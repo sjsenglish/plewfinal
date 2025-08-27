@@ -1,5 +1,5 @@
 // api/vocabulary/extract.js - Server-side vocabulary extraction
-import { db } from '../../src/firebase-admin';
+const { db } = require('../../src/firebase-admin');
 
 // Move vocabulary extraction logic to server-side
 const extractMeaningfulWords = (text) => {

@@ -41,6 +41,35 @@ const VocabularyAdmin = () => {
     }
   };
 
+  const testBasicAPI = async () => {
+    setTesting(true);
+    setError(null);
+    
+    try {
+      console.log('Testing basic API endpoint...');
+      
+      const response = await fetch('/api/vocabulary/test');
+      const data = await response.json();
+
+      if (data.success) {
+        setResult({
+          type: 'basic-test',
+          ...data
+        });
+        console.log('✅ Basic API test successful:', data);
+      } else {
+        setError(data.error || 'Basic API test failed');
+        console.error('❌ Basic API test failed:', data.error);
+      }
+
+    } catch (err) {
+      setError(err.message);
+      console.error('❌ Basic API test error:', err);
+    } finally {
+      setTesting(false);
+    }
+  };
+
   const testVocabularyAPI = async () => {
     setTesting(true);
     setError(null);
@@ -99,6 +128,22 @@ const VocabularyAdmin = () => {
           }}
         >
           {populating ? '🔄 Populating...' : '🚀 Populate Vocabulary Database'}
+        </button>
+
+        <button
+          onClick={testBasicAPI}
+          disabled={testing}
+          style={{
+            padding: '1rem 2rem',
+            backgroundColor: testing ? '#6c757d' : '#17a2b8',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: testing ? 'not-allowed' : 'pointer',
+            fontSize: '1rem'
+          }}
+        >
+          {testing ? '🔄 Testing...' : '🔧 Test Basic API'}
         </button>
 
         <button

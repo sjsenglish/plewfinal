@@ -1,6 +1,6 @@
 // api/vocabulary/populate.js - API endpoint to populate vocabulary from Algolia
-import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { db } from '../../src/firebase-admin';
+const { liteClient: algoliasearch } = require('algoliasearch/lite');
+const { db } = require('../../src/firebase-admin');
 
 const extractMeaningfulWords = (text) => {
   const stopWords = new Set([

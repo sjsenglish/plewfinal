@@ -1,5 +1,5 @@
 // api/vocabulary/fetch.js - Fetch pre-computed vocabulary from database
-import { db } from '../../src/firebase-admin';
+const { db } = require('../../src/firebase-admin');
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
