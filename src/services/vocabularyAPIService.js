@@ -1,5 +1,6 @@
 // src/services/vocabularyAPIService.js - Client-side service for fetching pre-computed vocabulary
 import { getOpenAIKey } from '../utils/envConfig';
+import { getEnhancedWordInfo as getWordInfoFromService } from './vocabularyService';
 
 // Fetch pre-computed vocabulary from server
 export const fetchVocabulary = async (options = {}) => {
@@ -173,21 +174,14 @@ export const getEnhancedWordInfo = async (word, context = '') => {
   }
 
   try {
-    // This could also be moved to server-side for better performance
-    // For now, keeping it client-side as it's called on-demand
-    const response = await fetch('/api/vocabulary/enhance', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ word, context })
-    });
-
-    if (response.ok) {
-      const result = await response.json();
-      return result.data;
+    // Use client-side OpenAI service for word analysis
+    console.log('Getting enhanced word info for:', word);
+    const enhancedInfo = await getWordInfoFromService(word, context);
+    
+    if (enhancedInfo && enhancedInfo.definition) {
+      return enhancedInfo;
     } else {
-      throw new Error('Enhancement API failed');
+      throw new Error('OpenAI analysis failed');
     }
   } catch (error) {
     console.error('Error getting enhanced word info:', error);
