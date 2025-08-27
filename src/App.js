@@ -36,6 +36,7 @@ import SubmitQuestionForm from './components/SubmitQuestionForm';
 // import MathsSubmitQuestionForm from './components/MathsSubmitQuestionForm'; // HIDDEN
 // import MathsFilters from './components/MathsFilters'; // HIDDEN
 import KoreanEnglishFilters from './components/KoreanEnglishFilters';
+import VocabularySearch from './components/VocabularySearch';
 import DemoMode from './components/DemoMode';
 // import StudyBuddyApp from './components/StudyBuddyApp'; // HIDDEN - Ask Bo and Application Builder
 import FeatureFlagDebug from './components/FeatureFlagDebug';
@@ -82,6 +83,10 @@ if (!process.env.REACT_APP_ALGOLIA_APP_ID || !process.env.REACT_APP_ALGOLIA_SEAR
   console.error('❌ Missing Algolia environment variables. Please check your .env file.');
 }
 
+if (!process.env.REACT_APP_OPENAI_API_KEY) {
+  console.warn('⚠️ Missing OpenAI API key. Vocabulary features will have limited functionality.');
+}
+
 // Updated SUBJECTS - Korean-English, Vocabulary, and Community
 const SUBJECTS = {
   koreanEnglish: {
@@ -92,7 +97,7 @@ const SUBJECTS = {
     searchType: 'algolia'
   },
   vocabulary: {
-    index: 'vocabulary-words',
+    index: 'korean-english-question-pairs',
     theme: 'vocabulary-theme',
     bannerText: 'expand your English vocabulary with smart synonym learning and adaptive testing',
     displayName: 'Vocabulary',
@@ -472,13 +477,23 @@ const buildAlgoliaFilters = (filters) => {
                   currentFilters={koreanEnglishFilters}
                 />
               )}
-              
-              <div className="results-container">
+
+              {/* Vocabulary Search Component */}
+              {currentSubject === 'vocabulary' ? (
+                <VocabularySearch 
+                  searchClient={searchClient}
+                  subjectConfig={subjectConfig}
+                  bannerText={bannerText}
+                  user={user}
+                />
+              ) : (
+                <div className="results-container">
                 <div className="stats-container">{statsComponent}</div>
                 <div className="hits-container">
                   {user && <Hits hitComponent={HitWrapper} />}
                 </div>
               </div>
+              )}
             </div>
           </div>
 

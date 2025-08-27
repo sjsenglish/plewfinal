@@ -1,19 +1,29 @@
 import React, { useState } from 'react';
 import './VocabularyFilters.css';
 
-const VocabularyFilters = ({ onFiltersChange, currentFilters }) => {
-  const [activeCategory, setActiveCategory] = useState('difficulty');
+const VocabularyFilters = ({ onFiltersChange, onSortChange, currentFilters, sortBy = 'frequency' }) => {
+  const [activeCategory, setActiveCategory] = useState('sort');
   const [selectedFilters, setSelectedFilters] = useState(currentFilters || {});
   const [isExpanded, setIsExpanded] = useState(false);
+  const [currentSort, setCurrentSort] = useState(sortBy);
 
   // Filter definitions for vocabulary words
   const FILTER_CATEGORIES = {
+    sort: {
+      label: 'Sort By',
+      options: [
+        { id: 'frequency', label: 'Most Frequent', value: 'frequency' },
+        { id: 'alphabetical', label: 'A-Z', value: 'alphabetical' },
+        { id: 'difficulty', label: 'Difficulty', value: 'difficulty' },
+        { id: 'length', label: 'Word Length', value: 'length' },
+      ]
+    },
     difficulty: {
       label: 'Difficulty',
       options: [
-        { id: 'beginner', label: 'Beginner (1-2)', value: 'difficulty:1 OR difficulty:2' },
-        { id: 'intermediate', label: 'Intermediate (3)', value: 'difficulty:3' },
-        { id: 'advanced', label: 'Advanced (4-5)', value: 'difficulty:4 OR difficulty:5' },
+        { id: 'beginner', label: 'Beginner (1-2)', value: 'beginner' },
+        { id: 'intermediate', label: 'Intermediate (3)', value: 'intermediate' },
+        { id: 'advanced', label: 'Advanced (4-5)', value: 'advanced' },
       ]
     },
     partOfSpeech: {
@@ -72,6 +82,13 @@ const VocabularyFilters = ({ onFiltersChange, currentFilters }) => {
 
   // Handle filter selection
   const handleFilterSelect = (category, filterId, filterValue) => {
+    if (category === 'sort') {
+      // Handle sorting separately
+      setCurrentSort(filterId);
+      onSortChange && onSortChange(filterId);
+      return;
+    }
+
     const newFilters = { ...selectedFilters };
     
     // For single-select categories, replace the value
@@ -79,48 +96,33 @@ const VocabularyFilters = ({ onFiltersChange, currentFilters }) => {
     
     setSelectedFilters(newFilters);
     
-    // Convert to format expected by App.js
-    const algoliaFilters = {};
-    Object.entries(newFilters).forEach(([cat, id]) => {
-      if (id) {
-        const option = FILTER_CATEGORIES[cat]?.options.find(opt => opt.id === id);
-        if (option) {
-          algoliaFilters[cat] = option.value;
-        }
-      }
-    });
-    
     console.log('Filter selected:', { category, filterId, filterValue });
     console.log('New filters state:', newFilters);
-    console.log('Algolia filters to send:', algoliaFilters);
     
-    onFiltersChange(algoliaFilters);
+    onFiltersChange && onFiltersChange(newFilters);
   };
 
   // Clear specific filter
   const clearFilter = (category) => {
+    if (category === 'sort') {
+      setCurrentSort('frequency');
+      onSortChange && onSortChange('frequency');
+      return;
+    }
+
     const newFilters = { ...selectedFilters };
     delete newFilters[category];
     setSelectedFilters(newFilters);
     
-    // Convert to format expected by App.js
-    const algoliaFilters = {};
-    Object.entries(newFilters).forEach(([cat, id]) => {
-      if (id) {
-        const option = FILTER_CATEGORIES[cat]?.options.find(opt => opt.id === id);
-        if (option) {
-          algoliaFilters[cat] = option.value;
-        }
-      }
-    });
-    
-    onFiltersChange(algoliaFilters);
+    onFiltersChange && onFiltersChange(newFilters);
   };
 
   // Clear all filters
   const clearAllFilters = () => {
     setSelectedFilters({});
-    onFiltersChange({});
+    setCurrentSort('frequency');
+    onFiltersChange && onFiltersChange({});
+    onSortChange && onSortChange('frequency');
   };
 
   // Count active filters
@@ -187,18 +189,24 @@ const VocabularyFilters = ({ onFiltersChange, currentFilters }) => {
 
         {/* Filter options */}
         <div className="filter-options">
-          {FILTER_CATEGORIES[activeCategory]?.options.map((option) => (
-            <button
-              key={option.id}
-              className={`filter-option ${selectedFilters[activeCategory] === option.id ? 'selected' : ''}`}
-              onClick={() => handleFilterSelect(activeCategory, option.id, option.value)}
-            >
-              {option.label}
-              {selectedFilters[activeCategory] === option.id && (
-                <span className="selected-checkmark">✓</span>
-              )}
-            </button>
-          ))}
+          {FILTER_CATEGORIES[activeCategory]?.options.map((option) => {
+            const isSelected = activeCategory === 'sort' 
+              ? currentSort === option.id 
+              : selectedFilters[activeCategory] === option.id;
+            
+            return (
+              <button
+                key={option.id}
+                className={`filter-option ${isSelected ? 'selected' : ''}`}
+                onClick={() => handleFilterSelect(activeCategory, option.id, option.value)}
+              >
+                {option.label}
+                {isSelected && (
+                  <span className="selected-checkmark">✓</span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

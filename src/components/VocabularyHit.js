@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getEnhancedWordInfo, generateSynonymQuiz } from '../services/vocabularyService';
 import './VocabularyHit.css';
 
 const VocabularyHit = ({ hit }) => {
@@ -6,34 +7,64 @@ const VocabularyHit = ({ hit }) => {
   const [showExamples, setShowExamples] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showPronunciation, setShowPronunciation] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [wordInfo, setWordInfo] = useState(null);
+  const [quiz, setQuiz] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [quizAnswer, setQuizAnswer] = useState(null);
+  const [showQuizResult, setShowQuizResult] = useState(false);
 
-  // Early return if hit is undefined or null
+  // Extract word data - hit is now a word extracted from questions
+  const word = hit?.word || '';
+  const frequency = hit?.frequency || 0;
+  const contexts = hit?.contexts || [];
+
+  // Enhanced word info from OpenAI
+  const definition = wordInfo?.definition || 'Loading definition...';
+  const partOfSpeech = wordInfo?.partOfSpeech || '';
+  const difficulty = wordInfo?.difficulty || 3;
+  const subjectArea = wordInfo?.subjectArea || '';
+  const synonyms = wordInfo?.synonyms || [];
+  const antonyms = wordInfo?.antonyms || [];
+  const examples = wordInfo?.examples || [];
+  const pronunciation = wordInfo?.pronunciation || '';
+  const audioUrl = wordInfo?.audioUrl || '';
+  const koreanTranslation = wordInfo?.koreanTranslation || '';
+  const etymology = wordInfo?.etymology || '';
+  const collocations = wordInfo?.collocations || [];
+  const sourceExams = wordInfo?.sourceExams || [];
+
+  // User progress data - mock for now
+  const isLearned = false;
+  const confidence = 0;
+  const reviewCount = 0;
+
+  // Load enhanced word information when component mounts
+  useEffect(() => {
+    const loadWordInfo = async () => {
+      if (word && !wordInfo && hit) {
+        setLoading(true);
+        try {
+          const context = contexts[0] || '';
+          const enhancedInfo = await getEnhancedWordInfo(word, context);
+          setWordInfo(enhancedInfo);
+        } catch (error) {
+          console.error('Error loading word info:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadWordInfo();
+  }, [word, wordInfo, contexts, hit]);
+
+  // Early return if hit is undefined or null - AFTER hooks
   if (!hit) {
     return null;
   }
 
   console.log('Vocabulary hit object:', hit);
-
-  // Extract data from vocabulary hit structure
-  const word = hit.word || '';
-  const definition = hit.definition || '';
-  const partOfSpeech = hit.partOfSpeech || '';
-  const difficulty = hit.difficulty || 1;
-  const frequency = hit.frequency || '';
-  const subjectArea = hit.subjectArea || '';
-  const sourceExams = hit.sourceExams || [];
-  const synonyms = hit.synonyms || [];
-  const antonyms = hit.antonyms || [];
-  const examples = hit.examples || [];
-  const pronunciation = hit.pronunciation || '';
-  const audioUrl = hit.audioUrl || '';
-  const koreanTranslation = hit.koreanTranslation || '';
-  const etymology = hit.etymology || '';
-  const collocations = hit.collocations || [];
-  const userProgress = hit.userProgress || {};
-  const isLearned = userProgress.isLearned || false;
-  const confidence = userProgress.confidence || 0;
-  const reviewCount = userProgress.reviewCount || 0;
 
   // Play audio function
   const playAudio = (audioUrl) => {
@@ -48,6 +79,36 @@ const VocabularyHit = ({ hit }) => {
   const toggleExamples = () => setShowExamples(!showExamples);
   const togglePronunciation = () => setShowPronunciation(!showPronunciation);
   const toggleBookmark = () => setIsBookmarked(!isBookmarked);
+
+  // Quiz functions
+  const startQuiz = async () => {
+    if (!wordInfo) return;
+    
+    setLoading(true);
+    try {
+      const quizData = await generateSynonymQuiz(word, wordInfo);
+      setQuiz(quizData);
+      setShowQuiz(true);
+      setQuizAnswer(null);
+      setShowQuizResult(false);
+    } catch (error) {
+      console.error('Error generating quiz:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const selectQuizAnswer = (selectedOption) => {
+    setQuizAnswer(selectedOption);
+    setShowQuizResult(true);
+  };
+
+  const closeQuiz = () => {
+    setShowQuiz(false);
+    setQuiz(null);
+    setQuizAnswer(null);
+    setShowQuizResult(false);
+  };
 
   // Get difficulty badge class
   const getDifficultyClass = (diff) => {
@@ -250,16 +311,76 @@ const VocabularyHit = ({ hit }) => {
         </div>
       </div>
 
+      {/* Quiz Interface */}
+      {showQuiz && quiz && (
+        <div className="quiz-overlay">
+          <div className="quiz-modal">
+            <div className="quiz-header">
+              <h3>Synonym Quiz</h3>
+              <button className="close-quiz" onClick={closeQuiz}>✕</button>
+            </div>
+            
+            <div className="quiz-question">
+              <p>{quiz.question}</p>
+            </div>
+            
+            <div className="quiz-options">
+              {quiz.options.map((option, index) => (
+                <button
+                  key={index}
+                  className={`quiz-option ${quizAnswer === option ? 
+                    (option === quiz.correctAnswer ? 'correct' : 'incorrect') : ''}`}
+                  onClick={() => selectQuizAnswer(option)}
+                  disabled={showQuizResult}
+                >
+                  {option}
+                  {showQuizResult && quizAnswer === option && (
+                    <span className="option-result">
+                      {option === quiz.correctAnswer ? '✓' : '✗'}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+            
+            {showQuizResult && (
+              <div className="quiz-result">
+                <div className={`result-message ${quizAnswer === quiz.correctAnswer ? 'correct' : 'incorrect'}`}>
+                  {quizAnswer === quiz.correctAnswer ? '🎉 Correct!' : '❌ Incorrect'}
+                </div>
+                <p className="quiz-explanation">{quiz.explanation}</p>
+                <button className="try-again-btn" onClick={closeQuiz}>
+                  Try Another Word
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Context and Frequency Info */}
+      <div className="word-stats">
+        <div className="frequency-info">
+          <span className="stat-label">Appears in:</span>
+          <span className="stat-value">{frequency} question{frequency !== 1 ? 's' : ''}</span>
+        </div>
+        {contexts.length > 0 && (
+          <div className="context-preview">
+            <span className="stat-label">Context:</span>
+            <span className="context-text">"{contexts[0].substring(0, 100)}..."</span>
+          </div>
+        )}
+      </div>
+
       {/* Action buttons */}
       <div className="word-actions">
-        <button className="action-button study-button">
-          <span className="button-icon">📖</span>
-          <span className="button-text">Study</span>
-        </button>
-        
-        <button className="action-button test-button">
-          <span className="button-icon">✏️</span>
-          <span className="button-text">Test Me</span>
+        <button 
+          className="action-button study-button"
+          onClick={startQuiz}
+          disabled={loading || !wordInfo}
+        >
+          <span className="button-icon">🎯</span>
+          <span className="button-text">{loading ? 'Loading...' : 'Quiz Me'}</span>
         </button>
         
         <button className={`action-button bookmark-button ${isBookmarked ? 'active' : ''}`}>

@@ -1,0 +1,176 @@
+.vocabulary-search-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Search Header */
+.search-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.search-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #8b4513;
+  margin: 0 0 1rem 0;
+  text-shadow: 1px 1px 2px rgba(255, 107, 53, 0.1);
+}
+
+.search-subtitle {
+  font-size: 1.2rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Search Stats */
+.search-stats {
+  background: linear-gradient(135deg, #fff8f0, #ffffff);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  border-left: 4px solid #ff6b35;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.search-stats .ais-Stats-text {
+  color: #8b4513;
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f0e6d6;
+  border-top: 4px solid #ff6b35;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-state p {
+  color: #8b4513;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Vocabulary Results */
+.vocabulary-results {
+  margin-top: 2rem;
+}
+
+.vocabulary-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Load More */
+.load-more-container {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #fff8f0, #ffffff);
+  border-radius: 12px;
+  border: 2px dashed #ff6b35;
+  margin-top: 1.5rem;
+}
+
+.load-more-container p {
+  color: #8b4513;
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+}
+
+.load-more-btn {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.load-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+}
+
+/* No Results */
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  border-radius: 16px;
+  border: 2px dashed #e9ecef;
+}
+
+.no-results h3 {
+  color: #8b4513;
+  font-size: 1.5rem;
+  margin: 0 0 1rem 0;
+}
+
+.no-results p {
+  color: #6c757d;
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .vocabulary-search-container {
+    padding: 1rem;
+  }
+
+  .search-title {
+    font-size: 2rem;
+  }
+
+  .search-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .search-header {
+    margin-bottom: 2rem;
+  }
+
+  .vocabulary-grid {
+    gap: 1rem;
+  }
+
+  .loading-state {
+    padding: 3rem 1rem;
+  }
+
+  .no-results {
+    padding: 3rem 1rem;
+  }
+
+  .load-more-container {
+    padding: 1.5rem;
+  }
+}
