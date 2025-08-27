@@ -22,10 +22,8 @@ const COLORS = {
   darkGray: '#374151'
 };
 
-// Your Firebase Storage icons
+// Firebase Storage icons
 const ICONS = {
-  tsa: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftsa%20icon.svg?alt=media&token=ef892a4f-ae47-4295-a252-b3f11dbeb376',
-  maths: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Falevel%20maths%20icon.svg?alt=media&token=df078332-ccae-4013-b34e-fd1c5f4c5383',
   ghost: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fpurple%20ghost.svg?alt=media&token=8f68c264-89dd-4563-8858-07b8f9fd87e0',
   note: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ffile%20icon.svg?alt=media&token=19369fc7-4d0c-499a-ad43-d47372a13b09'
 };
@@ -48,7 +46,7 @@ const getImageUrl = (url) => {
   return url;
 };
 
-// Subject configurations - TSA and Maths
+// Subject configuration - Korean-English only
 const SUBJECTS = {
   'korean-english': {
     index: 'korean-english-question-pairs',
@@ -1496,7 +1494,7 @@ const getQuestionPreview = (question) => {
                                 flexWrap: 'wrap',
                                 gap: '6px'
                               }}>
-                                {packData.subject === 'tsa' && question.question_type && (
+                                {question.question_type && (
                                   <span style={{
                                     backgroundColor: '#ddd6fe',
                                     color: '#7c3aed',
@@ -1508,19 +1506,19 @@ const getQuestionPreview = (question) => {
                                     {question.question_type}
                                   </span>
                                 )}
-                                {packData.subject === 'maths' && question.spec_topic && (
+                                {question.subject_area && (
                                   <span style={{
-                                    backgroundColor: '#ddd6fe',
-                                    color: '#7c3aed',
+                                    backgroundColor: '#e0f2fe',
+                                    color: '#0891b2',
                                     padding: '2px 6px',
                                     borderRadius: '4px',
                                     fontSize: '11px',
                                     fontWeight: '500'
                                   }}>
-                                    {question.spec_topic}
+                                    {question.subject_area}
                                   </span>
                                 )}
-                                {question.marks && (
+                                {question.difficulty && (
                                   <span style={{
                                     backgroundColor: '#fef3c7',
                                     color: '#d97706',
@@ -1529,10 +1527,22 @@ const getQuestionPreview = (question) => {
                                     fontSize: '11px',
                                     fontWeight: '500'
                                   }}>
-                                    {question.marks} marks
+                                    {question.difficulty}
                                   </span>
                                 )}
-                                {(question.year || (question.id && packData.subject === 'maths')) && (
+                                {question.level && (
+                                  <span style={{
+                                    backgroundColor: '#fce7f3',
+                                    color: '#be185d',
+                                    padding: '2px 6px',
+                                    borderRadius: '4px',
+                                    fontSize: '11px',
+                                    fontWeight: '500'
+                                  }}>
+                                    {question.level}
+                                  </span>
+                                )}
+                                {question.year && (
                                   <span style={{
                                     backgroundColor: '#dcfce7',
                                     color: '#16a34a',
@@ -1541,7 +1551,7 @@ const getQuestionPreview = (question) => {
                                     fontSize: '11px',
                                     fontWeight: '500'
                                   }}>
-                                    {question.id && packData.subject === 'maths' ? question.id.split('_')[0] : question.year}
+                                    {question.year}
                                   </span>
                                 )}
                               </div>
