@@ -43,13 +43,13 @@ module.exports = async function handler(req, res) {
   try {
     console.log('Starting vocabulary population from Algolia...');
 
-    // Initialize Algolia client
+    // Initialize Algolia client (v5 syntax)
     const searchClient = algoliasearch(
       process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
       process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY
     );
 
-    const index = searchClient.initIndex('korean-english-question-pairs');
+    const indexName = 'korean-english-question-pairs';
     
     // Fetch questions from Algolia
     console.log('Fetching questions from Algolia...');
@@ -60,10 +60,14 @@ module.exports = async function handler(req, res) {
     
     // Fetch all questions (or limit for testing)
     while (page < 5) { // Limit to 500 questions for initial population
-      const searchResult = await index.search('', {
-        page,
-        hitsPerPage,
-        attributesToRetrieve: ['objectID', 'question', 'question_text', 'questionText', 'english_text', 'english', 'text', 'korean_text', 'korean', 'answer', 'answer_text', 'explanation', 'explanation_text', 'translation', 'romanization']
+      const searchResult = await searchClient.searchSingleIndex({
+        indexName,
+        searchParams: {
+          query: '',
+          page,
+          hitsPerPage,
+          attributesToRetrieve: ['objectID', 'question', 'question_text', 'questionText', 'english_text', 'english', 'text', 'korean_text', 'korean', 'answer', 'answer_text', 'explanation', 'explanation_text', 'translation', 'romanization']
+        }
       });
 
       if (searchResult.hits.length === 0) break;
