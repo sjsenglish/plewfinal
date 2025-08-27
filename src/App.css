@@ -1591,6 +1591,80 @@ ul {
   background: #2f7a5a;
 }
 
+/* Vocabulary Theme */
+.vocabulary-theme {
+  background-color: #fffbf0;
+  color: #8b4513;
+}
+.vocabulary-theme .main-header {
+  background-color: #fff8e1;
+  color: #8b4513;
+}
+.vocabulary-theme .navbar-logo a {
+  color: #8b4513;
+}
+.vocabulary-theme .navbar-logo a:hover {
+  color: #ff6b35;
+}
+.vocabulary-theme .navbar-links a {
+  color: #8b4513;
+}
+.vocabulary-theme .navbar-links a:hover {
+  color: #ff6b35;
+}
+.vocabulary-theme .navbar-links a.active {
+  color: #ff6b35;
+}
+.vocabulary-theme .navbar-links a.active::after {
+  background-color: #ff6b35;
+}
+.vocabulary-theme .dropdown-button {
+  color: #8b4513;
+}
+.vocabulary-theme .dropdown-button:hover {
+  color: #ff6b35;
+}
+.vocabulary-theme .dropdown-menu button {
+  color: #8b4513;
+}
+.vocabulary-theme .dropdown-menu button:hover {
+  background-color: #fff8f0;
+  color: #ff6b35;
+}
+.vocabulary-theme .login-button {
+  background-color: #ff6b35;
+}
+.vocabulary-theme .login-button:hover {
+  background-color: #f7931e;
+}
+.vocabulary-theme .modern-main-header {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+}
+.vocabulary-theme .search-card::before {
+  background: linear-gradient(90deg, #ff6b35, #f7931e);
+}
+.vocabulary-theme .search-card-header h2 {
+  color: #8b4513;
+}
+.vocabulary-theme .searchbox-form:focus-within {
+  border-color: #ff6b35;
+}
+.vocabulary-theme .lock-icon {
+  color: #ff6b35;
+  text-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+.vocabulary-theme .signup-action-button {
+  background: linear-gradient(45deg, #ff6b35, #f7931e);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+}
+.vocabulary-theme .login-action-button {
+  color: #ff6b35;
+  border-color: #ff6b35;
+}
+.vocabulary-theme .login-action-button:hover {
+  background: #ff6b35;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .community-hero {

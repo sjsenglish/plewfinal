@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, createContext, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { InstantSearch, SearchBox, Stats, Hits, Configure } from 'react-instantsearch';
+import { InstantSearch, Stats, Hits, Configure } from 'react-instantsearch';
 import './firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
@@ -36,7 +36,6 @@ import SubmitQuestionForm from './components/SubmitQuestionForm';
 // import MathsSubmitQuestionForm from './components/MathsSubmitQuestionForm'; // HIDDEN
 // import MathsFilters from './components/MathsFilters'; // HIDDEN
 import KoreanEnglishFilters from './components/KoreanEnglishFilters';
-import KoreanEnglishHit from './components/KoreanEnglishHit';
 import DemoMode from './components/DemoMode';
 // import StudyBuddyApp from './components/StudyBuddyApp'; // HIDDEN - Ask Bo and Application Builder
 import FeatureFlagDebug from './components/FeatureFlagDebug';
@@ -83,13 +82,20 @@ if (!process.env.REACT_APP_ALGOLIA_APP_ID || !process.env.REACT_APP_ALGOLIA_SEAR
   console.error('❌ Missing Algolia environment variables. Please check your .env file.');
 }
 
-// Updated SUBJECTS - Korean-English and Community only
+// Updated SUBJECTS - Korean-English, Vocabulary, and Community
 const SUBJECTS = {
   koreanEnglish: {
     index: 'korean-english-question-pairs',
     theme: 'korean-english-theme',
     bannerText: 'master Korean-English with interactive question pairs and practice exercises',
     displayName: 'Korean-English',
+    searchType: 'algolia'
+  },
+  vocabulary: {
+    index: 'vocabulary-words',
+    theme: 'vocabulary-theme',
+    bannerText: 'expand your English vocabulary with smart synonym learning and adaptive testing',
+    displayName: 'Vocabulary',
     searchType: 'algolia'
   },
   community: {
@@ -259,9 +265,6 @@ const SearchPage = ({ currentSubject, subjectConfig, bannerText, user, handleSub
   // const [showPSGrader, setShowPSGrader] = useState(false); // HIDDEN
   const [koreanEnglishFilters, setKoreanEnglishFilters] = useState({});
 
-  const handleOpenVideo = () => {
-    setShowVideoPopup(true);
-  };
 
   const handleCloseVideo = () => {
     setShowVideoPopup(false);
@@ -628,12 +631,12 @@ const buildAlgoliaFilters = (filters) => {
 
 function App() {
   // Start with TSA as default subject
-  const [currentSubject, setCurrentSubject] = useState('tsa');
+  const [currentSubject, setCurrentSubject] = useState('vocabulary');
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [bannerText, setBannerText] = useState('');
 
-  const subjectConfig = useMemo(() => SUBJECTS[currentSubject], [currentSubject]);
+  const subjectConfig = useMemo(() => SUBJECTS[currentSubject] || SUBJECTS['vocabulary'], [currentSubject]);
 
   useEffect(() => {
     const auth = getAuth();
@@ -683,16 +686,6 @@ function App() {
   }, [authLoading, user]);
 
   // Feature Protected Route - simplified to just check authentication
-  const FeatureProtectedRoute = useMemo(() => {
-    const Component = ({ children, feature }) => {
-      if (authLoading) return <LoadingScreen />;
-      if (!user) return <Navigate to="/login" />;
-      
-      return children;
-    };
-    Component.displayName = 'FeatureProtectedRoute';
-    return Component;
-  }, [authLoading, user]);
 
   const SearchComponent = useMemo(() => (
     <SearchPage
