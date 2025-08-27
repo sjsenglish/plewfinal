@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { getEnhancedWordInfo, generateSynonymQuiz } from '../services/vocabularyService';
 import './VocabularyHit.css';
 
@@ -19,8 +19,8 @@ const VocabularyHit = ({ hit }) => {
   const frequency = hit?.frequency || 0;
   const contexts = hit?.contexts || [];
 
-  // Enhanced word info from OpenAI
-  const definition = wordInfo?.definition || 'Loading definition...';
+  // Enhanced word info from OpenAI with better defaults
+  const definition = wordInfo?.definition || `Basic vocabulary word extracted from Korean-English questions. Click "Show Synonyms" or "Show Examples" to load detailed information.`;
   const partOfSpeech = wordInfo?.partOfSpeech || '';
   const difficulty = wordInfo?.difficulty || 3;
   const subjectArea = wordInfo?.subjectArea || '';
@@ -39,25 +39,38 @@ const VocabularyHit = ({ hit }) => {
   const confidence = 0;
   const reviewCount = 0;
 
-  // Load enhanced word information when component mounts
-  useEffect(() => {
-    const loadWordInfo = async () => {
-      if (word && !wordInfo && hit) {
-        setLoading(true);
-        try {
-          const context = contexts[0] || '';
-          const enhancedInfo = await getEnhancedWordInfo(word, context);
-          setWordInfo(enhancedInfo);
-        } catch (error) {
-          console.error('Error loading word info:', error);
-        } finally {
-          setLoading(false);
-        }
+  // Load enhanced word information only when user interacts (lazy loading)
+  const loadWordInfo = useCallback(async () => {
+    if (word && !wordInfo && !loading) {
+      setLoading(true);
+      try {
+        console.log('Loading word info for:', word);
+        const context = contexts[0] || '';
+        const enhancedInfo = await getEnhancedWordInfo(word, context);
+        console.log('Received word info for:', word, enhancedInfo);
+        setWordInfo(enhancedInfo);
+      } catch (error) {
+        console.error('Error loading word info for', word, ':', error);
+        // Set basic fallback info
+        setWordInfo({
+          word: word,
+          partOfSpeech: 'unknown',
+          definition: 'Click to load definition...',
+          difficulty: 3,
+          synonyms: ['Click to load...'],
+          antonyms: [],
+          examples: [{ sentence: 'Click to load examples...', translation: '예시를 로드하려면 클릭하세요...' }],
+          koreanTranslation: '번역을 로드하려면 클릭하세요',
+          frequency: 'common',
+          subjectArea: 'general',
+          collocations: [],
+          etymology: ''
+        });
+      } finally {
+        setLoading(false);
       }
-    };
-
-    loadWordInfo();
-  }, [word, wordInfo, contexts, hit]);
+    }
+  }, [word, wordInfo, loading, contexts]);
 
   // Early return if hit is undefined or null - AFTER hooks
   if (!hit) {
@@ -74,15 +87,36 @@ const VocabularyHit = ({ hit }) => {
     }
   };
 
-  // Toggle functions
-  const toggleSynonyms = () => setShowSynonyms(!showSynonyms);
-  const toggleExamples = () => setShowExamples(!showExamples);
+  // Toggle functions with lazy loading
+  const toggleSynonyms = () => {
+    if (!wordInfo && !loading) {
+      loadWordInfo();
+    }
+    setShowSynonyms(!showSynonyms);
+  };
+  
+  const toggleExamples = () => {
+    if (!wordInfo && !loading) {
+      loadWordInfo();
+    }
+    setShowExamples(!showExamples);
+  };
+  
   const togglePronunciation = () => setShowPronunciation(!showPronunciation);
   const toggleBookmark = () => setIsBookmarked(!isBookmarked);
 
   // Quiz functions
   const startQuiz = async () => {
-    if (!wordInfo) return;
+    // Load word info first if not available
+    if (!wordInfo && !loading) {
+      await loadWordInfo();
+    }
+    
+    // Wait a moment if still loading
+    if (!wordInfo) {
+      setTimeout(() => startQuiz(), 1000);
+      return;
+    }
     
     setLoading(true);
     try {
