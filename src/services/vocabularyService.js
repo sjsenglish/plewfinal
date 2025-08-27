@@ -1,10 +1,19 @@
 // vocabularyService.js - Extract and analyze vocabulary from Korean-English questions
 import OpenAI from 'openai';
+import { getOpenAIKey } from '../utils/envConfig';
 
-const openai = new OpenAI({
-  apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
+const apiKey = getOpenAIKey();
+
+// Create OpenAI client with better error handling
+let openai = null;
+if (apiKey) {
+  openai = new OpenAI({
+    apiKey: apiKey,
+    dangerouslyAllowBrowser: true
+  });
+} else {
+  console.warn('⚠️ OpenAI API key not found. Vocabulary features will use fallback data.');
+}
 
 // Extract vocabulary words from question text
 export const extractVocabularyFromQuestions = async (hits) => {
@@ -71,6 +80,27 @@ const extractMeaningfulWords = (text) => {
 
 // Get enhanced word information using OpenAI
 export const getEnhancedWordInfo = async (word, context = '') => {
+  // If no OpenAI client available, return fallback data
+  if (!openai) {
+    console.warn(`No OpenAI API key available. Using fallback data for word: ${word}`);
+    return {
+      word: word,
+      partOfSpeech: 'unknown',
+      definition: 'OpenAI API key required for enhanced definitions',
+      difficulty: 3,
+      synonyms: ['similar', 'equivalent', 'comparable'],
+      antonyms: [],
+      examples: [
+        {"sentence": `This is an example with the word ${word}.`, "translation": "이것은 단어를 사용한 예시입니다."}
+      ],
+      koreanTranslation: '번역을 위해 OpenAI API 키가 필요합니다',
+      frequency: 'common',
+      subjectArea: 'general',
+      collocations: [],
+      etymology: ''
+    };
+  }
+
   try {
     const prompt = `Analyze the English word "${word}" and provide comprehensive information in JSON format:
 
@@ -121,12 +151,14 @@ Provide accurate information suitable for Korean middle/high school students lea
     return {
       word: word,
       partOfSpeech: 'unknown',
-      definition: 'Definition not available',
+      definition: 'Definition not available - API error',
       difficulty: 3,
-      synonyms: [],
+      synonyms: ['similar', 'equivalent', 'comparable'],
       antonyms: [],
-      examples: [],
-      koreanTranslation: '번역 불가능',
+      examples: [
+        {"sentence": `This is an example with the word ${word}.`, "translation": "이것은 단어를 사용한 예시입니다."}
+      ],
+      koreanTranslation: 'API 오류로 번역 불가능',
       frequency: 'common',
       subjectArea: 'general',
       collocations: [],
@@ -137,6 +169,21 @@ Provide accurate information suitable for Korean middle/high school students lea
 
 // Generate synonym quiz for a word
 export const generateSynonymQuiz = async (word, wordInfo) => {
+  // If no OpenAI client available, return fallback quiz
+  if (!openai) {
+    console.warn(`No OpenAI API key available. Using fallback quiz for word: ${word}`);
+    const synonyms = wordInfo.synonyms && wordInfo.synonyms.length > 0 ? wordInfo.synonyms : ['similar', 'equivalent', 'comparable'];
+    const correctAnswer = synonyms[0];
+    const wrongOptions = ['different', 'opposite', 'unrelated'].filter(opt => opt !== correctAnswer);
+    
+    return {
+      question: `Which word is a synonym of '${word}'?`,
+      correctAnswer: correctAnswer,
+      options: [correctAnswer, ...wrongOptions.slice(0, 3)].sort(() => Math.random() - 0.5),
+      explanation: `"${correctAnswer}" is a synonym of "${word}". Note: OpenAI API key required for enhanced quizzes.`
+    };
+  }
+
   try {
     const prompt = `Create a multiple choice synonym quiz for the word "${word}".
 
@@ -177,10 +224,13 @@ Generate 4 answer choices where:
     return JSON.parse(jsonResponse);
   } catch (error) {
     console.error('Error generating synonym quiz:', error);
+    const synonyms = wordInfo.synonyms && wordInfo.synonyms.length > 0 ? wordInfo.synonyms : ['similar', 'equivalent', 'comparable'];
+    const correctAnswer = synonyms[0];
+    
     return {
       question: `Which word is a synonym of '${word}'?`,
-      correctAnswer: word,
-      options: [word, 'example', 'sample', 'test'],
+      correctAnswer: correctAnswer,
+      options: [correctAnswer, 'example', 'sample', 'test'].sort(() => Math.random() - 0.5),
       explanation: 'Quiz generation failed. Please try again.'
     };
   }
