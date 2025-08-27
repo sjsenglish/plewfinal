@@ -50,125 +50,62 @@ const getImageUrl = (url) => {
 
 // Subject configurations - TSA and Maths
 const SUBJECTS = {
-  tsa: {
-    index: 'copy_tsa_questions',
-    displayName: 'TSA',
-    description: 'Thinking Skills Assessment',
+  'korean-english': {
+    index: 'korean-english-question-pairs',
+    displayName: 'Korean-English',
+    description: 'Korean-English Language Questions',
     filterCategories: {
-      type: [
-        { id: 'critical-thinking', label: 'Critical Thinking', value: 'question_type:"Critical Thinking"' },
-        { id: 'problem-solving', label: 'Problem Solving', value: 'question_type:"Problem Solving"' },
-      ],
-      subType: [
-        { id: 'main-conclusion', label: 'Main Conclusion', value: 'sub_types:"Main Conclusion"' },
-        { id: 'drawing-conclusions', label: 'Drawing Conclusions', value: 'sub_types:"Drawing Conclusions"' },
-        { id: 'assumption', label: 'Assumption', value: 'sub_types:"Assumption"' },
-        { id: 'strengthen', label: 'Strengthen', value: 'sub_types:"Strengthen"' },
-        { id: 'parallel-reasoning', label: 'Parallel Reasoning', value: 'sub_types:"Parallel Reasoning"' },
-        { id: 'weakening-arguments', label: 'Weakening Arguments', value: 'sub_types:"Weakening Arguments"' },
-        { id: 'principle', label: 'Principle', value: 'sub_types:"Principle"' },
-        { id: 'flaws', label: 'Flaws', value: 'sub_types:"Flaws"' },
-        { id: 'Rates', label: 'Rates', value: 'sub_types:"Rates"' },
-        { id: 'Ratio/Proportion/Percentage', label: 'Ratio/Proportion/Percentage', value: 'sub_types:"Ratio/Proportion/Percentage"' },
-        { id: 'Spatial', label: 'Spatial', value: 'sub_types:"Spatial"' },
-        { id: 'Optimisation', label: 'Optimisation', value: 'sub_types:"Optimisation"' },
-        { id: 'Best Fit', label: 'Best Fit', value: 'sub_types:"Best Fit"' },
-        { id: 'Probability', label: 'Probability', value: 'sub_types:"Probability"' },
-        { id: 'Logic', label: 'Logic', value: 'sub_types:"Logic"' },
-      ],
       year: [
-        { id: 'year-2008', label: '2008', value: 'year:2008' },
-        { id: 'year-2009', label: '2009', value: 'year:2009' },
-        { id: 'year-2010', label: '2010', value: 'year:2010' },
-        { id: 'year-2011', label: '2011', value: 'year:2011' },
-        { id: 'year-2012', label: '2012', value: 'year:2012' },
-        { id: 'year-2013', label: '2013', value: 'year:2013' },
-        { id: 'year-2014', label: '2014', value: 'year:2014' },
-        { id: 'year-2015', label: '2015', value: 'year:2015' },
-        { id: 'year-2016', label: '2016', value: 'year:2016' },
-        { id: 'year-2017', label: '2017', value: 'year:2017' },
-        { id: 'year-2018', label: '2018', value: 'year:2018' },
-        { id: 'year-2019', label: '2019', value: 'year:2019' },
-        { id: 'year-2020', label: '2020', value: 'year:2020' },
-        { id: 'year-2021', label: '2021', value: 'year:2021' },
+        { id: 'year-2024', label: '2024', value: 'year:2024' },
+        { id: 'year-2023', label: '2023', value: 'year:2023' },
         { id: 'year-2022', label: '2022', value: 'year:2022' },
+        { id: 'year-2021', label: '2021', value: 'year:2021' },
+        { id: 'year-2020', label: '2020', value: 'year:2020' },
+        { id: 'year-2019', label: '2019', value: 'year:2019' },
+        { id: 'year-2018', label: '2018', value: 'year:2018' },
+        { id: 'year-2017', label: '2017', value: 'year:2017' },
+        { id: 'year-2016', label: '2016', value: 'year:2016' },
+        { id: 'year-2015', label: '2015', value: 'year:2015' },
+      ],
+      subjectArea: [
+        { id: 'grammar', label: 'Grammar', value: 'subject_area:"Grammar"' },
+        { id: 'vocabulary', label: 'Vocabulary', value: 'subject_area:"Vocabulary"' },
+        { id: 'reading', label: 'Reading Comprehension', value: 'subject_area:"Reading"' },
+        { id: 'writing', label: 'Writing', value: 'subject_area:"Writing"' },
+        { id: 'speaking', label: 'Speaking', value: 'subject_area:"Speaking"' },
+        { id: 'listening', label: 'Listening', value: 'subject_area:"Listening"' },
+        { id: 'translation', label: 'Translation', value: 'subject_area:"Translation"' },
+      ],
+      difficulty: [
+        { id: 'beginner', label: 'Beginner', value: 'difficulty:"Beginner"' },
+        { id: 'intermediate', label: 'Intermediate', value: 'difficulty:"Intermediate"' },
+        { id: 'advanced', label: 'Advanced', value: 'difficulty:"Advanced"' },
+        { id: 'expert', label: 'Expert', value: 'difficulty:"Expert"' },
+      ],
+      questionType: [
+        { id: 'multiple-choice', label: 'Multiple Choice', value: 'question_type:"Multiple Choice"' },
+        { id: 'fill-blank', label: 'Fill in the Blank', value: 'question_type:"Fill in the Blank"' },
+        { id: 'translation', label: 'Translation', value: 'question_type:"Translation"' },
+        { id: 'comprehension', label: 'Reading Comprehension', value: 'question_type:"Reading Comprehension"' },
+        { id: 'essay', label: 'Essay', value: 'question_type:"Essay"' },
+        { id: 'dialogue', label: 'Dialogue', value: 'question_type:"Dialogue"' },
+        { id: 'listening', label: 'Listening', value: 'question_type:"Listening"' },
+      ],
+      level: [
+        { id: 'elementary', label: 'Elementary', value: 'level:"Elementary"' },
+        { id: 'intermediate', label: 'Intermediate', value: 'level:"Intermediate"' },
+        { id: 'upper-intermediate', label: 'Upper-Intermediate', value: 'level:"Upper-Intermediate"' },
+        { id: 'advanced', label: 'Advanced', value: 'level:"Advanced"' },
       ],
     },
-    categoryLabels: { type: 'Question Type', subType: 'Sub Type', year: 'Year' },
+    categoryLabels: { 
+      year: 'Year',
+      subjectArea: 'Subject Area',
+      difficulty: 'Difficulty', 
+      questionType: 'Question Type',
+      level: 'Level'
+    },
   },
-  
-maths: {
-  index: 'edexel_mathematics_updated',
-  displayName: 'A Level Maths',
-  description: 'Edexcel A Level Mathematics',
-  filterCategories: {
-    year: [
-      { id: 'year-2024', label: '2024', value: 'paper_info.year:2024' },
-      { id: 'year-2023', label: '2023', value: 'paper_info.year:2023' },
-      { id: 'year-2022', label: '2022', value: 'paper_info.year:2022' },
-      { id: 'year-2021', label: '2021', value: 'paper_info.year:2021' },
-      { id: 'year-2020', label: '2020', value: 'paper_info.year:2020' },
-      { id: 'year-2019', label: '2019', value: 'paper_info.year:2019' },
-      { id: 'year-2018', label: '2018', value: 'paper_info.year:2018' },
-      { id: 'year-2017', label: '2017', value: 'paper_info.year:2017' },
-    ],
-    paperTitle: [
-      { id: 'pure-1', label: 'Pure Mathematics 1', value: 'paper_info.paper_title:"Pure Mathematics 1"' },
-      { id: 'pure-2', label: 'Pure Mathematics 2', value: 'paper_info.paper_title:"Pure Mathematics 2"' },
-      { id: 'statistics-1', label: 'Statistics 1', value: 'paper_info.paper_title:"Statistics 1"' },
-      { id: 'mechanics-1', label: 'Mechanics 1', value: 'paper_info.paper_title:"Mechanics 1"' },
-    ],
-    specTopic: [
-      { id: 'proof', label: '1. Proof', value: 'spec_topic:"Proof"' },
-      { id: 'algebra-function', label: '2. Algebra and function', value: 'spec_topic:"Algebra and function"' },
-      { id: 'coordinate-geometry', label: '3. Coordinate geometry', value: 'spec_topic:"Coordinate geometry in the (x,y) plane"' },
-      { id: 'sequences-series', label: '4. Sequences and series', value: 'spec_topic:"Sequences and series"' },
-      { id: 'trigonometry', label: '5. Trigonometry', value: 'spec_topic:"Trigonometry"' },
-      { id: 'exponentials-logarithms', label: '6. Exponentials and logarithms', value: 'spec_topic:"Exponentials and logarithms"' },
-      { id: 'differentiation', label: '7. Differentiation', value: 'spec_topic:"Differentiation"' },
-      { id: 'integration', label: '8. Integration', value: 'spec_topic:"Integration"' },
-      { id: 'numerical-methods', label: '9. Numerical methods', value: 'spec_topic:"Numerical methods"' },
-      { id: 'vectors', label: '10. Vectors', value: 'spec_topic:"Vectors"' },
-      { id: 'statistical-sampling', label: 'Statistical Sampling', value: 'spec_topic:"Statistical Sampling"' },
-      { id: 'data-presentation', label: 'Data presentation and interpretation', value: 'spec_topic:"Data presentation and interpretation"' },
-      { id: 'probability', label: 'Probability', value: 'spec_topic:"Probability"' },
-      { id: 'statistical-distributions', label: 'Statistical distributions', value: 'spec_topic:"Statistical distributions"' },
-      { id: 'hypothesis-testing', label: 'Statistical hypothesis testing', value: 'spec_topic:"Statistical hypothesis testing"' },
-      { id: 'quantities-units', label: 'Quantities and units in mechanics', value: 'spec_topic:"Quantities and units in mechanics"' },
-      { id: 'kinematics', label: 'Kinematics', value: 'spec_topic:"Kinematics"' },
-      { id: 'forces-newtons', label: 'Forces and Newton\'s laws', value: 'spec_topic:"Forces and Newton\'s laws"' },
-      { id: 'moments', label: 'Moments', value: 'spec_topic:"Moments"' },
-    ],
-    questionTopic: [
-      { id: 'factorising-quadratics', label: 'Factorising quadratics', value: 'question_topic:"Factorising quadratics"' },
-      { id: 'quadratic-formula', label: 'Quadratic formula', value: 'question_topic:"Quadratic formula"' },
-      { id: 'completing-square', label: 'Completing the square', value: 'question_topic:"Completing the square"' },
-      { id: 'manipulate-polynomials', label: 'Manipulate polynomials', value: 'question_topic:"Manipulate polynomials"' },
-      { id: 'binomial-expansion', label: 'Binomial expansion', value: 'question_topic:"Binomial expansion"' },
-      { id: 'differentiation', label: 'Differentiation', value: 'question_topic:"Differentiation"' },
-      { id: 'integration', label: 'Integration', value: 'question_topic:"Integration"' },
-      { id: 'trigonometry', label: 'Trigonometry', value: 'question_topic:"Trigonometry"' },
-      { id: 'vectors', label: 'Vectors', value: 'question_topic:"Vectors"' },
-      { id: 'coordinate-geometry', label: 'Coordinate geometry', value: 'question_topic:"Coordinate geometry"' },
-      { id: 'sequences-series', label: 'Sequences and series', value: 'question_topic:"Sequences and series"' },
-      { id: 'exponentials-logs', label: 'Exponentials and logarithms', value: 'question_topic:"Exponentials and logarithms"' },
-      { id: 'probability', label: 'Probability', value: 'question_topic:"Probability"' },
-      { id: 'statistics', label: 'Statistics', value: 'question_topic:"Statistics"' },
-      { id: 'mechanics', label: 'Mechanics', value: 'question_topic:"Mechanics"' },
-    ],
-    month: [
-      { id: 'june', label: 'June', value: 'paper_info.month:"June 2024" OR paper_info.month:"June 2023" OR paper_info.month:"June 2022" OR paper_info.month:"June 2021" OR paper_info.month:"June 2020" OR paper_info.month:"June 2019" OR paper_info.month:"June 2018" OR paper_info.month:"June 2017"' },
-      { id: 'october', label: 'October', value: 'paper_info.month:"October 2024" OR paper_info.month:"October 2023" OR paper_info.month:"October 2022" OR paper_info.month:"October 2021" OR paper_info.month:"October 2020" OR paper_info.month:"October 2019" OR paper_info.month:"October 2018" OR paper_info.month:"October 2017"' },
-    ],
-  },
-  categoryLabels: { 
-    year: 'Year',
-    paperTitle: 'Paper Title',
-    specTopic: 'Spec Topic', 
-    questionTopic: 'Question Topic',
-    month: 'Month'
-  },
-},
 };
 
 // PDF Preview Component
@@ -216,209 +153,145 @@ const PDFPreview = ({ packData, selectedQuestions }) => {
           </div>
 
           <div style={{ flex: 1 }}>
-            {packData.subject === 'tsa' && (
-              <>
-                {question.question_content && (
-                  <div style={{ 
-                    fontSize: `${previewStyles.fontSize}px`,
-                    marginBottom: '8px',
-                    color: '#374151'
-                  }}>
-                    {question.question_content}
-                  </div>
-                )}
-
-                {imageUrl && (
-                  <div style={{ 
-                    margin: '12px 0',
-                    textAlign: 'center',
-                    border: '1px solid #e2e8f0',
-                    borderRadius: '8px',
-                    padding: '8px',
-                    backgroundColor: '#f8fafc'
-                  }}>
-                    <img
-                      src={getImageUrl(imageUrl)}
-                      alt={`Question ${questionNum} diagram`}
-                      style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '200px',
-                        height: 'auto',
-                        borderRadius: '4px'
-                      }}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        const errorMsg = document.createElement('div');
-                        errorMsg.textContent = '[Image will be included in PDF]';
-                        errorMsg.style.color = '#64748b';
-                        errorMsg.style.fontStyle = 'italic';
-                        errorMsg.style.padding = '20px';
-                        e.target.parentNode.appendChild(errorMsg);
-                      }}
-                    />
-                  </div>
-                )}
-                
-                {question.question && (
-                  <div style={{ 
-                    fontSize: `${previewStyles.fontSize + 1}px`,
-                    fontWeight: '500',
-                    color: '#111827'
-                  }}>
-                    {question.question}
-                  </div>
-                )}
-
-                {question.options && question.options.length > 0 && (
-                  <div style={{ marginTop: '12px' }}>
-                    {question.options.map((option, optIndex) => (
-                      <div key={optIndex} style={{ 
-                        display: 'flex', 
-                        alignItems: 'flex-start', 
-                        gap: '8px',
-                        marginBottom: '6px'
-                      }}>
-                        <span style={{
-                          backgroundColor: '#f3f4f6',
-                          color: '#374151',
-                          padding: '2px 6px',
-                          borderRadius: '4px',
-                          fontSize: `${previewStyles.fontSize - 1}px`,
-                          fontWeight: '500',
-                          minWidth: '20px',
-                          textAlign: 'center'
-                        }}>
-                          {option.id || String.fromCharCode(65 + optIndex)}
-                        </span>
-                        <span style={{ 
-                          fontSize: `${previewStyles.fontSize}px`,
-                          color: '#374151'
-                        }}>
-                          {option.text}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {packData.styling?.includeAnswers && !packData.styling?.separateAnswerSheet && question.correct_answer && (
-                  <div style={{ 
-                    padding: previewStyles.answerBoxPadding,
-                    fontSize: `${previewStyles.fontSize - 1}px`,
-                    marginTop: '12px',
-                    backgroundColor: '#f0fdf4',
-                    border: '1px solid #bbf7d0',
-                    borderRadius: '6px',
-                    color: '#16a34a'
-                  }}>
-                    <strong>Answer: {question.correct_answer}</strong>
-                    {question.options && (() => {
-                      const correctOption = question.options.find(opt => opt.id === question.correct_answer);
-                      return correctOption?.text ? ` - ${correctOption.text.substring(0, 50)}${correctOption.text.length > 50 ? '...' : ''}` : '';
-                    })()}
-                  </div>
-                )}
-              </>
-            )}
-{packData.subject === 'maths' && (
-  <>
-    <div style={{ marginBottom: '12px' }}>
-      {question.paper_info && (
-        <div style={{ 
-          fontSize: `${previewStyles.fontSize - 1}px`,
-          color: '#6b7280',
-          marginBottom: '4px'
-        }}>
-          <strong>Year:</strong> {question.paper_info.year} • <strong>Paper:</strong> {question.paper_info.paper_title}
-        </div>
-      )}
-      {question.spec_topic && (
-        <div style={{ 
-          fontSize: `${previewStyles.fontSize - 1}px`,
-          color: '#6b7280',
-          marginBottom: '4px'
-        }}>
-          <strong>Spec Topic:</strong> {question.spec_topic}
-        </div>
-      )}
-      {question.question_topic && (
-        <div style={{ 
-          fontSize: `${previewStyles.fontSize - 1}px`,
-          color: '#6b7280',
-          marginBottom: '4px'
-        }}>
-          <strong>Question Topic:</strong> {question.question_topic}
-        </div>
-      )}
-      {question.marks && (
-        <div style={{ 
-          fontSize: `${previewStyles.fontSize - 1}px`,
-          color: '#6b7280'
-        }}>
-          <strong>Marks:</strong> {question.marks}
-        </div>
-      )}
-    </div>
-
-
-                {imageUrl && (
-                  <div style={{ 
-                    margin: '12px 0',
-                    textAlign: 'center',
-                    border: '1px solid #e2e8f0',
-                    borderRadius: '8px',
-                    padding: '8px',
-                    backgroundColor: '#f8fafc'
-                  }}>
-                    <img
-                      src={getImageUrl(imageUrl)}
-                      alt={`Question ${questionNum} diagram`}
-                      style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '200px',
-                        height: 'auto',
-                        borderRadius: '4px'
-                      }}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        const errorMsg = document.createElement('div');
-                        errorMsg.textContent = '[Image will be included in PDF]';
-                        errorMsg.style.color = '#64748b';
-                        errorMsg.style.fontStyle = 'italic';
-                        errorMsg.style.padding = '20px';
-                        e.target.parentNode.appendChild(errorMsg);
-                      }}
-                    />
-                  </div>
-                )}
-
-                <div style={{
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '4px',
-                  padding: '20px',
-                  backgroundColor: '#fafafa',
-                  minHeight: '60px',
+            {/* Korean-English question display */}
+            <div style={{ marginBottom: '12px' }}>
+              {question.year && (
+                <div style={{ 
                   fontSize: `${previewStyles.fontSize - 1}px`,
                   color: '#6b7280',
-                  fontStyle: 'italic'
+                  marginBottom: '4px'
                 }}>
-                  Answer space for working and solution
+                  <strong>Year:</strong> {question.year}
                 </div>
+              )}
+              {question.subject_area && (
+                <div style={{ 
+                  fontSize: `${previewStyles.fontSize - 1}px`,
+                  color: '#6b7280',
+                  marginBottom: '4px'
+                }}>
+                  <strong>Subject Area:</strong> {question.subject_area}
+                </div>
+              )}
+              {question.difficulty && (
+                <div style={{ 
+                  fontSize: `${previewStyles.fontSize - 1}px`,
+                  color: '#6b7280',
+                  marginBottom: '4px'
+                }}>
+                  <strong>Difficulty:</strong> {question.difficulty}
+                </div>
+              )}
+              {question.question_type && (
+                <div style={{ 
+                  fontSize: `${previewStyles.fontSize - 1}px`,
+                  color: '#6b7280'
+                }}>
+                  <strong>Question Type:</strong> {question.question_type}
+                </div>
+              )}
+            </div>
 
-                {packData.styling?.includeAnswers && !packData.styling?.separateAnswerSheet && question.correct_answer && (
-                  <div style={{ 
-                    padding: previewStyles.answerBoxPadding,
-                    fontSize: `${previewStyles.fontSize - 1}px`,
-                    marginTop: '12px',
-                    backgroundColor: '#f0fdf4',
-                    border: '1px solid #bbf7d0',
-                    borderRadius: '6px',
-                    color: '#16a34a'
+            {/* Korean text */}
+            {question.korean && (
+              <div style={{ 
+                fontSize: `${previewStyles.fontSize + 1}px`,
+                fontWeight: '500',
+                color: '#111827',
+                marginBottom: '8px',
+                fontFamily: 'Malgun Gothic, Noto Sans KR, serif'
+              }}>
+                <strong>Korean:</strong> {question.korean}
+              </div>
+            )}
+
+            {/* English text */}
+            {question.english && (
+              <div style={{ 
+                fontSize: `${previewStyles.fontSize + 1}px`,
+                fontWeight: '500',
+                color: '#111827',
+                marginBottom: '8px'
+              }}>
+                <strong>English:</strong> {question.english}
+              </div>
+            )}
+
+            {/* Question text */}
+            {question.question && (
+              <div style={{ 
+                fontSize: `${previewStyles.fontSize + 1}px`,
+                fontWeight: '500',
+                color: '#111827',
+                marginBottom: '12px'
+              }}>
+                {question.question}
+              </div>
+            )}
+
+            {/* Options for multiple choice */}
+            {question.options && question.options.length > 0 && (
+              <div style={{ marginTop: '12px' }}>
+                {question.options.map((option, optIndex) => (
+                  <div key={optIndex} style={{ 
+                    display: 'flex', 
+                    alignItems: 'flex-start', 
+                    gap: '8px',
+                    marginBottom: '6px'
                   }}>
-                    <strong>Answer:</strong> {question.correct_answer}
+                    <span style={{
+                      backgroundColor: '#f3f4f6',
+                      color: '#374151',
+                      padding: '2px 6px',
+                      borderRadius: '4px',
+                      fontSize: `${previewStyles.fontSize - 1}px`,
+                      fontWeight: '500',
+                      minWidth: '20px',
+                      textAlign: 'center'
+                    }}>
+                      {option.id || String.fromCharCode(65 + optIndex)}
+                    </span>
+                    <span style={{ 
+                      fontSize: `${previewStyles.fontSize}px`,
+                      color: '#374151'
+                    }}>
+                      {option.text}
+                    </span>
                   </div>
-                )}
-              </>
+                ))}
+              </div>
+            )}
+
+            {/* Answer space for fill-in-the-blank or essay questions */}
+            {(question.question_type === 'Fill in the Blank' || question.question_type === 'Essay' || question.question_type === 'Translation') && (
+              <div style={{
+                border: '1px solid #e2e8f0',
+                borderRadius: '4px',
+                padding: '20px',
+                backgroundColor: '#fafafa',
+                minHeight: '60px',
+                fontSize: `${previewStyles.fontSize - 1}px`,
+                color: '#6b7280',
+                fontStyle: 'italic',
+                marginTop: '12px'
+              }}>
+                Answer space
+              </div>
+            )}
+
+            {/* Answer section */}
+            {packData.styling?.includeAnswers && !packData.styling?.separateAnswerSheet && question.answer && (
+              <div style={{ 
+                padding: previewStyles.answerBoxPadding,
+                fontSize: `${previewStyles.fontSize - 1}px`,
+                marginTop: '12px',
+                backgroundColor: '#f0fdf4',
+                border: '1px solid #bbf7d0',
+                borderRadius: '6px',
+                color: '#16a34a'
+              }}>
+                <strong>Answer:</strong> {question.answer}
+              </div>
             )}
           </div>
         </div>
@@ -574,7 +447,7 @@ export const QuestionPackPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [packData, setPackData] = useState({
     packName: '',
-    subject: 'tsa',
+    subject: 'korean-english',
     selectedQuestionIds: [],
     totalQuestions: 50,
     styling: { 
@@ -588,7 +461,7 @@ export const QuestionPackPage = () => {
 
   // Filter and question states
   const [activeFilters, setActiveFilters] = useState([]);
-  const [activeCategory, setActiveCategory] = useState('type');
+  const [activeCategory, setActiveCategory] = useState('year');
   const [availableQuestions, setAvailableQuestions] = useState(0);
   const [fetchedQuestions, setFetchedQuestions] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
@@ -647,22 +520,25 @@ const colorOptions = [
     }
   };
 
-// Get question preview
+// Get question preview for Korean-English
 const getQuestionPreview = (question) => {
-  if (packData.subject === 'tsa') {
-    const hasImage = question?.image_url || question?.imageFile || question?.image_file;
-    const preview = question.question_content || question.question || 'TSA Question';
-    return hasImage ? `📷 ${preview}` : preview;
-  } else if (packData.subject === 'maths') {
-    const hasImage = question?.imageUrl || question?.image_url || question?.imageFile || question?.image_file;
-    const year = question.paper_info?.year || 'Unknown Year';
-    const paperTitle = question.paper_info?.paper_title || 'Unknown Paper';
-    const questionNumber = question.question_number || 'Q?';
-    const questionTopic = question.question_topic || question.spec_topic || 'Unknown Topic';
-    const preview = `${year} ${paperTitle} Q${questionNumber} - ${questionTopic}`;
-    return hasImage ? `📷 ${preview}` : preview;
+  const korean = question.korean || question.korean_text || '';
+  const english = question.english || question.english_text || '';
+  const questionType = question.question_type || '';
+  const subjectArea = question.subject_area || '';
+  
+  // Create a meaningful preview
+  if (korean && english) {
+    return `${korean.substring(0, 30)}... → ${english.substring(0, 30)}...`;
+  } else if (korean) {
+    return `Korean: ${korean.substring(0, 40)}...`;
+  } else if (english) {
+    return `English: ${english.substring(0, 40)}...`;
+  } else if (question.question) {
+    return question.question.substring(0, 50) + (question.question.length > 50 ? '...' : '');
+  } else {
+    return `${subjectArea || 'Korean-English'} ${questionType || 'Question'}`;
   }
-  return 'Question';
 };
 
   // Toggle question selection
@@ -824,23 +700,16 @@ const getQuestionPreview = (question) => {
     setGeneratingPDF(true);
 
     try {
-      // Validate questions have required data
+      // Validate Korean-English questions have required data
       const invalidQuestions = selectedQuestions.filter((q, index) => {
         if (!q) {
           console.warn(`Question at index ${index} is null/undefined`);
           return true;
         }
-        // Check for required fields based on subject
-        if (packData.subject === 'tsa') {
-          if (!q.question && !q.question_content) {
-            console.warn(`TSA question ${q.objectID || index} missing question content`);
-            return true;
-          }
-        } else if (packData.subject === 'maths') {
-          if (!q.paper_info && !q.spec_topic && !q.question_topic) {
-            console.warn(`Maths question ${q.objectID || index} missing metadata`);
-            return true;
-          }
+        // Check for Korean-English required fields
+        if (!q.korean && !q.english && !q.question) {
+          console.warn(`Korean-English question ${q.objectID || index} missing content`);
+          return true;
         }
         return false;
       });
@@ -1017,7 +886,7 @@ const getQuestionPreview = (question) => {
   // Reset filters when changing subjects
   useEffect(() => {
     setActiveFilters([]);
-    setActiveCategory(packData.subject === 'tsa' ? 'type' : 'year');
+    setActiveCategory('year'); // Default to year for Korean-English
   }, [packData.subject]);
 
   if (paywallLoading) {
