@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { fetchVocabulary } from '../services/vocabularyAPIService';
 import VocabularyFilters from './VocabularyFilters';
 import VocabularyHit from './VocabularyHit';
+import VocabularyAdmin from './VocabularyAdmin';
 import './VocabularySearch.css';
 
 const VocabularySearch = ({ bannerText }) => {
@@ -84,6 +85,9 @@ const VocabularySearch = ({ bannerText }) => {
         <h1 className="search-title">Vocabulary Learning</h1>
         <p className="search-subtitle">{bannerText}</p>
       </div>
+
+      {/* Admin Panel - Remove this after population */}
+      <VocabularyAdmin />
 
       {/* Search Stats */}
       <div className="search-stats">
