@@ -242,54 +242,63 @@ const VocabularyHit = ({ hit }) => {
         </div>
       </div>
 
+      {/* Action buttons - always show */}
+      <div className="action-buttons-section">
+        <button 
+          className="toggle-button synonyms-toggle"
+          onClick={toggleSynonyms}
+          disabled={loading}
+        >
+          {loading ? '⏳ Loading...' : showSynonyms ? '🔽 Hide Synonyms' : '📝 Show Synonyms'} {synonyms.length > 0 ? `(${synonyms.length})` : ''}
+        </button>
+        
+        <button 
+          className="toggle-button examples-toggle"
+          onClick={toggleExamples}
+          disabled={loading}
+        >
+          {loading ? '⏳ Loading...' : showExamples ? '🔽 Hide Examples' : '💡 Show Examples'} {examples.length > 0 ? `(${examples.length})` : ''}
+        </button>
+        
+        <button 
+          className="toggle-button quiz-toggle"
+          onClick={startQuiz}
+          disabled={loading}
+        >
+          🧠 Start Quiz
+        </button>
+      </div>
+
       {/* Synonyms section */}
-      {synonyms.length > 0 && (
+      {synonyms.length > 0 && showSynonyms && (
         <div className="synonyms-section">
-          <button 
-            className="toggle-button synonyms-toggle"
-            onClick={toggleSynonyms}
-          >
-            {showSynonyms ? '🔽 Hide Synonyms' : '📝 Show Synonyms'} ({synonyms.length})
-          </button>
-          
-          {showSynonyms && (
-            <div className="synonyms-content">
-              <div className="synonyms-list">
-                {synonyms.map((synonym, index) => (
-                  <span key={index} className="synonym-item">
-                    {synonym}
-                  </span>
-                ))}
-              </div>
+          <div className="synonyms-content">
+            <div className="synonyms-list">
+              {synonyms.map((synonym, index) => (
+                <span key={index} className="synonym-item">
+                  {synonym}
+                </span>
+              ))}
             </div>
-          )}
+          </div>
         </div>
       )}
 
-      {/* Examples section */}
-      {examples.length > 0 && (
+      {/* Examples section - now only shows content when data is loaded */}
+      {examples.length > 0 && showExamples && (
         <div className="examples-section">
-          <button 
-            className="toggle-button examples-toggle"
-            onClick={toggleExamples}
-          >
-            {showExamples ? '🔽 Hide Examples' : '💡 Show Examples'} ({examples.length})
-          </button>
-          
-          {showExamples && (
-            <div className="examples-content">
-              <div className="examples-list">
-                {examples.map((example, index) => (
-                  <div key={index} className="example-item">
-                    <p className="example-text">{example.sentence || example}</p>
-                    {example.translation && (
-                      <p className="example-translation">{example.translation}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
+          <div className="examples-content">
+            <div className="examples-list">
+              {examples.map((example, index) => (
+                <div key={index} className="example-item">
+                  <p className="example-text">{example.sentence || example}</p>
+                  {example.translation && (
+                    <p className="example-translation">{example.translation}</p>
+                  )}
+                </div>
+              ))}
             </div>
-          )}
+          </div>
         </div>
       )}
 
