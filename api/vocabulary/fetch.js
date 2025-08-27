@@ -1,7 +1,7 @@
 // api/vocabulary/fetch.js - Fetch pre-computed vocabulary from database
 const { db } = require('../../src/firebase-admin');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
