@@ -134,7 +134,7 @@ const VocabularySearch = ({ searchClient, subjectConfig, bannerText, user }) => 
 
       {/* InstantSearch wrapper for getting question data */}
       <InstantSearch searchClient={searchClient} indexName={subjectConfig.index}>
-        <Configure hitsPerPage={1000} />
+        <Configure hitsPerPage={20} />
         
         {/* Hidden search box to get all questions */}
         <div style={{ display: 'none' }}>
@@ -185,13 +185,13 @@ const VocabularySearch = ({ searchClient, subjectConfig, bannerText, user }) => 
       <div className="vocabulary-results">
         {filteredWords.length > 0 ? (
           <div className="vocabulary-grid">
-            {filteredWords.slice(0, 50).map((word, index) => (
+            {filteredWords.slice(0, 20).map((word, index) => (
               <VocabularyHit key={`${word.word}-${index}`} hit={word} />
             ))}
             
-            {filteredWords.length > 50 && (
+            {filteredWords.length > 20 && (
               <div className="load-more-container">
-                <p>Showing first 50 words out of {filteredWords.length} total</p>
+                <p>Showing first 20 words out of {filteredWords.length} total</p>
                 <button className="load-more-btn">
                   Load More Words
                 </button>
