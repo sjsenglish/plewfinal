@@ -1,128 +1,81 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { InstantSearch, Stats, Configure, useHits } from 'react-instantsearch';
-import { extractVocabularyFromQuestions, sortWords } from '../services/vocabularyService';
-import CustomSearchBox from './CustomSearchBox';
+import { fetchVocabulary } from '../services/vocabularyAPIService';
 import VocabularyFilters from './VocabularyFilters';
 import VocabularyHit from './VocabularyHit';
 import './VocabularySearch.css';
 
-const VocabularySearch = ({ searchClient, subjectConfig, bannerText, user }) => {
+const VocabularySearch = ({ bannerText }) => {
   const [vocabularyWords, setVocabularyWords] = useState([]);
-  const [filteredWords, setFilteredWords] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [sortBy, setSortBy] = useState('frequency');
-  const [filters, setFilters] = useState({});
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [error, setError] = useState(null);
+  const [pagination, setPagination] = useState({
+    total: 0,
+    limit: 10,
+    offset: 0,
+    hasMore: false
+  });
+  const [filters, setFilters] = useState({
+    sortBy: 'frequency',
+    subjectArea: 'all',
+    minFrequency: 1,
+    search: null
+  });
 
-  // Extract vocabulary from search results
-  const extractVocabulary = useCallback(async (hits) => {
-    if (!hits || hits.length === 0) return;
-    
+  // Fetch vocabulary from API
+  const loadVocabulary = useCallback(async (options = {}) => {
     setLoading(true);
+    setError(null);
+    
     try {
-      console.log('Extracting vocabulary from', hits.length, 'questions');
-      const words = await extractVocabularyFromQuestions(hits);
-      console.log('Extracted', words.length, 'unique words');
+      console.log('Loading vocabulary from API with options:', options);
       
-      setVocabularyWords(words);
-      setFilteredWords(sortWords(words, sortBy));
-    } catch (error) {
-      console.error('Error extracting vocabulary:', error);
+      const result = await fetchVocabulary({
+        ...filters,
+        ...options
+      });
+
+      if (result.success) {
+        setVocabularyWords(result.words);
+        setPagination(result.pagination);
+        console.log('Loaded vocabulary:', result.words.length, 'words');
+      } else {
+        setError(result.error);
+        console.error('Failed to load vocabulary:', result.error);
+      }
+    } catch (err) {
+      setError(err.message);
+      console.error('Error loading vocabulary:', err);
     } finally {
       setLoading(false);
     }
-  }, [sortBy]);
+  }, [filters]);
 
-  // Handle search results from Algolia
-  const handleSearchResults = useCallback((hits) => {
-    if (hits && hits.length > 0) {
-      extractVocabulary(hits);
-    }
-  }, [extractVocabulary]);
-
-  // Initialize with empty search to get all questions
+  // Load initial vocabulary on component mount
   useEffect(() => {
-    if (!isInitialized) {
-      // Trigger initial load - this will be handled by the search component
-      setIsInitialized(true);
-    }
-  }, [isInitialized]);
+    loadVocabulary();
+  }, [loadVocabulary]);
 
   // Handle sorting changes
   const handleSortChange = useCallback((newSortBy) => {
-    setSortBy(newSortBy);
-    const sorted = sortWords(filteredWords, newSortBy);
-    setFilteredWords(sorted);
-  }, [filteredWords]);
+    const newFilters = { ...filters, sortBy: newSortBy };
+    setFilters(newFilters);
+    loadVocabulary({ sortBy: newSortBy, offset: 0 });
+  }, [filters, loadVocabulary]);
 
   // Handle filter changes
   const handleFiltersChange = useCallback((newFilters) => {
-    setFilters(newFilters);
-    
-    // Apply filters to vocabulary words
-    let filtered = [...vocabularyWords];
-    
-    // Apply difficulty filter
-    if (newFilters.difficulty) {
-      filtered = filtered.filter(word => {
-        const difficulty = word.difficulty || 3;
-        switch (newFilters.difficulty) {
-          case 'beginner':
-            return difficulty <= 2;
-          case 'intermediate':
-            return difficulty === 3;
-          case 'advanced':
-            return difficulty >= 4;
-          default:
-            return true;
-        }
-      });
-    }
-    
-    // Apply part of speech filter
-    if (newFilters.partOfSpeech) {
-      filtered = filtered.filter(word => 
-        (word.partOfSpeech || '').toLowerCase() === newFilters.partOfSpeech
-      );
-    }
-    
-    // Apply frequency filter
-    if (newFilters.frequency) {
-      filtered = filtered.filter(word => 
-        (word.frequency || 'common') === newFilters.frequency
-      );
-    }
-    
-    // Apply subject area filter
-    if (newFilters.subjectArea) {
-      filtered = filtered.filter(word => 
-        (word.subjectArea || 'general') === newFilters.subjectArea
-      );
-    }
-    
-    // Sort the filtered results
-    const sorted = sortWords(filtered, sortBy);
-    setFilteredWords(sorted);
-  }, [vocabularyWords, sortBy]);
+    const updatedFilters = { ...filters, ...newFilters, offset: 0 };
+    setFilters(updatedFilters);
+    loadVocabulary(updatedFilters);
+  }, [filters, loadVocabulary]);
 
-  // Component to collect hits using useHits hook
-  const VocabularyHitsCollector = () => {
-    const { hits } = useHits();
-    
-    useEffect(() => {
-      console.log('VocabularyHitsCollector received hits:', hits ? hits.length : 'no hits');
-      if (hits && hits.length > 0) {
-        console.log('Sample hit structure:', hits[0]);
-        console.log('First few hits:', hits.slice(0, 3));
-        handleSearchResults(hits);
-      } else {
-        console.log('No hits received or hits array is empty');
-      }
-    }, [hits]);
-
-    // Don't render anything
-    return null;
-  };
+  // Handle load more
+  const handleLoadMore = useCallback(() => {
+    if (pagination.hasMore && !loading) {
+      const newOffset = pagination.offset + pagination.limit;
+      loadVocabulary({ offset: newOffset });
+    }
+  }, [pagination, loading, loadVocabulary]);
 
   return (
     <div className="vocabulary-search-container">
@@ -132,79 +85,88 @@ const VocabularySearch = ({ searchClient, subjectConfig, bannerText, user }) => 
         <p className="search-subtitle">{bannerText}</p>
       </div>
 
-      {/* InstantSearch wrapper for getting question data */}
-      <InstantSearch searchClient={searchClient} indexName={subjectConfig.index}>
-        <Configure hitsPerPage={10} />
-        
-        {/* Hidden search box to get all questions */}
-        <div style={{ display: 'none' }}>
-          <CustomSearchBox 
-            placeholder="Loading vocabulary..."
-            defaultQuery=""
-          />
-          <VocabularyHitsCollector />
-        </div>
-        
-        {/* Search Stats */}
-        <div className="search-stats">
-          <Stats 
-            translations={{
-              stats: (nbHits, processingTime) => 
-                `Found ${vocabularyWords.length} vocabulary words from ${nbHits} questions (${processingTime}ms)`
-            }}
-          />
-        </div>
-      </InstantSearch>
+      {/* Search Stats */}
+      <div className="search-stats">
+        <p>Found {pagination.total} vocabulary words (pre-computed from questions database)</p>
+      </div>
 
       {/* Vocabulary Filters */}
       <VocabularyFilters
         onFiltersChange={handleFiltersChange}
         onSortChange={handleSortChange}
         currentFilters={filters}
-        sortBy={sortBy}
+        sortBy={filters.sortBy}
       />
 
       {/* Loading State */}
       {loading && (
         <div className="loading-state">
           <div className="loading-spinner"></div>
-          <p>Extracting vocabulary from questions...</p>
+          <p>Loading vocabulary from database...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <div className="error-state" style={{ 
+          background: '#fee', 
+          border: '1px solid #fcc', 
+          padding: '1rem', 
+          borderRadius: '8px', 
+          margin: '1rem 0' 
+        }}>
+          <h3>Error Loading Vocabulary</h3>
+          <p>{error}</p>
+          <button onClick={() => loadVocabulary()} style={{
+            background: '#ff6b35',
+            color: 'white',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}>
+            Retry
+          </button>
         </div>
       )}
 
       {/* Debug Info */}
       <div style={{ padding: '10px', background: '#f0f0f0', margin: '10px 0', fontSize: '12px' }}>
-        <p>Debug Info:</p>
+        <p>API Info:</p>
         <p>Loading: {loading.toString()}</p>
         <p>Vocabulary Words: {vocabularyWords.length}</p>
-        <p>Filtered Words: {filteredWords.length}</p>
-        <p>Sample words: {vocabularyWords.slice(0, 3).map(w => w.word).join(', ')}</p>
+        <p>Total Available: {pagination.total}</p>
+        <p>Current Filters: {JSON.stringify(filters)}</p>
+        <p>Has More: {pagination.hasMore.toString()}</p>
       </div>
 
       {/* Vocabulary Results */}
       <div className="vocabulary-results">
-        {filteredWords.length > 0 ? (
+        {vocabularyWords.length > 0 ? (
           <div className="vocabulary-grid">
-            {filteredWords.slice(0, 10).map((word, index) => (
-              <VocabularyHit key={`${word.word}-${index}`} hit={word} />
+            {vocabularyWords.map((word, index) => (
+              <VocabularyHit key={`${word.word || word.id}-${index}`} hit={word} />
             ))}
             
-            {filteredWords.length > 10 && (
+            {pagination.hasMore && (
               <div className="load-more-container">
-                <p>Showing first 10 words out of {filteredWords.length} total</p>
-                <button className="load-more-btn">
-                  Load More Words
+                <p>Showing {vocabularyWords.length} of {pagination.total} vocabulary words</p>
+                <button 
+                  className="load-more-btn"
+                  onClick={handleLoadMore}
+                  disabled={loading}
+                >
+                  {loading ? 'Loading...' : 'Load More Words'}
                 </button>
               </div>
             )}
           </div>
         ) : (
-          !loading && vocabularyWords.length === 0 && (
+          !loading && !error && (
             <div className="no-results">
               <h3>No vocabulary words found</h3>
-              <p>Try adjusting your filters or check your search index.</p>
-              <p>Loading: {loading.toString()}</p>
-              <p>Vocabulary Words: {vocabularyWords.length}</p>
+              <p>No vocabulary words match your current filters.</p>
+              <p>Try adjusting your search criteria or check if the vocabulary database has been populated.</p>
             </div>
           )
         )}

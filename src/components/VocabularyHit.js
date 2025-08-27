@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { getEnhancedWordInfo, generateSynonymQuiz } from '../services/vocabularyService';
+import { getEnhancedWordInfo } from '../services/vocabularyAPIService';
+import { generateSynonymQuiz } from '../services/vocabularyService';
 import './VocabularyHit.css';
 
 const VocabularyHit = ({ hit }) => {
