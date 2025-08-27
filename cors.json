@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://www.examrizzsearch.com", "https://examrizzsearch.com"],
+    "method": ["GET", "HEAD"],
+    "maxAgeSeconds": 3600,
+    "responseHeader": ["Content-Type"]
+  }
+]

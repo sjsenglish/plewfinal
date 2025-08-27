@@ -1,0 +1,123 @@
+/* Updated CustomHits.css */
+.locked-content {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.alternate-theme .locked-content {
+  background-color: #2d3b50;
+  color: white;
+}
+
+.locked-message {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.lock-icon {
+  font-size: 3rem;
+  color: #6b5ca5;
+  margin-bottom: 1rem;
+}
+
+.alternate-theme .lock-icon {
+  color: #2b55a1;
+}
+
+.locked-message h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #221368;
+}
+
+.alternate-theme .locked-message h3 {
+  color: #d6e4f7;
+}
+
+.locked-message p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.alternate-theme .locked-message p {
+  color: #a5d6ff;
+}
+
+.locked-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.signup-action-button,
+.login-action-button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.signup-action-button {
+  background-color: #6b5ca5;
+  color: white;
+}
+
+.signup-action-button:hover {
+  background-color: #5a4b94;
+  transform: translateY(-2px);
+}
+
+.login-action-button {
+  background-color: #f0e7f8;
+  color: #221368;
+}
+
+.login-action-button:hover {
+  background-color: #e0d6eb;
+  transform: translateY(-2px);
+}
+
+.alternate-theme .signup-action-button {
+  background-color: #2b55a1;
+}
+
+.alternate-theme .signup-action-button:hover {
+  background-color: #1a4490;
+}
+
+.alternate-theme .login-action-button {
+  background-color: #d6e4f7;
+  color: #2b55a1;
+}
+
+.alternate-theme .login-action-button:hover {
+  background-color: #c5d6f0;
+}
+
+.no-results {
+  padding: 2rem 0;
+  text-align: center;
+  color: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .locked-content {
+    padding: 1.5rem;
+  }
+
+  .locked-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

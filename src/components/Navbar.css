@@ -1,0 +1,740 @@
+/* Navbar.css - Improved Aesthetic */
+.navbar {
+  background-color: white;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.alternate-theme.navbar {
+  background-color: #2d3b50;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+
+.navbar-left {
+  flex: 0 0 auto;
+  margin-right: 4rem;
+}
+
+.navbar-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.navbar-auth {
+  margin-left: 3rem;
+}
+
+.navbar-logo {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.navbar-logo a {
+  text-decoration: none;
+  color: #221368;
+  transition: all 0.3s ease;
+}
+
+.navbar-logo a:hover {
+  color: #6b5ca5;
+  transform: translateY(-1px);
+}
+
+.alternate-theme .navbar-logo a {
+  color: #ffffff;
+}
+
+.alternate-theme .navbar-logo a:hover {
+  color: #d6e4f7;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 3.5rem;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #4a5568;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  letter-spacing: 0.01em;
+}
+
+.navbar-links a:hover {
+  color: #6b5ca5;
+  background-color: rgba(107, 92, 165, 0.08);
+  transform: translateY(-1px);
+}
+
+.navbar-links a.active {
+  color: #6b5ca5;
+  background-color: rgba(107, 92, 165, 0.12);
+  font-weight: 600;
+}
+
+.navbar-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  background: linear-gradient(90deg, #6b5ca5, #8b7cc8);
+  border-radius: 2px;
+}
+
+/* PLEW theme (alternate-theme) - Enhanced styling */
+.alternate-theme .navbar-links a {
+  color: #e2e8f0 !important;
+  font-size: 0.95rem;
+}
+
+.alternate-theme .navbar-links a:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.alternate-theme .navbar-links a.active {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.alternate-theme .navbar-links a.active::after {
+  background: linear-gradient(90deg, #ffffff, #d6e4f7) !important;
+}
+
+.profile-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(107, 92, 165, 0.2);
+  transition: all 0.3s ease;
+}
+
+.nav-avatar:hover {
+  border-color: #6b5ca5;
+  transform: scale(1.05);
+}
+
+.nav-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6b5ca5, #8b7cc8);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.nav-avatar-placeholder:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(107, 92, 165, 0.3);
+}
+
+.alternate-theme .nav-avatar-placeholder {
+  background: linear-gradient(135deg, #2b55a1, #4a73c1);
+}
+
+/* Dropdown styles - Enhanced with hover functionality */
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-container:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-button {
+  background: none;
+  border: none;
+  color: #4a5568;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.01em;
+}
+
+.dropdown-button:hover {
+  color: #6b5ca5;
+  background-color: rgba(107, 92, 165, 0.08);
+  transform: translateY(-1px);
+}
+
+.dropdown-button i {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-container:hover .dropdown-button i {
+  transform: rotate(180deg);
+}
+
+/* PLEW theme dropdown button - Enhanced */
+.alternate-theme .dropdown-button {
+  color: #e2e8f0 !important;
+  font-size: 0.95rem;
+}
+
+.alternate-theme .dropdown-button:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  min-width: 220px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1010;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.alternate-theme .dropdown-menu {
+  background-color: #3a4a61;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-menu button {
+  width: 100%;
+  text-align: left;
+  padding: 1rem 1.25rem;
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #4a5568;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dropdown-menu button:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu button:hover {
+  background-color: rgba(107, 92, 165, 0.08);
+  color: #6b5ca5;
+  transform: translateX(4px);
+}
+
+/* PLEW theme dropdown menu buttons - Enhanced */
+.alternate-theme .dropdown-menu button {
+  color: #e2e8f0 !important;
+  font-size: 0.95rem;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.alternate-theme .dropdown-menu button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+/* Enhanced Login button - Made larger */
+.navbar-links .login-button {
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, #6b5ca5, #8b7cc8);
+  color: white;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(107, 92, 165, 0.3);
+  border: none;
+  letter-spacing: 0.01em;
+  min-width: 120px;
+  text-align: center;
+}
+
+.navbar-links .login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(107, 92, 165, 0.4);
+  background: linear-gradient(135deg, #5a4b94, #7a6bb7);
+}
+
+.alternate-theme .navbar-links .login-button {
+  background: linear-gradient(135deg, #2b55a1, #4a73c1);
+  box-shadow: 0 2px 8px rgba(43, 85, 161, 0.3);
+}
+
+.alternate-theme .navbar-links .login-button:hover {
+  background: linear-gradient(135deg, #1a4490, #3962b0);
+  box-shadow: 0 4px 16px rgba(43, 85, 161, 0.4);
+}
+
+/* Enhanced Logout button - Made larger */
+.logout-button {
+  padding: 0.875rem 1.5rem;
+  background-color: #f7fafc;
+  color: #718096;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  min-width: 120px;
+  text-align: center;
+}
+
+.logout-button:hover {
+  background-color: #edf2f7;
+  color: #4a5568;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alternate-theme .logout-button {
+  background-color: #41556f;
+  color: #d6e4f7;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.alternate-theme .logout-button:hover {
+  background-color: #4a5c76;
+  color: #ffffff;
+}
+
+/* Enhanced Loading state */
+.nav-loading {
+  width: 32px;
+  height: 12px;
+  background-color: #f1f5f9;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(107, 92, 165, 0.6), transparent);
+  animation: navLoading 1.5s infinite;
+}
+
+@keyframes navLoading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Enhanced Responsive adjustments */
+@media (max-width: 1024px) {
+  .navbar-container {
+    padding: 0 1.5rem;
+  }
+  
+  .navbar-left {
+    margin-right: 2rem;
+  }
+  
+  .navbar-links {
+    gap: 2rem;
+  }
+
+  .navbar-auth {
+    margin-left: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.75rem 0;
+  }
+
+  .navbar-container {
+    padding: 0 1rem;
+  }
+
+  .navbar-logo {
+    font-size: 1.5rem;
+  }
+
+  .navbar-links {
+    gap: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .navbar-auth {
+    margin-left: 1.5rem;
+  }
+
+  .navbar-links a,
+  .dropdown-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .navbar-left {
+    margin-right: 0;
+  }
+
+  .navbar-right {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .navbar-auth {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .dropdown-menu {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+  }
+
+  .navbar-links a,
+  .dropdown-button {
+    width: 100%;
+    padding: 0.75rem;
+    text-align: left;
+  }
+
+  .navbar-links .login-button,
+  .logout-button {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+}
+/* Navbar Styles - Updated to match your existing class names */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px);
+    border: none !important;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.navbar-logo a {
+    font-size: 24px !important;
+    font-weight: bold !important;
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 40px !important;
+    align-items: center;
+}
+
+/* Glass button styling for nav links */
+.navbar-glass-button {
+    color: white !important;
+    text-decoration: none !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    opacity: 0.9 !important;
+    transition: opacity 0.3s ease !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.navbar-glass-button:hover {
+    opacity: 1 !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.navbar-auth {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+/* MINIMAL COLOR FIXES ONLY */
+
+/* Fix navbar links visibility - change text color to be visible */
+.navbar-glass-button {
+    color: #333 !important;
+    opacity: 0.9 !important;
+}
+
+.navbar-glass-button:hover {
+    opacity: 1 !important;
+    color: #000 !important;
+}
+
+/* Fix examrizzsearch logo visibility */
+.navbar-logo a {
+    color: #333 !important;
+}
+
+/* How it works button - smaller and stacked */
+.see-how-it-works-button-new.exact-colors,
+.see-how-it-works-button-new,
+button.see-how-it-works-button-new,
+[class*="how-it-works"] {
+    background-color: #ccccff !important;
+    color: #221468 !important;
+    border-color: #ccccff !important;
+    background: #ccccff !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    border-radius: 20px !important;
+}
+
+.see-how-it-works-button-new.exact-colors:hover,
+.see-how-it-works-button-new:hover,
+button.see-how-it-works-button-new:hover,
+[class*="how-it-works"]:hover {
+    background-color: rgba(204, 204, 255, 0.9) !important;
+    color: #221468 !important;
+    background: rgba(204, 204, 255, 0.9) !important;
+}
+
+/* Download PS guide button - smaller and stacked */
+.pdf-download-button.exact-colors,
+.pdf-download-button,
+button.pdf-download-button,
+[class*="pdf-download"] {
+    background-color: #00ced1 !important;
+    color: #1e3a8a !important;
+    border-color: #00ced1 !important;
+    background: #00ced1 !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    border-radius: 20px !important;
+}
+
+.pdf-download-button.exact-colors:hover,
+.pdf-download-button:hover,
+button.pdf-download-button:hover,
+[class*="pdf-download"]:hover {
+    background-color: rgba(0, 206, 209, 0.9) !important;
+    color: #1e3a8a !important;
+    background: rgba(0, 206, 209, 0.9) !important;
+}
+
+/* Stack buttons vertically and make them smaller */
+.header-actions-container {
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: center !important;
+}
+
+/* Monthly Plan button - same colors as PDF button */
+.navbar-upgrade-button-exact {
+    background-color: #00ced1 !important;
+    color: #1e3a8a !important;
+    border-color: #00ced1 !important;
+    background: #00ced1 !important;
+}
+
+.navbar-upgrade-button-exact:hover {
+    background-color: rgba(0, 206, 209, 0.9) !important;
+    color: #1e3a8a !important;
+    background: rgba(0, 206, 209, 0.9) !important;
+}
+.navbar-upgrade-button-exact {
+    background-color: #00ced1 !important;
+    color: #1e3a8a !important;
+    border-color: #00ced1 !important;
+    background: #00ced1 !important;
+    padding: 8px 16px !important;
+    border-radius: 20px !important;
+    border: 2px solid #00ced1 !important;
+}
+
+.navbar-upgrade-button-exact:hover {
+    background-color: rgba(0, 206, 209, 0.9) !important;
+    color: #1e3a8a !important;
+    background: rgba(0, 206, 209, 0.9) !important;
+}
+
+/* Login/Logout button - container styling like other buttons */
+.navbar-login-button-exact,
+button.navbar-glass-button {
+    background-color: #ccccff !important;
+    color: #221468 !important;
+    border: 2px solid #ccccff !important;
+    padding: 8px 16px !important;
+    border-radius: 20px !important;
+    cursor: pointer !important;
+}
+
+.navbar-login-button-exact:hover,
+button.navbar-glass-button:hover {
+    background-color: rgba(204, 204, 255, 0.9) !important;
+    color: #221468 !important;
+}
+/* Add this to your Navbar.css file */
+
+/* Navbar brand styling */
+.navbar-brand-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  font-weight: inherit;
+}
+
+/* Beta label for navbar */
+.navbar-beta-label {
+  background: linear-gradient(135deg, #00ced1 0%, #ccccff 100%) !important;
+  color: white !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  padding: 2px 6px !important;
+  border-radius: 8px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  box-shadow: 0 2px 6px rgba(0, 206, 209, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(8px) !important;
+  display: inline-block !important;
+  white-space: nowrap !important;
+  z-index: 10 !important;
+  position: relative !important;
+  top: -1px !important;
+  animation: navbar-beta-glow 2s ease-in-out infinite alternate !important;
+  line-height: 1 !important;
+}
+
+@keyframes navbar-beta-glow {
+  0% {
+    box-shadow: 0 2px 6px rgba(0, 206, 209, 0.4);
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 3px 10px rgba(0, 206, 209, 0.6);
+    transform: scale(1.05);
+  }
+}
+
+/* Responsive adjustments for beta label */
+@media (max-width: 1024px) {
+  .navbar-beta-label {
+    font-size: 8px !important;
+    padding: 1px 4px !important;
+  }
+  
+  .navbar-brand-text {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-beta-label {
+    font-size: 7px !important;
+    padding: 1px 3px !important;
+  }
+  
+  .navbar-brand-text {
+    gap: 4px;
+  }
+}
+
+/* Alternative simple beta label if the animated one doesn't work */
+.navbar-beta-label-simple {
+  background: #00ced1 !important;
+  color: white !important;
+  font-size: 8px !important;
+  font-weight: bold !important;
+  padding: 2px 5px !important;
+  border-radius: 4px !important;
+  text-transform: uppercase !important;
+  display: inline-block !important;
+  margin-left: 6px !important;
+  position: relative !important;
+  top: -1px !important;
+}
+
