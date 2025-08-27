@@ -17,40 +17,69 @@ if (apiKey) {
 
 // Extract vocabulary words from question text
 export const extractVocabularyFromQuestions = async (hits) => {
+  console.log('Processing', hits.length, 'questions for vocabulary extraction');
   const vocabularyWords = new Map();
   
   // Extract unique words from all question texts
-  hits.forEach(hit => {
-    const questionText = hit.question || hit.question_text || hit.questionText || '';
-    if (questionText) {
+  hits.forEach((hit, index) => {
+    // Try multiple field names to find question text in Korean-English pairs
+    const questionText = hit.question || hit.question_text || hit.questionText || 
+                        hit.english_text || hit.english || hit.text || 
+                        hit.korean_text || hit.korean || '';
+    
+    // Also extract from any other text fields that might contain vocabulary
+    const additionalText = [
+      hit.answer || hit.answer_text || '',
+      hit.explanation || hit.explanation_text || '',
+      hit.translation || '',
+      hit.romanization || ''
+    ].filter(text => text && typeof text === 'string').join(' ');
+    
+    const fullText = [questionText, additionalText].filter(t => t).join(' ');
+    
+    if (fullText && fullText.trim().length > 0) {
+      console.log(`Processing question ${index + 1}: "${fullText.substring(0, 100)}..."`);
+      
       // Extract meaningful words (filter out common words, focus on vocabulary-rich content)
-      const words = extractMeaningfulWords(questionText);
+      const words = extractMeaningfulWords(fullText);
+      console.log(`Found ${words.length} vocabulary words in question ${index + 1}`);
+      
       words.forEach(word => {
         if (!vocabularyWords.has(word.toLowerCase())) {
           vocabularyWords.set(word.toLowerCase(), {
             word: word,
             frequency: 1,
-            contexts: [questionText.substring(0, 200)],
-            sourceQuestions: [hit.objectID || hit.id]
+            contexts: [fullText.substring(0, 200)],
+            sourceQuestions: [hit.objectID || hit.id || `question-${index}`]
           });
         } else {
           const existing = vocabularyWords.get(word.toLowerCase());
           existing.frequency += 1;
-          existing.contexts.push(questionText.substring(0, 200));
-          existing.sourceQuestions.push(hit.objectID || hit.id);
+          if (existing.contexts.length < 5) { // Limit contexts to avoid memory issues
+            existing.contexts.push(fullText.substring(0, 200));
+          }
+          existing.sourceQuestions.push(hit.objectID || hit.id || `question-${index}`);
         }
       });
+    } else {
+      console.log(`Question ${index + 1} has no extractable text. Fields:`, Object.keys(hit));
     }
   });
 
+  console.log('Total unique vocabulary words extracted:', vocabularyWords.size);
+  
   // Convert to array and sort by frequency
-  return Array.from(vocabularyWords.values())
+  const result = Array.from(vocabularyWords.values())
     .sort((a, b) => b.frequency - a.frequency);
+    
+  console.log('Top 10 most frequent words:', result.slice(0, 10).map(w => `${w.word} (${w.frequency})`));
+  
+  return result;
 };
 
 // Extract meaningful vocabulary words from text
 const extractMeaningfulWords = (text) => {
-  // Common words to exclude
+  // Common words to exclude - keeping this minimal to get more vocabulary
   const stopWords = new Set([
     'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by',
     'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did',
@@ -58,24 +87,33 @@ const extractMeaningfulWords = (text) => {
     'this', 'that', 'these', 'those', 'it', 'its', 'he', 'she', 'they', 'we', 'you', 'i',
     'me', 'him', 'her', 'them', 'us', 'my', 'your', 'his', 'her', 'their', 'our',
     'what', 'when', 'where', 'why', 'how', 'which', 'who', 'whom', 'whose',
-    'not', 'no', 'yes', 'so', 'very', 'much', 'many', 'more', 'most', 'some', 'any', 'all'
+    'not', 'no', 'yes', 'so', 'very', 'much', 'many', 'more', 'most', 'some', 'any', 'all',
+    'from', 'into', 'about', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'any',
+    'as', 'because', 'before', 'below', 'between', 'both', 'down', 'during', 'each', 'few',
+    'further', 'here', 'how', 'if', 'into', 'just', 'now', 'once', 'only', 'other', 'our',
+    'out', 'over', 'own', 'same', 'such', 'than', 'then', 'there', 'through', 'too', 'under',
+    'until', 'up', 'while', 'with'
   ]);
 
-  // Extract words that are likely to be good vocabulary
+  // Extract words that are likely to be good vocabulary - made less restrictive
   const words = text
     .toLowerCase()
     .replace(/[^\w\s]/g, ' ') // Remove punctuation
     .split(/\s+/)
     .filter(word => 
-      word.length >= 4 && // At least 4 characters
-      word.length <= 15 && // Not too long
+      word.length >= 3 && // Reduced to 3 characters for more words
+      word.length <= 20 && // Increased max length
       !stopWords.has(word) && // Not a stop word
       !/^\d+$/.test(word) && // Not just numbers
-      /^[a-z]+$/.test(word) // Only letters
+      /^[a-z]+$/.test(word) && // Only letters
+      !word.includes('http') && // Filter out URLs
+      !word.includes('www') // Filter out web addresses
     );
 
   // Remove duplicates and return
-  return [...new Set(words)];
+  const uniqueWords = [...new Set(words)];
+  console.log(`Extracted ${uniqueWords.length} unique words from text: "${text.substring(0, 50)}..."`);
+  return uniqueWords;
 };
 
 // Get enhanced word information using OpenAI

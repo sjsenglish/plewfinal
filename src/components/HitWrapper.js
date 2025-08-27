@@ -28,7 +28,7 @@ const HitWrapper = ({ hit, ...props }) => {
       (hit.marks !== undefined && hit.question_text !== undefined) ||
       (hit.filters !== undefined && Array.isArray(hit.filters)) ||
       // FIXED: Check if hit.id exists, is a string, and includes 'MA0'
-      (hit.id && typeof hit.id === 'string' && hit.id.includes('MA0'))
+      (hit.id && typeof hit.id === 'string' && hit.id.includes && hit.id.includes('MA0'))
     );
   };
 
@@ -45,7 +45,7 @@ const HitWrapper = ({ hit, ...props }) => {
       hit.english_audio_url !== undefined ||
       (hit.level !== undefined && (hit.category !== undefined || hit.topic !== undefined)) ||
       // Check if index contains korean-english
-      (hit._index && typeof hit._index === 'string' && hit._index.includes('korean-english'))
+      (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('korean-english'))
     );
   };
 
@@ -67,7 +67,7 @@ const HitWrapper = ({ hit, ...props }) => {
       hit.collocations !== undefined ||
       hit.antonyms !== undefined ||
       // Check if index contains vocabulary
-      (hit._index && typeof hit._index === 'string' && hit._index.includes('vocabulary'))
+      (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('vocabulary'))
     );
   };
 
@@ -101,13 +101,13 @@ const HitWrapper = ({ hit, ...props }) => {
     } else {
       // Additional fallback logic based on index or other hints
       // FIXED: Added safety checks for _index as well
-      if (hit._index && typeof hit._index === 'string' && hit._index.includes('vocabulary')) {
+      if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('vocabulary')) {
         return 'vocabulary';
-      } else if (hit._index && typeof hit._index === 'string' && hit._index.includes('korean-english')) {
+      } else if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('korean-english')) {
         return 'koreanEnglish';
-      } else if (hit._index && typeof hit._index === 'string' && hit._index.includes('maths')) {
+      } else if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('maths')) {
         return 'maths';
-      } else if (hit._index && typeof hit._index === 'string' && hit._index.includes('plew')) {
+      } else if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('plew')) {
         return 'plew';
       } else {
         return 'tsa'; // Default fallback
