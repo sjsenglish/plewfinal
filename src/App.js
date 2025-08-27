@@ -33,12 +33,14 @@ import PasswordResetConfirm from './components/PasswordResetConfirm';
 import CommunitySearch from './components/CommunitySearch';
 import AdminQuestionUpload from './components/AdminQuestionUpload';
 import SubmitQuestionForm from './components/SubmitQuestionForm';
-import MathsSubmitQuestionForm from './components/MathsSubmitQuestionForm';
-import MathsFilters from './components/MathsFilters'; 
+// import MathsSubmitQuestionForm from './components/MathsSubmitQuestionForm'; // HIDDEN
+// import MathsFilters from './components/MathsFilters'; // HIDDEN
+import KoreanEnglishFilters from './components/KoreanEnglishFilters';
+import KoreanEnglishHit from './components/KoreanEnglishHit';
 import DemoMode from './components/DemoMode';
-import StudyBuddyApp from './components/StudyBuddyApp';
+// import StudyBuddyApp from './components/StudyBuddyApp'; // HIDDEN - Ask Bo and Application Builder
 import FeatureFlagDebug from './components/FeatureFlagDebug';
-import EnhancedPersonalStatementGrader from './components/EnhancedPersonalStatementGrader';
+// import EnhancedPersonalStatementGrader from './components/EnhancedPersonalStatementGrader'; // HIDDEN
 import DebugTest from './components/DebugTest';
 import AdminSetup from './components/AdminSetup';
 
@@ -81,24 +83,17 @@ if (!process.env.REACT_APP_ALGOLIA_APP_ID || !process.env.REACT_APP_ALGOLIA_SEAR
   console.error('❌ Missing Algolia environment variables. Please check your .env file.');
 }
 
-// Updated SUBJECTS - TSA, Maths (unlocked), and Community
+// Updated SUBJECTS - Korean-English and Community only
 const SUBJECTS = {
-  tsa: {
-    index: 'copy_tsa_questions',
-    theme: 'tsa-theme',
-    bannerText: 'find video solutions to all past paper questions in seconds',
-    displayName: 'TSA',
-    searchType: 'algolia'
-  },
-  maths: {
-    index: 'edexel_mathematics_updated', 
-    theme: 'maths-theme',
-    bannerText: 'fully searchable questionbank and video solutions for all things maths',
-    displayName: 'Mathematics',
+  koreanEnglish: {
+    index: 'korean-english-question-pairs',
+    theme: 'korean-english-theme',
+    bannerText: 'master Korean-English with interactive question pairs and practice exercises',
+    displayName: 'Korean-English',
     searchType: 'algolia'
   },
   community: {
-    index: 'community-questions',
+    index: 'plewcommunity',
     theme: 'community-theme',
     bannerText: 'get help with real student questions and applications',
     displayName: 'Community',
@@ -261,8 +256,8 @@ const SubjectToggle = ({ currentSubject, onSubjectChange }) => {
 const SearchPage = ({ currentSubject, subjectConfig, bannerText, user, handleSubjectChange }) => {
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [showDemoMode, setShowDemoMode] = useState(false);
-  const [showPSGrader, setShowPSGrader] = useState(false);
-  const [mathsFilters, setMathsFilters] = useState({});
+  // const [showPSGrader, setShowPSGrader] = useState(false); // HIDDEN
+  const [koreanEnglishFilters, setKoreanEnglishFilters] = useState({});
 
   const handleOpenVideo = () => {
     setShowVideoPopup(true);
@@ -272,10 +267,10 @@ const SearchPage = ({ currentSubject, subjectConfig, bannerText, user, handleSub
     setShowVideoPopup(false);
   };
 
-  // Handle filter changes for maths subject
-  const handleMathsFiltersChange = (filters) => {
-    console.log('Received maths filters in App.js:', filters);
-    setMathsFilters(filters);
+  // Handle filter changes for Korean-English subject  
+  const handleKoreanEnglishFiltersChange = (filters) => {
+    console.log('Received Korean-English filters in App.js:', filters);
+    setKoreanEnglishFilters(filters);
   };
 
 // Replace your current buildAlgoliaFilters function in App.js with this:
@@ -388,62 +383,13 @@ const buildAlgoliaFilters = (filters) => {
             <span className="modern-cursor">|</span>
           </div>
 
-          {/* Grade My Personal Statement Button - Middle of Landing Page */}
-          {(
-          <div className="personal-statement-cta" style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: '40px',
-            marginBottom: '40px'
-          }}>
-            <div className="grading-button-container" style={{
-              textAlign: 'center'
-            }}>
-              <a 
-                href="/study-progress?tab=personal-statement"
-                className="see-how-it-works-button-new exact-colors"
-                style={{
-                  opacity: 1,
-                  cursor: 'pointer',
-                  background: 'linear-gradient(135deg, #00ced1, #ccccff)',
-                  border: 'none',
-                  borderRadius: '12px',
-                  padding: '14px 28px',
-                  color: 'white',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: '0 4px 14px rgba(0, 206, 209, 0.3)',
-                  backdropFilter: 'blur(10px)',
-                  WebkitBackdropFilter: 'blur(10px)',
-                  textDecoration: 'none'
-                }}
-              >
-                <i className="fas fa-graduation-cap"></i>
-                grade my personal statement
-              </a>
-              <div className="grading-active-message" style={{
-                fontSize: '12px',
-                color: '#00ced1',
-                fontWeight: '500',
-                marginTop: '8px',
-                textAlign: 'center'
-              }}>
-                AI-powered analysis & feedback ✨
-              </div>
-            </div>
-          </div>
-          )}
+          {/* Grade My Personal Statement Button - HIDDEN */}
 
-          {/* Submit Question Button - only for Community and Maths */}
-          {(currentSubject === 'community' || currentSubject === 'maths') && (
+          {/* Submit Question Button - only for Community */}
+          {currentSubject === 'community' && (
             <div className="submit-question-cta">
               <a 
-                href={currentSubject === 'maths' ? '/submit-maths-question' : '/submit-question'} 
+                href="/submit-question" 
                 className="submit-question-button"
               >
                 <i className="fas fa-plus"></i>
@@ -507,8 +453,8 @@ const buildAlgoliaFilters = (filters) => {
 >
           {/* Configure Algolia with filters */}
           <Configure 
-            key={JSON.stringify(mathsFilters)} 
-            filters={buildAlgoliaFilters(mathsFilters)} 
+            key={JSON.stringify(currentSubject === 'koreanEnglish' ? koreanEnglishFilters : {})} 
+            filters={buildAlgoliaFilters(currentSubject === 'koreanEnglish' ? koreanEnglishFilters : {})} 
           />
           
           {headerContent}
@@ -516,11 +462,11 @@ const buildAlgoliaFilters = (filters) => {
           {/* Search Results Section */}
           <div className="modern-search-wrapper">
             <div className="container">
-              {/* Add MathsFilters component for maths subject */}
-              {currentSubject === 'maths' && user && (
-                <MathsFilters 
-                  onFiltersChange={handleMathsFiltersChange}
-                  currentFilters={mathsFilters}
+              {/* Add KoreanEnglishFilters component for Korean-English subject */}
+              {currentSubject === 'koreanEnglish' && user && (
+                <KoreanEnglishFilters 
+                  onFiltersChange={handleKoreanEnglishFiltersChange}
+                  currentFilters={koreanEnglishFilters}
                 />
               )}
               
@@ -544,10 +490,7 @@ const buildAlgoliaFilters = (filters) => {
         <DemoMode onClose={() => setShowDemoMode(false)} />
       )}
 
-        {/* Personal Statement Grader */}
-        {showPSGrader && (
-          <EnhancedPersonalStatementGrader onClose={() => setShowPSGrader(false)} />
-        )}
+        {/* Personal Statement Grader - HIDDEN */}
 
         {/* Add CSS for the grading button and Discord enhancement */}
         <style jsx>{`
@@ -649,10 +592,7 @@ const buildAlgoliaFilters = (filters) => {
       {/* Video Popup */}
       <VideoPopup isOpen={showVideoPopup} onClose={handleCloseVideo} />
 
-      {/* Personal Statement Grader */}
-      {showPSGrader && (
-        <EnhancedPersonalStatementGrader onClose={() => setShowPSGrader(false)} />
-      )}
+      {/* Personal Statement Grader - HIDDEN */}
 
       {/* Add CSS for the grading button */}
       <style jsx>{`
@@ -795,9 +735,9 @@ function App() {
                 <Route path="/admin/questions" element={<ProtectedRoute><AdminQuestionUpload /></ProtectedRoute>} />
                 <Route path="/admin/setup" element={<AdminSetup />} />
                 <Route path="/submit-question" element={<SubmitQuestionForm />} />
-                <Route path="/submit-maths-question" element={<MathsSubmitQuestionForm />} />
-                <Route path="/study-buddy" element={<FeatureProtectedRoute feature="study-buddy"><StudyBuddyApp /></FeatureProtectedRoute>} />
-                <Route path="/study-progress" element={<FeatureProtectedRoute feature="application-builder"><StudyBuddyApp /></FeatureProtectedRoute>} />
+                {/* <Route path="/submit-maths-question" element={<MathsSubmitQuestionForm />} /> */}
+                {/* <Route path="/study-buddy" element={<FeatureProtectedRoute feature="study-buddy"><StudyBuddyApp /></FeatureProtectedRoute>} /> */}
+                {/* <Route path="/study-progress" element={<FeatureProtectedRoute feature="application-builder"><StudyBuddyApp /></FeatureProtectedRoute>} /> */}
                 <Route path="/debug" element={<DebugTest />} />
               </Routes>
             </ErrorBoundary>

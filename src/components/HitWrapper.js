@@ -3,6 +3,7 @@ import React from 'react';
 import TSAHit from './TSAHit';
 import PlewHit from './PlewHit';
 import MathsHit from './MathsHit';
+import KoreanEnglishHit from './KoreanEnglishHit';
 
 const HitWrapper = ({ hit, ...props }) => {
   // Debug: Log the hit to see what we're working with (remove in production)
@@ -30,6 +31,23 @@ const HitWrapper = ({ hit, ...props }) => {
     );
   };
 
+  // Function to determine if the hit is a Korean-English question
+  const isKoreanEnglishQuestion = (hit) => {
+    return (
+      hit.korean_text !== undefined ||
+      hit.korean !== undefined ||
+      hit.english_text !== undefined ||
+      hit.english !== undefined ||
+      hit.romanization !== undefined ||
+      hit.pronunciation !== undefined ||
+      hit.korean_audio_url !== undefined ||
+      hit.english_audio_url !== undefined ||
+      (hit.level !== undefined && (hit.category !== undefined || hit.topic !== undefined)) ||
+      // Check if index contains korean-english
+      (hit._index && typeof hit._index === 'string' && hit._index.includes('korean-english'))
+    );
+  };
+
   // Function to determine if the hit is a TSA question
   const isTsaQuestion = (hit) => {
     return (
@@ -47,7 +65,9 @@ const HitWrapper = ({ hit, ...props }) => {
 
   // Enhanced detection with fallback logic
   const detectHitType = () => {
-    if (isPlewQuestion(hit)) {
+    if (isKoreanEnglishQuestion(hit)) {
+      return 'koreanEnglish';
+    } else if (isPlewQuestion(hit)) {
       return 'plew';
     } else if (isMathsQuestion(hit)) {
       return 'maths';
@@ -56,7 +76,9 @@ const HitWrapper = ({ hit, ...props }) => {
     } else {
       // Additional fallback logic based on index or other hints
       // FIXED: Added safety checks for _index as well
-      if (hit._index && typeof hit._index === 'string' && hit._index.includes('maths')) {
+      if (hit._index && typeof hit._index === 'string' && hit._index.includes('korean-english')) {
+        return 'koreanEnglish';
+      } else if (hit._index && typeof hit._index === 'string' && hit._index.includes('maths')) {
         return 'maths';
       } else if (hit._index && typeof hit._index === 'string' && hit._index.includes('plew')) {
         return 'plew';
@@ -73,7 +95,8 @@ const HitWrapper = ({ hit, ...props }) => {
     hitType,
     isPlewQuestion: isPlewQuestion(hit),
     isTsaQuestion: isTsaQuestion(hit),
-    isMathsQuestion: isMathsQuestion(hit)
+    isMathsQuestion: isMathsQuestion(hit),
+    isKoreanEnglishQuestion: isKoreanEnglishQuestion(hit)
   });
 
   // Render the appropriate hit component
@@ -82,6 +105,8 @@ const HitWrapper = ({ hit, ...props }) => {
       return <PlewHit hit={hit} {...props} />;
     case 'maths':
       return <MathsHit hit={hit} {...props} />;
+    case 'koreanEnglish':
+      return <KoreanEnglishHit hit={hit} {...props} />;
     case 'tsa':
       return <TSAHit hit={hit} {...props} />;
     default:

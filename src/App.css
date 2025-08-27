@@ -1496,6 +1496,101 @@ ul {
   background: linear-gradient(45deg, #3f72af, #5a8bc7);
 }
 
+/* Korean-English theme styles */
+.korean-english-theme {
+  background-color: #f5fff8;
+  color: #1a4d2e;
+}
+
+.korean-english-theme .main-header {
+  background-color: #c9ffdb;
+  color: #1a4d2e;
+}
+
+.korean-english-theme .navbar-logo a {
+  color: #1a4d2e;
+}
+
+.korean-english-theme .navbar-logo a:hover {
+  color: #2f7a5a;
+}
+
+.korean-english-theme .navbar-links a {
+  color: #1a4d2e;
+}
+
+.korean-english-theme .navbar-links a:hover {
+  color: #2f7a5a;
+}
+
+.korean-english-theme .navbar-links a.active {
+  color: #2f7a5a;
+}
+
+.korean-english-theme .navbar-links a.active::after {
+  background-color: #2f7a5a;
+}
+
+.korean-english-theme .dropdown-button {
+  color: #1a4d2e;
+}
+
+.korean-english-theme .dropdown-button:hover {
+  color: #2f7a5a;
+}
+
+.korean-english-theme .dropdown-menu button {
+  color: #1a4d2e;
+}
+
+.korean-english-theme .dropdown-menu button:hover {
+  background-color: #e7ffef;
+  color: #2f7a5a;
+}
+
+.korean-english-theme .login-button {
+  background-color: #2f7a5a;
+}
+
+.korean-english-theme .login-button:hover {
+  background-color: #1a4d2e;
+}
+
+.korean-english-theme .modern-main-header {
+  background: linear-gradient(135deg, #2f7a5a 0%, #1a4d2e 100%);
+}
+
+.korean-english-theme .search-card::before {
+  background: linear-gradient(90deg, #2f7a5a, #1a4d2e);
+}
+
+.korean-english-theme .search-card-header h2 {
+  color: #1a4d2e;
+}
+
+.korean-english-theme .searchbox-form:focus-within {
+  border-color: #2f7a5a;
+}
+
+.korean-english-theme .lock-icon {
+  color: #2f7a5a;
+  text-shadow: 0 4px 12px rgba(47, 122, 90, 0.3);
+}
+
+.korean-english-theme .signup-action-button {
+  background: linear-gradient(45deg, #2f7a5a, #1a4d2e);
+  box-shadow: 0 6px 20px rgba(47, 122, 90, 0.3);
+}
+
+.korean-english-theme .login-action-button {
+  color: #2f7a5a;
+  border-color: #2f7a5a;
+}
+
+.korean-english-theme .login-action-button:hover {
+  background: #2f7a5a;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .community-hero {

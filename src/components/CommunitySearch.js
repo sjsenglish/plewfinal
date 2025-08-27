@@ -54,7 +54,7 @@ const CommunitySearch = ({ user, placeholder = "search community questions..." }
       
       if (!Array.isArray(searchResults) || searchResults.length === 0) {
         // Fallback: try to get from Firebase directly
-        const q = firebaseQuery(collection(db, 'community-questions'), limit(100));
+        const q = firebaseQuery(collection(db, 'plewcommunity'), limit(100));
         const querySnapshot = await getDocs(q);
         
         const questions = [];

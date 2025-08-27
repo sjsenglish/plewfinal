@@ -77,7 +77,7 @@ export const searchCommunityQuestions = async (query, limit = 100) => {
     const questions = [];
     for (const questionId of questionIds) {
       try {
-        const questionDoc = await getDoc(doc(db, 'community-questions', questionId));
+        const questionDoc = await getDoc(doc(db, 'plewcommunity', questionId));
         if (questionDoc.exists()) {
           const questionData = questionDoc.data();
           const matchData = pineconeData.matches.find(m => m.id === questionId);
@@ -113,7 +113,7 @@ export const addCommunityQuestion = async (questionData) => {
     
     // Add to Firebase first
     const { addDoc, doc, setDoc } = await import('firebase/firestore');
-    await setDoc(doc(db, 'community-questions', questionId), {
+    await setDoc(doc(db, 'plewcommunity', questionId), {
       ...questionData,
       createdAt: new Date(),
       updatedAt: new Date()
