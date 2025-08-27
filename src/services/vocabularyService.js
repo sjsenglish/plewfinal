@@ -117,6 +117,106 @@ const extractMeaningfulWords = (text) => {
 };
 
 // Get enhanced word information using OpenAI
+// Free Dictionary API fallback (no API key required)
+const getFallbackWordInfo = async (word) => {
+  try {
+    console.log('Trying Free Dictionary API for:', word);
+    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+    
+    if (!response.ok) {
+      throw new Error(`Dictionary API responded with ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (!data || !data[0]) {
+      throw new Error('No dictionary data found');
+    }
+    
+    const entry = data[0];
+    const meaning = entry.meanings?.[0];
+    const definition = meaning?.definitions?.[0];
+    
+    // Extract audio URL
+    const audioObj = entry.phonetics?.find(p => p.audio) || {};
+    const audioUrl = audioObj.audio || '';
+    
+    // Extract multiple definitions if available
+    const allDefinitions = meaning?.definitions || [];
+    const primaryDef = definition?.definition || `${word} - dictionary definition not available`;
+    
+    // Extract synonyms and antonyms
+    const synonyms = [];
+    const antonyms = [];
+    
+    allDefinitions.forEach(def => {
+      if (def.synonyms) synonyms.push(...def.synonyms);
+      if (def.antonyms) antonyms.push(...def.antonyms);
+    });
+    
+    // Create examples from dictionary
+    const examples = [];
+    if (definition?.example) {
+      examples.push({
+        sentence: definition.example,
+        translation: "번역이 필요합니다"
+      });
+    }
+    
+    // Add more examples from other definitions
+    allDefinitions.slice(1, 3).forEach(def => {
+      if (def.example) {
+        examples.push({
+          sentence: def.example,
+          translation: "번역이 필요합니다"
+        });
+      }
+    });
+    
+    return {
+      word: word,
+      partOfSpeech: meaning?.partOfSpeech || 'unknown',
+      definition: primaryDef,
+      difficulty: 3, // Default middle difficulty
+      synonyms: [...new Set(synonyms)].slice(0, 6), // Remove duplicates, limit to 6
+      antonyms: [...new Set(antonyms)].slice(0, 4), // Remove duplicates, limit to 4
+      examples: examples.length > 0 ? examples : [{
+        sentence: `Here is an example using the word "${word}".`,
+        translation: "번역이 필요합니다"
+      }],
+      koreanTranslation: `${word} - 한국어 번역 필요`,
+      frequency: 'common',
+      subjectArea: 'general',
+      collocations: [],
+      etymology: '',
+      pronunciation: entry.phonetic || audioObj.text || '',
+      audioUrl: audioUrl
+    };
+    
+  } catch (error) {
+    console.error('Free Dictionary API failed:', error);
+    
+    // Return enhanced fallback data
+    return {
+      word: word,
+      partOfSpeech: 'unknown',
+      definition: `${word} - A vocabulary word from Korean-English study materials. Free dictionary lookup failed, enhanced definition requires OpenAI API access.`,
+      difficulty: 3,
+      synonyms: [`${word.slice(0, -2)}ing`, 'related', 'similar'],
+      antonyms: [],
+      examples: [{
+        sentence: `The word "${word}" appears frequently in academic texts.`,
+        translation: `"${word}"라는 단어는 학술 텍스트에 자주 나타납니다.`
+      }],
+      koreanTranslation: `${word} - 사전 번역 필요`,
+      frequency: 'common',
+      subjectArea: 'academic',
+      collocations: [],
+      etymology: ''
+    };
+  }
+};
+
 export const getEnhancedWordInfo = async (word, context = '') => {
   // If no OpenAI client available, return fallback data
   if (!openai) {
@@ -184,8 +284,20 @@ Provide accurate information suitable for Korean middle/high school students lea
     const jsonResponse = response.choices[0].message.content.trim();
     return JSON.parse(jsonResponse);
   } catch (error) {
-    console.error('Error getting enhanced word info:', error);
-    // Return basic fallback data
+    console.error('OpenAI failed, trying fallback APIs:', error);
+    
+    // Try fallback APIs in order of preference
+    try {
+      const fallbackData = await getFallbackWordInfo(word, context);
+      if (fallbackData) {
+        console.log('Successfully got fallback data for:', word);
+        return fallbackData;
+      }
+    } catch (fallbackError) {
+      console.error('All fallback APIs failed:', fallbackError);
+    }
+    
+    // Final fallback with basic data
     return {
       word: word,
       partOfSpeech: 'unknown',
