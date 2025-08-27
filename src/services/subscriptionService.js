@@ -129,163 +129,16 @@ export const cancelUserSubscription = async (userId, stripeSubscriptionId) => {
   }
 };
 
-// Check if user has access to a feature
+// Check if user has access to a feature - PAYWALL REMOVED: All users have full access
 export const hasFeatureAccess = (subscription, feature) => {
-  const { status, plan, isAdmin } = subscription;
-
-  // Admin users have access to everything
-  if (isAdmin) {
-    return true;
-  }
-
-  // Free users
-  if (status === 'free' || !status || status === 'cancelled') {
-    switch (feature) {
-      case 'basic_search':
-      case 'community':
-      case 'application_builder': // Now available to all users
-      case 'study_buddy': // Now available to all users
-        return true;
-      case 'view_answers':
-      case 'create_question_packs':
-      case 'video_solutions':
-      case 'pdf_export':
-      case 'practice_mode':
-        return false;
-      default:
-        return false;
-    }
-  }
-
-  // Trial and Paid users (active subscription)
-  if (status === 'active') {
-    switch (feature) {
-      case 'basic_search':
-      case 'community':
-      case 'view_answers':
-      case 'video_solutions':
-      case 'study_buddy':
-      case 'application_builder':
-        return true;
-      case 'create_question_packs':
-        return plan === 'study' || plan === 'pro' || plan === 'trial';
-      case 'pdf_export':
-      case 'practice_mode':
-        return plan === 'pro' || plan === 'trial';
-      default:
-        return false;
-    }
-  }
-
-  // Canceled or past due users (same as free)
-  return false;
+  // All users now have access to all features - paywall removed
+  return true;
 };
 
-// Check daily usage limits for free users
+// Check daily usage limits for free users - PAYWALL REMOVED: No usage limits
 export const checkUsageLimit = async (userId, feature) => {
-  try {
-    const userDocRef = doc(db, 'users', userId);
-    const docSnap = await getDoc(userDocRef);
-
-    if (!docSnap.exists()) {
-      // Create new user document with default usage
-      const defaultUserData = {
-        subscription: { status: 'free', plan: null },
-        usage: { 
-          questionsViewedToday: 0, 
-          questionPacksCreated: 0,
-          lastResetDate: new Date().toISOString().split('T')[0]
-        },
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
-
-      await setDoc(userDocRef, defaultUserData);
-      
-      // New users start with full limits available
-      switch (feature) {
-        case 'view_question':
-          return {
-            success: true,
-            allowed: true,
-            current: 0,
-            limit: 5,
-          };
-        case 'create_question_pack':
-          return {
-            success: true,
-            allowed: true,
-            current: 0,
-            limit: 1,
-          };
-        default:
-          return { success: true, allowed: true };
-      }
-    }
-
-    const userData = docSnap.data();
-    const usage = userData.usage || {};
-    const subscription = userData.subscription || {};
-
-    // If user is admin or has paid subscription, no limits
-    if (userData.isAdmin || subscription.status === 'active') {
-      return { success: true, allowed: true };
-    }
-
-    // Check if we need to reset daily counter
-    const today = new Date().toISOString().split('T')[0];
-    if (usage.lastResetDate !== today) {
-      // Reset daily counters
-      await updateDoc(userDocRef, {
-        'usage.questionsViewedToday': 0,
-        'usage.lastResetDate': today,
-        updatedAt: new Date(),
-      });
-      
-      // After reset, limits are available
-      switch (feature) {
-        case 'view_question':
-          return {
-            success: true,
-            allowed: true,
-            current: 0,
-            limit: 5,
-          };
-        case 'create_question_pack':
-          return {
-            success: true,
-            allowed: (usage.questionPacksCreated || 0) < 1,
-            current: usage.questionPacksCreated || 0,
-            limit: 1,
-          };
-        default:
-          return { success: true, allowed: true };
-      }
-    }
-
-    // Check specific limits
-    switch (feature) {
-      case 'view_question':
-        return {
-          success: true,
-          allowed: (usage.questionsViewedToday || 0) < 5,
-          current: usage.questionsViewedToday || 0,
-          limit: 5,
-        };
-      case 'create_question_pack':
-        return {
-          success: true,
-          allowed: (usage.questionPacksCreated || 0) < 1,
-          current: usage.questionPacksCreated || 0,
-          limit: 1,
-        };
-      default:
-        return { success: true, allowed: true };
-    }
-  } catch (error) {
-    console.error('Error checking usage limit:', error);
-    return { success: false, error: error.message };
-  }
+  // All users now have unlimited usage - paywall removed
+  return { success: true, allowed: true, unlimited: true };
 };
 
 // Increment usage counter

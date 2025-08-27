@@ -2,9 +2,6 @@
 import { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import {
-  getUserSubscription,
-  hasFeatureAccess,
-  checkUsageLimit,
   cancelUserSubscription,
 } from '../services/subscriptionService';
 
@@ -12,80 +9,42 @@ export const usePaywall = () => {
   const [subscription, setSubscription] = useState(null);
   const [usage, setUsage] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
 
   const auth = getAuth();
   const user = auth.currentUser;
 
-  // Load user subscription data
+  // Load user subscription data - PAYWALL REMOVED: Everyone gets full access
   const loadSubscriptionData = async () => {
-    if (!user) {
-      setSubscription({ status: 'free', plan: null });
-      setUsage({ questionsViewedToday: 0, questionPacksCreated: 0 });
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const result = await getUserSubscription(user.uid);
-
-      if (result.success) {
-        // Check if user is an admin
-        if (result.isAdmin || result.role === 'admin') {
-          // Admin users get full access
-          setSubscription({ 
-            status: 'active', 
-            plan: 'pro',
-            isAdmin: true,
-            stripeSubscriptionId: 'admin_permanent'
-          });
-          setUsage({ 
-            questionsViewedToday: 0, 
-            questionPacksCreated: 0,
-            unlimitedAccess: true 
-          });
-        } else {
-          setSubscription(result.subscription);
-          setUsage(result.usage);
-        }
-      } else {
-        console.error('Error loading subscription:', result.error);
-        // Set defaults on error
-        setSubscription({ status: 'free', plan: null });
-        setUsage({ questionsViewedToday: 0, questionPacksCreated: 0 });
-        setError(result.error);
-      }
-    } catch (err) {
-      console.error('Error in loadSubscriptionData:', err);
-      setSubscription({ status: 'free', plan: null });
-      setUsage({ questionsViewedToday: 0, questionPacksCreated: 0 });
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    // PAYWALL REMOVED: All users now get full access regardless of subscription status
+    setSubscription({ 
+      status: 'active', 
+      plan: 'pro',
+      paywall_removed: true,
+      fullAccess: true
+    });
+    setUsage({ 
+      questionsViewedToday: 0, 
+      questionPacksCreated: 0,
+      unlimitedAccess: true 
+    });
+    setLoading(false);
   };
 
   useEffect(() => {
     loadSubscriptionData();
   }, [user]);
 
-  // Check if user has access to a specific feature
+  // Check if user has access to a specific feature - PAYWALL REMOVED: Always true
   const checkFeatureAccess = (feature) => {
-    if (!subscription) return false;
-    return hasFeatureAccess(subscription, feature);
+    // All users now have access to all features - paywall removed
+    return true;
   };
 
-  // Check usage limits for free users
+  // Check usage limits for free users - PAYWALL REMOVED: Always allowed
   const checkUsage = async (feature) => {
-    if (!user) return { allowed: false, reason: 'Please log in' };
-
-    try {
-      const result = await checkUsageLimit(user.uid, feature);
-      return result;
-    } catch (error) {
-      console.error('Error checking usage:', error);
-      return { allowed: false, reason: 'Error checking usage' };
-    }
+    // All users now have unlimited usage - paywall removed
+    return { allowed: true, unlimited: true, reason: 'Full access enabled' };
   };
 
   // Cancel subscription function (for recurring subscriptions only)
@@ -157,18 +116,10 @@ export const usePaywall = () => {
     }
   };
 
-  // Get user's plan info - updated without trial
+  // Get user's plan info - PAYWALL REMOVED: Everyone has full access
   const getPlanInfo = () => {
-    if (!subscription) return { name: 'Free', isPaid: false };
-
-    switch (subscription.plan) {
-      case 'study':
-        return { name: 'Monthly Plan', isPaid: true };
-      case 'pro':
-        return { name: 'Full Access 2025', isPaid: true };
-      default:
-        return { name: 'Free', isPaid: false };
-    }
+    // All users now have full access - paywall removed
+    return { name: 'Full Access (Free)', isPaid: true, paywallRemoved: true };
   };
 
   return {
@@ -181,7 +132,7 @@ export const usePaywall = () => {
     cancelSubscription,
     getPlanInfo,
     isLoggedIn: !!user,
-    isPaidUser: subscription?.status === 'active',
+    isPaidUser: true, // Everyone now has paid user access
     // Helper function to refresh data
     refreshSubscription: loadSubscriptionData,
   };
