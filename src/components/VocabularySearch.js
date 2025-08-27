@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { InstantSearch, Stats, Configure } from 'react-instantsearch';
+import { InstantSearch, Stats, Configure, useHits } from 'react-instantsearch';
 import { extractVocabularyFromQuestions, sortWords } from '../services/vocabularyService';
 import CustomSearchBox from './CustomSearchBox';
 import VocabularyFilters from './VocabularyFilters';
@@ -105,16 +105,22 @@ const VocabularySearch = ({ searchClient, subjectConfig, bannerText, user }) => 
     setFilteredWords(sorted);
   }, [vocabularyWords, sortBy]);
 
-  // Custom Hits component that triggers vocabulary extraction
-  const VocabularyHits = ({ hits }) => {
-    // Store hits and trigger extraction when they change
+  // Component to collect hits using useHits hook
+  const VocabularyHitsCollector = () => {
+    const { hits } = useHits();
+    
     useEffect(() => {
+      console.log('VocabularyHitsCollector received hits:', hits ? hits.length : 'no hits');
       if (hits && hits.length > 0) {
+        console.log('Sample hit structure:', hits[0]);
+        console.log('First few hits:', hits.slice(0, 3));
         handleSearchResults(hits);
+      } else {
+        console.log('No hits received or hits array is empty');
       }
     }, [hits]);
 
-    // Don't render the actual question hits, we'll render vocabulary words instead
+    // Don't render anything
     return null;
   };
 
@@ -128,7 +134,7 @@ const VocabularySearch = ({ searchClient, subjectConfig, bannerText, user }) => 
 
       {/* InstantSearch wrapper for getting question data */}
       <InstantSearch searchClient={searchClient} indexName={subjectConfig.index}>
-        <Configure hitsPerPage={500} />
+        <Configure hitsPerPage={1000} />
         
         {/* Hidden search box to get all questions */}
         <div style={{ display: 'none' }}>
@@ -136,7 +142,7 @@ const VocabularySearch = ({ searchClient, subjectConfig, bannerText, user }) => 
             placeholder="Loading vocabulary..."
             defaultQuery=""
           />
-          <VocabularyHits />
+          <VocabularyHitsCollector />
         </div>
         
         {/* Search Stats */}
@@ -166,6 +172,15 @@ const VocabularySearch = ({ searchClient, subjectConfig, bannerText, user }) => 
         </div>
       )}
 
+      {/* Debug Info */}
+      <div style={{ padding: '10px', background: '#f0f0f0', margin: '10px 0', fontSize: '12px' }}>
+        <p>Debug Info:</p>
+        <p>Loading: {loading.toString()}</p>
+        <p>Vocabulary Words: {vocabularyWords.length}</p>
+        <p>Filtered Words: {filteredWords.length}</p>
+        <p>Sample words: {vocabularyWords.slice(0, 3).map(w => w.word).join(', ')}</p>
+      </div>
+
       {/* Vocabulary Results */}
       <div className="vocabulary-results">
         {filteredWords.length > 0 ? (
@@ -188,6 +203,8 @@ const VocabularySearch = ({ searchClient, subjectConfig, bannerText, user }) => 
             <div className="no-results">
               <h3>No vocabulary words found</h3>
               <p>Try adjusting your filters or check your search index.</p>
+              <p>Loading: {loading.toString()}</p>
+              <p>Vocabulary Words: {vocabularyWords.length}</p>
             </div>
           )
         )}
