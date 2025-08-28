@@ -143,7 +143,8 @@ const Navbar = ({ onSubjectChange }) => {
 
         <div className="navbar-right">
           <div className="navbar-links">
-            {/* Study Features - Always visible, authentication handled by routes */}
+            {/* Study Features - Hidden for now */}
+            {/* 
             <Link 
               to="/study-buddy" 
               className="navbar-glass-button"
@@ -159,6 +160,7 @@ const Navbar = ({ onSubjectChange }) => {
               <span></span>
               Application Builder
             </Link>
+            */}
 
             {/* Premium Dashboard - Always visible, authentication handled by routes */}
             <Link 
