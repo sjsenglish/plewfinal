@@ -12,11 +12,11 @@ const searchClient = algoliasearch(
   process.env.REACT_APP_ALGOLIA_SEARCH_KEY
 );
 
-// Color palette from your specification
+// Color palette - Updated to pastel blue theme
 const COLORS = {
   lightPurple: '#ccccff',
-  teal: '#00ced1', 
-  lightTeal: '#d8f0ed',
+  teal: '#3b82f6', 
+  lightTeal: '#dbeafe',
   white: '#ffffff',
   gray: '#6b7280',
   darkGray: '#374151'
@@ -479,8 +479,8 @@ export const QuestionPackPage = () => {
 const colorOptions = [
   { id: 'light-purple', color: '#ccccff', name: 'Light Purple' },
   { id: 'dark-purple', color: '#221468', name: 'Dark Purple' },
-  { id: 'teal', color: '#00ced1', name: 'Teal' },
-  { id: 'light-teal', color: '#d8f0ed', name: 'Light Teal' },
+  { id: 'teal', color: '#3b82f6', name: 'Blue' },
+  { id: 'light-teal', color: '#dbeafe', name: 'Light Blue' },
   { id: 'lavender', color: '#e1dfff', name: 'Lavender' },
 ];
 

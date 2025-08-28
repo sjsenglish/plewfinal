@@ -1,10 +1,10 @@
 .vocabulary-filters {
   margin-bottom: 2rem;
-  background: linear-gradient(135deg, #fff8f0, #ffffff);
+  background: linear-gradient(135deg, #fdf2f8, #ffffff);
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.08);
+  border: 1px solid rgba(249, 168, 212, 0.15);
 }
 
 .filters-mobile-toggle {
@@ -17,7 +17,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  background: linear-gradient(135deg, #ec4899, #f9a8d4);
   color: white;
   border: none;
   border-radius: 12px;
@@ -25,17 +25,17 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
 }
 
 .filters-toggle-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 6px 16px rgba(236, 72, 153, 0.3);
 }
 
 .filter-count-badge {
   background: rgba(255, 255, 255, 0.9);
-  color: #ff6b35;
+  color: #ec4899;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
   font-size: 0.9rem;
