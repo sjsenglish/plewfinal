@@ -162,6 +162,15 @@ const Navbar = ({ onSubjectChange }) => {
             </Link>
             */}
 
+            {/* Video Streaming */}
+            <Link 
+              to="/videos" 
+              className="navbar-glass-button"
+            >
+              <span>📺</span>
+              Video Lessons
+            </Link>
+
             {/* Premium Dashboard - Always visible, authentication handled by routes */}
             <Link 
               to="/premium" 

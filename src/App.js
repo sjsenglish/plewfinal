@@ -37,6 +37,7 @@ import SubmitQuestionForm from './components/SubmitQuestionForm';
 // import MathsFilters from './components/MathsFilters'; // HIDDEN
 import KoreanEnglishFilters from './components/KoreanEnglishFilters';
 import VocabularySearch from './components/VocabularySearch';
+import VideoStreaming from './components/VideoStreaming';
 import DemoMode from './components/DemoMode';
 // import StudyBuddyApp from './components/StudyBuddyApp'; // HIDDEN - Ask Bo and Application Builder
 import FeatureFlagDebug from './components/FeatureFlagDebug';
@@ -727,6 +728,7 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/success" element={<SuccessPage />} />
                 <Route path="/community" element={<CommunityPage />} />
+                <Route path="/videos" element={<VideoStreaming />} />
                 <Route path="/admin/quiz-creator" element={<QuizCreator />} />
                 <Route path="/test" element={<TestPage />} />
                 <Route path="/subscription-plans" element={<SubscriptionPlansPage />} />
