@@ -21,7 +21,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #f8f9fa;
+  background-color: #d8f0ed;
 }
 
 .app {
@@ -40,13 +40,23 @@ body {
 
 /* Theme Styles */
 .tsa-theme {
-  background-color: #f8f9fa;
-  color: #221368;
+  background-color: #d8f0ed;
+  color: #221468;
 }
 
 .plew-theme {
-  background-color: #f8f9fa;
-  color: #2b55a1;
+  background-color: #d8f0ed;
+  color: #221468;
+}
+
+.korean-english-theme {
+  background-color: #e1dfff;
+  color: #221468;
+}
+
+.vocabulary-theme {
+  background-color: #d8f0ed;
+  color: #2a4442;
 }
 
 /* Social Header */
@@ -67,19 +77,35 @@ body {
 }
 
 .tsa-theme .social-link {
-  color: #221368;
+  color: #221468;
 }
 
 .tsa-theme .social-link:hover {
-  color: #6b5ca5;
+  color: #9691c4;
 }
 
 .plew-theme .social-link {
-  color: #2b55a1;
+  color: #221468;
 }
 
 .plew-theme .social-link:hover {
-  color: #4d7bc9;
+  color: #9691c4;
+}
+
+.korean-english-theme .social-link {
+  color: #221468;
+}
+
+.korean-english-theme .social-link:hover {
+  color: #9691c4;
+}
+
+.vocabulary-theme .social-link {
+  color: #2a4442;
+}
+
+.vocabulary-theme .social-link:hover {
+  color: #5b8f8a;
 }
 
 /* Main Header */
@@ -90,13 +116,23 @@ body {
 }
 
 .tsa-theme .main-header {
-  background-color: #c5c9e6;
-  color: #221368;
+  background-color: #e1dfff;
+  color: #221468;
 }
 
 .plew-theme .main-header {
-  background-color: #d6e4f7;
-  color: #2b55a1;
+  background-color: #d8f0ed;
+  color: #221468;
+}
+
+.korean-english-theme .main-header {
+  background-color: #d4d0ff;
+  color: #221468;
+}
+
+.vocabulary-theme .main-header {
+  background-color: #d8f0ed;
+  color: #2a4442;
 }
 
 .header-content {
@@ -114,11 +150,19 @@ body {
 }
 
 .tsa-theme .return-link {
-  color: #221368;
+  color: #221468;
 }
 
 .plew-theme .return-link {
-  color: #2b55a1;
+  color: #221468;
+}
+
+.korean-english-theme .return-link {
+  color: #221468;
+}
+
+.vocabulary-theme .return-link {
+  color: #2a4442;
 }
 
 .main-header h1 {

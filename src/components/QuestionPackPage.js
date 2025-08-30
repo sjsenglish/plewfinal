@@ -12,14 +12,14 @@ const searchClient = algoliasearch(
   process.env.REACT_APP_ALGOLIA_SEARCH_KEY
 );
 
-// Color palette - Updated to pastel blue theme
+// Color palette - Updated to purple theme
 const COLORS = {
-  lightPurple: '#ccccff',
-  teal: '#3b82f6', 
-  lightTeal: '#dbeafe',
+  lightPurple: '#d4d0ff',
+  teal: '#221468', 
+  lightTeal: '#e1dfff',
   white: '#ffffff',
-  gray: '#6b7280',
-  darkGray: '#374151'
+  gray: '#9691c4',
+  darkGray: '#221468'
 };
 
 // Firebase Storage icons
@@ -479,8 +479,8 @@ export const QuestionPackPage = () => {
 const colorOptions = [
   { id: 'light-purple', color: '#ccccff', name: 'Light Purple' },
   { id: 'dark-purple', color: '#221468', name: 'Dark Purple' },
-  { id: 'teal', color: '#3b82f6', name: 'Blue' },
-  { id: 'light-teal', color: '#dbeafe', name: 'Light Blue' },
+  { id: 'teal', color: '#221468', name: 'Purple' },
+  { id: 'light-teal', color: '#e1dfff', name: 'Light Purple' },
   { id: 'lavender', color: '#e1dfff', name: 'Lavender' },
 ];
 

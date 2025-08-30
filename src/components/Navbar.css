@@ -47,12 +47,12 @@
 
 .navbar-logo a {
   text-decoration: none;
-  color: #221368;
+  color: #221468;
   transition: all 0.3s ease;
 }
 
 .navbar-logo a:hover {
-  color: #6b5ca5;
+  color: #9691c4;
   transform: translateY(-1px);
 }
 
@@ -83,13 +83,13 @@
 }
 
 .navbar-links a:hover {
-  color: #6b5ca5;
+  color: #9691c4;
   background-color: rgba(107, 92, 165, 0.08);
   transform: translateY(-1px);
 }
 
 .navbar-links a.active {
-  color: #6b5ca5;
+  color: #9691c4;
   background-color: rgba(107, 92, 165, 0.12);
   font-weight: 600;
 }
@@ -102,7 +102,7 @@
   transform: translateX(-50%);
   width: 24px;
   height: 3px;
-  background: linear-gradient(90deg, #6b5ca5, #8b7cc8);
+  background: linear-gradient(90deg, #9691c4, #ccccff);
   border-radius: 2px;
 }
 
@@ -142,7 +142,7 @@
 }
 
 .nav-avatar:hover {
-  border-color: #6b5ca5;
+  border-color: #9691c4;
   transform: scale(1.05);
 }
 
@@ -150,7 +150,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6b5ca5, #8b7cc8);
+  background: linear-gradient(135deg, #9691c4, #ccccff);
   color: white;
   display: flex;
   align-items: center;
@@ -197,7 +197,7 @@
 }
 
 .dropdown-button:hover {
-  color: #6b5ca5;
+  color: #9691c4;
   background-color: rgba(107, 92, 165, 0.08);
   transform: translateY(-1px);
 }
@@ -265,7 +265,7 @@
 
 .dropdown-menu button:hover {
   background-color: rgba(107, 92, 165, 0.08);
-  color: #6b5ca5;
+  color: #9691c4;
   transform: translateX(4px);
 }
 
@@ -284,7 +284,7 @@
 /* Enhanced Login button - Made larger */
 .navbar-links .login-button {
   padding: 0.875rem 2rem;
-  background: linear-gradient(135deg, #6b5ca5, #8b7cc8);
+  background: linear-gradient(135deg, #9691c4, #ccccff);
   color: white;
   border-radius: 8px;
   transition: all 0.3s ease;
