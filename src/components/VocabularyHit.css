@@ -1,241 +1,361 @@
-.vocabulary-hit-container {
-  background: linear-gradient(135deg, #d8f0ed, #ffffff);
-  border-radius: 16px;
-  padding: 2rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 20px rgba(42, 68, 66, 0.08);
-  border: 1px solid rgba(91, 143, 138, 0.2);
-  transition: all 0.3s ease;
-  border-left: 4px solid #5b8f8a;
+/* Modern Word Card Design - Sleek & Clean */
+
+.word-card {
+  background: linear-gradient(135deg, #d8f0ed 0%, #ffffff 100%);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+  border-left: 6px solid #5b8f8a;
+  box-shadow: 0 8px 32px rgba(42, 68, 66, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.vocabulary-hit-container:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(42, 68, 66, 0.12);
-  border-left-width: 6px;
+.word-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #5b8f8a, #2a4442);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-/* Header Section */
-.vocabulary-hit-header {
+.word-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(42, 68, 66, 0.15);
+  border-left-width: 8px;
+}
+
+.word-card:hover::before {
+  opacity: 1;
+}
+
+/* Theme-specific word card styles */
+
+/* Vocabulary Theme (Green) */
+.vocabulary-theme .word-card {
+  background: linear-gradient(135deg, #d8f0ed 0%, #ffffff 100%);
+  border-left-color: #5b8f8a;
+  box-shadow: 0 8px 32px rgba(42, 68, 66, 0.1);
+}
+
+.vocabulary-theme .word-card::before {
+  background: linear-gradient(90deg, #5b8f8a, #2a4442);
+}
+
+.vocabulary-theme .word-card:hover {
+  box-shadow: 0 16px 48px rgba(42, 68, 66, 0.15);
+}
+
+/* Korean-English Theme (Purple) */
+.korean-english-theme .word-card {
+  background: linear-gradient(135deg, #e1dfff 0%, #ffffff 100%);
+  border-left-color: #9691c4;
+  box-shadow: 0 8px 32px rgba(34, 20, 104, 0.1);
+}
+
+.korean-english-theme .word-card::before {
+  background: linear-gradient(90deg, #9691c4, #221468);
+}
+
+.korean-english-theme .word-card:hover {
+  box-shadow: 0 16px 48px rgba(34, 20, 104, 0.15);
+}
+
+/* Card Header */
+.word-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #d8f0ed;
+  margin-bottom: 16px;
 }
 
-.word-header-left {
+.word-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   flex: 1;
 }
 
-.word-main {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.8rem;
-}
-
 .word-title {
-  margin: 0;
   font-size: 2rem;
   font-weight: 700;
   color: #2a4442;
-  text-shadow: 1px 1px 2px rgba(42, 68, 66, 0.15);
+  margin: 0;
+  line-height: 1.1;
+  text-shadow: 1px 1px 2px rgba(42, 68, 66, 0.1);
 }
 
-.pronunciation-section {
+/* Theme-specific word title */
+.vocabulary-theme .word-title {
+  color: #2a4442;
+  text-shadow: 1px 1px 2px rgba(42, 68, 66, 0.1);
+}
+
+.korean-english-theme .word-title {
+  color: #221468;
+  text-shadow: 1px 1px 2px rgba(34, 20, 104, 0.1);
+}
+
+.word-pos {
+  background: rgba(91, 143, 138, 0.15);
+  color: #2a4442;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.word-meta {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
-.pronunciation-toggle,
-.audio-button {
-  background: linear-gradient(135deg, #5b8f8a, #2a4442);
-  color: white;
-  border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
-}
-
-.pronunciation-toggle:hover,
-.audio-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
-}
-
-.pronunciation-text {
-  font-size: 1.1rem;
-  color: #8b4513;
-  font-family: 'Arial', monospace;
-  margin-left: 0.5rem;
-}
-
-.word-badges {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.difficulty-badge,
-.pos-badge,
-.frequency-badge {
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
+.difficulty-badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .difficulty-beginner {
-  background: linear-gradient(135deg, #28a745, #20c997);
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
 }
 
 .difficulty-intermediate {
-  background: linear-gradient(135deg, #ffc107, #fd7e14);
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  color: white;
 }
 
 .difficulty-advanced {
-  background: linear-gradient(135deg, #dc3545, #e83e8c);
-}
-
-.pos-badge {
-  background: linear-gradient(135deg, #6f42c1, #6610f2);
-}
-
-.frequency-badge {
-  background: linear-gradient(135deg, #17a2b8, #20c997);
-}
-
-.word-actions-mini {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.bookmark-mini {
-  background: transparent;
-  border: 2px solid #5b8f8a;
-  color: #5b8f8a;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.bookmark-mini.active,
-.bookmark-mini:hover {
-  background: linear-gradient(135deg, #5b8f8a, #2a4442);
+  background: linear-gradient(135deg, #ef4444, #f87171);
   color: white;
+}
+
+.bookmark-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: all 0.2s ease;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.bookmark-btn:hover {
+  color: #5b8f8a;
+  background: rgba(91, 143, 138, 0.1);
   transform: scale(1.1);
 }
 
-.learned-indicator {
-  background: linear-gradient(135deg, #28a745, #20c997);
-  color: white;
-  padding: 0.3rem 0.6rem;
-  border-radius: 50%;
-  font-size: 1rem;
-  font-weight: bold;
+/* Theme-specific bookmark button */
+.vocabulary-theme .bookmark-btn:hover {
+  color: #5b8f8a;
+  background: rgba(91, 143, 138, 0.1);
 }
 
-/* Progress Section */
-.progress-indicator {
-  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-  padding: 1rem;
+.korean-english-theme .bookmark-btn:hover {
+  color: #9691c4;
+  background: rgba(150, 145, 196, 0.1);
+}
+
+.bookmark-btn.bookmarked {
+  color: #fbbf24;
+}
+
+/* Pronunciation */
+.word-pronunciation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.6);
   border-radius: 12px;
-  margin-bottom: 1.5rem;
-  border: 1px solid #ff9800;
+  border: 1px solid rgba(91, 143, 138, 0.2);
 }
 
-.progress-bar {
-  width: 100%;
-  height: 8px;
-  background: #ffecb3;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 0.5rem;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(135deg, #5b8f8a, #2a4442);
-  border-radius: 4px;
-  transition: width 0.3s ease;
-}
-
-.progress-text {
+.pronunciation-btn {
+  background: none;
+  border: none;
+  color: #5b8f8a;
   font-size: 0.9rem;
-  color: #8b4513;
-  font-weight: 600;
-}
-
-/* Definition Section */
-.definition-section {
-  background: white;
-  border-left: 4px solid #5b8f8a;
-  padding: 1.5rem;
-  border-radius: 12px;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.definition-text {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #212529;
-  margin: 0 0 0.5rem 0;
+  cursor: pointer;
   font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.pronunciation-btn:hover {
+  color: #2a4442;
+}
+
+.audio-btn {
+  background: #5b8f8a;
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.audio-btn:hover {
+  background: #2a4442;
+  transform: scale(1.1);
+}
+
+/* Theme-specific audio button */
+.vocabulary-theme .audio-btn {
+  background: #5b8f8a;
+}
+
+.vocabulary-theme .audio-btn:hover {
+  background: #2a4442;
+}
+
+.korean-english-theme .audio-btn {
+  background: #9691c4;
+}
+
+.korean-english-theme .audio-btn:hover {
+  background: #221468;
+}
+
+/* Definition */
+.word-definition {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.word-definition p {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: #374151;
 }
 
 .korean-translation {
-  font-size: 1rem;
-  color: #6c757d;
-  margin: 0.5rem 0 0 0;
+  color: #6b7280;
   font-style: italic;
+  font-size: 0.9rem !important;
 }
 
-/* Toggle Sections */
-.synonyms-section,
-.examples-section {
-  margin-bottom: 1rem;
+/* Action Buttons */
+.word-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
-.toggle-button {
+.action-btn {
   background: linear-gradient(135deg, #5b8f8a, #2a4442);
   color: white;
   border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  font-size: 1rem;
+  padding: 12px 20px;
+  border-radius: 16px;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(91, 143, 138, 0.3);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+  gap: 6px;
 }
 
-.toggle-button:hover {
+.action-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 8px 20px rgba(91, 143, 138, 0.4);
 }
 
-.synonyms-content,
-.examples-content {
-  background: linear-gradient(135deg, #fff8f0, #ffffff);
-  border-left: 4px solid #5b8f8a;
-  padding: 1.5rem;
-  border-radius: 12px;
-  margin-top: 1rem;
-  animation: slideDown 0.3s ease;
+.action-btn:active {
+  transform: translateY(0);
+}
+
+.action-btn.active {
+  background: linear-gradient(135deg, #2a4442, #1a2f2d);
+  box-shadow: 0 2px 8px rgba(42, 68, 66, 0.4);
+}
+
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Theme-specific button styles */
+
+/* Vocabulary Theme (Green) */
+.vocabulary-theme .action-btn {
+  background: linear-gradient(135deg, #5b8f8a, #2a4442);
+  box-shadow: 0 4px 12px rgba(91, 143, 138, 0.3);
+}
+
+.vocabulary-theme .action-btn:hover {
+  box-shadow: 0 8px 20px rgba(91, 143, 138, 0.4);
+}
+
+.vocabulary-theme .action-btn.active {
+  background: linear-gradient(135deg, #2a4442, #1a2f2d);
+  box-shadow: 0 2px 8px rgba(42, 68, 66, 0.4);
+}
+
+.vocabulary-theme .quiz-btn {
+  background: linear-gradient(135deg, #2a4442, #1a2f2d);
+}
+
+.vocabulary-theme .quiz-btn:hover {
+  box-shadow: 0 8px 20px rgba(42, 68, 66, 0.4);
+}
+
+/* Korean-English Theme (Purple) */
+.korean-english-theme .action-btn {
+  background: linear-gradient(135deg, #9691c4, #221468);
+  box-shadow: 0 4px 12px rgba(150, 145, 196, 0.3);
+}
+
+.korean-english-theme .action-btn:hover {
+  box-shadow: 0 8px 20px rgba(150, 145, 196, 0.4);
+}
+
+.korean-english-theme .action-btn.active {
+  background: linear-gradient(135deg, #221468, #1a0f4d);
+  box-shadow: 0 2px 8px rgba(34, 20, 104, 0.4);
+}
+
+.korean-english-theme .quiz-btn {
+  background: linear-gradient(135deg, #221468, #1a0f4d);
+}
+
+.korean-english-theme .quiz-btn:hover {
+  box-shadow: 0 8px 20px rgba(34, 20, 104, 0.4);
+}
+
+/* Expandable Content */
+.word-synonyms,
+.word-examples {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(91, 143, 138, 0.15);
+  animation: slideDown 0.3s ease-out;
 }
 
 @keyframes slideDown {
@@ -249,468 +369,325 @@
   }
 }
 
-.synonyms-list {
+.word-synonyms h4,
+.word-examples h4 {
+  margin: 0 0 12px 0;
+  color: #2a4442;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.synonym-tags,
+.antonym-tags,
+.collocation-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
-.synonym-item {
-  background: white;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #8b4513;
-  border: 2px solid #f0e6d6;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.synonym-item:hover {
+.synonym-tag {
   background: linear-gradient(135deg, #5b8f8a, #2a4442);
   color: white;
-  border-color: transparent;
-  transform: translateY(-2px);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(91, 143, 138, 0.2);
+  transition: transform 0.2s ease;
 }
 
-.examples-list {
+.synonym-tag:hover {
+  transform: scale(1.05);
+}
+
+/* Theme-specific synonym tags */
+.vocabulary-theme .synonym-tag {
+  background: linear-gradient(135deg, #5b8f8a, #2a4442);
+  box-shadow: 0 2px 8px rgba(91, 143, 138, 0.2);
+}
+
+.korean-english-theme .synonym-tag {
+  background: linear-gradient(135deg, #9691c4, #221468);
+  box-shadow: 0 2px 8px rgba(150, 145, 196, 0.2);
+}
+
+.example-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .example-item {
-  background: white;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: rgba(91, 143, 138, 0.05);
+  padding: 16px;
+  border-radius: 12px;
   border-left: 3px solid #5b8f8a;
+}
+
+/* Theme-specific example items */
+.vocabulary-theme .example-item {
+  background: rgba(91, 143, 138, 0.05);
+  border-left-color: #5b8f8a;
+}
+
+.korean-english-theme .example-item {
+  background: rgba(150, 145, 196, 0.05);
+  border-left-color: #9691c4;
 }
 
 .example-text {
+  margin: 0 0 8px 0;
   font-size: 1rem;
+  color: #374151;
+  font-style: italic;
   line-height: 1.5;
-  color: #212529;
-  margin: 0 0 0.5rem 0;
 }
 
 .example-translation {
-  font-size: 0.9rem;
-  color: #6c757d;
   margin: 0;
-  font-style: italic;
-}
-
-/* Collocations and Antonyms */
-.collocations-section,
-.antonyms-section {
-  margin: 1rem 0;
-  padding: 1rem;
-  background: linear-gradient(135deg, #f8f9fa, #ffffff);
-  border-radius: 12px;
-  border-left: 3px solid #5b8f8a;
-}
-
-.section-title {
-  margin: 0 0 0.8rem 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #8b4513;
-}
-
-.collocations-list,
-.antonyms-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.collocation-item,
-.antonym-item {
-  background: white;
-  padding: 0.3rem 0.6rem;
-  border-radius: 16px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  color: #6b7280;
   font-weight: 500;
-  color: #8b4513;
-  border: 1px solid #f0e6d6;
-  transition: all 0.2s ease;
 }
 
-.collocation-item:hover,
-.antonym-item:hover {
-  background: #fff8f0;
-  border-color: #5b8f8a;
-  transform: translateY(-1px);
-}
-
-/* Etymology Section */
-.etymology-section {
-  background: linear-gradient(135deg, #e8f5e8, #f0fff0);
-  border-left: 4px solid #28a745;
-  padding: 1rem;
-  border-radius: 12px;
-  margin: 1rem 0;
-}
-
-.etymology-text {
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: #495057;
-  margin: 0;
-  font-style: italic;
-}
-
-/* Metadata Section */
-.metadata-section {
-  margin: 1.5rem 0;
-  padding-top: 1rem;
-  border-top: 1px solid #f0e6d6;
-}
-
-.metadata-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.metadata-tag {
-  padding: 0.3rem 0.8rem;
+/* Additional Info */
+.word-additional {
+  background: rgba(255, 255, 255, 0.6);
   border-radius: 16px;
+  padding: 20px;
+  margin-top: 16px;
+  border: 1px solid rgba(91, 143, 138, 0.1);
+}
+
+.word-antonyms,
+.word-collocations {
+  margin-bottom: 16px;
+}
+
+.word-antonyms:last-child,
+.word-collocations:last-child {
+  margin-bottom: 0;
+}
+
+.word-additional h5 {
+  margin: 0 0 8px 0;
+  color: #2a4442;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.antonym-tag {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 10px;
   font-size: 0.8rem;
-  font-weight: 600;
-  color: white;
+  font-weight: 500;
 }
 
-.subject-tag {
-  background: linear-gradient(135deg, #6f42c1, #6610f2);
+.collocation-tag {
+  background: rgba(91, 143, 138, 0.15);
+  color: #2a4442;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
-.exam-tag {
-  background: linear-gradient(135deg, #17a2b8, #20c997);
-}
-
-/* Action Buttons */
-.word-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 2px solid #f0e6d6;
-}
-
-.action-button {
-  flex: 1;
-  padding: 0.8rem 1rem;
-  background: white;
-  border: 2px solid #f0e6d6;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #8b4513;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.action-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.study-button:hover {
-  background: linear-gradient(135deg, #6f42c1, #6610f2);
-  border-color: transparent;
-  color: white;
-}
-
-.test-button:hover {
-  background: linear-gradient(135deg, #28a745, #20c997);
-  border-color: transparent;
-  color: white;
-}
-
-.bookmark-button:hover {
-  background: linear-gradient(135deg, #ffc107, #fd7e14);
-  border-color: transparent;
-  color: white;
-}
-
-.bookmark-button.active {
-  background: linear-gradient(135deg, #5b8f8a, #2a4442);
-  border-color: transparent;
-  color: white;
-}
-
-.report-button:hover {
-  background: linear-gradient(135deg, #dc3545, #e83e8c);
-  border-color: transparent;
-  color: white;
-}
-
-.button-icon {
-  font-size: 1.1rem;
-}
-
-.button-text {
-  font-size: 0.9rem;
-}
-
-/* Quiz Interface */
-.quiz-overlay {
+/* Quiz Modal */
+.quiz-modal {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.3s ease-out;
 }
 
-.quiz-modal {
-  background: linear-gradient(135deg, #fffbf0, #ffffff);
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.quiz-content {
+  background: white;
   border-radius: 20px;
-  width: 90%;
+  padding: 32px;
   max-width: 500px;
-  padding: 2rem;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 107, 53, 0.2);
-  animation: slideUp 0.3s ease;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .quiz-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #f0e6d6;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f3f4f6;
 }
 
 .quiz-header h3 {
   margin: 0;
-  color: #8b4513;
+  color: #2a4442;
   font-size: 1.4rem;
 }
 
 .close-quiz {
-  background: rgba(255, 107, 53, 0.1);
-  color: #5b8f8a;
+  background: none;
   border: none;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  font-size: 1.2rem;
+  font-size: 2rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  color: #9ca3af;
+  transition: color 0.2s ease;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .close-quiz:hover {
-  background: #5b8f8a;
-  color: white;
-  transform: scale(1.1);
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .quiz-question {
-  margin-bottom: 2rem;
-  text-align: center;
+  margin-bottom: 24px;
 }
 
 .quiz-question p {
-  font-size: 1.2rem;
-  color: #8b4513;
-  font-weight: 600;
+  font-size: 1.1rem;
+  color: #374151;
   margin: 0;
+  line-height: 1.5;
 }
 
 .quiz-options {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .quiz-option {
-  background: white;
-  border: 2px solid #f0e6d6;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  padding: 16px;
   border-radius: 12px;
-  padding: 1rem;
   font-size: 1rem;
-  color: #8b4513;
   cursor: pointer;
   transition: all 0.3s ease;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
+  text-align: left;
 }
 
-.quiz-option:hover:not(:disabled) {
+.quiz-option:hover {
+  background: #f3f4f6;
   border-color: #5b8f8a;
-  background: linear-gradient(135deg, #fff8f0, #ffffff);
-  transform: translateY(-2px);
+}
+
+.quiz-option.selected {
+  background: #dbeafe;
+  border-color: #3b82f6;
 }
 
 .quiz-option.correct {
-  border-color: #28a745;
-  background: linear-gradient(135deg, #d4edda, #ffffff);
-  color: #155724;
+  background: #d1fae5;
+  border-color: #10b981;
+  color: #065f46;
 }
 
 .quiz-option.incorrect {
-  border-color: #dc3545;
-  background: linear-gradient(135deg, #f8d7da, #ffffff);
-  color: #721c24;
-}
-
-.quiz-option:disabled {
-  cursor: default;
-}
-
-.option-result {
-  font-size: 1.2rem;
-  font-weight: bold;
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #991b1b;
 }
 
 .quiz-result {
-  text-align: center;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #e7f3ff, #f0f7ff);
+  background: #f9fafb;
+  padding: 20px;
   border-radius: 12px;
-  border-left: 4px solid #007bff;
-}
-
-.result-message {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
-.result-message.correct {
-  color: #28a745;
-}
-
-.result-message.incorrect {
-  color: #dc3545;
-}
-
-.quiz-explanation {
-  font-size: 1rem;
-  color: #495057;
-  line-height: 1.5;
-  margin: 0 0 1.5rem 0;
-}
-
-.try-again-btn {
-  background: linear-gradient(135deg, #5b8f8a, #2a4442);
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.try-again-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
-}
-
-/* Word Stats */
-.word-stats {
-  background: linear-gradient(135deg, #f8f9fa, #ffffff);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
   border-left: 4px solid #5b8f8a;
 }
 
-.frequency-info,
-.context-preview {
-  margin-bottom: 1rem;
+.quiz-result p {
+  margin: 0 0 8px 0;
 }
 
-.frequency-info:last-child,
-.context-preview:last-child {
-  margin-bottom: 0;
-}
-
-.stat-label {
+.quiz-result p.correct {
+  color: #065f46;
   font-weight: 600;
-  color: #8b4513;
-  margin-right: 0.5rem;
 }
 
-.stat-value {
-  color: #5b8f8a;
-  font-weight: 700;
+.quiz-result p.incorrect {
+  color: #991b1b;
+  font-weight: 600;
 }
 
-.context-text {
-  color: #6c757d;
+.quiz-explanation {
   font-style: italic;
-  font-size: 0.9rem;
-  line-height: 1.4;
+  color: #6b7280;
 }
 
-/* Mobile Responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .vocabulary-hit-container {
-    padding: 1.5rem;
-  }
-
-  .vocabulary-hit-header {
-    flex-direction: column;
-    gap: 1rem;
+  .word-card {
+    padding: 20px;
+    margin-bottom: 16px;
+    border-radius: 16px;
   }
 
   .word-title {
     font-size: 1.6rem;
   }
 
-  .word-badges {
-    align-self: flex-start;
-  }
-
-  .word-actions-mini {
-    align-self: flex-end;
-  }
-
-  .word-main {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .synonyms-list,
-  .collocations-list,
-  .antonyms-list {
-    gap: 0.3rem;
-  }
-
   .word-actions {
-    flex-direction: column;
+    gap: 8px;
   }
 
-  .action-button {
-    width: 100%;
+  .action-btn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
   }
 
-  .examples-list {
-    gap: 0.5rem;
+  .quiz-content {
+    padding: 24px;
+    margin: 20px;
+  }
+
+  .synonym-tags,
+  .antonym-tags,
+  .collocation-tags {
+    gap: 6px;
+  }
+
+  .synonym-tag,
+  .antonym-tag,
+  .collocation-tag {
+    font-size: 0.8rem;
+    padding: 4px 8px;
   }
 }

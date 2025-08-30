@@ -1,6 +1,7 @@
 // vocabularyService.js - Extract and analyze vocabulary from Korean-English questions
 import OpenAI from 'openai';
 import { getOpenAIKey } from '../utils/envConfig';
+import { getWordnikWordInfo, testWordnikConnection } from './wordnikService';
 
 const apiKey = getOpenAIKey();
 
@@ -243,9 +244,20 @@ const getFallbackWordInfo = async (word) => {
 };
 
 export const getEnhancedWordInfo = async (word, context = '') => {
-  // First try Free Dictionary API as primary source
   console.log(`Getting enhanced info for word: ${word}`);
   
+  // First try Wordnik API as primary source (best quality)
+  try {
+    const wordnikData = await getWordnikWordInfo(word, context);
+    if (wordnikData && wordnikData.definition) {
+      console.log('Successfully got word info from Wordnik API');
+      return wordnikData;
+    }
+  } catch (error) {
+    console.log('Wordnik API failed, trying Free Dictionary API:', error.message);
+  }
+  
+  // Then try Free Dictionary API as secondary source
   try {
     const fallbackData = await getFallbackWordInfo(word, context);
     if (fallbackData && fallbackData.definition && !fallbackData.definition.includes('lookup failed')) {
@@ -259,30 +271,26 @@ export const getEnhancedWordInfo = async (word, context = '') => {
   // If no OpenAI client available, return enhanced fallback data
   if (!openai) {
     console.warn(`No OpenAI API key available. Using enhanced fallback for word: ${word}`);
-    // Try Free Dictionary API one more time with error handling
-    try {
-      const fallbackData = await getFallbackWordInfo(word, context);
-      return fallbackData;
-    } catch {
-      // Return basic fallback if all else fails
-      return {
-        word: word,
-        partOfSpeech: 'noun/verb',
-        definition: `${word}: A vocabulary word from Korean-English study materials. Enhanced definition requires API access.`,
-        difficulty: 3,
-        synonyms: ['similar', 'related', 'comparable', 'equivalent'],
-        antonyms: ['opposite', 'different'],
-        examples: [
-          {"sentence": `The word "${word}" is commonly used in academic contexts.`, "translation": `"${word}"라는 단어는 학술적 맥락에서 일반적으로 사용됩니다.`},
-          {"sentence": `Students should understand the meaning of "${word}".`, "translation": `학생들은 "${word}"의 의미를 이해해야 합니다.`}
-        ],
-        koreanTranslation: `${word} - 한국어 번역`,
-        frequency: 'common',
-        subjectArea: 'academic',
-        collocations: [`${word} is`, `${word} can`, `use ${word}`],
-        etymology: 'Etymology information not available'
-      };
-    }
+    // Return comprehensive fallback if all APIs fail
+    return {
+      word: word,
+      partOfSpeech: 'noun/verb',
+      definition: `${word}: A vocabulary word from Korean-English study materials. This word is important for language learning and appears in academic contexts.`,
+      difficulty: 3,
+      synonyms: ['similar', 'related', 'comparable', 'equivalent', 'corresponding'],
+      antonyms: ['opposite', 'different', 'contrasting'],
+      examples: [
+        {"sentence": `The word "${word}" is commonly used in academic contexts.`, "translation": `"${word}"라는 단어는 학술적 맥락에서 일반적으로 사용됩니다.`},
+        {"sentence": `Students should understand the meaning of "${word}".`, "translation": `학생들은 "${word}"의 의미를 이해해야 합니다.`},
+        {"sentence": `Practice using "${word}" in different sentences.`, "translation": `다양한 문장에서 "${word}"를 사용하는 연습을 하세요.`}
+      ],
+      koreanTranslation: `${word} - 한국어 번역`,
+      frequency: 'common',
+      subjectArea: 'academic',
+      collocations: [`${word} is`, `${word} can`, `use ${word}`, `${word} means`],
+      etymology: 'Etymology information not available',
+      source: 'fallback'
+    };
   }
 
   try {

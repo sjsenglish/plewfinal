@@ -7,7 +7,7 @@ const SAMPLE_VIDEOS = {
     id: 'hero-video',
     title: 'Featured Study Series',
     description: 'Master your Korean-English vocabulary with our comprehensive video lessons designed to boost your learning efficiency.',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    videoUrl: 'https://www.youtube.com/embed/PtnI54sUc84?start=2&autoplay=1&mute=1&controls=1&loop=1&playlist=PtnI54sUc84',
     poster: 'https://peach.blender.org/wp-content/uploads/title_anouncement.jpg'
   },
   categories: [
@@ -163,17 +163,15 @@ const VideoStreaming = () => {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-video-container">
-          <video
+          <iframe
             ref={heroVideoRef}
             className="hero-video"
-            muted
-            loop
-            playsInline
-            poster={SAMPLE_VIDEOS.hero.poster}
-          >
-            <source src={SAMPLE_VIDEOS.hero.videoUrl} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+            src={SAMPLE_VIDEOS.hero.videoUrl}
+            title={SAMPLE_VIDEOS.hero.title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
           <div className="hero-overlay"></div>
           <div className="hero-content">
             <h1 className="hero-title">{SAMPLE_VIDEOS.hero.title}</h1>

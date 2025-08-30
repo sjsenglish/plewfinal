@@ -87,96 +87,48 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { questionData, batchProcess = false } = req.body;
+    const { questionData } = req.body;
 
-    if (batchProcess) {
-      // Process multiple questions for initial setup
-      console.log('Processing batch vocabulary extraction...');
-      
-      // This would be called during initial setup or migration
-      // In a real scenario, you'd fetch from Algolia here
-      if (!questionData || !Array.isArray(questionData)) {
-        return res.status(400).json({ error: 'Question data array required for batch processing' });
-      }
-
-      const allVocabulary = new Map();
-      
-      questionData.forEach(question => {
-        const extractedWords = extractVocabularyFromQuestion(question);
-        
-        extractedWords.forEach(wordData => {
-          const key = wordData.word.toLowerCase();
-          if (!allVocabulary.has(key)) {
-            allVocabulary.set(key, wordData);
-          } else {
-            const existing = allVocabulary.get(key);
-            existing.frequency += wordData.frequency;
-            existing.contexts = [...new Set([...existing.contexts, ...wordData.contexts])].slice(0, 3);
-            existing.sourceQuestions = [...new Set([...existing.sourceQuestions, ...wordData.sourceQuestions])];
-            existing.lastUpdated = new Date().toISOString();
-          }
-        });
-      });
-
-      // Store in Firestore
-      const batch = db.batch();
-      const vocabularyRef = db.collection('vocabulary');
-      
-      Array.from(allVocabulary.values()).forEach(wordData => {
-        const docRef = vocabularyRef.doc(wordData.word.toLowerCase());
-        batch.set(docRef, wordData, { merge: true });
-      });
-
-      await batch.commit();
-      
-      return res.status(200).json({
-        success: true,
-        processed: questionData.length,
-        vocabularyWords: allVocabulary.size,
-        message: 'Batch vocabulary extraction completed'
-      });
-
-    } else {
-      // Process single question (for new questions)
-      if (!questionData) {
-        return res.status(400).json({ error: 'Question data required' });
-      }
-
-      const extractedWords = extractVocabularyFromQuestion(questionData);
-      
-      // Update Firestore with new/updated vocabulary
-      const batch = db.batch();
-      const vocabularyRef = db.collection('vocabulary');
-      
-      for (const wordData of extractedWords) {
-        const docRef = vocabularyRef.doc(wordData.word.toLowerCase());
-        const existingDoc = await docRef.get();
-        
-        if (existingDoc.exists) {
-          // Merge with existing data
-          const existing = existingDoc.data();
-          const updated = {
-            ...existing,
-            frequency: (existing.frequency || 0) + wordData.frequency,
-            contexts: [...new Set([...(existing.contexts || []), ...wordData.contexts])].slice(0, 3),
-            sourceQuestions: [...new Set([...(existing.sourceQuestions || []), ...wordData.sourceQuestions])],
-            lastUpdated: new Date().toISOString()
-          };
-          batch.set(docRef, updated);
-        } else {
-          // New word
-          batch.set(docRef, wordData);
-        }
-      }
-
-      await batch.commit();
-      
-      return res.status(200).json({
-        success: true,
-        extractedWords: extractedWords.length,
-        message: 'Vocabulary extraction completed for question'
-      });
+    // Process single question (for new questions)
+    if (!questionData) {
+      return res.status(400).json({ error: 'Question data required' });
     }
+
+    const extractedWords = extractVocabularyFromQuestion(questionData);
+    
+    // Update Firestore with new/updated vocabulary
+    const batch = db.batch();
+    const vocabularyRef = db.collection('vocabulary');
+    
+    for (const wordData of extractedWords) {
+      const docRef = vocabularyRef.doc(wordData.word.toLowerCase());
+      const existingDoc = await docRef.get();
+      
+      if (existingDoc.exists) {
+        // Merge with existing data
+        const existing = existingDoc.data();
+        const updated = {
+          ...existing,
+          frequency: (existing.frequency || 0) + wordData.frequency,
+          contexts: [...new Set([...(existing.contexts || []), ...wordData.contexts])].slice(0, 3),
+          sourceQuestions: [...new Set([...(existing.sourceQuestions || []), ...wordData.sourceQuestions])],
+          lastUpdated: new Date().toISOString()
+        };
+        batch.set(docRef, updated);
+      } else {
+        // New word
+        batch.set(docRef, wordData);
+      }
+    }
+
+    await batch.commit();
+    
+    return res.status(200).json({
+      success: true,
+      extractedWords: extractedWords.length,
+      message: 'Vocabulary extraction completed for question'
+    });
+  }
 
   } catch (error) {
     console.error('Vocabulary extraction error:', error);

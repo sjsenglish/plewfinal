@@ -1,6 +1,7 @@
 // src/services/vocabularyAPIService.js - Client-side service for fetching pre-computed vocabulary
-import { getOpenAIKey } from '../utils/envConfig';
+import { getOpenAIKey, getWordnikAPIKey } from '../utils/envConfig';
 import { getEnhancedWordInfo as getWordInfoFromService } from './vocabularyService';
+import { testWordnikConnection } from './wordnikService';
 
 // Fetch pre-computed vocabulary from server
 export const fetchVocabulary = async (options = {}) => {
@@ -105,59 +106,19 @@ export const extractVocabularyForQuestion = async (questionData) => {
   }
 };
 
-// Batch process existing questions (for initial setup/migration)
-export const batchProcessVocabulary = async (questionsData) => {
-  try {
-    console.log('Starting batch vocabulary processing for', questionsData.length, 'questions');
 
-    const response = await fetch('/api/vocabulary/extract', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        questionData: questionsData,
-        batchProcess: true
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Batch processing API request failed: ${response.status}`);
-    }
-
-    const result = await response.json();
-    
-    if (!result.success) {
-      throw new Error(result.error || 'Failed to batch process vocabulary');
-    }
-
-    console.log('Batch vocabulary processing completed:', result.vocabularyWords, 'unique words from', result.processed, 'questions');
-    
-    return {
-      success: true,
-      processed: result.processed,
-      vocabularyWords: result.vocabularyWords,
-      message: result.message
-    };
-
-  } catch (error) {
-    console.error('Error in batch vocabulary processing:', error);
-    return {
-      success: false,
-      error: error.message
-    };
-  }
-};
-
-// Enhanced word information (keep this for individual word details)
+// Enhanced word information with Wordnik integration
 export const getEnhancedWordInfo = async (word, context = '') => {
+  const wordnikKey = getWordnikAPIKey();
+  
+  console.log(`Getting enhanced word info for: ${word} (Wordnik available: ${!!wordnikKey})`);
+  
   try {
-    // Always use the service function which has proper fallbacks
-    console.log('Getting enhanced word info for:', word);
+    // Use the service function which now prioritizes Wordnik -> Free Dictionary -> OpenAI
     const enhancedInfo = await getWordInfoFromService(word, context);
     
     if (enhancedInfo && enhancedInfo.definition) {
-      console.log('Successfully retrieved word info with definition');
+      console.log(`Successfully retrieved word info from ${enhancedInfo.source || 'unknown source'}`);
       return enhancedInfo;
     } else {
       console.log('No definition found, using fallback');
@@ -176,12 +137,12 @@ export const getEnhancedWordInfo = async (word, context = '') => {
       console.error('Second attempt failed:', secondError.message);
     }
     
-    // Return comprehensive fallback data
+    // Return comprehensive fallback data with better content
     return {
       word: word,
       partOfSpeech: 'noun/verb',
-      definition: `${word}: An important vocabulary word for Korean-English learners. This word frequently appears in academic and professional contexts.`,
-      difficulty: 3,
+      definition: `${word}: An important vocabulary word for Korean-English learners. This word frequently appears in academic and professional contexts and is essential for building strong English proficiency.`,
+      difficulty: Math.min(Math.max(Math.floor(word.length / 2), 1), 5),
       synonyms: ['similar', 'related', 'equivalent', 'comparable', 'corresponding', 'associated'],
       antonyms: ['opposite', 'different', 'contrasting', 'dissimilar'],
       examples: [
@@ -194,17 +155,46 @@ export const getEnhancedWordInfo = async (word, context = '') => {
           translation: `학생들은 문장에서 "${word}"를 사용하는 연습을 해야 합니다.`
         },
         {
-          sentence: `The meaning of "${word}" varies depending on context.`,
-          translation: `"${word}"의 의미는 문맥에 따라 다릅니다.`
+          sentence: `Understanding "${word}" will improve your English vocabulary.`,
+          translation: `"${word}"를 이해하면 영어 어휘력이 향상됩니다.`
         }
       ],
       koreanTranslation: `${word} - 한국어 번역`,
       frequency: 'common',
       subjectArea: 'general',
-      collocations: [`${word} is`, `${word} can`, `using ${word}`, `${word} means`],
-      etymology: 'Etymology details not available',
+      collocations: [`${word} is`, `${word} can be`, `using ${word}`, `${word} means`],
+      etymology: 'Etymology details not available - connect Wordnik API for detailed word origins',
       pronunciation: `/${word}/`,
-      audioUrl: null
+      audioUrl: null,
+      source: 'fallback'
     };
   }
+};
+
+// Test vocabulary services connection
+export const testVocabularyServices = async () => {
+  const results = {
+    wordnik: { available: false, tested: false },
+    openai: { available: false, tested: false }
+  };
+  
+  // Test Wordnik
+  const wordnikKey = getWordnikAPIKey();
+  results.wordnik.available = !!wordnikKey;
+  if (wordnikKey) {
+    try {
+      const wordnikTest = await testWordnikConnection();
+      results.wordnik.tested = wordnikTest.success;
+      results.wordnik.message = wordnikTest.message || wordnikTest.error;
+    } catch (error) {
+      results.wordnik.tested = false;
+      results.wordnik.message = error.message;
+    }
+  }
+  
+  // Test OpenAI
+  const openaiKey = getOpenAIKey();
+  results.openai.available = !!openaiKey;
+  
+  return results;
 };
