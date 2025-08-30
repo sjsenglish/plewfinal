@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { getEnhancedWordInfo } from '../services/vocabularyAPIService';
-import { generateSynonymQuiz } from '../services/vocabularyService';
 import './VocabularyHit.css';
 
 const VocabularyHit = ({ hit = {} }) => {
@@ -9,10 +8,6 @@ const VocabularyHit = ({ hit = {} }) => {
   const [showPronunciation, setShowPronunciation] = useState(false);
   const [wordInfo, setWordInfo] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
-  const [quiz, setQuiz] = useState(null);
-  const [quizAnswer, setQuizAnswer] = useState(null);
-  const [showQuizResult, setShowQuizResult] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   console.log('Vocabulary hit object:', hit);
@@ -90,42 +85,6 @@ const VocabularyHit = ({ hit = {} }) => {
     }
   };
 
-  // Quiz functions
-  const startQuiz = async () => {
-    if (!wordInfo && !loading) {
-      await loadWordInfo();
-    }
-    
-    if (!wordInfo) {
-      setTimeout(() => startQuiz(), 1000);
-      return;
-    }
-    
-    setLoading(true);
-    try {
-      const quizData = await generateSynonymQuiz(word, wordInfo);
-      setQuiz(quizData);
-      setShowQuiz(true);
-      setQuizAnswer(null);
-      setShowQuizResult(false);
-    } catch (error) {
-      console.error('Error generating quiz:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const selectQuizAnswer = (selectedOption) => {
-    setQuizAnswer(selectedOption);
-    setShowQuizResult(true);
-  };
-
-  const closeQuiz = () => {
-    setShowQuiz(false);
-    setQuiz(null);
-    setQuizAnswer(null);
-    setShowQuizResult(false);
-  };
 
   // Get difficulty badge class
   const getDifficultyClass = (diff) => {
@@ -209,13 +168,6 @@ const VocabularyHit = ({ hit = {} }) => {
           {loading ? '⏳' : '💡'} Examples {examples.length > 0 ? `(${examples.length})` : ''}
         </button>
         
-        <button 
-          className="action-btn quiz-btn"
-          onClick={startQuiz}
-          disabled={loading}
-        >
-          🧠 Quiz
-        </button>
       </div>
 
       {/* Expandable Content */}
@@ -273,46 +225,6 @@ const VocabularyHit = ({ hit = {} }) => {
         </div>
       )}
 
-      {/* Quiz Modal */}
-      {showQuiz && quiz && (
-        <div className="quiz-modal">
-          <div className="quiz-content">
-            <div className="quiz-header">
-              <h3>Synonym Quiz: {word}</h3>
-              <button className="close-quiz" onClick={closeQuiz}>×</button>
-            </div>
-            
-            <div className="quiz-question">
-              <p>Which word is a synonym for "<strong>{word}</strong>"?</p>
-            </div>
-            
-            <div className="quiz-options">
-              {quiz.options?.map((option, index) => (
-                <button
-                  key={index}
-                  className={`quiz-option ${quizAnswer === option ? 'selected' : ''} ${
-                    showQuizResult ? (option === quiz.correct ? 'correct' : quizAnswer === option ? 'incorrect' : '') : ''
-                  }`}
-                  onClick={() => selectQuizAnswer(option)}
-                  disabled={showQuizResult}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-            
-            {showQuizResult && (
-              <div className="quiz-result">
-                <p className={quizAnswer === quiz.correct ? 'correct' : 'incorrect'}>
-                  {quizAnswer === quiz.correct ? '✅ Correct!' : '❌ Incorrect'}
-                </p>
-                <p>The correct answer is: <strong>{quiz.correct}</strong></p>
-                {quiz.explanation && <p className="quiz-explanation">{quiz.explanation}</p>}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
