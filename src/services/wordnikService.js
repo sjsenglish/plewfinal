@@ -1,37 +1,27 @@
-// Wordnik API Service for vocabulary features
-import { getWordnikAPIKey } from '../utils/envConfig';
+// Wordnik API Service for vocabulary features (via server-side API)
 
-const BASE_URL = 'https://api.wordnik.com/v4/word.json';
+// Use server-side API route to access Wordnik (since API key is server-side only)
+const API_BASE = '/api/wordnik';
 
-// Get Wordnik API key
-const getAPIKey = () => {
-  const key = getWordnikAPIKey();
-  if (!key) {
-    console.warn('Wordnik API key not found. Some vocabulary features may be limited.');
-  }
-  return key;
-};
-
-// Get word definition from Wordnik
+// Get word definition from Wordnik via server-side API
 export const getWordDefinition = async (word) => {
-  const apiKey = getAPIKey();
-  if (!apiKey) {
-    throw new Error('Wordnik API key not available');
-  }
-
   try {
-    const url = `${BASE_URL}/${encodeURIComponent(word)}/definitions?limit=5&includeRelated=false&sourceDictionaries=all&useCanonical=true&includeTags=false&api_key=${apiKey}`;
-    
-    console.log('Fetching definition from Wordnik:', word);
-    const response = await fetch(url);
+    console.log('Fetching definition from Wordnik via server API:', word);
+    const response = await fetch(`${API_BASE}/word?word=${encodeURIComponent(word)}&action=definitions`);
     
     if (!response.ok) {
-      throw new Error(`Wordnik API error: ${response.status}`);
+      throw new Error(`Server API error: ${response.status}`);
     }
+
+    const result = await response.json();
     
-    const definitions = await response.json();
+    if (!result.success) {
+      throw new Error(result.error || 'Failed to get definitions');
+    }
+
+    const definitions = result.data.definitions || [];
     
-    if (!definitions || definitions.length === 0) {
+    if (definitions.length === 0) {
       throw new Error('No definitions found');
     }
 
@@ -55,31 +45,30 @@ export const getWordDefinition = async (word) => {
   }
 };
 
-// Get word examples from Wordnik
+// Get word examples from Wordnik via server-side API
 export const getWordExamples = async (word) => {
-  const apiKey = getAPIKey();
-  if (!apiKey) {
-    throw new Error('Wordnik API key not available');
-  }
-
   try {
-    const url = `${BASE_URL}/${encodeURIComponent(word)}/examples?includeDuplicates=false&useCanonical=true&skip=0&limit=10&api_key=${apiKey}`;
-    
-    console.log('Fetching examples from Wordnik:', word);
-    const response = await fetch(url);
+    console.log('Fetching examples from Wordnik via server API:', word);
+    const response = await fetch(`${API_BASE}/word?word=${encodeURIComponent(word)}&action=examples`);
     
     if (!response.ok) {
-      throw new Error(`Wordnik API error: ${response.status}`);
+      throw new Error(`Server API error: ${response.status}`);
     }
+
+    const result = await response.json();
     
-    const data = await response.json();
+    if (!result.success) {
+      throw new Error(result.error || 'Failed to get examples');
+    }
+
+    const examples = result.data.examples || [];
     
-    if (!data || !data.examples || data.examples.length === 0) {
+    if (examples.length === 0) {
       throw new Error('No examples found');
     }
 
     // Process and clean examples
-    const examples = data.examples
+    const processedExamples = examples
       .filter(example => example.text && example.text.length > 10 && example.text.length < 200)
       .slice(0, 5)
       .map(example => ({
@@ -88,7 +77,7 @@ export const getWordExamples = async (word) => {
         source: example.title || 'Wordnik'
       }));
 
-    return examples;
+    return processedExamples;
     
   } catch (error) {
     console.error('Wordnik examples API failed:', error);
@@ -96,26 +85,25 @@ export const getWordExamples = async (word) => {
   }
 };
 
-// Get related words (synonyms, antonyms) from Wordnik
+// Get related words (synonyms, antonyms) from Wordnik via server-side API
 export const getRelatedWords = async (word) => {
-  const apiKey = getAPIKey();
-  if (!apiKey) {
-    throw new Error('Wordnik API key not available');
-  }
-
   try {
-    const url = `${BASE_URL}/${encodeURIComponent(word)}/relatedWords?useCanonical=true&relationshipTypes=synonym,antonym,equivalent,similar&limitPerRelationshipType=10&api_key=${apiKey}`;
-    
-    console.log('Fetching related words from Wordnik:', word);
-    const response = await fetch(url);
+    console.log('Fetching related words from Wordnik via server API:', word);
+    const response = await fetch(`${API_BASE}/word?word=${encodeURIComponent(word)}&action=related`);
     
     if (!response.ok) {
-      throw new Error(`Wordnik API error: ${response.status}`);
+      throw new Error(`Server API error: ${response.status}`);
     }
+
+    const result = await response.json();
     
-    const relatedData = await response.json();
+    if (!result.success) {
+      throw new Error(result.error || 'Failed to get related words');
+    }
+
+    const relatedData = result.data.related || [];
     
-    if (!relatedData || relatedData.length === 0) {
+    if (relatedData.length === 0) {
       throw new Error('No related words found');
     }
 
@@ -143,27 +131,58 @@ export const getRelatedWords = async (word) => {
   }
 };
 
-// Get comprehensive word information using multiple Wordnik endpoints
+// Get comprehensive word information using server-side API (all data in one call)
 export const getWordnikWordInfo = async (word, context = '') => {
-  const apiKey = getAPIKey();
-  if (!apiKey) {
-    throw new Error('Wordnik API key not available');
-  }
-
-  console.log('Getting comprehensive word info from Wordnik:', word);
+  console.log('Getting comprehensive word info from Wordnik via server API:', word);
   
   try {
-    // Make parallel requests to different Wordnik endpoints
-    const [definitionData, relatedWords, examples] = await Promise.allSettled([
-      getWordDefinition(word),
-      getRelatedWords(word),
-      getWordExamples(word)
-    ]);
+    // Make a single request to get all data
+    const response = await fetch(`${API_BASE}/word?word=${encodeURIComponent(word)}&action=all`);
+    
+    if (!response.ok) {
+      throw new Error(`Server API error: ${response.status}`);
+    }
 
-    // Process results
-    const definition = definitionData.status === 'fulfilled' ? definitionData.value : null;
-    const related = relatedWords.status === 'fulfilled' ? relatedWords.value : { synonyms: [], antonyms: [] };
-    const exampleSentences = examples.status === 'fulfilled' ? examples.value : [];
+    const result = await response.json();
+    
+    if (!result.success) {
+      // Check if this is a fallback error (API key not configured)
+      if (result.fallback) {
+        throw new Error('Wordnik API not available on server - falling back to other sources');
+      }
+      throw new Error(result.error || 'Failed to get word information');
+    }
+
+    const data = result.data;
+    
+    // Extract definitions
+    const definitions = data.definitions || [];
+    const primaryDef = definitions[0];
+    
+    // Extract related words
+    const relatedData = data.related || [];
+    const synonyms = [];
+    const antonyms = [];
+    
+    relatedData.forEach(relation => {
+      if (relation.relationshipType === 'synonym' || 
+          relation.relationshipType === 'equivalent' || 
+          relation.relationshipType === 'similar') {
+        synonyms.push(...(relation.words || []));
+      } else if (relation.relationshipType === 'antonym') {
+        antonyms.push(...(relation.words || []));
+      }
+    });
+    
+    // Extract examples
+    const examples = (data.examples || [])
+      .filter(example => example.text && example.text.length > 10 && example.text.length < 200)
+      .slice(0, 5)
+      .map(example => ({
+        sentence: example.text.trim(),
+        translation: `"${word}"를 사용한 예문입니다.`,
+        source: example.title || 'Wordnik'
+      }));
 
     // Determine difficulty based on word length and complexity
     const difficulty = word.length <= 4 ? 1 : 
@@ -173,12 +192,12 @@ export const getWordnikWordInfo = async (word, context = '') => {
 
     return {
       word: word,
-      partOfSpeech: definition?.partOfSpeech || 'noun',
-      definition: definition?.definition || `${word}: A vocabulary word with detailed information from Wordnik.`,
+      partOfSpeech: primaryDef?.partOfSpeech || 'noun',
+      definition: primaryDef?.text || `${word}: A vocabulary word with detailed information from Wordnik.`,
       difficulty: difficulty,
-      synonyms: related.synonyms.length > 0 ? related.synonyms : ['similar', 'related', 'comparable'],
-      antonyms: related.antonyms.length > 0 ? related.antonyms : ['opposite', 'different'],
-      examples: exampleSentences.length > 0 ? exampleSentences : [
+      synonyms: synonyms.length > 0 ? [...new Set(synonyms)].slice(0, 8) : ['similar', 'related', 'comparable'],
+      antonyms: antonyms.length > 0 ? [...new Set(antonyms)].slice(0, 6) : ['opposite', 'different'],
+      examples: examples.length > 0 ? examples : [
         {
           sentence: `The word "${word}" is commonly used in English.`,
           translation: `"${word}"라는 단어는 영어에서 일반적으로 사용됩니다.`,
@@ -201,17 +220,18 @@ export const getWordnikWordInfo = async (word, context = '') => {
   }
 };
 
-// Test Wordnik API connection
+// Test Wordnik API connection via server-side API
 export const testWordnikConnection = async () => {
-  const apiKey = getAPIKey();
-  if (!apiKey) {
-    return { success: false, error: 'No API key available' };
-  }
-
   try {
     // Test with a simple word
-    await getWordDefinition('test');
-    return { success: true, message: 'Wordnik API connection successful' };
+    const response = await fetch(`${API_BASE}/word?word=test&action=definitions`);
+    const result = await response.json();
+    
+    if (!response.ok || !result.success) {
+      return { success: false, error: result.error || 'Server API connection failed' };
+    }
+    
+    return { success: true, message: 'Wordnik API connection successful via server' };
   } catch (error) {
     return { success: false, error: error.message };
   }

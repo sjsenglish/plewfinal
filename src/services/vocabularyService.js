@@ -246,15 +246,15 @@ const getFallbackWordInfo = async (word) => {
 export const getEnhancedWordInfo = async (word, context = '') => {
   console.log(`Getting enhanced info for word: ${word}`);
   
-  // First try Wordnik API as primary source (best quality)
+  // First try Wordnik API via server-side route (best quality)
   try {
     const wordnikData = await getWordnikWordInfo(word, context);
     if (wordnikData && wordnikData.definition) {
-      console.log('Successfully got word info from Wordnik API');
+      console.log('Successfully got word info from Wordnik API via server');
       return wordnikData;
     }
   } catch (error) {
-    console.log('Wordnik API failed, trying Free Dictionary API:', error.message);
+    console.log('Wordnik API (server-side) failed, trying Free Dictionary API:', error.message);
   }
   
   // Then try Free Dictionary API as secondary source

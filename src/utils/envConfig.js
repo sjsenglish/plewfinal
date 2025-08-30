@@ -38,13 +38,24 @@ export const getOpenAIKey = () => {
 
 // Get Wordnik API Key
 export const getWordnikAPIKey = () => {
-  // Try React environment variables first (development)
+  // Debug environment variables (only in development)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Environment check:', {
+      REACT_APP_WORDNIK_API_KEY: !!process.env.REACT_APP_WORDNIK_API_KEY,
+      WORDNIK_API_KEY: !!process.env.WORDNIK_API_KEY,
+      NODE_ENV: process.env.NODE_ENV
+    });
+  }
+
+  // Try React environment variables first (required for client-side)
   if (process.env.REACT_APP_WORDNIK_API_KEY) {
+    console.log('✅ Found Wordnik API key via REACT_APP_WORDNIK_API_KEY');
     return process.env.REACT_APP_WORDNIK_API_KEY;
   }
 
-  // Try regular environment variables (should work in some deployments)
+  // Try regular environment variables (fallback, won't work in browser)
   if (process.env.WORDNIK_API_KEY) {
+    console.log('⚠️ Found Wordnik API key via WORDNIK_API_KEY (may not work in browser)');
     return process.env.WORDNIK_API_KEY;
   }
 
@@ -67,6 +78,16 @@ export const getWordnikAPIKey = () => {
       return global.WORDNIK_API_KEY;
     }
   }
+
+  console.warn(`
+  ⚠️  Wordnik API Key Not Found
+  
+  For Wordnik vocabulary features, add your API key to Vercel:
+  Environment Variable Name: REACT_APP_WORDNIK_API_KEY
+  Environment Variable Value: your_wordnik_api_key_here
+  
+  Note: Client-side React apps require REACT_APP_ prefix for environment variables.
+  `);
 
   return null;
 };
