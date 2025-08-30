@@ -110,10 +110,8 @@ const VideoStreaming = () => {
   const carouselRefs = useRef({});
 
   useEffect(() => {
-    // Auto-play hero video when component mounts
-    if (heroVideoRef.current) {
-      heroVideoRef.current.play().catch(console.error);
-    }
+    // YouTube iframe auto-plays with autoplay=1 parameter
+    // No need to manually call play() on iframe elements
 
     // Add keyboard event listeners
     const handleKeyPress = (e) => {
@@ -142,9 +140,7 @@ const VideoStreaming = () => {
     setIsFullscreen(false);
     setCurrentVideo(null);
     setIsPlaying(false);
-    if (fullscreenVideoRef.current) {
-      fullscreenVideoRef.current.pause();
-    }
+    // YouTube iframes don't have pause() method - they're controlled via URL parameters
   };
 
   const scrollCarousel = (categoryIndex, direction) => {
@@ -244,15 +240,15 @@ const VideoStreaming = () => {
             <button className="close-button" onClick={closeFullscreen}>
               ×
             </button>
-            <video
+            <iframe
               ref={fullscreenVideoRef}
               className="fullscreen-video"
-              controls
-              autoPlay
               src={currentVideo.videoUrl}
-            >
-              Your browser does not support the video tag.
-            </video>
+              title={currentVideo.title}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
           </div>
         </div>
       )}
