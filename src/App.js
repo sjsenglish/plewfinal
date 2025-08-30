@@ -93,14 +93,14 @@ const SUBJECTS = {
   koreanEnglish: {
     index: 'korean-english-question-pairs',
     theme: 'korean-english-theme',
-    bannerText: 'master Korean-English with interactive question pairs and practice exercises',
-    displayName: 'Korean-English',
+    bannerText: 'master the CSAT through practise questions',
+    displayName: '문제은행',
     searchType: 'algolia'
   },
   vocabulary: {
     index: 'korean-english-question-pairs',
     theme: 'vocabulary-theme',
-    bannerText: 'expand your English vocabulary with smart synonym learning and adaptive testing',
+    bannerText: 'master the vocab you need for exams',
     displayName: 'Vocabulary',
     searchType: 'algolia'
   },
