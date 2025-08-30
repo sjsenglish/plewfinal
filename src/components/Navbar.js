@@ -167,7 +167,7 @@ const Navbar = ({ onSubjectChange }) => {
               to="/videos" 
               className="navbar-glass-button"
             >
-              <span>📺</span>
+              <span></span>
               Video Lessons
             </Link>
 
