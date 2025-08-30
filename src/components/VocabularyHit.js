@@ -3,7 +3,7 @@ import { getEnhancedWordInfo } from '../services/vocabularyAPIService';
 import { generateSynonymQuiz } from '../services/vocabularyService';
 import './VocabularyHit.css';
 
-const VocabularyHit = ({ hit }) => {
+const VocabularyHit = ({ hit = {} }) => {
   const [showSynonyms, setShowSynonyms] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
   const [showPronunciation, setShowPronunciation] = useState(false);
@@ -14,11 +14,6 @@ const VocabularyHit = ({ hit }) => {
   const [quizAnswer, setQuizAnswer] = useState(null);
   const [showQuizResult, setShowQuizResult] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-
-  // Early return if hit is undefined or null - BEFORE hooks
-  if (!hit) {
-    return null;
-  }
 
   console.log('Vocabulary hit object:', hit);
 
@@ -138,6 +133,11 @@ const VocabularyHit = ({ hit }) => {
     if (diff === 3) return 'difficulty-intermediate';
     return 'difficulty-advanced';
   };
+
+  // Don't render anything if no valid hit data
+  if (!hit || Object.keys(hit).length === 0) {
+    return null;
+  }
 
   return (
     <div className="word-card">
