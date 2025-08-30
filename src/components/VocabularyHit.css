@@ -516,16 +516,31 @@
   to { opacity: 1; }
 }
 
-.quiz-content {
-  background: white;
+/* Theme-aware quiz modal */
+.vocabulary-theme .quiz-content {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fdfc 100%);
   border-radius: 20px;
   padding: 32px;
   max-width: 500px;
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(91, 143, 138, 0.3);
   animation: slideUp 0.3s ease-out;
+  border: 2px solid #d8f0ed;
+}
+
+.korean-english-theme .quiz-content {
+  background: linear-gradient(145deg, #ffffff 0%, #fdfcff 100%);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(150, 145, 196, 0.3);
+  animation: slideUp 0.3s ease-out;
+  border: 2px solid #e1dfff;
 }
 
 @keyframes slideUp {
@@ -548,10 +563,19 @@
   border-bottom: 2px solid #f3f4f6;
 }
 
-.quiz-header h3 {
+/* Theme-aware quiz header */
+.vocabulary-theme .quiz-header h3 {
   margin: 0;
   color: #2a4442;
   font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.korean-english-theme .quiz-header h3 {
+  margin: 0;
+  color: #221468;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 .close-quiz {
@@ -593,25 +617,55 @@
   margin-bottom: 24px;
 }
 
-.quiz-option {
-  background: #f9fafb;
-  border: 2px solid #e5e7eb;
+/* Theme-aware quiz options */
+.vocabulary-theme .quiz-option {
+  background: #f9fdfb;
+  border: 2px solid #d8f0ed;
   padding: 16px;
   border-radius: 12px;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: left;
+  color: #2a4442;
 }
 
-.quiz-option:hover {
-  background: #f3f4f6;
+.korean-english-theme .quiz-option {
+  background: #fdfcff;
+  border: 2px solid #e1dfff;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  color: #221468;
+}
+
+.vocabulary-theme .quiz-option:hover {
+  background: #edf9f6;
   border-color: #5b8f8a;
+  box-shadow: 0 4px 12px rgba(91, 143, 138, 0.2);
 }
 
-.quiz-option.selected {
-  background: #dbeafe;
-  border-color: #3b82f6;
+.korean-english-theme .quiz-option:hover {
+  background: #f4f2ff;
+  border-color: #9691c4;
+  box-shadow: 0 4px 12px rgba(150, 145, 196, 0.2);
+}
+
+.vocabulary-theme .quiz-option.selected {
+  background: #d8f0ed;
+  border-color: #5b8f8a;
+  color: #2a4442;
+  font-weight: 600;
+}
+
+.korean-english-theme .quiz-option.selected {
+  background: #e1dfff;
+  border-color: #9691c4;
+  color: #221468;
+  font-weight: 600;
 }
 
 .quiz-option.correct {
@@ -626,11 +680,21 @@
   color: #991b1b;
 }
 
-.quiz-result {
-  background: #f9fafb;
+/* Theme-aware quiz result */
+.vocabulary-theme .quiz-result {
+  background: linear-gradient(145deg, #f8fdfc, #edf9f6);
   padding: 20px;
   border-radius: 12px;
   border-left: 4px solid #5b8f8a;
+  border: 1px solid #d8f0ed;
+}
+
+.korean-english-theme .quiz-result {
+  background: linear-gradient(145deg, #fdfcff, #f4f2ff);
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid #9691c4;
+  border: 1px solid #e1dfff;
 }
 
 .quiz-result p {

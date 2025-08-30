@@ -373,69 +373,97 @@ Provide accurate information suitable for Korean middle/high school students lea
 
 // Generate synonym quiz for a word
 export const generateSynonymQuiz = async (word, wordInfo) => {
-  // If no OpenAI client available, return fallback quiz
-  if (!openai) {
-    console.warn(`No OpenAI API key available. Using fallback quiz for word: ${word}`);
-    const synonyms = wordInfo.synonyms && wordInfo.synonyms.length > 0 ? wordInfo.synonyms : ['similar', 'equivalent', 'comparable'];
-    const correctAnswer = synonyms[0];
-    const wrongOptions = ['different', 'opposite', 'unrelated'].filter(opt => opt !== correctAnswer);
-    
-    return {
-      question: `Which word is a synonym of '${word}'?`,
-      correctAnswer: correctAnswer,
-      options: [correctAnswer, ...wrongOptions.slice(0, 3)].sort(() => Math.random() - 0.5),
-      explanation: `"${correctAnswer}" is a synonym of "${word}". Note: OpenAI API key required for enhanced quizzes.`
-    };
-  }
-
+  console.log(`Generating synonym quiz for: ${word} using Wordnik data`);
+  
   try {
-    const prompt = `Create a multiple choice synonym quiz for the word "${word}".
-
-Word information:
-- Definition: ${wordInfo.definition}
-- Part of speech: ${wordInfo.partOfSpeech}
-
-Generate 4 answer choices where:
-- One is the correct synonym
-- Three are plausible but incorrect options
-- All options should be at similar difficulty level
-- Format as JSON:
-
-{
-  "question": "Which word is a synonym of '${word}'?",
-  "correctAnswer": "correct synonym",
-  "options": ["option1", "option2", "option3", "option4"],
-  "explanation": "Brief explanation of why the correct answer is right"
-}`;
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
-        {
-          role: "system",
-          content: "You are creating educational vocabulary quizzes for Korean students learning English. Provide JSON format only."
-        },
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
-      temperature: 0.4,
-      max_tokens: 300
-    });
-
-    const jsonResponse = response.choices[0].message.content.trim();
-    return JSON.parse(jsonResponse);
-  } catch (error) {
-    console.error('Error generating synonym quiz:', error);
-    const synonyms = wordInfo.synonyms && wordInfo.synonyms.length > 0 ? wordInfo.synonyms : ['similar', 'equivalent', 'comparable'];
+    // Use Wordnik synonyms if available
+    const synonyms = wordInfo.synonyms && wordInfo.synonyms.length > 0 ? wordInfo.synonyms : [];
+    const antonyms = wordInfo.antonyms && wordInfo.antonyms.length > 0 ? wordInfo.antonyms : [];
+    
+    if (synonyms.length === 0) {
+      throw new Error('No synonyms available for quiz');
+    }
+    
+    // Choose the best synonym (first one from Wordnik)
     const correctAnswer = synonyms[0];
+    
+    // Create plausible wrong options using:
+    // 1. Antonyms (if available)
+    // 2. Other words that are NOT synonyms
+    // 3. Common distractor words
+    const wrongOptions = [];
+    
+    // Add antonyms as wrong options (they're good distractors)
+    if (antonyms.length > 0) {
+      wrongOptions.push(...antonyms.slice(0, 2));
+    }
+    
+    // Add common distractor words based on part of speech
+    const partOfSpeech = wordInfo.partOfSpeech || 'noun';
+    let commonDistractors = [];
+    
+    if (partOfSpeech.includes('noun')) {
+      commonDistractors = ['object', 'thing', 'item', 'element', 'aspect', 'factor', 'component', 'feature'];
+    } else if (partOfSpeech.includes('verb')) {
+      commonDistractors = ['create', 'make', 'do', 'perform', 'execute', 'complete', 'finish', 'start'];
+    } else if (partOfSpeech.includes('adjective')) {
+      commonDistractors = ['large', 'small', 'good', 'bad', 'new', 'old', 'different', 'same'];
+    } else {
+      commonDistractors = ['other', 'another', 'different', 'various', 'several', 'many', 'few', 'some'];
+    }
+    
+    // Filter out words that are too similar to the correct answer or the original word
+    const filteredDistractors = commonDistractors.filter(distractor => 
+      distractor !== correctAnswer && 
+      distractor !== word.toLowerCase() &&
+      !synonyms.includes(distractor) &&
+      !distractor.includes(word.toLowerCase()) &&
+      !word.toLowerCase().includes(distractor)
+    );
+    
+    wrongOptions.push(...filteredDistractors.slice(0, 3 - wrongOptions.length));
+    
+    // Ensure we have exactly 3 wrong options
+    while (wrongOptions.length < 3) {
+      const fallbackOptions = ['example', 'sample', 'instance', 'case', 'situation', 'condition'];
+      const fallback = fallbackOptions.find(opt => 
+        !wrongOptions.includes(opt) && 
+        opt !== correctAnswer && 
+        !synonyms.includes(opt)
+      );
+      if (fallback) wrongOptions.push(fallback);
+      else wrongOptions.push(`option${wrongOptions.length + 1}`);
+    }
+    
+    // Create the final options array and shuffle
+    const allOptions = [correctAnswer, ...wrongOptions.slice(0, 3)];
+    const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
+    
+    // Create explanation
+    const explanation = `"${correctAnswer}" is a synonym of "${word}". ${wordInfo.definition ? `"${word}" means: ${wordInfo.definition.substring(0, 100)}...` : ''}`;
     
     return {
       question: `Which word is a synonym of '${word}'?`,
-      correctAnswer: correctAnswer,
-      options: [correctAnswer, 'example', 'sample', 'test'].sort(() => Math.random() - 0.5),
-      explanation: 'Quiz generation failed. Please try again.'
+      correct: correctAnswer,
+      options: shuffledOptions,
+      explanation: explanation,
+      source: 'wordnik'
+    };
+    
+  } catch (error) {
+    console.error('Error generating Wordnik-based synonym quiz:', error);
+    
+    // Ultimate fallback quiz
+    const fallbackSynonyms = ['similar', 'equivalent', 'comparable', 'alike', 'related'];
+    const correctAnswer = fallbackSynonyms[0];
+    const wrongOptions = ['different', 'opposite', 'unrelated'];
+    
+    return {
+      question: `Which word is a synonym of '${word}'?`,
+      correct: correctAnswer,
+      options: [correctAnswer, ...wrongOptions].sort(() => Math.random() - 0.5),
+      explanation: `"${correctAnswer}" means having a similar meaning to "${word}".`,
+      source: 'fallback'
     };
   }
 };
