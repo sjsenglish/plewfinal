@@ -33,6 +33,7 @@ import PasswordResetConfirm from './components/PasswordResetConfirm';
 import CommunitySearch from './components/CommunitySearch';
 import AdminQuestionUpload from './components/AdminQuestionUpload';
 import SubmitQuestionForm from './components/SubmitQuestionForm';
+import LearnContentAdmin from './components/LearnContentAdmin';
 // import MathsSubmitQuestionForm from './components/MathsSubmitQuestionForm'; // HIDDEN
 // import MathsFilters from './components/MathsFilters'; // HIDDEN
 import KoreanEnglishFilters from './components/KoreanEnglishFilters';
@@ -743,6 +744,7 @@ function App() {
                 <Route path="/premium/quiz/:subject/results" element={<ProtectedRoute><QuizResults /></ProtectedRoute>} />
                 <Route path="/reset-password" element={<ProtectedRoute><PasswordResetConfirm /></ProtectedRoute>} />
                 <Route path="/admin/questions" element={<ProtectedRoute><AdminQuestionUpload /></ProtectedRoute>} />
+                <Route path="/admin/learn-content" element={<ProtectedRoute><LearnContentAdmin /></ProtectedRoute>} />
                 <Route path="/admin/setup" element={<AdminSetup />} />
                 <Route path="/submit-question" element={<SubmitQuestionForm />} />
                 {/* <Route path="/submit-maths-question" element={<MathsSubmitQuestionForm />} /> */}

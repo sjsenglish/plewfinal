@@ -6,6 +6,7 @@ import { QuestionPackPage } from './QuestionPackPage';
 import { ProfilePage } from './ProfilePage';
 import SubscriptionPlansModal from './SubscriptionPlansModal';
 import { Button } from './ui';
+import LearnTab from './LearnTab';
 
 const getCurrentTheme = () => {
   const appElement = document.querySelector('.app');
@@ -65,6 +66,7 @@ const PremiumDashboard = () => {
 
   const sections = [
     { id: 'overview', name: 'Overview', icon: '', premium: false },
+    { id: 'learn', name: 'Learn', icon: '📖', premium: true },
     { id: 'profile', name: 'Library', icon: '', premium: true },
     { id: 'question-packs', name: 'Question Packs', icon: '', premium: true },
   ];
@@ -78,13 +80,15 @@ const PremiumDashboard = () => {
   };
 
   const renderSectionContent = () => {
-    if (!isPaidUser && ['profile', 'question-packs'].includes(activeSection)) {
+    if (!isPaidUser && ['learn', 'profile', 'question-packs'].includes(activeSection)) {
       return renderUpgradePrompt();
     }
 
     switch (activeSection) {
       case 'overview':
         return renderOverview();
+      case 'learn':
+        return <LearnTab />;
       case 'profile':
         return <ProfilePage />;
       case 'question-packs':
@@ -181,6 +185,8 @@ const renderOverview = () => (
           {sections.filter(s => s.id !== 'overview').map(section => {
             const getIconUrl = (sectionId) => {
               switch (sectionId) {
+                case 'learn':
+                  return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbook.svg?alt=media&token=8f21ae0e-764d-4b03-ba1d-f1423329c325';
                 case 'profile':
                   return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbagback.svg?alt=media&token=65739e08-36db-4810-951c-91641f5d0084';
                 case 'question-packs':
@@ -274,6 +280,8 @@ const renderOverview = () => (
 
   const getFeatureDescription = (sectionId) => {
     switch (sectionId) {
+      case 'learn':
+        return 'Weekly curated content with question packs, videos, and vocabulary';
       case 'profile':
         return 'Practise timed question packs, review, and watch video solutions';
       case 'question-packs':
