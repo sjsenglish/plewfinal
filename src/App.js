@@ -22,7 +22,7 @@ import SuccessPage from './components/SuccessPage';
 import QuizCreator from './components/QuizCreator';
 import QuizTaking from './components/QuizTaking';
 import QuizResults from './components/QuizResults';
-import LiveLeaderboard from './components/LiveLeaderboard';
+// import LiveLeaderboard from './components/LiveLeaderboard'; // HIDDEN - Leaderboard functionality disabled
 import TestPage from './components/TestPage';
 import { ErrorBoundary } from './components/ui';
 import SubscriptionPlansPage from './components/SubscriptionPlansPage';
@@ -499,7 +499,7 @@ const buildAlgoliaFilters = (filters) => {
           </div>
 
           {/* Popout Components */}
-          <LiveLeaderboard subject={currentSubject} />
+          {/* <LiveLeaderboard subject={currentSubject} /> */}
         </InstantSearch>
 
         {/* Video Popup */}
@@ -606,7 +606,7 @@ const buildAlgoliaFilters = (filters) => {
       </div>
 
       {/* Popout Components */}
-      <LiveLeaderboard subject={currentSubject} />
+      {/* <LiveLeaderboard subject={currentSubject} /> */}
 
       {/* Video Popup */}
       <VideoPopup isOpen={showVideoPopup} onClose={handleCloseVideo} />
