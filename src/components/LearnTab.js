@@ -40,6 +40,10 @@ const LearnTab = () => {
   const [currentQuizQuestions, setCurrentQuizQuestions] = useState([]);
   const [generatingPDF, setGeneratingPDF] = useState(null);
   
+  // Video modal states
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [currentVideo, setCurrentVideo] = useState(null);
+  
   const auth = getAuth();
   const db = getFirestore();
   const user = auth.currentUser;
@@ -570,7 +574,8 @@ const LearnTab = () => {
                     e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
                   }}
                   onClick={() => {
-                    window.open(video.videoUrl, '_blank', 'noopener,noreferrer');
+                    setCurrentVideo(video);
+                    setShowVideoModal(true);
                   }}
                 >
                   {/* Video Thumbnail */}
@@ -714,7 +719,8 @@ const LearnTab = () => {
                         }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          window.open(video.videoUrl, '_blank', 'noopener,noreferrer');
+                          setCurrentVideo(video);
+                          setShowVideoModal(true);
                         }}
                       >
                         Watch Now
@@ -829,6 +835,174 @@ const LearnTab = () => {
           background-color: #94a3b8;
         }
       `}</style>
+      
+      {/* Video Modal */}
+      {showVideoModal && currentVideo && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.95)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '2rem'
+        }}>
+          <div style={{
+            position: 'relative',
+            width: '100%',
+            maxWidth: '1200px',
+            maxHeight: '90vh',
+            background: '#000',
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.8)'
+          }}>
+            {/* Close button */}
+            <button
+              onClick={() => {
+                setShowVideoModal(false);
+                setCurrentVideo(null);
+              }}
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: 'white',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                fontSize: '1.5rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 10,
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                e.currentTarget.style.transform = 'scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              ×
+            </button>
+
+            {/* Video container */}
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              paddingTop: '56.25%', // 16:9 aspect ratio
+              background: '#000'
+            }}>
+              {/* Check if it's a YouTube URL */}
+              {currentVideo.videoUrl.includes('youtube.com') || currentVideo.videoUrl.includes('youtu.be') ? (
+                <iframe
+                  src={(() => {
+                    let videoId = '';
+                    if (currentVideo.videoUrl.includes('youtube.com')) {
+                      const urlParams = new URLSearchParams(new URL(currentVideo.videoUrl).search);
+                      videoId = urlParams.get('v');
+                    } else if (currentVideo.videoUrl.includes('youtu.be')) {
+                      videoId = currentVideo.videoUrl.split('/').pop();
+                    }
+                    return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                  })()}
+                  title={currentVideo.title}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    border: 'none'
+                  }}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  controls
+                  autoPlay
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%'
+                  }}
+                >
+                  <source src={currentVideo.videoUrl} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+            </div>
+
+            {/* Video info bar */}
+            <div style={{
+              background: 'linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%)',
+              padding: '1.5rem',
+              borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+            }}>
+              <h2 style={{
+                color: 'white',
+                margin: '0 0 0.5rem 0',
+                fontSize: '1.5rem',
+                fontWeight: '600'
+              }}>
+                {currentVideo.title}
+              </h2>
+              {currentVideo.description && (
+                <p style={{
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  margin: '0',
+                  fontSize: '0.9rem',
+                  lineHeight: '1.5'
+                }}>
+                  {currentVideo.description}
+                </p>
+              )}
+              <div style={{
+                display: 'flex',
+                gap: '1rem',
+                marginTop: '1rem'
+              }}>
+                <span style={{
+                  fontSize: '0.8rem',
+                  padding: '0.25rem 0.75rem',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  borderRadius: '12px',
+                  textTransform: 'capitalize'
+                }}>
+                  {currentVideo.difficulty}
+                </span>
+                {currentVideo.duration && (
+                  <span style={{
+                    fontSize: '0.8rem',
+                    padding: '0.25rem 0.75rem',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    borderRadius: '12px'
+                  }}>
+                    Duration: {currentVideo.duration}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* InteractiveQuiz Modal */}
       {showInteractiveQuiz && currentQuizPack && currentQuizQuestions.length > 0 && (

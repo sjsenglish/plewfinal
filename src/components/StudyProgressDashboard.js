@@ -6,11 +6,11 @@ import EnhancedSupercurricularTab from './EnhancedSupercurricularTab';
 import EnhancedPersonalStatementBuilder from './EnhancedPersonalStatementBuilder';
 import userStorage from '../utils/userStorage'; 
 
-// Simplified Color Palette - Only 3 colors
+// Modern Color Palette - Clean and Bright
 const COLORS = {
-  primary: '#2a4442',    // Dark green for main elements
-  secondary: '#5b8f8a',  // Medium green for accents  
-  light: '#d8f0ed'       // Light mint for backgrounds
+  primary: '#374151',    // Charcoal gray for main elements
+  secondary: '#9ca3af',  // Light gray for accents  
+  light: '#f9fafb'       // Off-white for backgrounds
 };
 
 // Apple-inspired Typography System
@@ -288,16 +288,15 @@ const StudyProgressDashboard = ({ profileData, onProfileUpdate, refreshProfile }
     boxSizing: 'border-box'
   };
 
-  // Dashboard-specific background style - full viewport, no centering
+  // Dashboard-specific background style - clean white with subtle gradient
   const dashboardBackgroundStyle = {
     width: '100vw',
     height: '100vh',
     minHeight: '100vh',
-    background: `url(${BACKGROUND_IMAGE}) center center / cover, linear-gradient(135deg, ${COLORS.light} 0%, ${COLORS.secondary} 50%, ${COLORS.primary} 100%)`,
+    background: 'linear-gradient(135deg, #ffffff 0%, #f9fafb 50%, #f3f4f6 100%)',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
     position: 'relative',
-    // Removed animation to keep background still
-    padding: 0,
+    padding: '20px 0 0 0', // Add top padding to prevent button cut-off
     margin: 0,
     boxSizing: 'border-box',
     overflow: 'auto'
@@ -1408,34 +1407,36 @@ const StudyProgressDashboard = ({ profileData, onProfileUpdate, refreshProfile }
         zIndex: 0
       }}></div>
 
-      {/* Main container - full viewport layout */}
+      {/* Main container - full viewport layout with subtle shine */}
       <div style={{
         width: '100%',
         maxWidth: '1400px',
         minHeight: '100vh',
-        background: '#ffffff',
-        borderRadius: 0,
-        border: 'none',
-        boxShadow: 'none',
+        background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%)',
+        borderRadius: '16px',
+        border: '1px solid rgba(255, 255, 255, 0.8)',
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
         position: 'relative',
         zIndex: 1,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        margin: '0 auto',
-        padding: '0'
+        margin: '20px auto',
+        padding: '0',
+        backdropFilter: 'blur(10px)'
       }}>
-        {/* Header with Navigation */}
+        {/* Header with Navigation - Glossy white with gradient */}
         <div style={{
-          padding: '32px 32px 24px 32px', // Extra top padding to prevent cut-off
-          borderBottom: '1px solid #e5e7eb', // Clean light gray border
+          padding: '40px 32px 24px 32px', // Extra top padding to ensure no cut-off
+          borderBottom: '1px solid rgba(229, 231, 235, 0.5)',
           flexShrink: 0,
-          background: '#ffffff', // Pure white background
+          background: 'linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(250, 251, 252, 1) 100%)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)', // Subtle shadow
-          minHeight: '80px' // Ensure minimum height for visibility
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
+          minHeight: '90px',
+          position: 'relative'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             {/* Navigation buttons */}
