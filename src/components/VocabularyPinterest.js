@@ -54,24 +54,37 @@ const VocabularyPinterest = () => {
       console.log('📚 Loading vocabulary words with options:', options);
       const result = await fetchVocabulary(options);
       
-      if (result.success) {
+      console.log('📚 API Result:', result);
+      console.log('📚 First word sample:', result.words?.[0]);
+      
+      if (result.success && result.words && result.words.length > 0) {
         // Process words with minimal enhancement for better performance
-        const enhancedWords = result.words.map(word => ({
-          ...word,
-          id: word.word || word.id,
-          height: Math.floor(Math.random() * 200) + 300, // Random height for masonry
-          // Use existing data from API or provide good fallbacks
-          definition: word.definition || `${word.word}: An important vocabulary word for CSAT preparation.`,
-          synonyms: word.synonyms?.length > 0 ? word.synonyms : 
-                   ['similar', 'related', 'comparable', 'equivalent'],
-          examples: word.examples?.length > 0 ? word.examples :
-                   [`The word "${word.word}" appears frequently in CSAT reading passages.`],
-          questionInfo: word.questionInfo || null,
-          pronunciation: word.pronunciation || null,
-          difficulty: word.difficulty || 5,
-          frequency: word.frequency || 1,
-          subjectArea: word.subjectArea || selectedSubject
-        }));
+        const enhancedWords = result.words.map(word => {
+          // Ensure word has basic required fields
+          if (!word || !word.word) {
+            console.warn('🚨 Invalid word data:', word);
+            return null;
+          }
+          
+          return {
+            ...word,
+            id: word.word || word.id || `word-${Date.now()}`,
+            height: Math.floor(Math.random() * 200) + 300, // Random height for masonry
+            // Use existing data from API or provide good fallbacks
+            word: word.word,
+            definition: word.definition || `${word.word}: An important vocabulary word for CSAT preparation.`,
+            synonyms: (word.synonyms && word.synonyms.length > 0) ? word.synonyms : 
+                     ['similar', 'related', 'comparable', 'equivalent'],
+            examples: (word.examples && word.examples.length > 0) ? word.examples :
+                     [`The word "${word.word}" appears frequently in CSAT reading passages.`],
+            questionInfo: word.questionInfo || null,
+            pronunciation: word.pronunciation || null,
+            difficulty: word.difficulty || 5,
+            frequency: word.frequency || 1,
+            subjectArea: word.subjectArea || selectedSubject,
+            koreanTranslation: word.koreanTranslation || null
+          };
+        }).filter(Boolean); // Remove any null entries
 
         console.log(`📚 Processed ${enhancedWords.length} words`);
 
@@ -79,6 +92,11 @@ const VocabularyPinterest = () => {
           setWords(enhancedWords);
         } else {
           setWords(prev => [...prev, ...enhancedWords]);
+        }
+      } else {
+        console.warn('📚 No vocabulary words returned from API');
+        if (reset) {
+          setWords([]);
         }
       }
     } catch (error) {
@@ -275,6 +293,19 @@ const VocabularyPinterest = () => {
             <button onClick={() => loadWords(false)} className="load-more-btn">
               Load More Words
             </button>
+          </div>
+        )}
+
+        {/* No Words Message */}
+        {!loading && words.length === 0 && (
+          <div className="loading-container">
+            <div style={{ textAlign: 'center', padding: '3rem' }}>
+              <h3>📚 No vocabulary words found</h3>
+              <p>Add some vocabulary data to your Firebase collection to see words here.</p>
+              <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '1rem' }}>
+                Check the console for debug information or add test data using the scripts provided.
+              </p>
+            </div>
           </div>
         )}
 
