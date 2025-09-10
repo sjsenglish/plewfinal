@@ -93,7 +93,7 @@ if (!process.env.REACT_APP_OPENAI_API_KEY) {
 
 // Updated SUBJECTS - Korean-English, Vocabulary, and Community
 const SUBJECTS = {
-  koreanEnglish: {
+  'korean-english': {
     index: 'korean-english-question-pairs',
     theme: 'korean-english-theme',
     bannerText: 'master the CSAT through practise questions',
@@ -465,8 +465,8 @@ const buildAlgoliaFilters = (filters) => {
 >
           {/* Configure Algolia with filters */}
           <Configure 
-            key={JSON.stringify(currentSubject === 'koreanEnglish' ? koreanEnglishFilters : {})} 
-            filters={buildAlgoliaFilters(currentSubject === 'koreanEnglish' ? koreanEnglishFilters : {})} 
+            key={JSON.stringify(currentSubject === 'korean-english' ? koreanEnglishFilters : {})} 
+            filters={buildAlgoliaFilters(currentSubject === 'korean-english' ? koreanEnglishFilters : {})} 
           />
           
           {headerContent}
@@ -475,7 +475,7 @@ const buildAlgoliaFilters = (filters) => {
           <div className="modern-search-wrapper">
             <div className="container">
               {/* Add KoreanEnglishFilters component for Korean-English subject */}
-              {currentSubject === 'koreanEnglish' && user && (
+              {currentSubject === 'korean-english' && user && (
                 <KoreanEnglishFilters 
                   onFiltersChange={handleKoreanEnglishFiltersChange}
                   currentFilters={koreanEnglishFilters}

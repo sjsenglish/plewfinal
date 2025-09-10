@@ -91,7 +91,7 @@ const HitWrapper = ({ hit, ...props }) => {
     if (isVocabularyWord(hit)) {
       return 'vocabulary';
     } else if (isKoreanEnglishQuestion(hit)) {
-      return 'koreanEnglish';
+      return 'korean-english';
     } else if (isPlewQuestion(hit)) {
       return 'plew';
     } else if (isMathsQuestion(hit)) {
@@ -104,7 +104,7 @@ const HitWrapper = ({ hit, ...props }) => {
       if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('vocabulary')) {
         return 'vocabulary';
       } else if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('korean-english')) {
-        return 'koreanEnglish';
+        return 'korean-english';
       } else if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('maths')) {
         return 'maths';
       } else if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('plew')) {
@@ -135,7 +135,7 @@ const HitWrapper = ({ hit, ...props }) => {
       return <PlewHit hit={hit} {...props} />;
     case 'maths':
       return <MathsHit hit={hit} {...props} />;
-    case 'koreanEnglish':
+    case 'korean-english':
       return <KoreanEnglishHit hit={hit} {...props} />;
     case 'tsa':
       return <TSAHit hit={hit} {...props} />;
