@@ -100,163 +100,179 @@ const PremiumDashboard = () => {
 
 
 const renderOverview = () => (
-  <div style={{ height: '100%' }}>
-    {/* Simplified Header similar to ProfilePage */}
+  <div style={{ height: '100%', padding: '2rem' }}>
+    {/* Welcome Header */}
     <div style={{ 
       background: 'rgba(255, 255, 255, 0.5)', 
       backdropFilter: 'blur(10px)',
-      padding: '32px 24px', 
+      padding: '2.5rem', 
       border: '1px solid #a8dcc6',
-      marginBottom: '24px',
-      borderRadius: '12px',
-      margin: '0 0 24px 0'
+      marginBottom: '2rem',
+      borderRadius: '16px',
     }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <h1 style={{ 
-              margin: '0 0 8px 0', 
-              color: '#1e293b', 
-              fontSize: '2rem', 
-              fontWeight: '700' 
-            }}>
-              Welcome!
-            </h1>
-            <p style={{ 
-              margin: '0', 
-              color: '#64748b', 
-              fontSize: '1rem' 
-            }}>
-              Access your library, create question packs, and more
-            </p>
-          </div>
-          
-          {!isPaidUser && (
-            <button 
-              onClick={() => setShowUpgradeModal(true)}
-              style={{
-                padding: '12px 24px',
-                background: '#d8f0ed',
-                color: '#1e293b',
-                border: 'none',
-                borderRadius: '8px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                fontSize: '14px',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseOver={(e) => e.target.style.background = '#c4e9e0'}
-              onMouseOut={(e) => e.target.style.background = '#d8f0ed'}
-            >
-              Upgrade to Premium
-            </button>
-          )}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.5rem' }}>
+        <div>
+          <h1 style={{ 
+            margin: '0 0 0.5rem 0', 
+            color: '#1e293b', 
+            fontSize: '2.5rem', 
+            fontWeight: '800',
+            letterSpacing: '-0.02em' 
+          }}>
+            Welcome Back! 👋
+          </h1>
+          <p style={{ 
+            margin: '0', 
+            color: '#64748b', 
+            fontSize: '1.125rem',
+            fontWeight: '400' 
+          }}>
+            Access your library, create question packs, and track your learning progress
+          </p>
         </div>
+        
+        {!isPaidUser && (
+          <button 
+            onClick={() => setShowUpgradeModal(true)}
+            style={{
+              padding: '1rem 2rem',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '12px',
+              fontWeight: '700',
+              cursor: 'pointer',
+              fontSize: '0.9rem',
+              transition: 'all 0.3s cubic-bezier(0.23, 1, 0.32, 1)',
+              boxShadow: '0 4px 16px rgba(102, 126, 234, 0.3)'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 8px 32px rgba(102, 126, 234, 0.4)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 4px 16px rgba(102, 126, 234, 0.3)';
+            }}
+          >
+            ✨ Upgrade to Premium
+          </button>
+        )}
       </div>
     </div>
 
-    {/* Content matching ProfilePage style */}
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      
-      {/* Feature Grid */}
-      <div style={{ 
-        background: 'rgba(255, 255, 255, 0.5)', 
-        backdropFilter: 'blur(10px)',
-        borderRadius: '12px', 
-        padding: '32px', 
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', 
-        border: '1px solid #a8dcc6',
-        marginBottom: '24px' 
+    {/* Feature Grid */}
+    <div style={{ 
+      background: 'rgba(255, 255, 255, 0.5)', 
+      backdropFilter: 'blur(10px)',
+      borderRadius: '16px', 
+      padding: '2.5rem', 
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)', 
+      border: '1px solid #a8dcc6'
+    }}>
+      <h2 style={{ 
+        margin: '0 0 2rem 0', 
+        color: '#1e293b', 
+        fontSize: '1.5rem', 
+        fontWeight: '700',
+        letterSpacing: '-0.01em' 
       }}>
-        <h2 style={{ 
-          margin: '0 0 24px 0', 
-          color: '#1e293b', 
-          fontSize: '1.25rem', 
-          fontWeight: '600' 
-        }}>
-          
-        </h2>
+        Quick Access
+      </h2>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '20px'
-        }}>
-          {sections.filter(s => s.id !== 'overview').map(section => {
-            const getIconUrl = (sectionId) => {
-              switch (sectionId) {
-                case 'learn':
-                  return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbook.svg?alt=media&token=8f21ae0e-764d-4b03-ba1d-f1423329c325';
-                case 'profile':
-                  return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbagback.svg?alt=media&token=65739e08-36db-4810-951c-91641f5d0084';
-                case 'question-packs':
-                  return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbulb.svg?alt=media&token=1f21ae0e-764d-4b03-ba1d-f1423329c325';
-                default:
-                  return '';
-              }
-            };
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+        gap: '1.5rem'
+      }}>
+        {sections.filter(s => s.id !== 'overview').map(section => {
+          const getIconUrl = (sectionId) => {
+            switch (sectionId) {
+              case 'learn':
+                return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbook.svg?alt=media&token=8f21ae0e-764d-4b03-ba1d-f1423329c325';
+              case 'profile':
+                return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbagback.svg?alt=media&token=65739e08-36db-4810-951c-91641f5d0084';
+              case 'question-packs':
+                return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbulb.svg?alt=media&token=1f21ae0e-764d-4b03-ba1d-f1423329c325';
+              default:
+                return '';
+            }
+          };
 
-            return (
-              <div 
-                key={section.id}
-                onClick={() => handleSectionClick(section.id, section.premium)}
-                style={{
-                  background: 'rgba(255, 255, 255, 0.5)',
-                  backdropFilter: 'blur(5px)',
-                  border: '1px solid #a8dcc6',
+          return (
+            <div 
+              key={section.id}
+              onClick={() => handleSectionClick(section.id, section.premium)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.6)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(168, 220, 198, 0.5)',
+                borderRadius: '16px',
+                padding: '2rem',
+                cursor: 'pointer',
+                transition: 'all 0.3s cubic-bezier(0.23, 1, 0.32, 1)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              onMouseOver={(e) => {
+                if (!(section.premium && !isPaidUser)) {
+                  e.currentTarget.style.borderColor = 'rgba(102, 126, 234, 0.5)';
+                  e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 12px 32px rgba(102, 126, 234, 0.2)';
+                }
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(168, 220, 198, 0.5)';
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
+                <div style={{
+                  width: '56px',
+                  height: '56px',
                   borderRadius: '12px',
-                  padding: '24px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-                onMouseOver={(e) => {
-                  if (!(section.premium && !isPaidUser)) {
-                    e.currentTarget.style.borderColor = '#6366f1';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(99, 102, 241, 0.15)';
-                  }
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.borderColor = '#a8dcc6';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                  background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
                   <img 
                     src={getIconUrl(section.id)} 
                     alt={section.name}
                     style={{ 
-                      width: '50px', 
-                      height: '50px',
+                      width: '32px', 
+                      height: '32px',
                       objectFit: 'contain'
                     }}
                   />
-                  <h3 style={{ 
-                    margin: '0', 
-                    color: '#1e293b', 
-                    fontSize: '1.1rem', 
-                    fontWeight: '600' 
-                  }}>
-                    {section.name}
-                  </h3>
                 </div>
-                
-                <p style={{ 
+                <h3 style={{ 
                   margin: '0', 
-                  color: '#64748b', 
-                  fontSize: '14px', 
-                  lineHeight: '1.5' 
+                  color: '#1e293b', 
+                  fontSize: '1.25rem', 
+                  fontWeight: '700',
+                  letterSpacing: '-0.01em' 
                 }}>
-                  {getFeatureDescription(section.id)}
-                </p>
-
+                  {section.name}
+                </h3>
+                {section.premium && !isPaidUser && (
+                  <span style={{ marginLeft: 'auto', fontSize: '1.125rem', opacity: 0.6 }}>🔒</span>
+                )}
               </div>
-            );
-          })}
-        </div>
+              
+              <p style={{ 
+                margin: '0', 
+                color: '#64748b', 
+                fontSize: '0.95rem', 
+                lineHeight: '1.6',
+                fontWeight: '400' 
+              }}>
+                {getFeatureDescription(section.id)}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   </div>
@@ -302,41 +318,52 @@ const renderOverview = () => (
         </div>
       )}
 
-      <div className="dashboard-container">
-        {/* Sidebar Navigation */}
-        <nav className="dashboard-sidebar">
-          <div className="sidebar-header">
-            <h2>Dashboard</h2>
-            <div className="user-info">
-              <span className="user-name">{user.displayName || 'User'}</span>
-              <span className="user-plan">{planInfo.name}</span>
-            </div>
+      {/* Sleek Left Sidebar */}
+      <nav className="modern-sidebar">
+        <div className="sidebar-tabs">
+          {sections.map(section => {
+            const getTabIcon = (sectionId) => {
+              switch (sectionId) {
+                case 'overview': return '🏠';
+                case 'learn': return '📚';
+                case 'profile': return '📖';
+                case 'question-packs': return '💡';
+                default: return '•';
+              }
+            };
+
+            return (
+              <button
+                key={section.id}
+                className={`sidebar-tab ${activeSection === section.id ? 'active' : ''} 
+                           ${section.premium && !isPaidUser ? 'locked' : ''}`}
+                onClick={() => handleSectionClick(section.id, section.premium)}
+                title={section.name}
+              >
+                <span className="tab-icon">{getTabIcon(section.id)}</span>
+                <span className="tab-label">{section.name}</span>
+                {section.premium && !isPaidUser && (
+                  <span className="lock-indicator">🔒</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+        
+        <div className="sidebar-user">
+          <div className="user-avatar">
+            {(user.displayName || 'U')[0].toUpperCase()}
           </div>
+          <div className="plan-indicator" title={planInfo.name}>
+            {isPaidUser ? '👑' : '🔓'}
+          </div>
+        </div>
+      </nav>
 
-          <ul className="sidebar-nav">
-            {sections.map(section => (
-              <li key={section.id}>
-                <button
-                  className={`nav-item ${activeSection === section.id ? 'active' : ''} 
-                             ${section.premium && !isPaidUser ? 'locked' : ''}`}
-                  onClick={() => handleSectionClick(section.id, section.premium)}
-                >
-                  <span className="nav-icon">{section.icon}</span>
-                  <span className="nav-text">{section.name}</span>
-                  {section.premium && !isPaidUser && (
-                    <span className="lock-icon">🔒</span>
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* Main Content */}
-        <main className="dashboard-main">
-          {renderSectionContent()}
-        </main>
-      </div>
+      {/* Full-width Main Content */}
+      <main className="fullwidth-main">
+        {renderSectionContent()}
+      </main>
 
       {/* Updated styles with gradient background */}
       <style jsx global>{`
@@ -365,156 +392,194 @@ const renderOverview = () => (
           height: 100vh;
           background: linear-gradient(135deg, #b8e6d3 0%, #a8dcc6 20%, #d4edda 40%, #f0c5a0 60%, #f5b885 80%, #fad0c4 100%);
           position: relative;
-          font-family: 'Inter', sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
           margin: 0;
           padding: 0;
           overflow: hidden;
-          animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-          0%, 100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-
-        .premium-dashboard::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-image: 
-            radial-gradient(circle at 15% 60%, rgba(168, 230, 207, 0.4) 0%, transparent 45%),
-            radial-gradient(circle at 85% 25%, rgba(240, 197, 160, 0.4) 0%, transparent 45%),
-            radial-gradient(circle at 45% 85%, rgba(212, 237, 218, 0.3) 0%, transparent 50%),
-            radial-gradient(circle at 70% 70%, rgba(250, 208, 196, 0.3) 0%, transparent 40%);
-          pointer-events: none;
-          animation: floatBackground 8s ease-in-out infinite;
-        }
-
-        @keyframes floatBackground {
-          0%, 100% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(-10px, -5px) scale(1.02);
-          }
-          66% {
-            transform: translate(5px, -10px) scale(0.98);
-          }
-        }
-
-        .dashboard-container {
           display: flex;
-          max-width: 1400px;
-          margin: 0 auto;
-          position: relative;
-          z-index: 1;
-          height: 100vh;
         }
 
-        .dashboard-sidebar {
-          width: 280px;
-          background: rgba(255, 255, 255, 0.5);
-          backdrop-filter: blur(10px);
-          border-right: 1px solid #a8dcc6;
+        /* Modern Sleek Sidebar */
+        .modern-sidebar {
+          width: 80px;
+          background: rgba(0, 0, 0, 0.85);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-right: 1px solid rgba(255, 255, 255, 0.1);
           height: 100vh;
-          position: sticky;
+          position: fixed;
+          left: 0;
           top: 0;
-          overflow-y: auto;
-        }
-
-        .sidebar-header {
-          padding: 2rem 1.5rem;
-          border-bottom: 1px solid #a8dcc6;
-        }
-
-        .sidebar-header h2 {
-          margin: 0 0 1.5rem 0;
-          color: #1e293b;
-          font-size: 1.25rem;
-          font-weight: 600;
-        }
-
-        .user-info {
+          z-index: 100;
           display: flex;
           flex-direction: column;
-          gap: 0.75rem;
+          transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .user-name {
-          font-weight: 500;
-          color: #475569;
+        .modern-sidebar:hover {
+          width: 200px;
         }
 
-        .user-plan {
-          font-size: 0.875rem;
-          color: #64748b;
-          padding: 0.25rem 0.5rem;
-          background: rgba(241, 245, 249, 0.8);
-          border-radius: 4px;
-          display: inline-block;
+        .sidebar-tabs {
+          flex: 1;
+          padding: 2rem 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
         }
 
-        .sidebar-nav {
-          list-style: none;
-          padding: 1rem 0;
-          margin: 0;
-        }
-
-        .nav-item {
-          width: 100%;
-          padding: 0.75rem 1.5rem;
-          border: none;
-          background: none;
-          text-align: left;
-          cursor: pointer;
+        .sidebar-tab {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          transition: all 0.2s ease;
+          gap: 1rem;
+          padding: 1rem;
+          margin: 0 0.75rem;
+          border: none;
+          background: transparent;
+          color: rgba(255, 255, 255, 0.6);
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
           font-size: 0.875rem;
+          font-weight: 500;
+          position: relative;
+          overflow: hidden;
         }
 
-        .nav-item:hover {
-          background-color: rgba(248, 250, 252, 0.8);
+        .sidebar-tab::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          border-radius: 12px;
         }
 
-        .nav-item.active {
-          background-color: #d8f0ed;
-          color: #1e293b;
-          font-weight: 600;
+        .sidebar-tab:hover::before {
+          opacity: 1;
         }
 
-        .nav-item.locked {
-          opacity: 0.6;
+        .sidebar-tab:hover {
+          color: rgba(255, 255, 255, 0.9);
+          transform: translateX(4px);
+        }
+
+        .sidebar-tab.active {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+          transform: translateX(4px);
+        }
+
+        .sidebar-tab.active:hover {
+          transform: translateX(4px);
+        }
+
+        .sidebar-tab.locked {
+          opacity: 0.4;
           cursor: not-allowed;
         }
 
-        .nav-icon {
+        .sidebar-tab.locked:hover {
+          transform: none;
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tab-icon {
           font-size: 1.25rem;
+          min-width: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
-        .nav-text {
+        .tab-label {
+          font-weight: 600;
+          white-space: nowrap;
+          opacity: 0;
+          transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+          transform: translateX(-10px);
+        }
+
+        .modern-sidebar:hover .tab-label {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        .lock-indicator {
+          font-size: 0.75rem;
+          opacity: 0.7;
+          margin-left: auto;
+        }
+
+        .sidebar-user {
+          padding: 1.5rem 1rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .user-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 1rem;
+          letter-spacing: 0.5px;
+          box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .plan-indicator {
+          font-size: 1.125rem;
+          opacity: 0.8;
+          transition: all 0.3s ease;
+        }
+
+        .plan-indicator:hover {
+          opacity: 1;
+          transform: scale(1.1);
+        }
+
+        /* Full-width Main Content */
+        .fullwidth-main {
           flex: 1;
-          font-weight: 500;
-        }
-
-        .lock-icon {
-          font-size: 0.875rem;
-        }
-
-        .dashboard-main {
-          flex: 1;
-          padding: 2rem;
+          margin-left: 80px;
           height: 100vh;
           overflow-y: auto;
-          box-sizing: border-box;
+          transition: margin-left 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @media (min-width: 768px) {
+          .premium-dashboard:hover .fullwidth-main {
+            margin-left: 200px;
+          }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 767px) {
+          .modern-sidebar {
+            width: 60px;
+          }
+          
+          .modern-sidebar:hover {
+            width: 60px;
+          }
+          
+          .tab-label {
+            display: none;
+          }
+          
+          .fullwidth-main {
+            margin-left: 60px;
+          }
         }
 
         .dashboard-section {
