@@ -548,19 +548,13 @@ const renderOverview = () => (
           transform: scale(1.1);
         }
 
-        /* Full-width Main Content */
+        /* Full-width Main Content - Fixed Position */
         .fullwidth-main {
           flex: 1;
           margin-left: 80px;
           height: 100vh;
           overflow-y: auto;
-          transition: margin-left 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        @media (min-width: 768px) {
-          .premium-dashboard:hover .fullwidth-main {
-            margin-left: 200px;
-          }
+          /* Remove transition to keep content fixed */
         }
 
         /* Mobile responsiveness */
