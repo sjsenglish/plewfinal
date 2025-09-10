@@ -14,7 +14,6 @@ const VocabularyPinterest = () => {
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizWords, setQuizWords] = useState([]);
   const [hoveredWord, setHoveredWord] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     difficulty: 'all',
     frequency: 'all'
@@ -54,7 +53,7 @@ const VocabularyPinterest = () => {
         limit: 20,
         offset: reset ? 0 : words.length,
         subjectArea: selectedSubject,
-        search: searchQuery || null,
+        search: null,
         difficulty: filters.difficulty !== 'all' ? filters.difficulty : null,
         minFrequency: filters.frequency !== 'all' ? parseInt(filters.frequency) : 1
       };
@@ -62,17 +61,43 @@ const VocabularyPinterest = () => {
       const result = await fetchVocabulary(options);
       
       if (result.success) {
-        const newWords = result.words.map((word, index) => ({
-          ...word,
-          id: word.word || word.id,
-          height: Math.floor(Math.random() * 200) + 300, // Random height for masonry
-          // Add sample enhanced data for testing Pinterest layout
-          synonyms: word.synonyms || (index % 3 === 0 ? ['remarkable', 'extraordinary', 'incredible'] : undefined),
-          antonyms: word.antonyms || (index % 4 === 0 ? ['ordinary', 'common', 'unremarkable'] : undefined),
-          etymology: word.etymology || (index % 5 === 0 ? 'From Latin "absolutus" meaning complete, perfect, or finished.' : undefined),
-          collocations: word.collocations || (index % 3 === 1 ? ['absolutely certain', 'absolutely perfect', 'absolutely necessary'] : undefined),
-          examples: word.examples || [`The answer was ${word.word} correct.`]
-        }));
+        const enhancedWords = await Promise.all(
+          result.words.map(async (word, index) => {
+            // Try to get enhanced word info from Free Dictionary API
+            let enhancedData = {};
+            try {
+              const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.word}`);
+              if (response.ok) {
+                const data = await response.json();
+                const entry = data[0];
+                const meaning = entry?.meanings?.[0];
+                const definition = meaning?.definitions?.[0];
+                
+                enhancedData = {
+                  definition: definition?.definition || word.definition,
+                  synonyms: definition?.synonyms || [],
+                  examples: definition?.example ? [definition.example] : word.examples,
+                  pronunciation: entry?.phonetics?.[0]?.text || word.pronunciation
+                };
+              }
+            } catch (error) {
+              console.log(`Failed to enhance word ${word.word}:`, error);
+            }
+
+            return {
+              ...word,
+              ...enhancedData,
+              id: word.word || word.id,
+              height: Math.floor(Math.random() * 200) + 300, // Random height for masonry
+              // Fallback to ensure we have content for display
+              definition: enhancedData.definition || word.definition || `${word.word}: An important vocabulary word for CSAT preparation.`,
+              synonyms: enhancedData.synonyms?.length > 0 ? enhancedData.synonyms : (index % 3 === 0 ? ['remarkable', 'extraordinary', 'incredible'] : []),
+              examples: enhancedData.examples?.length > 0 ? enhancedData.examples : word.examples || [`The word "${word.word}" appears in CSAT passages.`]
+            };
+          })
+        );
+
+        const newWords = enhancedWords;
 
         if (reset) {
           setWords(newWords);
@@ -198,7 +223,7 @@ const VocabularyPinterest = () => {
 
   useEffect(() => {
     loadWords(true);
-  }, [selectedSubject, searchQuery, filters]);
+  }, [selectedSubject, filters]);
 
   useEffect(() => {
     loadSavedWords();
@@ -225,28 +250,8 @@ const VocabularyPinterest = () => {
 
   return (
     <div className="vocabulary-pinterest">
-      {/* Header */}
-      <div className="pinterest-header">
-        <div className="header-content">
-          <h1 className="main-title">
-            <span className="title-icon">📚</span>
-            Vocabulary Discovery
-          </h1>
-          <p className="subtitle">Discover and master CSAT vocabulary through engaging exploration - Updated!</p>
-        </div>
-      </div>
-
-      {/* Search and Filters */}
+      {/* Filters */}
       <div className="search-filters">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search vocabulary..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
-          />
-        </div>
 
         {/* Subject Area Tabs */}
         <div className="subject-tabs">
@@ -411,43 +416,11 @@ const VocabularyCard = ({
         </div>
       )}
 
-      {/* Example Sentences */}
+      {/* CSAT Example Sentences */}
       {word.examples && word.examples.length > 0 && (
         <div className="examples-section">
           <h4 className="examples-title">CSAT Example:</h4>
           <p className="example-sentence">{word.examples[0]}</p>
-        </div>
-      )}
-
-      {/* Antonyms - Always Visible */}
-      {word.antonyms && word.antonyms.length > 0 && (
-        <div className="antonyms-section">
-          <h4 className="section-title">Antonyms:</h4>
-          <div className="antonyms-list">
-            {word.antonyms.map((antonym, index) => (
-              <span key={index} className="antonym-tag">{antonym}</span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Etymology - Always Visible */}
-      {word.etymology && (
-        <div className="etymology-section">
-          <h4 className="section-title">Etymology:</h4>
-          <p className="etymology-text">{word.etymology}</p>
-        </div>
-      )}
-      
-      {/* Collocations - Always Visible */}
-      {word.collocations && word.collocations.length > 0 && (
-        <div className="collocations-section">
-          <h4 className="section-title">Common Collocations:</h4>
-          <div className="collocations-list">
-            {word.collocations.map((collocation, index) => (
-              <span key={index} className="collocation-tag">{collocation}</span>
-            ))}
-          </div>
         </div>
       )}
 

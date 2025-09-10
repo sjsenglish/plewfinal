@@ -1,7 +1,7 @@
 /* Pinterest-style Vocabulary Discovery */
 .vocabulary-pinterest {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
   padding: 0;
 }
 
@@ -173,22 +173,23 @@
 
 /* Vocabulary Cards */
 .vocabulary-card {
-  background: white;
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
   break-inside: avoid;
   margin-bottom: 1.5rem;
-  border: 2px solid transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .vocabulary-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
-  border-color: #667eea;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+  border-color: rgba(102, 126, 234, 0.3);
 }
 
 
@@ -280,12 +281,16 @@
 /* Definition Section */
 .definition-section {
   margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(248, 250, 252, 0.7);
+  border-radius: 12px;
+  border: 1px solid rgba(203, 213, 225, 0.3);
 }
 
 .definition-en {
   font-size: 1rem;
   line-height: 1.6;
-  color: #374151;
+  color: #1e293b;
   margin: 0 0 0.75rem 0;
   font-weight: 500;
 }
@@ -293,21 +298,22 @@
 .definition-ko {
   font-size: 0.95rem;
   line-height: 1.5;
-  color: #6b7280;
+  color: #64748b;
   margin: 0;
   font-style: italic;
   padding: 0.75rem;
-  background: #f8fafc;
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 8px;
-  border-left: 3px solid #667eea;
+  border: 1px solid rgba(203, 213, 225, 0.4);
 }
 
 /* Synonyms Section */
 .synonyms-section {
   margin-bottom: 1rem;
   padding: 0.75rem;
-  background: linear-gradient(135deg, #fef3c7, #fed7aa);
-  border-radius: 8px;
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .synonyms-label {
@@ -315,7 +321,7 @@
   font-weight: 600;
   display: block;
   margin-bottom: 0.5rem;
-  color: #92400e;
+  color: #6b46c1;
 }
 
 .synonyms-list {
@@ -325,12 +331,13 @@
 }
 
 .synonym-tag {
-  padding: 0.2rem 0.5rem;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 500;
-  color: #92400e;
+  color: #6b46c1;
+  border: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .synonym-more {
@@ -346,9 +353,9 @@
 .examples-section {
   margin-bottom: 1rem;
   padding: 1rem;
-  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-  border-radius: 8px;
-  border-left: 3px solid #10b981;
+  background: rgba(241, 245, 249, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
 }
 
 .examples-title {
@@ -368,67 +375,6 @@
   font-style: italic;
 }
 
-/* Section Titles */
-.section-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #374151;
-  margin: 0 0 0.5rem 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Etymology Section */
-.etymology-section {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
-  border-radius: 8px;
-  border-left: 3px solid #8b5cf6;
-}
-
-.etymology-text {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: #6b7280;
-  margin: 0;
-  font-style: italic;
-}
-
-/* Collocations Section */
-.collocations-section {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
-  border-radius: 8px;
-  border-left: 3px solid #3b82f6;
-}
-
-/* Antonyms Section */
-.antonyms-section {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  background: linear-gradient(135deg, #fef2f2, #fee2e2);
-  border-radius: 8px;
-  border-left: 3px solid #ef4444;
-}
-
-.collocations-list,
-.antonyms-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.collocation-tag,
-.antonym-tag {
-  padding: 0.25rem 0.5rem;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  color: #475569;
-}
 
 /* Card Actions */
 .card-actions {
