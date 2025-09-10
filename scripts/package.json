@@ -1,0 +1,19 @@
+{
+  "name": "vocabulary-extractor",
+  "version": "1.0.0",
+  "description": "CSAT Vocabulary Extraction Script",
+  "main": "vocabularyExtractor.js",
+  "type": "commonjs",
+  "scripts": {
+    "extract": "node vocabularyExtractor.js",
+    "test-extract": "node test-extractor.js"
+  },
+  "dependencies": {
+    "algoliasearch": "^5.25.0",
+    "firebase-admin": "^13.4.0",
+    "dotenv": "^17.2.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

@@ -2,15 +2,10 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getAuth } from 'firebase/auth';
 import { doc, setDoc, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import { fetchVocabulary, getEnhancedWordInfo } from '../services/vocabularyAPIService';
-import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import { fetchVocabulary } from '../services/vocabularyAPIService';
 import VocabularyQuiz from './VocabularyQuiz';
 import './VocabularyPinterest.css';
 
-const searchClient = algoliasearch(
-  process.env.REACT_APP_ALGOLIA_APP_ID,
-  process.env.REACT_APP_ALGOLIA_SEARCH_KEY
-);
 
 const VocabularyPinterest = () => {
   const [words, setWords] = useState([]);
@@ -19,8 +14,7 @@ const VocabularyPinterest = () => {
   const [selectedSubject, setSelectedSubject] = useState('all');
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizWords, setQuizWords] = useState([]);
-  const [hoveredWord, setHoveredWord] = useState(null);
-  const [filters, setFilters] = useState({
+  const [filters] = useState({
     difficulty: 'all',
     frequency: 'all'
   });
@@ -29,56 +23,6 @@ const VocabularyPinterest = () => {
   const user = auth.currentUser;
   const masonryRef = useRef(null);
 
-  // Fetch CSAT passage containing the word from Algolia
-  const fetchCSATPassage = async (word) => {
-    try {
-      console.log(`Searching for CSAT passage containing: "${word}"`);
-      const response = await searchClient.search([
-        {
-          indexName: 'korean-english-question-pairs',
-          params: {
-            query: word,
-            hitsPerPage: 1,
-            attributesToRetrieve: ['question', 'english_text', 'korean_text', 'paper_info', 'objectID'],
-            attributesToHighlight: ['question', 'english_text'],
-            highlightPreTag: '<mark>',
-            highlightPostTag: '</mark>'
-          }
-        }
-      ]);
-
-      console.log(`Algolia response for "${word}":`, response.results[0].hits.length, 'hits');
-      
-      if (response.results[0].hits.length > 0) {
-        const hit = response.results[0].hits[0];
-        const passage = hit.english_text || hit.question || '';
-        
-        console.log(`Found passage for "${word}":`, passage.substring(0, 100) + '...');
-        
-        // Find sentence containing the word
-        const sentences = passage.split(/[.!?]+/);
-        const wordRegex = new RegExp(`\\b${word}\\b`, 'i');
-        const sentenceWithWord = sentences.find(sentence => wordRegex.test(sentence));
-        
-        const result = {
-          example: sentenceWithWord ? sentenceWithWord.trim() + '.' : passage.substring(0, 200) + '...',
-          questionInfo: {
-            number: hit.objectID ? hit.objectID.split('-').pop() : null,
-            year: hit.paper_info?.year || '2023'
-          }
-        };
-        
-        console.log(`CSAT result for "${word}":`, result);
-        return result;
-      }
-      
-      console.log(`No CSAT passage found for: "${word}"`);
-      return null;
-    } catch (error) {
-      console.error('Error fetching CSAT passage for', word, ':', error);
-      return null;
-    }
-  };
 
   // Subject areas for browsing
   const subjectAreas = [
@@ -93,16 +37,8 @@ const VocabularyPinterest = () => {
     { id: 'psychology', name: 'Psychology', icon: '🧠' }
   ];
 
-  // Difficulty levels
-  const difficultyLevels = [
-    { id: 'all', name: 'All Levels', color: '#64748b' },
-    { id: 'beginner', name: 'Beginner', color: '#22c55e' },
-    { id: 'intermediate', name: 'Intermediate', color: '#f59e0b' },
-    { id: 'advanced', name: 'Advanced', color: '#ef4444' },
-    { id: 'expert', name: 'Expert', color: '#8b5cf6' }
-  ];
 
-  // Load vocabulary words
+  // Load vocabulary words - optimized for speed
   const loadWords = useCallback(async (reset = false) => {
     setLoading(true);
     try {
@@ -115,60 +51,34 @@ const VocabularyPinterest = () => {
         minFrequency: filters.frequency !== 'all' ? parseInt(filters.frequency) : 1
       };
 
+      console.log('📚 Loading vocabulary words with options:', options);
       const result = await fetchVocabulary(options);
       
       if (result.success) {
-        const enhancedWords = await Promise.all(
-          result.words.map(async (word, index) => {
-            // Try to get enhanced word info from Free Dictionary API
-            let enhancedData = {};
-            try {
-              const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.word}`);
-              if (response.ok) {
-                const data = await response.json();
-                const entry = data[0];
-                const meaning = entry?.meanings?.[0];
-                const definition = meaning?.definitions?.[0];
-                
-                enhancedData = {
-                  definition: definition?.definition || word.definition,
-                  synonyms: definition?.synonyms || [],
-                  pronunciation: entry?.phonetics?.[0]?.text || word.pronunciation
-                };
-              }
-            } catch (error) {
-              console.log(`Failed to enhance word ${word.word}:`, error);
-            }
+        // Process words with minimal enhancement for better performance
+        const enhancedWords = result.words.map(word => ({
+          ...word,
+          id: word.word || word.id,
+          height: Math.floor(Math.random() * 200) + 300, // Random height for masonry
+          // Use existing data from API or provide good fallbacks
+          definition: word.definition || `${word.word}: An important vocabulary word for CSAT preparation.`,
+          synonyms: word.synonyms?.length > 0 ? word.synonyms : 
+                   ['similar', 'related', 'comparable', 'equivalent'],
+          examples: word.examples?.length > 0 ? word.examples :
+                   [`The word "${word.word}" appears frequently in CSAT reading passages.`],
+          questionInfo: word.questionInfo || null,
+          pronunciation: word.pronunciation || null,
+          difficulty: word.difficulty || 5,
+          frequency: word.frequency || 1,
+          subjectArea: word.subjectArea || selectedSubject
+        }));
 
-            // Fetch actual CSAT passage for this word
-            const csatData = await fetchCSATPassage(word.word);
-
-            return {
-              ...word,
-              ...enhancedData,
-              id: word.word || word.id,
-              height: Math.floor(Math.random() * 200) + 300, // Random height for masonry
-              // Fallback to ensure we have content for display
-              definition: enhancedData.definition || word.definition || `${word.word}: An important vocabulary word for CSAT preparation.`,
-              // Ensure all words have synonyms
-              synonyms: enhancedData.synonyms?.length > 0 ? enhancedData.synonyms : 
-                        word.synonyms?.length > 0 ? word.synonyms :
-                        ['similar', 'related', 'comparable', 'equivalent'],
-              // Use actual CSAT passage examples
-              examples: csatData?.example ? [csatData.example] :
-                       word.examples?.length > 0 ? word.examples :
-                       [`The word "${word.word}" appears frequently in CSAT reading passages.`],
-              questionInfo: csatData?.questionInfo || word.questionInfo || null
-            };
-          })
-        );
-
-        const newWords = enhancedWords;
+        console.log(`📚 Processed ${enhancedWords.length} words`);
 
         if (reset) {
-          setWords(newWords);
+          setWords(enhancedWords);
         } else {
-          setWords(prev => [...prev, ...newWords]);
+          setWords(prev => [...prev, ...enhancedWords]);
         }
       }
     } catch (error) {
@@ -254,11 +164,6 @@ const VocabularyPinterest = () => {
     setShowQuiz(true);
   };
 
-  // Start quiz for single word
-  const startWordQuiz = (word) => {
-    setQuizWords([word]);
-    setShowQuiz(true);
-  };
 
   // Generate random words for subject
   const generateRandomWords = async () => {
@@ -289,7 +194,7 @@ const VocabularyPinterest = () => {
 
   useEffect(() => {
     loadWords(true);
-  }, [selectedSubject, filters]);
+  }, [selectedSubject, filters, loadWords]);
 
   useEffect(() => {
     loadSavedWords();
@@ -360,7 +265,6 @@ const VocabularyPinterest = () => {
               word={word}
               isSaved={savedWords.has(word.word)}
               onToggleSave={() => toggleSaveWord(word)}
-              onHover={setHoveredWord}
             />
           ))}
         </div>
@@ -402,8 +306,7 @@ const VocabularyPinterest = () => {
 const VocabularyCard = ({ 
   word, 
   isSaved, 
-  onToggleSave, 
-  onHover 
+  onToggleSave
 }) => {
 
   const getDifficultyColor = (difficulty) => {
@@ -423,11 +326,7 @@ const VocabularyCard = ({
   };
 
   return (
-    <div 
-      className="vocabulary-card"
-      onMouseEnter={() => onHover(word)}
-      onMouseLeave={() => onHover(null)}
-    >
+    <div className="vocabulary-card">
       {/* Card Header */}
       <div className="card-header">
         <div className="word-title">
