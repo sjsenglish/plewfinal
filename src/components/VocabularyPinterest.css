@@ -332,12 +332,12 @@
 
 .synonym-tag {
   padding: 0.3rem 0.6rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: white;
   border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 500;
   color: #6b46c1;
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
 }
 
 .synonym-more {
@@ -361,10 +361,17 @@
 .examples-title {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #065f46;
+  color: #475569;
   margin: 0 0 0.5rem 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.question-info {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+  text-transform: none;
 }
 
 .example-sentence {

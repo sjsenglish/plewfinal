@@ -273,29 +273,6 @@ const VocabularyStudy = () => {
 
   return (
     <div className="vocabulary-study">
-      {/* Header with Stats */}
-      <div className="study-header">
-        <div className="header-content">
-          <h2 className="study-title">
-            <span className="title-icon">📚</span>
-            My Vocabulary Collection
-          </h2>
-          <div className="study-stats">
-            <div className="stat-item">
-              <span className="stat-number">{studyStats.totalWords}</span>
-              <span className="stat-label">Saved Words</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-number">{studyStats.quizzedWords}</span>
-              <span className="stat-label">Practiced</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-number">{studyStats.averageScore}%</span>
-              <span className="stat-label">Avg Score</span>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {savedWords.length === 0 ? (
         <div className="empty-state">
@@ -415,7 +392,7 @@ const VocabularyStudy = () => {
   );
 };
 
-// Individual Word Card Component
+// Individual Word Card Component - Matching VocabularyPinterest style
 const WordCard = ({ word, isSelected, onToggleSelect, onRemove, onQuiz }) => {
   const getDifficultyColor = (difficulty) => {
     const level = typeof difficulty === 'number' ? difficulty : 3;
@@ -433,95 +410,74 @@ const WordCard = ({ word, isSelected, onToggleSelect, onRemove, onQuiz }) => {
     return 'Expert';
   };
 
-  const getPerformanceColor = (accuracy) => {
-    if (accuracy >= 80) return '#22c55e';
-    if (accuracy >= 60) return '#f59e0b';
-    return '#ef4444';
-  };
-
-  const formatDate = (timestamp) => {
-    if (!timestamp) return '';
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    return date.toLocaleDateString();
-  };
-
   return (
-    <div className={`word-card ${isSelected ? 'selected' : ''}`}>
-      {/* Selection Checkbox */}
+    <div className="vocabulary-card">
+      {/* Card Header */}
       <div className="card-header">
-        <input
-          type="checkbox"
-          checked={isSelected}
-          onChange={onToggleSelect}
-          className="word-checkbox"
-        />
+        <div className="word-title">
+          <h3 className="word-text">{word.word}</h3>
+          {word.pronunciation && (
+            <span className="pronunciation">/{word.pronunciation}/</span>
+          )}
+        </div>
         <button onClick={onRemove} className="remove-btn" title="Remove word">
           🗑️
         </button>
       </div>
 
-      {/* Word Title */}
-      <div className="word-title">
-        <h3 className="word-text">{word.word}</h3>
-        <div className="word-meta">
-          <span 
-            className="difficulty-badge"
-            style={{ backgroundColor: getDifficultyColor(word.difficulty) }}
-          >
-            {getDifficultyLabel(word.difficulty)}
-          </span>
-          {word.subjectArea && (
-            <span className="subject-tag">{word.subjectArea}</span>
-          )}
-        </div>
+      {/* Difficulty Badge */}
+      <div 
+        className="difficulty-badge"
+        style={{ backgroundColor: getDifficultyColor(word.difficulty) }}
+      >
+        {getDifficultyLabel(word.difficulty)}
       </div>
+
+      {/* Subject Area Tags */}
+      {word.subjectArea && (
+        <div className="subject-tags">
+          <span className="subject-tag">{word.subjectArea}</span>
+        </div>
+      )}
 
       {/* Definition */}
-      <div className="word-definition">
-        <p>{word.definition}</p>
-      </div>
-
-      {/* Performance Stats */}
-      <div className="performance-section">
-        {word.performance.attempts > 0 ? (
-          <div className="performance-stats">
-            <div className="stat-row">
-              <span className="stat-label">Accuracy:</span>
-              <span 
-                className="stat-value accuracy"
-                style={{ color: getPerformanceColor(word.performance.accuracy) }}
-              >
-                {word.performance.accuracy}%
-              </span>
-            </div>
-            <div className="stat-row">
-              <span className="stat-label">Attempts:</span>
-              <span className="stat-value">{word.performance.attempts}</span>
-            </div>
-            <div className="stat-row">
-              <span className="stat-label">Last practiced:</span>
-              <span className="stat-value">
-                {formatDate(word.performance.lastAttempt)}
-              </span>
-            </div>
-          </div>
-        ) : (
-          <div className="no-practice">
-            <span className="no-practice-text">Not practiced yet</span>
-          </div>
+      <div className="definition-section">
+        <p className="definition-en">{word.definition}</p>
+        {word.koreanTranslation && (
+          <p className="definition-ko">{word.koreanTranslation}</p>
         )}
       </div>
 
-      {/* Actions */}
+      {/* Synonyms - Always Visible */}
+      {word.synonyms && word.synonyms.length > 0 && (
+        <div className="synonyms-section">
+          <span className="synonyms-label">Synonyms:</span>
+          <div className="synonyms-list">
+            {word.synonyms.map((synonym, index) => (
+              <span key={index} className="synonym-tag">{synonym}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* CSAT Example Sentences */}
+      {word.examples && word.examples.length > 0 && (
+        <div className="examples-section">
+          <h4 className="examples-title">
+            CSAT Example
+            {word.questionInfo && (
+              <span className="question-info"> - Q{word.questionInfo.number || ''} ({word.questionInfo.year || '2023'})</span>
+            )}:
+          </h4>
+          <p className="example-sentence">{word.examples[0]}</p>
+        </div>
+      )}
+
+      {/* Quiz Action - Only in Learn Tab */}
       <div className="card-actions">
-        <button onClick={onQuiz} className="quiz-btn">
+        <button onClick={onQuiz} className="action-btn quiz-btn">
           🧠 Quiz This Word
         </button>
-      </div>
-
-      {/* Saved Date */}
-      <div className="saved-date">
-        Saved {formatDate(word.savedAt)}
       </div>
     </div>
   );

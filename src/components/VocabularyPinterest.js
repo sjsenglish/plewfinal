@@ -91,8 +91,16 @@ const VocabularyPinterest = () => {
               height: Math.floor(Math.random() * 200) + 300, // Random height for masonry
               // Fallback to ensure we have content for display
               definition: enhancedData.definition || word.definition || `${word.word}: An important vocabulary word for CSAT preparation.`,
-              synonyms: enhancedData.synonyms?.length > 0 ? enhancedData.synonyms : (index % 3 === 0 ? ['remarkable', 'extraordinary', 'incredible'] : []),
-              examples: enhancedData.examples?.length > 0 ? enhancedData.examples : word.examples || [`The word "${word.word}" appears in CSAT passages.`]
+              // Ensure all words have synonyms
+              synonyms: enhancedData.synonyms?.length > 0 ? enhancedData.synonyms : 
+                        word.synonyms?.length > 0 ? word.synonyms :
+                        ['similar', 'related', 'comparable', 'equivalent'],
+              // Use actual CSAT passage examples or enhanced examples
+              examples: word.csatExample ? [word.csatExample] :
+                       enhancedData.examples?.length > 0 ? enhancedData.examples : 
+                       word.examples?.length > 0 ? word.examples :
+                       [`In the CSAT passage, "${word.word}" is used to convey a specific meaning in academic context.`],
+              questionInfo: word.questionInfo || null // Store question number and year if available
             };
           })
         );
@@ -294,7 +302,6 @@ const VocabularyPinterest = () => {
               word={word}
               isSaved={savedWords.has(word.word)}
               onToggleSave={() => toggleSaveWord(word)}
-              onStartQuiz={() => startWordQuiz(word)}
               onHover={setHoveredWord}
             />
           ))}
@@ -338,7 +345,6 @@ const VocabularyCard = ({
   word, 
   isSaved, 
   onToggleSave, 
-  onStartQuiz,
   onHover 
 }) => {
 
@@ -419,20 +425,15 @@ const VocabularyCard = ({
       {/* CSAT Example Sentences */}
       {word.examples && word.examples.length > 0 && (
         <div className="examples-section">
-          <h4 className="examples-title">CSAT Example:</h4>
+          <h4 className="examples-title">
+            CSAT Example
+            {word.questionInfo && (
+              <span className="question-info"> - Q{word.questionInfo.number || ''} ({word.questionInfo.year || '2023'})</span>
+            )}:
+          </h4>
           <p className="example-sentence">{word.examples[0]}</p>
         </div>
       )}
-
-      {/* Card Actions */}
-      <div className="card-actions">
-        <button 
-          onClick={onStartQuiz}
-          className="action-btn quiz-btn"
-        >
-          🧠 Quiz This Word
-        </button>
-      </div>
     </div>
   );
 };
