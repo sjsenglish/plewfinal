@@ -22,48 +22,52 @@ const SubscriptionPlansModal = ({ onClose }) => {
 
   const planInfo = getPlanInfo();
 
-  // Updated plan configurations - trial removed
+  // New tier configurations
   const plans = [
     {
-      id: 'study',
-      name: 'Monthly Plan',
-      price: 20,
-      period: 'month',
-      priceId: process.env.REACT_APP_STRIPE_STUDY_PLAN_PRICE_ID,
+      id: 'tier1',
+      name: '티어 1 프리미엄',
+      price: 29000,
+      period: '월',
+      priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',
+      paymentLink: 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01',
       features: [
-        'Unlimited daily search',
-        'Unlimited video solutions',
-        'Unlimited question packs',
-        'Practice mode with timer',
-        'Priority community support',
-        'Workshop access',
-        'Weekly quizzes',
+        '무제한 일일 검색',
+        '무제한 비디오 솔루션', 
+        '무제한 문제 팩',
+        '타이머 연습 모드',
+        '우선 커뮤니티 지원',
+        '주간 큐레이션 콘텐츠',
       ],
-      buttonText: 'Choose Monthly Plan',
-      popular: true, // Made monthly plan popular
-      current: subscription?.plan === 'study'
+      buttonText: '티어 1 선택',
+      popular: true,
+      current: subscription?.plan === 'tier1'
     },
     {
-      id: 'pro',
-      name: 'Full Access 2025',
-      price: 50,
-      period: 'one-time until end of 2025',
-      priceId: process.env.REACT_APP_STRIPE_PRO_PLAN_PRICE_ID,
+      id: 'tier2',
+      name: '티어 2 프리미엄',
+      price: 49000,
+      period: '월',
+      priceId: 'price_1Rl7qwRslRN77kT8cBvGyMXo',
+      paymentLink: 'https://buy.stripe.com/5kQbJ377ZeDh4TE8EJ8EM02',
       features: [
-        'Everything in the monthly plan',
-        'Access until December 31, 2025',
-        'Best for 2026 university applicants',
-        'No recurring payments',
+        '티어 1의 모든 기능',
+        '고급 분석 대시보드',
+        '개인화된 학습 계획',
+        '1:1 과외 세션',
+        '독점 워크숍 액세스',
+        '우선 이메일 지원',
+        '맞춤 문제 팩 생성',
       ],
-      buttonText: 'Get Full Access',
+      buttonText: '티어 2 선택',
       popular: false,
-      current: subscription?.plan === 'pro'
+      current: subscription?.plan === 'tier2'
     }
   ];
 
   const handleUpgrade = async (plan) => {
     if (!user) {
-      alert('Please log in to upgrade your plan');
+      alert('플랜 업그레이드를 하려면 로그인하세요');
       return;
     }
 
@@ -71,20 +75,11 @@ const SubscriptionPlansModal = ({ onClose }) => {
     setSelectedPlan(plan.id);
 
     try {
-      const result = await createCheckoutSession(
-        plan.priceId,
-        user.uid,
-        user.email,
-        false // No trial flag needed anymore
-      );
-
-      if (!result.success) {
-        alert(`Error: ${result.error}`);
-      }
-      // Note: If successful, user will be redirected to Stripe
+      // Use Stripe payment links for direct checkout
+      window.open(plan.paymentLink, '_blank');
     } catch (error) {
-      console.error('Error starting checkout:', error);
-      alert('Failed to start checkout. Please try again.');
+      console.error('Error opening payment link:', error);
+      alert('결제 페이지를 열 수 없습니다. 다시 시도해주세요.');
     } finally {
       setLoading(prev => ({ ...prev, [plan.id]: false }));
       setSelectedPlan(null);
@@ -93,7 +88,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
 
   const formatPrice = (price) => {
     if (price === 0) return 'Free';
-    return `£${price}`;
+    return `₩${price.toLocaleString()}`;
   };
 
   if (paywallLoading) {
@@ -114,7 +109,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
             animation: 'spin 1s linear infinite',
             margin: '0 auto 1rem auto'
           }} />
-          <p style={{ color: '#64748b' }}>Loading plans...</p>
+          <p style={{ color: '#64748b' }}>플랜 로딩 중...</p>
         </div>
       </div>
     );
@@ -168,14 +163,14 @@ const SubscriptionPlansModal = ({ onClose }) => {
             marginBottom: '0.5rem',
             color: '#1f2937'
           }}>
-            Choose Your Plan
+            프리미엄 티어 선택
           </h1>
           <p style={{ 
             fontSize: '1rem', 
             color: '#6b7280',
             marginBottom: '1rem'
           }}>
-            Unlock everything you need for successful university admissions prep
+            수능 준비를 위한 두 가지 프리미엄 티어
           </p>
           
           {isLoggedIn && (
@@ -187,7 +182,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
               display: 'inline-block'
             }}>
               <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.25rem' }}>
-                Current Plan
+                현재 플랜
               </div>
               <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937' }}>
                 {planInfo.name}
@@ -230,7 +225,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
                 fontSize: '0.75rem',
                 fontWeight: '600'
               }}>
-                POPULAR
+                인기
               </div>
             )}
 
@@ -247,7 +242,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
                 fontSize: '0.75rem',
                 fontWeight: '600'
               }}>
-                CURRENT
+                현재
               </div>
             )}
 
@@ -275,20 +270,10 @@ const SubscriptionPlansModal = ({ onClose }) => {
                     color: '#6b7280',
                     marginTop: '0.25rem'
                   }}>
-                    {plan.period === 'one-time until end of 2025' ? 'one-time payment' : `/${plan.period}`}
+                    /{plan.period}
                   </div>
                 )}
               </div>
-              {plan.period === 'one-time until end of 2025' && (
-                <p style={{ 
-                  fontSize: '0.75rem', 
-                  color: '#6366f1',
-                  fontWeight: '600',
-                  margin: 0
-                }}>
-                  Access until Dec 31, 2025
-                </p>
-              )}
             </div>
 
             {/* Features list */}
@@ -382,12 +367,12 @@ const SubscriptionPlansModal = ({ onClose }) => {
                     borderRadius: '50%',
                     animation: 'spin 1s linear infinite'
                   }} />
-                  Processing...
+                  처리 중...
                 </>
               ) : plan.current ? (
-                '✓ Current Plan'
+                '✓ 현재 플랜'
               ) : !isLoggedIn ? (
-                'Log in Required'
+                '로그인 필요'
               ) : (
                 plan.buttonText
               )}
@@ -404,9 +389,8 @@ const SubscriptionPlansModal = ({ onClose }) => {
                 margin: 0,
                 lineHeight: '1.3'
               }}>
-                Secure payment by Stripe<br/>
-                {plan.id === 'study' ? 'Cancel anytime • ' : ''}
-                30-day money-back guarantee
+                Stripe 보안 결제<br/>
+                언제든지 취소 • 30일 환불 보장
               </p>
             </div>
           </div>
@@ -424,7 +408,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
           color: '#6b7280',
           margin: 0
         }}>
-          Questions? Email us at{' '}
+          문의사항이 있으시면 이메일로 연락하세요:{' '}
           <a 
             href="mailto:team@examrizzsearch.com"
             style={{ color: '#6366f1', textDecoration: 'none' }}
