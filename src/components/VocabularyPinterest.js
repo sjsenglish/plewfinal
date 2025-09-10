@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getAuth } from 'firebase/auth';
 import { doc, setDoc, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../services/firebase';
+import { db } from '../firebase';
 import { fetchVocabulary, getEnhancedWordInfo } from '../services/vocabularyAPIService';
 import VocabularyQuiz from './VocabularyQuiz';
 import './VocabularyPinterest.css';

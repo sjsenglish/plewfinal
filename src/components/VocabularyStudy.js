@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { getAuth } from 'firebase/auth';
 import { doc, collection, query, where, getDocs, orderBy, deleteDoc } from 'firebase/firestore';
-import { db } from '../services/firebase';
+import { db } from '../firebase';
 import VocabularyQuiz from './VocabularyQuiz';
 import './VocabularyStudy.css';
 
