@@ -1,0 +1,82 @@
+/* Korean Font Configuration */
+/* Futura is prioritized for Korean text, with fallbacks */
+
+/* Global font override for better Korean support */
+* {
+  font-family: 'Futura', 'IBM Plex Sans KR', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'NanumGothic', 'Yu Gothic UI', 'Segoe UI', sans-serif !important;
+}
+
+/* Specific targeting for Korean content */
+.korean-text,
+[lang="ko"],
+*:lang(ko) {
+  font-family: 'Futura', 'IBM Plex Sans KR', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}
+
+/* Brand title specific */
+.navbar-brand-text,
+.modern-brand-title,
+.navbar-logo {
+  font-family: 'Futura', 'IBM Plex Sans KR', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+  font-weight: 700 !important;
+}
+
+/* Navigation elements */
+.navbar-glass-button,
+.navbar-upgrade-button-exact,
+.navbar-login-button-exact {
+  font-family: 'Futura', 'IBM Plex Sans KR', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}
+
+/* Dashboard elements */
+.premium-dashboard h1,
+.premium-dashboard h2,
+.premium-dashboard h3,
+.premium-dashboard button,
+.premium-dashboard .nav-text {
+  font-family: 'Futura', 'IBM Plex Sans KR', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}
+
+/* Subject toggle buttons */
+.subject-toggle-button {
+  font-family: 'Futura', 'IBM Plex Sans KR', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}
+
+/* Learn tab content */
+.learn-tab h1,
+.learn-tab h2,
+.learn-tab h3,
+.learn-tab button,
+.learn-tab p {
+  font-family: 'Futura', 'IBM Plex Sans KR', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}
+
+/* Form elements and inputs */
+input,
+textarea,
+select,
+button {
+  font-family: 'Futura', 'IBM Plex Sans KR', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}
+
+/* Filter components */
+.korean-english-filters,
+.vocabulary-filters,
+.category-tab,
+.filter-option {
+  font-family: 'Futura', 'IBM Plex Sans KR', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}
+
+/* Ensure proper Korean text rendering */
+body {
+  font-feature-settings: "kern" 1;
+  -webkit-font-feature-settings: "kern" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Override any existing font declarations */
+.app,
+.app * {
+  font-family: 'Futura', 'IBM Plex Sans KR', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}

@@ -168,7 +168,7 @@ const Navbar = ({ onSubjectChange }) => {
               className="navbar-glass-button"
             >
               <span></span>
-              Video Lessons
+              학습
             </Link>
 
             {/* Premium Dashboard - Always visible, authentication handled by routes */}
@@ -177,7 +177,7 @@ const Navbar = ({ onSubjectChange }) => {
               className="navbar-glass-button"
             >
               <span></span>
-              Question Packs
+              프로필
             </Link>
           </div>
 
@@ -194,7 +194,7 @@ const Navbar = ({ onSubjectChange }) => {
                     className="navbar-upgrade-button-exact"
                   >
                     <span>⚡</span>
-                    Upgrade
+                    구독하기 
                   </Link>
                 ) : (
                   <Link
@@ -207,7 +207,7 @@ const Navbar = ({ onSubjectChange }) => {
                 )}
 
                 <button onClick={handleSignOut} className="navbar-glass-button">
-                  Log Out
+                  로그아웃
                 </button>
               </div>
             ) : (
@@ -215,7 +215,7 @@ const Navbar = ({ onSubjectChange }) => {
                 to="/login"
                 className="navbar-login-button-exact"
               >
-                Log In
+                로그인
               </Link>
             )}
           </div>

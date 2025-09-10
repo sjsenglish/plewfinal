@@ -10,6 +10,7 @@ import { StripeProvider } from './contexts/StripeContext';
 
 // Import components
 import './App.css';
+import './korean-fonts.css';
 import HitWrapper from './components/HitWrapper';
 import Navbar from './components/Navbar';
 import Login from './components/Login';

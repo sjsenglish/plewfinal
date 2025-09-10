@@ -7,6 +7,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Korean Text Styling with Futura priority */
+/* Target elements with Korean text */
+body,
+* {
+  font-family: 'Futura', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Yu Gothic UI', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
