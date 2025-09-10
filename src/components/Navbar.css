@@ -1,6 +1,6 @@
 /* Navbar.css - Improved Aesthetic */
 .navbar {
-  background-color: white;
+  background-color: white !important;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   padding: 1rem 0;
   position: sticky;
@@ -9,9 +9,14 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-.alternate-theme.navbar {
-  background-color: #2d3b50;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+/* Force white background for all themes */
+.alternate-theme .navbar,
+.vocabulary-theme .navbar,
+.community-theme .navbar,
+.maths-theme .navbar,
+.korean-english-theme .navbar {
+  background-color: white !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 
 .navbar-container {
@@ -47,21 +52,30 @@
 
 .navbar-logo a {
   text-decoration: none;
-  color: #221468;
+  color: #221468 !important;
   transition: all 0.3s ease;
 }
 
 .navbar-logo a:hover {
-  color: #9691c4;
+  color: #9691c4 !important;
   transform: translateY(-1px);
 }
 
-.alternate-theme .navbar-logo a {
-  color: #ffffff;
+/* Force consistent logo color for all themes */
+.alternate-theme .navbar-logo a,
+.vocabulary-theme .navbar-logo a,
+.community-theme .navbar-logo a,
+.maths-theme .navbar-logo a,
+.korean-english-theme .navbar-logo a {
+  color: #221468 !important;
 }
 
-.alternate-theme .navbar-logo a:hover {
-  color: #d6e4f7;
+.alternate-theme .navbar-logo a:hover,
+.vocabulary-theme .navbar-logo a:hover,
+.community-theme .navbar-logo a:hover,
+.maths-theme .navbar-logo a:hover,
+.korean-english-theme .navbar-logo a:hover {
+  color: #9691c4 !important;
 }
 
 .navbar-links {
@@ -106,24 +120,40 @@
   border-radius: 2px;
 }
 
-/* PLEW theme (alternate-theme) - Enhanced styling */
-.alternate-theme .navbar-links a {
-  color: #e2e8f0 !important;
+/* Force consistent link styling for all themes */
+.alternate-theme .navbar-links a,
+.vocabulary-theme .navbar-links a,
+.community-theme .navbar-links a,
+.maths-theme .navbar-links a,
+.korean-english-theme .navbar-links a {
+  color: #4a5568 !important;
   font-size: 0.95rem;
 }
 
-.alternate-theme .navbar-links a:hover {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.1) !important;
+.alternate-theme .navbar-links a:hover,
+.vocabulary-theme .navbar-links a:hover,
+.community-theme .navbar-links a:hover,
+.maths-theme .navbar-links a:hover,
+.korean-english-theme .navbar-links a:hover {
+  color: #9691c4 !important;
+  background-color: rgba(107, 92, 165, 0.08) !important;
 }
 
-.alternate-theme .navbar-links a.active {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.15) !important;
+.alternate-theme .navbar-links a.active,
+.vocabulary-theme .navbar-links a.active,
+.community-theme .navbar-links a.active,
+.maths-theme .navbar-links a.active,
+.korean-english-theme .navbar-links a.active {
+  color: #9691c4 !important;
+  background-color: rgba(107, 92, 165, 0.12) !important;
 }
 
-.alternate-theme .navbar-links a.active::after {
-  background: linear-gradient(90deg, #ffffff, #d6e4f7) !important;
+.alternate-theme .navbar-links a.active::after,
+.vocabulary-theme .navbar-links a.active::after,
+.community-theme .navbar-links a.active::after,
+.maths-theme .navbar-links a.active::after,
+.korean-english-theme .navbar-links a.active::after {
+  background: linear-gradient(90deg, #9691c4, #ccccff) !important;
 }
 
 .profile-nav-link {
@@ -211,15 +241,23 @@
   transform: rotate(180deg);
 }
 
-/* PLEW theme dropdown button - Enhanced */
-.alternate-theme .dropdown-button {
-  color: #e2e8f0 !important;
+/* Force consistent dropdown button styling for all themes */
+.alternate-theme .dropdown-button,
+.vocabulary-theme .dropdown-button,
+.community-theme .dropdown-button,
+.maths-theme .dropdown-button,
+.korean-english-theme .dropdown-button {
+  color: #4a5568 !important;
   font-size: 0.95rem;
 }
 
-.alternate-theme .dropdown-button:hover {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.1) !important;
+.alternate-theme .dropdown-button:hover,
+.vocabulary-theme .dropdown-button:hover,
+.community-theme .dropdown-button:hover,
+.maths-theme .dropdown-button:hover,
+.korean-english-theme .dropdown-button:hover {
+  color: #9691c4 !important;
+  background-color: rgba(107, 92, 165, 0.08) !important;
 }
 
 .dropdown-menu {
@@ -240,9 +278,14 @@
   transition: all 0.3s ease;
 }
 
-.alternate-theme .dropdown-menu {
-  background-color: #3a4a61;
-  border-color: rgba(255, 255, 255, 0.1);
+/* Force white dropdown menu for all themes */
+.alternate-theme .dropdown-menu,
+.vocabulary-theme .dropdown-menu,
+.community-theme .dropdown-menu,
+.maths-theme .dropdown-menu,
+.korean-english-theme .dropdown-menu {
+  background-color: white !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
 }
 
 .dropdown-menu button {
@@ -269,16 +312,24 @@
   transform: translateX(4px);
 }
 
-/* PLEW theme dropdown menu buttons - Enhanced */
-.alternate-theme .dropdown-menu button {
-  color: #e2e8f0 !important;
+/* Force consistent dropdown menu button styling for all themes */
+.alternate-theme .dropdown-menu button,
+.vocabulary-theme .dropdown-menu button,
+.community-theme .dropdown-menu button,
+.maths-theme .dropdown-menu button,
+.korean-english-theme .dropdown-menu button {
+  color: #4a5568 !important;
   font-size: 0.95rem;
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  border-bottom-color: rgba(0, 0, 0, 0.06) !important;
 }
 
-.alternate-theme .dropdown-menu button:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
+.alternate-theme .dropdown-menu button:hover,
+.vocabulary-theme .dropdown-menu button:hover,
+.community-theme .dropdown-menu button:hover,
+.maths-theme .dropdown-menu button:hover,
+.korean-english-theme .dropdown-menu button:hover {
+  background-color: rgba(107, 92, 165, 0.08) !important;
+  color: #9691c4 !important;
 }
 
 /* Enhanced Login button - Made larger */
@@ -478,15 +529,22 @@
     margin-top: 0.5rem;
   }
 }
+/* Force white navbar background for all possible theme combinations */
+[class*="-theme"] .navbar {
+    background-color: white !important;
+    backdrop-filter: none !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
 /* Navbar Styles - Updated to match your existing class names */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(10px);
-    border: none !important;
+    background: white !important;
+    backdrop-filter: none !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 
 .navbar-container {
@@ -499,7 +557,7 @@
 .navbar-logo a {
     font-size: 24px !important;
     font-weight: bold !important;
-    color: white !important;
+    color: #221468 !important;
     text-decoration: none !important;
 }
 
@@ -511,21 +569,22 @@
 
 /* Glass button styling for nav links */
 .navbar-glass-button {
-    color: white !important;
+    color: #4a5568 !important;
     text-decoration: none !important;
     font-size: 16px !important;
     font-weight: 500 !important;
     opacity: 0.9 !important;
-    transition: opacity 0.3s ease !important;
+    transition: all 0.3s ease !important;
     padding: 8px 16px !important;
     border-radius: 8px !important;
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: rgba(107, 92, 165, 0.05) !important;
+    border: 1px solid rgba(107, 92, 165, 0.15) !important;
 }
 
 .navbar-glass-button:hover {
     opacity: 1 !important;
-    background: rgba(255, 255, 255, 0.2) !important;
+    background: rgba(107, 92, 165, 0.1) !important;
+    color: #9691c4 !important;
 }
 
 .navbar-auth {
@@ -533,23 +592,7 @@
     align-items: center;
     gap: 20px;
 }
-/* MINIMAL COLOR FIXES ONLY */
-
-/* Fix navbar links visibility - change text color to be visible */
-.navbar-glass-button {
-    color: #333 !important;
-    opacity: 0.9 !important;
-}
-
-.navbar-glass-button:hover {
-    opacity: 1 !important;
-    color: #000 !important;
-}
-
-/* Fix examrizzsearch logo visibility */
-.navbar-logo a {
-    color: #333 !important;
-}
+/* Already fixed above - removed duplicate rules */
 
 /* How it works button - smaller and stacked */
 .see-how-it-works-button-new.exact-colors,

@@ -134,8 +134,8 @@ const Navbar = ({ onSubjectChange }) => {
           <div className="navbar-logo">
             <Link to="/" className="navbar-brand-link">
               <span className="navbar-brand-text">
-                examrizzsearch
-                <span className="navbar-beta-label">BETA</span>
+                옥스포드영어
+                <span className="navbar-beta-label">베타</span>
               </span>
             </Link>
           </div>

@@ -381,7 +381,7 @@ const buildAlgoliaFilters = (filters) => {
           <div className="brand-section">
             <div className="brand-title-container">
               <h1 className="modern-brand-title">
-                examrizzsearch
+                옥스포드 영어 - PLEW
               </h1>
             </div>
             <div className="brand-glow"></div>

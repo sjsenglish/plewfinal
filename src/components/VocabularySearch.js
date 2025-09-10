@@ -81,7 +81,7 @@ const VocabularySearch = ({ bannerText }) => {
     <div className="vocabulary-search-container">
       {/* Search Header */}
       <div className="search-header">
-        <h1 className="search-title">Vocabulary Learning</h1>
+        <h1 className="search-title"></h1>
         <p className="search-subtitle">{bannerText}</p>
       </div>
 
