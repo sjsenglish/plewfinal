@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, Timestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import './LearnTab.css';
 
 const LearnTab = () => {
   const [selectedLevel, setSelectedLevel] = useState('beginner');
@@ -243,349 +244,131 @@ const LearnTab = () => {
   }
 
   return (
-    <div style={{ height: '100%' }}>
-      {/* Header */}
-      <div style={{ 
-        background: 'rgba(255, 255, 255, 0.5)', 
-        backdropFilter: 'blur(10px)',
-        padding: '32px 24px', 
-        border: '1px solid #a8dcc6',
-        marginBottom: '24px',
-        borderRadius: '12px'
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
-            <div>
-              <h1 style={{ margin: '0 0 8px 0', color: '#1e293b', fontSize: '2rem', fontWeight: '700' }}>
-                Your Weekly Learning Path
-              </h1>
-              <p style={{ margin: '0', color: '#64748b', fontSize: '1rem' }}>
-                Week {getCurrentWeek()} • Personalized content updated weekly
-              </p>
-            </div>
-            
-            {/* Level Selector */}
-            <div style={{ display: 'flex', gap: '8px', background: 'rgba(255, 255, 255, 0.8)', padding: '4px', borderRadius: '8px' }}>
-              {['beginner', 'intermediate', 'advanced'].map((level) => (
-                <button
-                  key={level}
-                  onClick={() => handleLevelChange(level)}
-                  style={{
-                    padding: '8px 20px',
-                    background: selectedLevel === level ? '#d8f0ed' : 'transparent',
-                    color: selectedLevel === level ? '#1e293b' : '#64748b',
-                    border: 'none',
-                    borderRadius: '6px',
-                    fontWeight: selectedLevel === level ? '600' : '500',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    textTransform: 'capitalize'
-                  }}
-                  onMouseOver={(e) => {
-                    if (selectedLevel !== level) {
-                      e.target.style.background = '#f1f5f9';
-                    }
-                  }}
-                  onMouseOut={(e) => {
-                    if (selectedLevel !== level) {
-                      e.target.style.background = 'transparent';
-                    }
-                  }}
-                >
-                  {level}
-                </button>
-              ))}
-            </div>
+    <div className="learn-tab">
+      {/* Minimal Header */}
+      <div className="learn-header">
+        <div className="learn-header-content">
+          <div className="learn-title-section">
+            <h1>Week {getCurrentWeek()}</h1>
+            <p>Your personalized learning path</p>
+          </div>
+          
+          <div className="level-selector">
+            {['beginner', 'intermediate', 'advanced'].map((level) => (
+              <button
+                key={level}
+                onClick={() => handleLevelChange(level)}
+                className={`level-btn ${selectedLevel === level ? 'active' : ''}`}
+              >
+                {level}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Content Sections */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      {/* Main Content Grid */}
+      <div className="learn-content">
         
         {/* Question Packs Section */}
-        <div style={{ 
-          background: 'rgba(255, 255, 255, 0.5)', 
-          backdropFilter: 'blur(10px)',
-          borderRadius: '12px', 
-          padding: '24px', 
-          marginBottom: '24px',
-          border: '1px solid #a8dcc6'
-        }}>
-          <h2 style={{ margin: '0 0 20px 0', color: '#1e293b', fontSize: '1.25rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>📚</span> This Week's Question Packs
-          </h2>
+        <section className="learn-section">
+          <div className="section-header">
+            <h2>📚 Practice Packs</h2>
+          </div>
           
-          <div style={{ 
-            display: 'flex', 
-            gap: '16px', 
-            overflowX: 'auto', 
-            paddingBottom: '8px',
-            scrollbarWidth: 'thin',
-            scrollbarColor: '#cbd5e1 transparent'
-          }}>
+          <div className="cards-grid">
             {weeklyContent?.questionPacks.map((pack) => (
               <div
                 key={pack.id}
                 onClick={() => handlePackClick(pack.id)}
-                style={{
-                  minWidth: '280px',
-                  background: 'rgba(255, 255, 255, 0.8)',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '8px',
-                  padding: '20px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  position: 'relative'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
+                className="pack-card"
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '12px' }}>
-                  <h3 style={{ margin: 0, fontSize: '1rem', color: '#1e293b', fontWeight: '600' }}>
-                    {pack.title}
-                  </h3>
-                  <span style={{
-                    background: pack.difficulty === 'Easy' ? '#dcfce7' : pack.difficulty === 'Medium' ? '#fed7aa' : '#fecaca',
-                    color: pack.difficulty === 'Easy' ? '#166534' : pack.difficulty === 'Medium' ? '#c2410c' : '#991b1b',
-                    padding: '2px 8px',
-                    borderRadius: '4px',
-                    fontSize: '0.75rem',
-                    fontWeight: '500'
-                  }}>
+                <div className="pack-header">
+                  <h3>{pack.title}</h3>
+                  <span className={`difficulty-badge ${pack.difficulty.toLowerCase()}`}>
                     {pack.difficulty}
                   </span>
                 </div>
                 
-                <div style={{ marginBottom: '12px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', color: '#64748b', marginBottom: '8px' }}>
-                    <span>{pack.completedCount} / {pack.totalQuestions} completed</span>
+                <div className="pack-progress">
+                  <div className="progress-info">
+                    <span>{pack.completedCount} / {pack.totalQuestions}</span>
                     <span>{Math.round((pack.completedCount / pack.totalQuestions) * 100)}%</span>
                   </div>
-                  <div style={{ background: '#e2e8f0', borderRadius: '4px', height: '8px', overflow: 'hidden' }}>
-                    <div style={{
-                      width: `${(pack.completedCount / pack.totalQuestions) * 100}%`,
-                      height: '100%',
-                      background: 'linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%)',
-                      transition: 'width 0.3s ease'
-                    }} />
+                  <div className="progress-bar">
+                    <div 
+                      className="progress-fill"
+                      style={{ width: `${(pack.completedCount / pack.totalQuestions) * 100}%` }}
+                    />
                   </div>
                 </div>
                 
-                <button style={{
-                  width: '100%',
-                  padding: '8px',
-                  background: '#6366f1',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '0.875rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'background 0.2s ease'
-                }}
-                onMouseOver={(e) => e.target.style.background = '#4f46e5'}
-                onMouseOut={(e) => e.target.style.background = '#6366f1'}
-                >
-                  {pack.completedCount > 0 ? 'Continue Practice' : 'Start Practice'}
+                <button className="pack-btn">
+                  {pack.completedCount > 0 ? 'Continue' : 'Start'}
                 </button>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* Recommended Videos Section */}
-        <div style={{ 
-          background: 'rgba(255, 255, 255, 0.5)', 
-          backdropFilter: 'blur(10px)',
-          borderRadius: '12px', 
-          padding: '24px', 
-          marginBottom: '24px',
-          border: '1px solid #a8dcc6'
-        }}>
-          <h2 style={{ margin: '0 0 20px 0', color: '#1e293b', fontSize: '1.25rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>🎥</span> Recommended Videos
-          </h2>
+        {/* Videos Section */}
+        <section className="learn-section">
+          <div className="section-header">
+            <h2>🎥 Video Lessons</h2>
+          </div>
           
-          <div style={{ 
-            display: 'flex', 
-            gap: '16px', 
-            overflowX: 'auto', 
-            paddingBottom: '8px'
-          }}>
+          <div className="video-grid">
             {weeklyContent?.videos.map((video) => (
               <div
                 key={video.id}
-                style={{
-                  minWidth: '320px',
-                  background: 'rgba(255, 255, 255, 0.8)',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  position: 'relative'
-                }}
+                className="video-card"
                 onClick={() => setExpandedVideo(video)}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
               >
-                <div style={{ position: 'relative' }}>
-                  <img 
-                    src={video.thumbnail} 
-                    alt={video.title}
-                    style={{ width: '100%', height: '180px', objectFit: 'cover' }}
-                  />
-                  {video.completed && (
-                    <div style={{
-                      position: 'absolute',
-                      top: '8px',
-                      right: '8px',
-                      background: '#10b981',
-                      color: 'white',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '0.75rem',
-                      fontWeight: '500',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}>
-                      ✓ Completed
-                    </div>
-                  )}
-                  <div style={{
-                    position: 'absolute',
-                    bottom: '8px',
-                    right: '8px',
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    color: 'white',
-                    padding: '2px 6px',
-                    borderRadius: '4px',
-                    fontSize: '0.75rem'
-                  }}>
-                    {video.duration}
-                  </div>
+                <div className="video-thumbnail">
+                  <img src={video.thumbnail} alt={video.title} />
+                  {video.completed && <div className="completed-badge">✓</div>}
+                  <div className="duration-badge">{video.duration}</div>
+                  <div className="play-overlay">▶</div>
                 </div>
-                <div style={{ padding: '16px' }}>
-                  <h3 style={{ margin: '0 0 8px 0', fontSize: '1rem', color: '#1e293b', fontWeight: '600' }}>
-                    {video.title}
-                  </h3>
-                  <button style={{
-                    width: '100%',
-                    padding: '8px',
-                    background: video.completed ? '#e2e8f0' : '#6366f1',
-                    color: video.completed ? '#64748b' : 'white',
-                    border: 'none',
-                    borderRadius: '6px',
-                    fontSize: '0.875rem',
-                    fontWeight: '500',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s ease'
-                  }}
-                  onMouseOver={(e) => {
-                    if (!video.completed) {
-                      e.target.style.background = '#4f46e5';
-                    }
-                  }}
-                  onMouseOut={(e) => {
-                    if (!video.completed) {
-                      e.target.style.background = '#6366f1';
-                    }
-                  }}
-                  >
-                    {video.completed ? 'Watch Again' : 'Watch Now'}
+                <div className="video-info">
+                  <h3>{video.title}</h3>
+                  <button className={`video-btn ${video.completed ? 'completed' : ''}`}>
+                    {video.completed ? 'Rewatch' : 'Watch'}
                   </button>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* Vocabulary to Memorize Section */}
-        <div style={{ 
-          background: 'rgba(255, 255, 255, 0.5)', 
-          backdropFilter: 'blur(10px)',
-          borderRadius: '12px', 
-          padding: '24px', 
-          marginBottom: '24px',
-          border: '1px solid #a8dcc6'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <h2 style={{ margin: 0, color: '#1e293b', fontSize: '1.25rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span>📝</span> Vocabulary to Memorize
-            </h2>
-            <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
+        {/* Vocabulary Section */}
+        <section className="learn-section">
+          <div className="section-header">
+            <h2>📝 Vocabulary</h2>
+            <div className="vocab-progress">
               {weeklyContent?.vocabulary.filter(w => w.learned).length} / {weeklyContent?.vocabulary.length} learned
             </div>
           </div>
           
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
-            gap: '12px'
-          }}>
+          <div className="vocab-grid">
             {weeklyContent?.vocabulary.map((item) => (
               <div
                 key={item.word}
-                style={{
-                  background: item.learned ? 'rgba(220, 252, 231, 0.5)' : 'rgba(255, 255, 255, 0.8)',
-                  border: `1px solid ${item.learned ? '#86efac' : '#e2e8f0'}`,
-                  borderRadius: '8px',
-                  padding: '16px',
-                  transition: 'all 0.2s ease',
-                  cursor: 'pointer'
-                }}
+                className={`vocab-card ${item.learned ? 'learned' : ''}`}
                 onClick={() => toggleWordLearned(item.word)}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.05)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
-                  <h3 style={{ margin: 0, fontSize: '1.125rem', color: '#1e293b', fontWeight: '600' }}>
-                    {item.word}
-                  </h3>
-                  <div style={{
-                    width: '24px',
-                    height: '24px',
-                    borderRadius: '50%',
-                    border: `2px solid ${item.learned ? '#10b981' : '#cbd5e1'}`,
-                    background: item.learned ? '#10b981' : 'transparent',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.2s ease'
-                  }}>
-                    {item.learned && <span style={{ color: 'white', fontSize: '14px' }}>✓</span>}
+                <div className="vocab-header">
+                  <h3>{item.word}</h3>
+                  <div className={`check-circle ${item.learned ? 'checked' : ''}`}>
+                    {item.learned && <span>✓</span>}
                   </div>
                 </div>
-                <p style={{ margin: '0 0 4px 0', fontSize: '0.875rem', color: '#475569' }}>
-                  {item.definition}
-                </p>
-                <p style={{ margin: 0, fontSize: '0.75rem', color: '#94a3b8', fontStyle: 'italic' }}>
-                  Synonym: {item.synonym}
-                </p>
+                <p className="definition">{item.definition}</p>
+                <p className="synonym">Synonym: {item.synonym}</p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       </div>
 
       {/* Video Player Modal */}
