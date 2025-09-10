@@ -10,8 +10,9 @@
   },
   "dependencies": {
     "algoliasearch": "^5.25.0",
+    "dotenv": "^17.2.1",
     "firebase-admin": "^13.4.0",
-    "dotenv": "^17.2.1"
+    "node-fetch": "^3.3.2"
   },
   "engines": {
     "node": ">=16.0.0"
