@@ -39,6 +39,7 @@ import LearnContentAdmin from './components/LearnContentAdmin';
 // import MathsFilters from './components/MathsFilters'; // HIDDEN
 import KoreanEnglishFilters from './components/KoreanEnglishFilters';
 import VocabularySearch from './components/VocabularySearch';
+import VocabularyPinterest from './components/VocabularyPinterest';
 import VideoStreaming from './components/VideoStreaming';
 import DemoMode from './components/DemoMode';
 // import StudyBuddyApp from './components/StudyBuddyApp'; // HIDDEN - Ask Bo and Application Builder
@@ -492,14 +493,9 @@ const buildAlgoliaFilters = (filters) => {
                 />
               )}
 
-              {/* Vocabulary Search Component */}
+              {/* Vocabulary Pinterest Component */}
               {currentSubject === 'vocabulary' ? (
-                <VocabularySearch 
-                  searchClient={searchClient}
-                  subjectConfig={subjectConfig}
-                  bannerText={bannerText}
-                  user={user}
-                />
+                <VocabularyPinterest />
               ) : (
                 <div className="results-container">
                 <div className="stats-container">{statsComponent}</div>
@@ -743,6 +739,7 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/success" element={<SuccessPage />} />
                 <Route path="/community" element={<CommunityPage />} />
+                <Route path="/vocabulary" element={<VocabularyPinterest />} />
                 <Route path="/videos" element={<VideoStreaming />} />
                 <Route path="/admin/quiz-creator" element={<QuizCreator />} />
                 <Route path="/test" element={<TestPage />} />

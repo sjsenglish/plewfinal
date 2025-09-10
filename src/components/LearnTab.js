@@ -4,6 +4,7 @@ import { getFirestore, doc, getDoc, updateDoc, Timestamp, collection, getDocs, q
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { generateQuestionPackPDF, downloadPDF } from '../services/pdfGenerator';
 import InteractiveQuiz from './InteractiveQuiz';
+import VocabularyStudy from './VocabularyStudy';
 import './LearnTab.css';
 
 const searchClient = algoliasearch(
@@ -767,45 +768,9 @@ const LearnTab = () => {
           )}
         </section>
 
-        {/* Vocabulary Section - Coming Soon */}
+        {/* Vocabulary Section */}
         <section className="learn-section">
-          <div className="section-header">
-            <h2>📝 Vocabulary</h2>
-          </div>
-          
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '3rem',
-            textAlign: 'center',
-            background: 'var(--bg-primary)',
-            borderRadius: 'var(--radius-lg)',
-            border: '1px solid var(--border-light)'
-          }}>
-            <div style={{
-              fontSize: '3rem',
-              marginBottom: '1rem',
-              opacity: 0.7
-            }}>
-              📝
-            </div>
-            <h3 style={{ 
-              color: 'var(--text-secondary)', 
-              margin: '0 0 0.5rem 0',
-              fontWeight: '500'
-            }}>
-              Vocabulary exercises coming soon
-            </h3>
-            <p style={{ 
-              color: 'var(--text-tertiary)', 
-              margin: '0',
-              fontSize: '0.875rem'
-            }}>
-              Curated vocabulary for {selectedLevel} level
-            </p>
-          </div>
+          <VocabularyStudy />
         </section>
       </div>
 
