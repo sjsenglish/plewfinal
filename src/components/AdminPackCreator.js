@@ -49,6 +49,7 @@ const SUBJECTS = {
 const AdminPackCreator = () => {
   const [activeTab, setActiveTab] = useState('create');
   const [existingPacks, setExistingPacks] = useState([]);
+  const [existingVideos, setExistingVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   
   // Pack creation state
@@ -57,6 +58,19 @@ const AdminPackCreator = () => {
     description: '',
     difficulty: 'beginner',
     subject: 'korean-english',
+    tags: [],
+    isActive: true
+  });
+  
+  // Video creation state
+  const [videoData, setVideoData] = useState({
+    title: '',
+    description: '',
+    videoUrl: '',
+    thumbnailUrl: '',
+    difficulty: 'beginner',
+    subject: 'korean-english',
+    duration: '',
     tags: [],
     isActive: true
   });
@@ -74,6 +88,7 @@ const AdminPackCreator = () => {
 
   useEffect(() => {
     loadExistingPacks();
+    loadExistingVideos();
   }, []);
 
   const loadExistingPacks = async () => {
@@ -87,6 +102,20 @@ const AdminPackCreator = () => {
       setExistingPacks(packs);
     } catch (error) {
       console.error('Error loading existing packs:', error);
+    }
+  };
+
+  const loadExistingVideos = async () => {
+    try {
+      const q = query(collection(db, 'adminVideos'), orderBy('createdAt', 'desc'));
+      const querySnapshot = await getDocs(q);
+      const videos = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setExistingVideos(videos);
+    } catch (error) {
+      console.error('Error loading existing videos:', error);
     }
   };
 
@@ -197,6 +226,48 @@ const AdminPackCreator = () => {
     }
   };
 
+  const handleCreateVideo = async () => {
+    if (!videoData.title.trim() || !videoData.videoUrl.trim()) {
+      alert('Please provide a video title and video URL.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const adminVideo = {
+        ...videoData,
+        createdAt: new Date(),
+        createdBy: 'admin',
+        createdByUser: user?.uid || 'admin'
+      };
+
+      await addDoc(collection(db, 'adminVideos'), adminVideo);
+      
+      alert('Admin video created successfully!');
+      
+      // Reset form
+      setVideoData({
+        title: '',
+        description: '',
+        videoUrl: '',
+        thumbnailUrl: '',
+        difficulty: 'beginner',
+        subject: 'korean-english',
+        duration: '',
+        tags: [],
+        isActive: true
+      });
+      
+      // Reload existing videos
+      loadExistingVideos();
+    } catch (error) {
+      console.error('Error creating admin video:', error);
+      alert('Error creating video. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleToggleActive = async (packId, currentStatus) => {
     try {
       await updateDoc(doc(db, 'adminQuestionPacks', packId), {
@@ -205,6 +276,29 @@ const AdminPackCreator = () => {
       loadExistingPacks();
     } catch (error) {
       console.error('Error updating pack status:', error);
+    }
+  };
+
+  const handleToggleVideoActive = async (videoId, currentStatus) => {
+    try {
+      await updateDoc(doc(db, 'adminVideos', videoId), {
+        isActive: !currentStatus
+      });
+      loadExistingVideos();
+    } catch (error) {
+      console.error('Error updating video status:', error);
+    }
+  };
+
+  const handleDeleteVideo = async (videoId) => {
+    if (window.confirm('Are you sure you want to delete this video?')) {
+      try {
+        await deleteDoc(doc(db, 'adminVideos', videoId));
+        loadExistingVideos();
+      } catch (error) {
+        console.error('Error deleting video:', error);
+        alert('Error deleting video. Please try again.');
+      }
     }
   };
 
@@ -258,6 +352,20 @@ const AdminPackCreator = () => {
           }}
         >
           Manage Packs ({existingPacks.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('videos')}
+          style={{
+            padding: '1rem 2rem',
+            background: activeTab === 'videos' ? '#4f46e5' : 'transparent',
+            color: activeTab === 'videos' ? 'white' : '#6b7280',
+            border: 'none',
+            borderRadius: '8px 8px 0 0',
+            cursor: 'pointer',
+            fontWeight: '600'
+          }}
+        >
+          Video Management ({existingVideos.length})
         </button>
       </div>
 
@@ -473,7 +581,7 @@ const AdminPackCreator = () => {
             </button>
           </div>
         </div>
-      ) : (
+      ) : activeTab === 'manage' ? (
         /* Manage Packs Tab */
         <div>
           <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1.5rem' }}>
@@ -576,6 +684,261 @@ const AdminPackCreator = () => {
                 No admin packs created yet. Create your first pack using the "Create New Pack" tab.
               </div>
             )}
+          </div>
+        </div>
+      ) : (
+        /* Video Management Tab */
+        <div>
+          <div style={{ display: 'grid', gap: '2rem', gridTemplateColumns: '1fr 1fr' }}>
+            {/* Video Creation Form */}
+            <div style={{
+              background: 'white',
+              padding: '2rem',
+              borderRadius: '12px',
+              border: '1px solid #e5e7eb',
+              height: 'fit-content'
+            }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1.5rem' }}>Create New Video</h2>
+              
+              <div style={{ display: 'grid', gap: '1rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontWeight: '500', marginBottom: '0.5rem' }}>
+                    Video Title *
+                  </label>
+                  <input
+                    type="text"
+                    value={videoData.title}
+                    onChange={(e) => setVideoData(prev => ({ ...prev, title: e.target.value }))}
+                    placeholder="Enter video title..."
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      fontSize: '1rem'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontWeight: '500', marginBottom: '0.5rem' }}>
+                    Description
+                  </label>
+                  <textarea
+                    value={videoData.description}
+                    onChange={(e) => setVideoData(prev => ({ ...prev, description: e.target.value }))}
+                    placeholder="Enter video description..."
+                    rows="3"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      resize: 'vertical'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontWeight: '500', marginBottom: '0.5rem' }}>
+                    Video URL *
+                  </label>
+                  <input
+                    type="url"
+                    value={videoData.videoUrl}
+                    onChange={(e) => setVideoData(prev => ({ ...prev, videoUrl: e.target.value }))}
+                    placeholder="https://example.com/video.mp4 or YouTube URL"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      fontSize: '1rem'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontWeight: '500', marginBottom: '0.5rem' }}>
+                    Thumbnail URL
+                  </label>
+                  <input
+                    type="url"
+                    value={videoData.thumbnailUrl}
+                    onChange={(e) => setVideoData(prev => ({ ...prev, thumbnailUrl: e.target.value }))}
+                    placeholder="https://example.com/thumbnail.jpg"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      fontSize: '1rem'
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: '1fr 1fr' }}>
+                  <div>
+                    <label style={{ display: 'block', fontWeight: '500', marginBottom: '0.5rem' }}>
+                      Difficulty Level
+                    </label>
+                    <select
+                      value={videoData.difficulty}
+                      onChange={(e) => setVideoData(prev => ({ ...prev, difficulty: e.target.value }))}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                        fontSize: '1rem'
+                      }}
+                    >
+                      <option value="beginner">Beginner</option>
+                      <option value="intermediate">Intermediate</option>
+                      <option value="advanced">Advanced</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontWeight: '500', marginBottom: '0.5rem' }}>
+                      Duration
+                    </label>
+                    <input
+                      type="text"
+                      value={videoData.duration}
+                      onChange={(e) => setVideoData(prev => ({ ...prev, duration: e.target.value }))}
+                      placeholder="e.g., 10:30"
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                        fontSize: '1rem'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleCreateVideo}
+                  disabled={loading}
+                  style={{
+                    width: '100%',
+                    padding: '1rem',
+                    background: loading ? '#9ca3af' : '#4f46e5',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    marginTop: '1rem'
+                  }}
+                >
+                  {loading ? 'Creating Video...' : 'Create Video'}
+                </button>
+              </div>
+            </div>
+
+            {/* Existing Videos */}
+            <div style={{
+              background: 'white',
+              padding: '2rem',
+              borderRadius: '12px',
+              border: '1px solid #e5e7eb'
+            }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1.5rem' }}>
+                Existing Videos ({existingVideos.length})
+              </h2>
+              
+              <div style={{ display: 'grid', gap: '1rem', maxHeight: '600px', overflowY: 'auto' }}>
+                {existingVideos.map((video) => (
+                  <div
+                    key={video.id}
+                    style={{
+                      padding: '1rem',
+                      border: `2px solid ${video.isActive ? '#10b981' : '#ef4444'}`,
+                      borderRadius: '8px',
+                      background: video.isActive ? '#f0fdf4' : '#fef2f2'
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                      <h3 style={{ 
+                        fontSize: '1.1rem', 
+                        fontWeight: '600', 
+                        margin: '0',
+                        flex: 1,
+                        marginRight: '1rem'
+                      }}>
+                        {video.title}
+                      </h3>
+                      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                        <button
+                          onClick={() => handleToggleVideoActive(video.id, video.isActive)}
+                          style={{
+                            padding: '0.25rem 0.75rem',
+                            background: video.isActive ? '#ef4444' : '#10b981',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            fontSize: '0.8rem',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {video.isActive ? 'Deactivate' : 'Activate'}
+                        </button>
+                        <button
+                          onClick={() => handleDeleteVideo(video.id)}
+                          style={{
+                            padding: '0.25rem 0.75rem',
+                            background: '#dc2626',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            fontSize: '0.8rem',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div style={{ fontSize: '0.9rem', color: '#6b7280', marginBottom: '0.5rem' }}>
+                      <div><strong>Difficulty:</strong> {video.difficulty}</div>
+                      {video.duration && <div><strong>Duration:</strong> {video.duration}</div>}
+                      <div><strong>Created:</strong> {video.createdAt?.toDate?.()?.toLocaleDateString() || 'Unknown'}</div>
+                    </div>
+                    
+                    {video.description && (
+                      <p style={{ fontSize: '0.9rem', color: '#4b5563', margin: '0.5rem 0' }}>
+                        {video.description}
+                      </p>
+                    )}
+                    
+                    <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>
+                      <div><strong>URL:</strong> <a href={video.videoUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#4f46e5' }}>
+                        {video.videoUrl.length > 50 ? video.videoUrl.substring(0, 50) + '...' : video.videoUrl}
+                      </a></div>
+                    </div>
+                  </div>
+                ))}
+                
+                {existingVideos.length === 0 && (
+                  <div style={{
+                    padding: '2rem',
+                    textAlign: 'center',
+                    color: '#6b7280',
+                    background: 'white',
+                    borderRadius: '12px',
+                    border: '1px solid #e5e7eb'
+                  }}>
+                    No admin videos created yet. Create your first video using the form on the left.
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

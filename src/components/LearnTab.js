@@ -30,6 +30,7 @@ const COLORS = {
 const LearnTab = () => {
   const [selectedLevel, setSelectedLevel] = useState('beginner');
   const [adminPacks, setAdminPacks] = useState([]);
+  const [adminVideos, setAdminVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quizAttempts, setQuizAttempts] = useState([]);
   
@@ -56,8 +57,9 @@ const LearnTab = () => {
     const loadData = async () => {
       setLoading(true);
       try {
-        // Load admin packs for the selected difficulty level
+        // Load admin packs and videos for the selected difficulty level
         await loadAdminPacks();
+        await loadAdminVideos();
         
         if (user) {
           // Load user's level preference and progress
@@ -92,6 +94,26 @@ const LearnTab = () => {
     } catch (error) {
       console.error('Error loading admin packs:', error);
       setAdminPacks([]);
+    }
+  };
+
+  const loadAdminVideos = async () => {
+    try {
+      const q = query(
+        collection(db, 'adminVideos'),
+        where('difficulty', '==', selectedLevel),
+        where('isActive', '==', true),
+        orderBy('createdAt', 'desc')
+      );
+      const querySnapshot = await getDocs(q);
+      const videos = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setAdminVideos(videos);
+    } catch (error) {
+      console.error('Error loading admin videos:', error);
+      setAdminVideos([]);
     }
   };
 
@@ -514,45 +536,229 @@ const LearnTab = () => {
           )}
         </section>
 
-        {/* Videos Section - Coming Soon */}
+        {/* Videos Section */}
         <section className="learn-section">
           <div className="section-header">
             <h2>🎥 Video Lessons</h2>
           </div>
           
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '3rem',
-            textAlign: 'center',
-            background: 'var(--bg-primary)',
-            borderRadius: 'var(--radius-lg)',
-            border: '1px solid var(--border-light)'
-          }}>
+          {adminVideos.length > 0 ? (
             <div style={{
-              fontSize: '3rem',
-              marginBottom: '1rem',
-              opacity: 0.7
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+              gap: '1.5rem',
+              marginTop: '1rem'
             }}>
-              🎥
+              {adminVideos.map((video) => (
+                <div
+                  key={video.id}
+                  style={{
+                    background: COLORS.white,
+                    borderRadius: 'var(--radius-lg)',
+                    border: '1px solid var(--border-light)',
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.2s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+                  }}
+                  onClick={() => {
+                    window.open(video.videoUrl, '_blank', 'noopener,noreferrer');
+                  }}
+                >
+                  {/* Video Thumbnail */}
+                  <div style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '180px',
+                    background: video.thumbnailUrl ? `url(${video.thumbnailUrl})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    {!video.thumbnailUrl && (
+                      <div style={{
+                        fontSize: '3rem',
+                        color: 'white',
+                        opacity: 0.8
+                      }}>
+                        🎥
+                      </div>
+                    )}
+                    <div style={{
+                      position: 'absolute',
+                      top: '12px',
+                      right: '12px',
+                      background: 'rgba(0, 0, 0, 0.8)',
+                      color: 'white',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '0.75rem',
+                      fontWeight: '500'
+                    }}>
+                      {video.duration || 'N/A'}
+                    </div>
+                    <div style={{
+                      position: 'absolute',
+                      top: '0',
+                      left: '0',
+                      right: '0',
+                      bottom: '0',
+                      background: 'rgba(0, 0, 0, 0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      opacity: 0,
+                      transition: 'opacity 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.opacity = 1;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.opacity = 0;
+                    }}
+                    >
+                      <div style={{
+                        width: '60px',
+                        height: '60px',
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.5rem',
+                        color: COLORS.teal
+                      }}>
+                        ▶
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Video Info */}
+                  <div style={{ padding: '1rem' }}>
+                    <h3 style={{
+                      fontSize: '1.1rem',
+                      fontWeight: '600',
+                      color: COLORS.darkGray,
+                      margin: '0 0 0.5rem 0',
+                      lineHeight: '1.4'
+                    }}>
+                      {video.title}
+                    </h3>
+                    
+                    {video.description && (
+                      <p style={{
+                        fontSize: '0.875rem',
+                        color: COLORS.gray,
+                        margin: '0 0 1rem 0',
+                        lineHeight: '1.5',
+                        overflow: 'hidden',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical'
+                      }}>
+                        {video.description}
+                      </p>
+                    )}
+
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginTop: '1rem'
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}>
+                        <span style={{
+                          fontSize: '0.75rem',
+                          padding: '0.25rem 0.5rem',
+                          background: COLORS.lightTeal,
+                          color: COLORS.teal,
+                          borderRadius: '12px',
+                          fontWeight: '500',
+                          textTransform: 'capitalize'
+                        }}>
+                          {video.difficulty}
+                        </span>
+                      </div>
+                      
+                      <button
+                        style={{
+                          background: COLORS.teal,
+                          color: 'white',
+                          border: 'none',
+                          padding: '0.5rem 1rem',
+                          borderRadius: '6px',
+                          fontSize: '0.875rem',
+                          fontWeight: '500',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#00a3a3';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = COLORS.teal;
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(video.videoUrl, '_blank', 'noopener,noreferrer');
+                        }}
+                      >
+                        Watch Now
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <h3 style={{ 
-              color: 'var(--text-secondary)', 
-              margin: '0 0 0.5rem 0',
-              fontWeight: '500'
+          ) : (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '3rem',
+              textAlign: 'center',
+              background: 'var(--bg-primary)',
+              borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--border-light)'
             }}>
-              Video lessons coming soon
-            </h3>
-            <p style={{ 
-              color: 'var(--text-tertiary)', 
-              margin: '0',
-              fontSize: '0.875rem'
-            }}>
-              Interactive video content for {selectedLevel} level
-            </p>
-          </div>
+              <div style={{
+                fontSize: '3rem',
+                marginBottom: '1rem',
+                opacity: 0.7
+              }}>
+                🎥
+              </div>
+              <h3 style={{ 
+                color: 'var(--text-secondary)', 
+                margin: '0 0 0.5rem 0',
+                fontWeight: '500'
+              }}>
+                No video lessons available
+              </h3>
+              <p style={{ 
+                color: 'var(--text-tertiary)', 
+                margin: '0',
+                fontSize: '0.875rem'
+              }}>
+                Check back later for {selectedLevel} level video content
+              </p>
+            </div>
+          )}
         </section>
 
         {/* Vocabulary Section - Coming Soon */}
