@@ -350,14 +350,6 @@ const renderOverview = () => (
           })}
         </div>
         
-        <div className="sidebar-user">
-          <div className="user-avatar">
-            {(user.displayName || 'U')[0].toUpperCase()}
-          </div>
-          <div className="plan-indicator" title={planInfo.name}>
-            {isPaidUser ? '👑' : '🔓'}
-          </div>
-        </div>
       </nav>
 
       {/* Full-width Main Content */}
@@ -428,7 +420,7 @@ const renderOverview = () => (
 
         .sidebar-tabs {
           flex: 1;
-          padding: 2rem 0;
+          padding: 4rem 0 2rem 0;
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
@@ -529,46 +521,6 @@ const renderOverview = () => (
           margin-left: auto;
         }
 
-        .sidebar-user {
-          padding: 1.5rem 1rem;
-          border-top: 1px solid rgba(229, 231, 235, 0.3);
-          background: linear-gradient(180deg, 
-            rgba(249, 250, 251, 0.5) 0%, 
-            rgba(243, 244, 246, 0.8) 100%);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.75rem;
-        }
-
-        .user-avatar {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, 
-            rgba(99, 102, 241, 0.9) 0%, 
-            rgba(139, 92, 246, 0.9) 100%);
-          color: white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
-          font-weight: 700;
-          font-size: 1rem;
-          letter-spacing: 0.5px;
-          box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
-        }
-
-        .plan-indicator {
-          font-size: 1.125rem;
-          opacity: 0.8;
-          transition: all 0.3s ease;
-        }
-
-        .plan-indicator:hover {
-          opacity: 1;
-          transform: scale(1.1);
-        }
 
         /* Full-width Main Content - Fixed Position */
         .fullwidth-main {
