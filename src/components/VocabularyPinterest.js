@@ -226,7 +226,7 @@ const VocabularyPinterest = () => {
             <span className="title-icon">📚</span>
             Vocabulary Discovery
           </h1>
-          <p className="subtitle">Discover and master CSAT vocabulary through engaging exploration</p>
+          <p className="subtitle">Discover and master CSAT vocabulary through engaging exploration - Updated!</p>
         </div>
       </div>
 
