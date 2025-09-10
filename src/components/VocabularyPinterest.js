@@ -3,8 +3,14 @@ import { getAuth } from 'firebase/auth';
 import { doc, setDoc, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { fetchVocabulary, getEnhancedWordInfo } from '../services/vocabularyAPIService';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import VocabularyQuiz from './VocabularyQuiz';
 import './VocabularyPinterest.css';
+
+const searchClient = algoliasearch(
+  process.env.REACT_APP_ALGOLIA_APP_ID,
+  process.env.REACT_APP_ALGOLIA_SEARCH_KEY
+);
 
 const VocabularyPinterest = () => {
   const [words, setWords] = useState([]);
@@ -22,6 +28,57 @@ const VocabularyPinterest = () => {
   const auth = getAuth();
   const user = auth.currentUser;
   const masonryRef = useRef(null);
+
+  // Fetch CSAT passage containing the word from Algolia
+  const fetchCSATPassage = async (word) => {
+    try {
+      console.log(`Searching for CSAT passage containing: "${word}"`);
+      const response = await searchClient.search([
+        {
+          indexName: 'korean-english-question-pairs',
+          params: {
+            query: word,
+            hitsPerPage: 1,
+            attributesToRetrieve: ['question', 'english_text', 'korean_text', 'paper_info', 'objectID'],
+            attributesToHighlight: ['question', 'english_text'],
+            highlightPreTag: '<mark>',
+            highlightPostTag: '</mark>'
+          }
+        }
+      ]);
+
+      console.log(`Algolia response for "${word}":`, response.results[0].hits.length, 'hits');
+      
+      if (response.results[0].hits.length > 0) {
+        const hit = response.results[0].hits[0];
+        const passage = hit.english_text || hit.question || '';
+        
+        console.log(`Found passage for "${word}":`, passage.substring(0, 100) + '...');
+        
+        // Find sentence containing the word
+        const sentences = passage.split(/[.!?]+/);
+        const wordRegex = new RegExp(`\\b${word}\\b`, 'i');
+        const sentenceWithWord = sentences.find(sentence => wordRegex.test(sentence));
+        
+        const result = {
+          example: sentenceWithWord ? sentenceWithWord.trim() + '.' : passage.substring(0, 200) + '...',
+          questionInfo: {
+            number: hit.objectID ? hit.objectID.split('-').pop() : null,
+            year: hit.paper_info?.year || '2023'
+          }
+        };
+        
+        console.log(`CSAT result for "${word}":`, result);
+        return result;
+      }
+      
+      console.log(`No CSAT passage found for: "${word}"`);
+      return null;
+    } catch (error) {
+      console.error('Error fetching CSAT passage for', word, ':', error);
+      return null;
+    }
+  };
 
   // Subject areas for browsing
   const subjectAreas = [
@@ -76,13 +133,15 @@ const VocabularyPinterest = () => {
                 enhancedData = {
                   definition: definition?.definition || word.definition,
                   synonyms: definition?.synonyms || [],
-                  examples: definition?.example ? [definition.example] : word.examples,
                   pronunciation: entry?.phonetics?.[0]?.text || word.pronunciation
                 };
               }
             } catch (error) {
               console.log(`Failed to enhance word ${word.word}:`, error);
             }
+
+            // Fetch actual CSAT passage for this word
+            const csatData = await fetchCSATPassage(word.word);
 
             return {
               ...word,
@@ -95,12 +154,11 @@ const VocabularyPinterest = () => {
               synonyms: enhancedData.synonyms?.length > 0 ? enhancedData.synonyms : 
                         word.synonyms?.length > 0 ? word.synonyms :
                         ['similar', 'related', 'comparable', 'equivalent'],
-              // Use actual CSAT passage examples or enhanced examples
-              examples: word.csatExample ? [word.csatExample] :
-                       enhancedData.examples?.length > 0 ? enhancedData.examples : 
+              // Use actual CSAT passage examples
+              examples: csatData?.example ? [csatData.example] :
                        word.examples?.length > 0 ? word.examples :
-                       [`In the CSAT passage, "${word.word}" is used to convey a specific meaning in academic context.`],
-              questionInfo: word.questionInfo || null // Store question number and year if available
+                       [`The word "${word.word}" appears frequently in CSAT reading passages.`],
+              questionInfo: csatData?.questionInfo || word.questionInfo || null
             };
           })
         );
