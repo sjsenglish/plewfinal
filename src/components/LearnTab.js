@@ -315,7 +315,7 @@ const LearnTab = () => {
         <div className="learn-header-content">
           <div className="learn-title-section">
             <h1>Week {getCurrentWeek()}</h1>
-            <p>Your personalized learning path</p>
+            <p>당신의 개인 맞춤 학습 경로</p>
           </div>
           
           <div className="level-selector">
@@ -338,9 +338,9 @@ const LearnTab = () => {
         {/* Admin Curated Packs Section */}
         <section className="learn-section">
           <div className="section-header">
-            <h2>📚 Curated Practice Packs</h2>
+            <h2>📚 큐레이트된 연습 팩</h2>
             <span className="pack-count">
-              {adminPacks.length} pack{adminPacks.length !== 1 ? 's' : ''} available
+              {adminPacks.length}개 팩 이용 가능
             </span>
           </div>
           
@@ -544,7 +544,7 @@ const LearnTab = () => {
         {/* Videos Section */}
         <section className="learn-section">
           <div className="section-header">
-            <h2>🎥 Video Lessons</h2>
+            <h2>🎥 비디오 수업</h2>
           </div>
           
           {adminVideos.length > 0 ? (

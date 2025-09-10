@@ -1,5 +1,7 @@
 /* LearnTab - Modern Notion/Discord/Spotify Inspired Design */
 
+@import url('https://fonts.googleapis.com/css2?family=Futura:wght@300;400;500;600;700&display=swap');
+
 :root {
   --bg-primary: #ffffff;
   --bg-secondary: #f8f9fa;
@@ -56,19 +58,21 @@
 }
 
 .learn-title-section h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 1.8rem;
+  font-weight: 600;
   color: var(--text-primary);
   margin: 0 0 0.25rem 0;
   letter-spacing: -0.025em;
   line-height: 1.1;
+  font-family: 'Futura', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .learn-title-section p {
   color: var(--text-secondary);
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 400;
+  font-family: 'Futura', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* Level Selector - Discord-inspired */
@@ -118,6 +122,17 @@
   margin-bottom: 4rem;
   opacity: 0;
   animation: fadeInUp 0.6s ease-out forwards;
+  position: relative;
+}
+
+.learn-section:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: -2rem;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-light) 20%, var(--border-light) 80%, transparent);
 }
 
 .learn-section:nth-child(1) { animation-delay: 0.1s; }
@@ -129,14 +144,27 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid transparent;
+  background: linear-gradient(to right, var(--bg-primary), var(--bg-primary)) padding-box,
+              linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)) border-box;
+  border-image: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)) 1;
 }
 
 .section-header h2 {
-  font-size: 1.75rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.025em;
+  font-family: 'Futura', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.pack-count {
+  font-family: 'Futura', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .vocab-progress {
@@ -586,7 +614,7 @@
   }
   
   .learn-title-section h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
   
   .learn-content {
@@ -597,6 +625,10 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+  
+  .section-header h2 {
+    font-size: 1.1rem;
   }
   
   .video-grid,
