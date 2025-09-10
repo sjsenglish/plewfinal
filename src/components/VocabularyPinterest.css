@@ -191,10 +191,6 @@
   border-color: #667eea;
 }
 
-.vocabulary-card.expanded {
-  border-color: #10b981;
-  box-shadow: 0 8px 40px rgba(16, 185, 129, 0.2);
-}
 
 /* Card Header */
 .card-header {
@@ -306,18 +302,12 @@
   border-left: 3px solid #667eea;
 }
 
-/* Synonyms Preview */
-.synonyms-preview {
+/* Synonyms Section */
+.synonyms-section {
   margin-bottom: 1rem;
   padding: 0.75rem;
   background: linear-gradient(135deg, #fef3c7, #fed7aa);
   border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.synonyms-preview:hover {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  color: white;
 }
 
 .synonyms-label {
@@ -378,14 +368,8 @@
   font-style: italic;
 }
 
-/* Expanded Content */
-.expanded-content {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 2px dashed #e2e8f0;
-}
-
-.expanded-content h4 {
+/* Section Titles */
+.section-title {
   font-size: 0.9rem;
   font-weight: 600;
   color: #374151;
@@ -394,17 +378,39 @@
   letter-spacing: 0.5px;
 }
 
-.expanded-content p {
+/* Etymology Section */
+.etymology-section {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  border-radius: 8px;
+  border-left: 3px solid #8b5cf6;
+}
+
+.etymology-text {
   font-size: 0.9rem;
   line-height: 1.5;
   color: #6b7280;
-  margin: 0 0 1rem 0;
+  margin: 0;
+  font-style: italic;
 }
 
-.etymology-section,
-.collocations-section,
+/* Collocations Section */
+.collocations-section {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border-radius: 8px;
+  border-left: 3px solid #3b82f6;
+}
+
+/* Antonyms Section */
 .antonyms-section {
   margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border-radius: 8px;
+  border-left: 3px solid #ef4444;
 }
 
 .collocations-list,
@@ -442,10 +448,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.expand-btn {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
-}
 
 .card-actions .quiz-btn {
   background: linear-gradient(135deg, #f59e0b, #d97706);

@@ -14,7 +14,6 @@ const VocabularyPinterest = () => {
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizWords, setQuizWords] = useState([]);
   const [hoveredWord, setHoveredWord] = useState(null);
-  const [expandedWords, setExpandedWords] = useState(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     difficulty: 'all',
@@ -120,14 +119,26 @@ const VocabularyPinterest = () => {
           return newSet;
         });
       } else {
-        await setDoc(docRef, {
+        // Filter out undefined values to prevent Firebase errors
+        const wordData = {
           userId: user.uid,
-          word: word.word,
-          definition: word.definition,
-          difficulty: word.difficulty,
-          subjectArea: word.subjectArea,
+          word: word.word || '',
+          definition: word.definition || '',
+          difficulty: word.difficulty || 3,
+          subjectArea: word.subjectArea || 'general',
           savedAt: new Date()
-        });
+        };
+
+        // Add optional fields only if they exist and are not undefined
+        if (word.pronunciation) wordData.pronunciation = word.pronunciation;
+        if (word.koreanTranslation) wordData.koreanTranslation = word.koreanTranslation;
+        if (word.synonyms && word.synonyms.length > 0) wordData.synonyms = word.synonyms;
+        if (word.antonyms && word.antonyms.length > 0) wordData.antonyms = word.antonyms;
+        if (word.examples && word.examples.length > 0) wordData.examples = word.examples;
+        if (word.etymology) wordData.etymology = word.etymology;
+        if (word.collocations && word.collocations.length > 0) wordData.collocations = word.collocations;
+
+        await setDoc(docRef, wordData);
         setSavedWords(prev => new Set([...prev, word.word]));
       }
     } catch (error) {
@@ -178,30 +189,6 @@ const VocabularyPinterest = () => {
     }
   };
 
-  // Handle word expansion
-  const toggleWordExpansion = async (word) => {
-    const wordId = word.word;
-    
-    if (expandedWords.has(wordId)) {
-      setExpandedWords(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(wordId);
-        return newSet;
-      });
-    } else {
-      // Load enhanced word info
-      try {
-        const enhancedInfo = await getEnhancedWordInfo(word.word);
-        // Update word with enhanced info
-        setWords(prev => prev.map(w => 
-          w.word === wordId ? { ...w, ...enhancedInfo, enhanced: true } : w
-        ));
-        setExpandedWords(prev => new Set([...prev, wordId]));
-      } catch (error) {
-        console.error('Error loading enhanced word info:', error);
-      }
-    }
-  };
 
   useEffect(() => {
     loadWords(true);
@@ -294,9 +281,7 @@ const VocabularyPinterest = () => {
             <VocabularyCard
               key={`${word.word}-${index}`}
               word={word}
-              isExpanded={expandedWords.has(word.word)}
               isSaved={savedWords.has(word.word)}
-              onToggleExpansion={() => toggleWordExpansion(word)}
               onToggleSave={() => toggleSaveWord(word)}
               onStartQuiz={() => startWordQuiz(word)}
               onHover={setHoveredWord}
@@ -340,14 +325,11 @@ const VocabularyPinterest = () => {
 // Individual Vocabulary Card Component
 const VocabularyCard = ({ 
   word, 
-  isExpanded, 
   isSaved, 
-  onToggleExpansion, 
   onToggleSave, 
   onStartQuiz,
   onHover 
 }) => {
-  const [showSynonyms, setShowSynonyms] = useState(false);
 
   const getDifficultyColor = (difficulty) => {
     const level = typeof difficulty === 'number' ? difficulty : 3;
@@ -367,7 +349,7 @@ const VocabularyCard = ({
 
   return (
     <div 
-      className={`vocabulary-card ${isExpanded ? 'expanded' : ''}`}
+      className="vocabulary-card"
       onMouseEnter={() => onHover(word)}
       onMouseLeave={() => onHover(null)}
     >
@@ -411,19 +393,14 @@ const VocabularyCard = ({
         )}
       </div>
 
-      {/* Synonyms Preview on Hover */}
+      {/* Synonyms - Always Visible */}
       {word.synonyms && word.synonyms.length > 0 && (
-        <div 
-          className="synonyms-preview"
-          onMouseEnter={() => setShowSynonyms(true)}
-          onMouseLeave={() => setShowSynonyms(false)}
-        >
+        <div className="synonyms-section">
           <span className="synonyms-label">Synonyms:</span>
           <div className="synonyms-list">
-            {word.synonyms.slice(0, 3).map((synonym, index) => (
+            {word.synonyms.map((synonym, index) => (
               <span key={index} className="synonym-tag">{synonym}</span>
             ))}
-            {word.synonyms.length > 3 && <span className="synonym-more">+{word.synonyms.length - 3}</span>}
           </div>
         </div>
       )}
@@ -436,48 +413,40 @@ const VocabularyCard = ({
         </div>
       )}
 
-      {/* Expanded Content */}
-      {isExpanded && word.enhanced && (
-        <div className="expanded-content">
-          {word.etymology && (
-            <div className="etymology-section">
-              <h4>Etymology:</h4>
-              <p>{word.etymology}</p>
-            </div>
-          )}
-          
-          {word.collocations && word.collocations.length > 0 && (
-            <div className="collocations-section">
-              <h4>Common Collocations:</h4>
-              <div className="collocations-list">
-                {word.collocations.map((collocation, index) => (
-                  <span key={index} className="collocation-tag">{collocation}</span>
-                ))}
-              </div>
-            </div>
-          )}
+      {/* Antonyms - Always Visible */}
+      {word.antonyms && word.antonyms.length > 0 && (
+        <div className="antonyms-section">
+          <h4 className="section-title">Antonyms:</h4>
+          <div className="antonyms-list">
+            {word.antonyms.map((antonym, index) => (
+              <span key={index} className="antonym-tag">{antonym}</span>
+            ))}
+          </div>
+        </div>
+      )}
 
-          {word.antonyms && word.antonyms.length > 0 && (
-            <div className="antonyms-section">
-              <h4>Antonyms:</h4>
-              <div className="antonyms-list">
-                {word.antonyms.map((antonym, index) => (
-                  <span key={index} className="antonym-tag">{antonym}</span>
-                ))}
-              </div>
-            </div>
-          )}
+      {/* Etymology - Always Visible */}
+      {word.etymology && (
+        <div className="etymology-section">
+          <h4 className="section-title">Etymology:</h4>
+          <p className="etymology-text">{word.etymology}</p>
+        </div>
+      )}
+      
+      {/* Collocations - Always Visible */}
+      {word.collocations && word.collocations.length > 0 && (
+        <div className="collocations-section">
+          <h4 className="section-title">Common Collocations:</h4>
+          <div className="collocations-list">
+            {word.collocations.map((collocation, index) => (
+              <span key={index} className="collocation-tag">{collocation}</span>
+            ))}
+          </div>
         </div>
       )}
 
       {/* Card Actions */}
       <div className="card-actions">
-        <button 
-          onClick={onToggleExpansion}
-          className="action-btn expand-btn"
-        >
-          {isExpanded ? '📖 Show Less' : '📖 Show More'}
-        </button>
         <button 
           onClick={onStartQuiz}
           className="action-btn quiz-btn"
