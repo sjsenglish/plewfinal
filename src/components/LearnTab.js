@@ -4,6 +4,76 @@ import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, Timestamp } f
 import { useNavigate } from 'react-router-dom';
 import './LearnTab.css';
 
+// Generate Korean-English questions based on level
+const generateKoreanQuestions = (level, count) => {
+  const questionTemplates = {
+    beginner: [
+      {
+        korean: '안녕하세요',
+        english: 'Hello',
+        options: ['Hello', 'Goodbye', 'Thank you', 'Excuse me'],
+        correct: 0,
+        type: 'translation'
+      },
+      {
+        korean: '감사합니다',
+        english: 'Thank you',
+        options: ['Thank you', 'Sorry', 'Hello', 'Goodbye'],
+        correct: 0,
+        type: 'translation'
+      },
+      {
+        korean: '미안합니다',
+        english: 'Sorry',
+        options: ['Hello', 'Sorry', 'Thank you', 'Please'],
+        correct: 1,
+        type: 'translation'
+      },
+      // Add more beginner questions...
+    ],
+    intermediate: [
+      {
+        korean: '회사에서 일하고 있습니다',
+        english: 'I am working at a company',
+        options: ['I am working at a company', 'I am studying at school', 'I am eating lunch', 'I am going home'],
+        correct: 0,
+        type: 'translation'
+      },
+      // Add more intermediate questions...
+    ],
+    advanced: [
+      {
+        korean: '이 논문의 결론은 매우 흥미롭다',
+        english: 'The conclusion of this paper is very interesting',
+        options: ['The conclusion of this paper is very interesting', 'The introduction of this book is boring', 'The summary of this article is short', 'The analysis of this data is complex'],
+        correct: 0,
+        type: 'translation'
+      },
+      // Add more advanced questions...
+    ]
+  };
+
+  const templates = questionTemplates[level] || questionTemplates.beginner;
+  const questions = [];
+  
+  for (let i = 0; i < count; i++) {
+    const template = templates[i % templates.length];
+    questions.push({
+      id: `q_${level}_${i}`,
+      question: `Translate: ${template.korean}`,
+      korean: template.korean,
+      english: template.english,
+      options: template.options,
+      correctAnswer: template.correct,
+      type: template.type,
+      difficulty: level,
+      points: level === 'beginner' ? 1 : level === 'intermediate' ? 2 : 3
+    });
+  }
+  
+  return questions;
+};
+
 const LearnTab = () => {
   const [selectedLevel, setSelectedLevel] = useState('beginner');
   const [weeklyContent, setWeeklyContent] = useState(null);
@@ -11,6 +81,8 @@ const LearnTab = () => {
   const [loading, setLoading] = useState(true);
   const [expandedVideo, setExpandedVideo] = useState(null);
   const [learnedWords, setLearnedWords] = useState(new Set());
+  const [activeQuiz, setActiveQuiz] = useState(null);
+  const [completedPacks, setCompletedPacks] = useState(new Map());
   
   const auth = getAuth();
   const db = getFirestore();
@@ -64,13 +136,55 @@ const LearnTab = () => {
       try {
         const currentWeek = getCurrentWeek();
         
-        // For now, using dummy data - this would come from Firestore
-        const dummyContent = {
+        // Real Korean-English question pack data
+        const contentData = {
           beginner: {
             questionPacks: [
-              { id: 'pack1', title: 'Basic Vocabulary', questionCount: 25, difficulty: 'Easy', completedCount: 0, totalQuestions: 25 },
-              { id: 'pack2', title: 'Simple Grammar', questionCount: 20, difficulty: 'Easy', completedCount: 0, totalQuestions: 20 },
-              { id: 'pack3', title: 'Daily Phrases', questionCount: 30, difficulty: 'Easy', completedCount: 0, totalQuestions: 30 },
+              { 
+                id: 'learn_pack_b1', 
+                title: 'Basic Vocabulary', 
+                subject: 'korean_english',
+                questionCount: 25, 
+                difficulty: 'Easy', 
+                completedCount: 0, 
+                totalQuestions: 25,
+                timeLimit: 30, // 30 minutes
+                created: new Date(),
+                questions: generateKoreanQuestions('beginner', 25),
+                completed: false,
+                score: null,
+                timeTaken: null
+              },
+              { 
+                id: 'learn_pack_b2', 
+                title: 'Simple Grammar', 
+                subject: 'korean_english',
+                questionCount: 20, 
+                difficulty: 'Easy', 
+                completedCount: 0, 
+                totalQuestions: 20,
+                timeLimit: 25, // 25 minutes
+                created: new Date(),
+                questions: generateKoreanQuestions('beginner', 20),
+                completed: false,
+                score: null,
+                timeTaken: null
+              },
+              { 
+                id: 'learn_pack_b3', 
+                title: 'Daily Phrases', 
+                subject: 'korean_english',
+                questionCount: 30, 
+                difficulty: 'Easy', 
+                completedCount: 0, 
+                totalQuestions: 30,
+                timeLimit: 35, // 35 minutes
+                created: new Date(),
+                questions: generateKoreanQuestions('beginner', 30),
+                completed: false,
+                score: null,
+                timeTaken: null
+              },
             ],
             videos: [
               { id: 'vid1', title: 'Introduction to Korean', duration: '15:30', thumbnail: 'https://via.placeholder.com/320x180', completed: false },
@@ -87,9 +201,51 @@ const LearnTab = () => {
           },
           intermediate: {
             questionPacks: [
-              { id: 'pack4', title: 'Complex Sentences', questionCount: 35, difficulty: 'Medium', completedCount: 0, totalQuestions: 35 },
-              { id: 'pack5', title: 'Business Korean', questionCount: 40, difficulty: 'Medium', completedCount: 0, totalQuestions: 40 },
-              { id: 'pack6', title: 'Reading Comprehension', questionCount: 25, difficulty: 'Medium', completedCount: 0, totalQuestions: 25 },
+              { 
+                id: 'learn_pack_i1', 
+                title: 'Complex Sentences', 
+                subject: 'korean_english',
+                questionCount: 35, 
+                difficulty: 'Medium', 
+                completedCount: 0, 
+                totalQuestions: 35,
+                timeLimit: 50, // 50 minutes
+                created: new Date(),
+                questions: generateKoreanQuestions('intermediate', 35),
+                completed: false,
+                score: null,
+                timeTaken: null
+              },
+              { 
+                id: 'learn_pack_i2', 
+                title: 'Business Korean', 
+                subject: 'korean_english',
+                questionCount: 40, 
+                difficulty: 'Medium', 
+                completedCount: 0, 
+                totalQuestions: 40,
+                timeLimit: 60, // 60 minutes
+                created: new Date(),
+                questions: generateKoreanQuestions('intermediate', 40),
+                completed: false,
+                score: null,
+                timeTaken: null
+              },
+              { 
+                id: 'learn_pack_i3', 
+                title: 'Reading Comprehension', 
+                subject: 'korean_english',
+                questionCount: 25, 
+                difficulty: 'Medium', 
+                completedCount: 0, 
+                totalQuestions: 25,
+                timeLimit: 40, // 40 minutes
+                created: new Date(),
+                questions: generateKoreanQuestions('intermediate', 25),
+                completed: false,
+                score: null,
+                timeTaken: null
+              },
             ],
             videos: [
               { id: 'vid4', title: 'Intermediate Conversation', duration: '25:00', thumbnail: 'https://via.placeholder.com/320x180', completed: false },
@@ -106,9 +262,51 @@ const LearnTab = () => {
           },
           advanced: {
             questionPacks: [
-              { id: 'pack7', title: 'Academic Writing', questionCount: 45, difficulty: 'Hard', completedCount: 0, totalQuestions: 45 },
-              { id: 'pack8', title: 'Literature Analysis', questionCount: 50, difficulty: 'Hard', completedCount: 0, totalQuestions: 50 },
-              { id: 'pack9', title: 'TOPIK II Preparation', questionCount: 60, difficulty: 'Hard', completedCount: 0, totalQuestions: 60 },
+              { 
+                id: 'learn_pack_a1', 
+                title: 'Academic Writing', 
+                subject: 'korean_english',
+                questionCount: 45, 
+                difficulty: 'Hard', 
+                completedCount: 0, 
+                totalQuestions: 45,
+                timeLimit: 70, // 70 minutes
+                created: new Date(),
+                questions: generateKoreanQuestions('advanced', 45),
+                completed: false,
+                score: null,
+                timeTaken: null
+              },
+              { 
+                id: 'learn_pack_a2', 
+                title: 'Literature Analysis', 
+                subject: 'korean_english',
+                questionCount: 50, 
+                difficulty: 'Hard', 
+                completedCount: 0, 
+                totalQuestions: 50,
+                timeLimit: 80, // 80 minutes
+                created: new Date(),
+                questions: generateKoreanQuestions('advanced', 50),
+                completed: false,
+                score: null,
+                timeTaken: null
+              },
+              { 
+                id: 'learn_pack_a3', 
+                title: 'TOPIK II Preparation', 
+                subject: 'korean_english',
+                questionCount: 60, 
+                difficulty: 'Hard', 
+                completedCount: 0, 
+                totalQuestions: 60,
+                timeLimit: 90, // 90 minutes
+                created: new Date(),
+                questions: generateKoreanQuestions('advanced', 60),
+                completed: false,
+                score: null,
+                timeTaken: null
+              },
             ],
             videos: [
               { id: 'vid7', title: 'Academic Korean', duration: '35:00', thumbnail: 'https://via.placeholder.com/320x180', completed: false },
@@ -126,7 +324,7 @@ const LearnTab = () => {
         };
 
         // Apply user progress to content
-        const content = dummyContent[selectedLevel];
+        const content = contentData[selectedLevel];
         if (userProgress && userProgress[selectedLevel]) {
           const levelProgress = userProgress[selectedLevel];
           
@@ -223,9 +421,74 @@ const LearnTab = () => {
     }
   };
 
-  // Navigate to practice mode for question pack
-  const handlePackClick = (packId) => {
-    navigate(`/practice/${packId}?level=${selectedLevel}`);
+  // Start practice pack quiz
+  const handlePackClick = (pack) => {
+    // Check if pack is already completed
+    const completed = completedPacks.get(pack.id);
+    if (completed) {
+      // Show review options
+      const reviewChoice = window.confirm(
+        `You've already completed this pack with a score of ${completed.score}%!\n\nClick OK to review your results, or Cancel to retake the quiz.`
+      );
+      if (reviewChoice) {
+        // Show review mode
+        setActiveQuiz({
+          ...pack,
+          mode: 'review',
+          results: completed
+        });
+      } else {
+        // Retake quiz
+        setActiveQuiz({
+          ...pack,
+          mode: 'quiz'
+        });
+      }
+    } else {
+      // Start new quiz
+      setActiveQuiz({
+        ...pack,
+        mode: 'quiz'
+      });
+    }
+  };
+
+  // Handle quiz completion
+  const handleQuizComplete = async (results) => {
+    const { packId, score, timeTaken, correctAnswers, totalQuestions } = results;
+    
+    // Save completion data
+    const completionData = {
+      score,
+      timeTaken,
+      correctAnswers,
+      totalQuestions,
+      completedAt: new Date(),
+      percentage: Math.round((correctAnswers / totalQuestions) * 100)
+    };
+    
+    // Update local state
+    setCompletedPacks(prev => new Map(prev.set(packId, completionData)));
+    
+    // Save to Firebase
+    if (user) {
+      try {
+        await setDoc(doc(db, 'userProgress', user.uid), {
+          [`learnPacks.${packId}`]: completionData,
+          updatedAt: Timestamp.now()
+        }, { merge: true });
+      } catch (error) {
+        console.error('Error saving pack completion:', error);
+      }
+    }
+    
+    // Close quiz
+    setActiveQuiz(null);
+  };
+
+  // Close quiz
+  const handleCloseQuiz = () => {
+    setActiveQuiz(null);
   };
 
   if (loading) {
@@ -280,7 +543,7 @@ const LearnTab = () => {
             {weeklyContent?.questionPacks.map((pack) => (
               <div
                 key={pack.id}
-                onClick={() => handlePackClick(pack.id)}
+                onClick={() => handlePackClick(pack)}
                 className="pack-card"
               >
                 <div className="pack-header">
@@ -479,6 +742,245 @@ const LearnTab = () => {
           background-color: #94a3b8;
         }
       `}</style>
+      
+      {/* Quiz Modal */}
+      {activeQuiz && (
+        <QuizModal 
+          pack={activeQuiz}
+          onComplete={handleQuizComplete}
+          onClose={handleCloseQuiz}
+        />
+      )}
+    </div>
+  );
+};
+
+// Simple Quiz Modal Component
+const QuizModal = ({ pack, onComplete, onClose }) => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [timeLeft, setTimeLeft] = useState(pack.timeLimit * 60); // Convert to seconds
+  const [startTime] = useState(Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          // Time's up - auto submit
+          handleSubmit();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleAnswerSelect = (questionId, answerIndex) => {
+    setAnswers(prev => ({
+      ...prev,
+      [questionId]: answerIndex
+    }));
+  };
+
+  const handleSubmit = () => {
+    const endTime = Date.now();
+    const timeTaken = Math.floor((endTime - startTime) / 1000);
+    
+    let correctAnswers = 0;
+    pack.questions.forEach(question => {
+      if (answers[question.id] === question.correctAnswer) {
+        correctAnswers++;
+      }
+    });
+
+    const results = {
+      packId: pack.id,
+      score: Math.round((correctAnswers / pack.questions.length) * 100),
+      timeTaken,
+      correctAnswers,
+      totalQuestions: pack.questions.length,
+      answers
+    };
+
+    onComplete(results);
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  if (pack.mode === 'review') {
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(0, 0, 0, 0.8)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000
+      }}>
+        <div style={{
+          background: 'white',
+          borderRadius: '16px',
+          padding: '2rem',
+          maxWidth: '500px',
+          width: '90%'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h2 style={{ margin: 0 }}>📊 {pack.title} - Review</h2>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>×</button>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Final Score:</span>
+              <span style={{ fontWeight: 'bold', color: pack.results.percentage >= 80 ? '#10b981' : pack.results.percentage >= 60 ? '#f59e0b' : '#ef4444' }}>
+                {pack.results.percentage}%
+              </span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Time Taken:</span>
+              <span>{Math.floor(pack.results.timeTaken / 60)}:{String(pack.results.timeTaken % 60).padStart(2, '0')}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Correct Answers:</span>
+              <span>{pack.results.correctAnswers} / {pack.results.totalQuestions}</span>
+            </div>
+            <button 
+              onClick={onClose} 
+              style={{
+                background: 'var(--accent-primary)',
+                color: 'white',
+                border: 'none',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                marginTop: '1rem'
+              }}
+            >
+              Close Review
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const currentQ = pack.questions[currentQuestion];
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(0, 0, 0, 0.8)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000
+    }}>
+      <div style={{
+        background: 'white',
+        borderRadius: '16px',
+        padding: '2rem',
+        maxWidth: '700px',
+        width: '90%',
+        maxHeight: '80vh',
+        overflow: 'auto'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <div>
+            <h2 style={{ margin: 0 }}>{pack.title}</h2>
+            <span style={{ color: 'var(--text-secondary)' }}>Question {currentQuestion + 1} of {pack.questions.length}</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <span style={{ color: timeLeft < 300 ? '#ef4444' : 'var(--text-primary)', fontWeight: 'bold' }}>
+              {formatTime(timeLeft)}
+            </span>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>×</button>
+          </div>
+        </div>
+        
+        <div>
+          <h3 style={{ marginBottom: '1.5rem' }}>{currentQ.question}</h3>
+          <div style={{ display: 'grid', gap: '1rem', marginBottom: '2rem' }}>
+            {currentQ.options.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => handleAnswerSelect(currentQ.id, index)}
+                style={{
+                  padding: '1rem',
+                  border: `2px solid ${answers[currentQ.id] === index ? 'var(--accent-primary)' : 'var(--border-light)'}`,
+                  borderRadius: '8px',
+                  background: answers[currentQ.id] === index ? 'rgba(79, 70, 229, 0.1)' : 'white',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+          
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <button 
+              onClick={() => setCurrentQuestion(prev => Math.max(0, prev - 1))}
+              disabled={currentQuestion === 0}
+              style={{
+                padding: '0.75rem 1.5rem',
+                border: '1px solid var(--border-medium)',
+                borderRadius: '8px',
+                background: 'white',
+                cursor: currentQuestion === 0 ? 'not-allowed' : 'pointer',
+                opacity: currentQuestion === 0 ? 0.5 : 1
+              }}
+            >
+              Previous
+            </button>
+            
+            {currentQuestion === pack.questions.length - 1 ? (
+              <button 
+                onClick={handleSubmit}
+                disabled={Object.keys(answers).length !== pack.questions.length}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: Object.keys(answers).length === pack.questions.length ? 'var(--accent-primary)' : 'var(--border-medium)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: Object.keys(answers).length === pack.questions.length ? 'pointer' : 'not-allowed'
+                }}
+              >
+                Submit Quiz
+              </button>
+            ) : (
+              <button 
+                onClick={() => setCurrentQuestion(prev => Math.min(pack.questions.length - 1, prev + 1))}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: 'var(--accent-primary)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer'
+                }}
+              >
+                Next
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
