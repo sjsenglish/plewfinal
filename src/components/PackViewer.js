@@ -48,6 +48,10 @@ const SUBJECTS = {
   maths: {
     index: 'edexel_mathematics_updated',
     displayName: 'A-Level Maths'
+  },
+  'korean-english': {
+    index: 'korean-english-question-pairs',
+    displayName: 'Korean-English'
   }
 };
 
@@ -90,7 +94,7 @@ const PackViewer = () => {
       // Check if subject is supported
       const subjectConfig = SUBJECTS[packData.subject];
       if (!subjectConfig) {
-        setError(`Unsupported subject: ${packData.subject}. This viewer supports TSA and Maths questions.`);
+        setError(`Unsupported subject: ${packData.subject}. This viewer supports TSA, A-Level Maths, and Korean-English questions.`);
         setLoading(false);
         return;
       }
@@ -544,6 +548,32 @@ const PackViewer = () => {
                             {question.id.split('_')[0]}
                           </span>
                         )}
+
+                        {/* Korean-English Tags */}
+                        {pack.subject === 'korean-english' && question.difficulty && (
+                          <span style={{
+                            fontSize: '12px',
+                            padding: '4px 8px',
+                            backgroundColor: '#fef0cd',
+                            color: '#92400e',
+                            borderRadius: '12px',
+                            fontWeight: '500'
+                          }}>
+                            {question.difficulty}
+                          </span>
+                        )}
+                        {pack.subject === 'korean-english' && question.type && (
+                          <span style={{
+                            fontSize: '12px',
+                            padding: '4px 8px',
+                            backgroundColor: '#e0f2fe',
+                            color: '#0369a1',
+                            borderRadius: '12px',
+                            fontWeight: '500'
+                          }}>
+                            {question.type}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -877,6 +907,144 @@ const PackViewer = () => {
                                 </a>
                               </div>
                             </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+
+                    {/* Question Content - Korean-English Format */}
+                    {pack.subject === 'korean-english' && (
+                      <>
+                        {/* Korean-English Info */}
+                        <div style={{ marginBottom: '16px' }}>
+                          {question.difficulty && (
+                            <div style={{
+                              fontSize: '14px',
+                              color: COLORS.gray,
+                              marginBottom: '8px'
+                            }}>
+                              <strong>Difficulty:</strong> {question.difficulty}
+                            </div>
+                          )}
+                          {question.type && (
+                            <div style={{
+                              fontSize: '14px',
+                              color: COLORS.gray,
+                              marginBottom: '16px'
+                            }}>
+                              <strong>Type:</strong> {question.type}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Korean Text Display */}
+                        {question.korean && (
+                          <div style={{
+                            marginBottom: '16px',
+                            padding: '20px',
+                            backgroundColor: '#f8fafc',
+                            borderRadius: '12px',
+                            border: '2px solid #e0f2fe',
+                            textAlign: 'center'
+                          }}>
+                            <div style={{
+                              fontSize: '14px',
+                              color: COLORS.gray,
+                              marginBottom: '8px',
+                              fontWeight: '500'
+                            }}>
+                              Korean Text:
+                            </div>
+                            <div style={{
+                              fontSize: '24px',
+                              fontWeight: '600',
+                              color: '#111827',
+                              fontFamily: 'system-ui, -apple-system, sans-serif',
+                              lineHeight: '1.4'
+                            }}>
+                              {question.korean}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Question Display */}
+                        {question.question && (
+                          <div style={{
+                            marginBottom: '16px',
+                            fontWeight: '500',
+                            fontSize: '16px',
+                            color: COLORS.darkGray,
+                            lineHeight: '1.6',
+                            padding: '16px',
+                            backgroundColor: '#fefce8',
+                            borderRadius: '8px',
+                            border: '1px solid #fde047'
+                          }}>
+                            {question.question}
+                          </div>
+                        )}
+
+                        {/* Options Display */}
+                        {question.options && question.options.length > 0 && (
+                          <div style={{ marginBottom: '16px' }}>
+                            <div style={{
+                              fontSize: '14px',
+                              color: COLORS.gray,
+                              marginBottom: '12px',
+                              fontWeight: '500'
+                            }}>
+                              Choose the best English translation:
+                            </div>
+                            {question.options.map((option, optIndex) => (
+                              <div
+                                key={optIndex}
+                                style={{
+                                  padding: '12px 16px',
+                                  marginBottom: '8px',
+                                  backgroundColor: '#f8fafc',
+                                  borderRadius: '8px',
+                                  border: '1px solid #f1f5f9',
+                                  color: COLORS.darkGray,
+                                  transition: 'all 0.2s ease'
+                                }}
+                              >
+                                <strong style={{ color: COLORS.teal }}>
+                                  {String.fromCharCode(65 + optIndex)}.
+                                </strong> {option}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* English Translation Display */}
+                        {question.english && (
+                          <div style={{
+                            marginTop: '16px',
+                            padding: '16px',
+                            backgroundColor: '#dcfce7',
+                            borderRadius: '8px',
+                            borderLeft: `4px solid #16a34a`
+                          }}>
+                            <strong style={{ color: '#166534' }}>Correct Translation:</strong>{' '}
+                            <span style={{ color: '#166534', fontWeight: '600' }}>
+                              {question.english}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Show correct answer if available */}
+                        {question.correctAnswer !== undefined && question.options && (
+                          <div style={{
+                            marginTop: '16px',
+                            padding: '16px',
+                            backgroundColor: '#dcfce7',
+                            borderRadius: '8px',
+                            borderLeft: `4px solid #16a34a`
+                          }}>
+                            <strong style={{ color: '#166534' }}>Correct Answer:</strong>{' '}
+                            <span style={{ color: '#166534', fontWeight: '600' }}>
+                              {String.fromCharCode(65 + question.correctAnswer)} - {question.options[question.correctAnswer]}
+                            </span>
                           </div>
                         )}
                       </>

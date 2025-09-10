@@ -25,6 +25,12 @@ const SUBJECTS = {
     displayName: 'A-Level Maths',
     icon: '📊',
     avgTimePerQuestion: 3 // minutes
+  },
+  'korean-english': {
+    index: 'korean-english-question-pairs',
+    displayName: 'Korean-English',
+    icon: '🇰🇷',
+    avgTimePerQuestion: 1 // minutes
   }
 };
 
@@ -69,7 +75,7 @@ const PracticeMode = () => {
       // Check if subject is supported
       const subjectConfig = SUBJECTS[packData.subject];
       if (!subjectConfig) {
-        setError(`Unsupported subject: ${packData.subject}. This practice mode supports TSA and A-Level Maths questions.`);
+        setError(`Unsupported subject: ${packData.subject}. This practice mode supports TSA, A-Level Maths, and Korean-English questions.`);
         setLoading(false);
         return;
       }
@@ -164,6 +170,8 @@ const PracticeMode = () => {
       return [...new Set(questions.map(q => q.question_type).filter(Boolean))];
     } else if (pack.subject === 'maths') {
       return [...new Set(questions.map(q => q.question_topic).filter(Boolean))];
+    } else if (pack.subject === 'korean-english') {
+      return [...new Set(questions.map(q => q.difficulty || 'Translation').filter(Boolean))];
     }
     return [];
   };
@@ -176,6 +184,9 @@ const PracticeMode = () => {
       return [...new Set(questions.map(q => q.year).filter(Boolean))];
     } else if (pack?.subject === 'maths') {
       return [...new Set(questions.map(q => q.id ? q.id.split('_')[0] : null).filter(Boolean))];
+    } else if (pack?.subject === 'korean-english') {
+      // Korean-English questions don't have years, return question levels instead
+      return [...new Set(questions.map(q => q.level || q.difficulty).filter(Boolean))];
     }
     return [];
   };
@@ -319,7 +330,11 @@ const PracticeMode = () => {
           {/* Question Types/Topics */}
           {getQuestionTypes().length > 0 && (
             <div className="question-types">
-              <h4>{pack.subject === 'tsa' ? 'Question Types:' : 'Topics:'}</h4>
+              <h4>
+                {pack.subject === 'tsa' ? 'Question Types:' : 
+                 pack.subject === 'maths' ? 'Topics:' :
+                 pack.subject === 'korean-english' ? 'Difficulty Levels:' : 'Types:'}
+              </h4>
               <div className="type-badges">
                 {getQuestionTypes().map((type, index) => (
                   <span key={index} className="question-type-badge">
@@ -333,7 +348,9 @@ const PracticeMode = () => {
           {/* Years */}
           {getYears().length > 0 && (
             <div className="question-years">
-              <h4>Years:</h4>
+              <h4>
+                {pack.subject === 'korean-english' ? 'Levels:' : 'Years:'}
+              </h4>
               <div className="year-badges">
                 {getYears().map((year, index) => (
                   <span key={index} className="question-year-badge">
@@ -352,6 +369,20 @@ const PracticeMode = () => {
                 {[...new Set(questions.map(q => q.id ? q.id.split('_')[1] : null).filter(Boolean))].map((examCode, index) => (
                   <span key={index} className="exam-type-badge">
                     {examCode}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Korean-English specific information */}
+          {pack.subject === 'korean-english' && (
+            <div className="korean-english-info">
+              <h4>Question Types:</h4>
+              <div className="question-type-badges">
+                {[...new Set(questions.map(q => q.type || 'Translation').filter(Boolean))].map((type, index) => (
+                  <span key={index} className="question-type-badge">
+                    {type === 'translation' ? 'Translation' : type}
                   </span>
                 ))}
               </div>
@@ -395,6 +426,12 @@ const PracticeMode = () => {
                 <li>Review model solutions after completion</li>
               </>
             )}
+            {pack.subject === 'korean-english' && (
+              <>
+                <li>Choose the best English translation for Korean phrases</li>
+                <li>Pay attention to context and nuance</li>
+              </>
+            )}
             <li>Track your progress and performance</li>
             <li>Review detailed explanations and solutions</li>
           </ul>
@@ -420,6 +457,19 @@ const PracticeMode = () => {
                 <li>Check your answers make sense</li>
                 <li>Use appropriate mathematical notation</li>
                 <li>State any assumptions you make</li>
+              </ul>
+            </div>
+          )}
+          
+          {pack.subject === 'korean-english' && (
+            <div className="subject-tips">
+              <h4>Korean-English Tips:</h4>
+              <ul>
+                <li>Read the Korean text carefully and understand the context</li>
+                <li>Consider cultural nuances in translation</li>
+                <li>Look for key grammatical structures</li>
+                <li>Eliminate clearly incorrect options first</li>
+                <li>Practice reading Korean characters (Hangul) regularly</li>
               </ul>
             </div>
           )}
@@ -452,6 +502,12 @@ const PracticeMode = () => {
                 <div className="expectation-item">
                   <span className="expectation-icon">📝</span>
                   <span>Model solutions and marking</span>
+                </div>
+              )}
+              {pack.subject === 'korean-english' && (
+                <div className="expectation-item">
+                  <span className="expectation-icon">🇰🇷</span>
+                  <span>Korean-English translation practice</span>
                 </div>
               )}
               <div className="expectation-item">
