@@ -46,6 +46,7 @@ import FeatureFlagDebug from './components/FeatureFlagDebug';
 // import EnhancedPersonalStatementGrader from './components/EnhancedPersonalStatementGrader'; // HIDDEN
 import DebugTest from './components/DebugTest';
 import AdminSetup from './components/AdminSetup';
+import AdminPackCreator from './components/AdminPackCreator';
 
 // Create Quiz Context to manage navbar visibility
 const QuizContext = createContext();
@@ -748,6 +749,7 @@ function App() {
                 <Route path="/admin/learn-content" element={<ProtectedRoute><LearnContentAdmin /></ProtectedRoute>} />
                 <Route path="/admin/setup" element={<AdminSetup />} />
                 <Route path="/submit-question" element={<SubmitQuestionForm />} />
+                <Route path="/admin/pack-creator" element={<AdminPackCreator />} />
                 {/* <Route path="/submit-maths-question" element={<MathsSubmitQuestionForm />} /> */}
                 {/* <Route path="/study-buddy" element={<FeatureProtectedRoute feature="study-buddy"><StudyBuddyApp /></FeatureProtectedRoute>} /> */}
                 {/* <Route path="/study-progress" element={<FeatureProtectedRoute feature="application-builder"><StudyBuddyApp /></FeatureProtectedRoute>} /> */}
