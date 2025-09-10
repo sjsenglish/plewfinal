@@ -22,84 +22,66 @@ const SubscriptionPlansPage = () => {
 
   const planInfo = getPlanInfo();
 
-  // Updated plan configurations - trial removed
+  // New tier configurations
   const plans = [
     {
-      id: 'free',
-      name: 'Free',
-      price: 0,
-      period: 'forever',
-      description: 'Perfect for getting started',
+      id: 'tier1',
+      name: '티어 1 프리미엄',
+      price: 29000,
+      period: '월',
+      priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',
+      paymentLink: 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01',
+      description: '수능 준비를 위한 기본 프리미엄 플랜',
       features: [
-        'Unlimited daily search',
-        '1 video solution per day',
+        '무제한 일일 검색',
+        '무제한 비디오 솔루션',
+        '무제한 문제 팩',
+        '타이머 연습 모드',
+        '우선 커뮤니티 지원',
+        '주간 큐레이션 콘텐츠',
       ],
-      buttonText: 'Current Plan',
-      popular: false,
-      current: !isPaidUser
+      buttonText: '티어 1 선택',
+      popular: true,
+      current: subscription?.plan === 'tier1'
     },
     {
-      id: 'study',
-      name: 'Monthly Plan',
-      price: 20,
-      period: 'month',
-      priceId: process.env.REACT_APP_STRIPE_STUDY_PLAN_PRICE_ID,
-      description: 'Everything you need for exam prep',
+      id: 'tier2',
+      name: '티어 2 프리미엄',
+      price: 49000,
+      period: '월',
+      priceId: 'price_1Rl7qwRslRN77kT8cBvGyMXo',
+      paymentLink: 'https://buy.stripe.com/5kQbJ377ZeDh4TE8EJ8EM02',
+      description: '고급 기능이 포함된 완전한 프리미엄 플랜',
       features: [
-        'Unlimited daily search',
-        'Unlimited video solutions',
-        'Unlimited question packs',
-        'Practice mode with timer',
-        'Priority community support',
-        'Workshop access',
-        'Weekly quizzes',
+        '티어 1의 모든 기능',
+        '고급 분석 대시보드',
+        '개인화된 학습 계획',
+        '1:1 과외 세션',
+        '독점 워크숍 액세스',
+        '우선 이메일 지원',
+        '맞춤 문제 팩 생성',
       ],
-      buttonText: 'Upgrade Now',
-      current: subscription?.plan === 'study'
-    },
-    {
-      id: 'pro',
-      name: 'Full Access 2025',
-      price: 50,
-      period: 'one-time until end of 2025',
-      priceId: process.env.REACT_APP_STRIPE_PRO_PLAN_PRICE_ID,
-      description: 'Same features, one payment until end of 2025',
-      features: [
-        'Everything in the monthly plan',
-        'Interview prep',
-        'Personal statement support',
-      ],
-      buttonText: 'Get Full Access',
+      buttonText: '티어 2 선택',
       popular: false,
-      current: subscription?.plan === 'pro',
+      current: subscription?.plan === 'tier2'
     }
   ];
 
   const handleUpgrade = async (plan) => {
     if (!user) {
-      alert('Please log in to upgrade your plan');
+      alert('플랜 업그레이드를 하려면 로그인하세요');
       return;
     }
-
-    if (plan.id === 'free') return;
 
     setLoading(prev => ({ ...prev, [plan.id]: true }));
     setSelectedPlan(plan.id);
 
     try {
-      const result = await createCheckoutSession(
-        plan.priceId,
-        user.uid,
-        user.email,
-        false // No trial flag needed anymore
-      );
-
-      if (!result.success) {
-        alert(`Error: ${result.error}`);
-      }
+      // Use Stripe payment links for direct checkout
+      window.open(plan.paymentLink, '_blank');
     } catch (error) {
-      console.error('Error starting checkout:', error);
-      alert('Failed to start checkout. Please try again.');
+      console.error('Error opening payment link:', error);
+      alert('결제 페이지를 열 수 없습니다. 다시 시도해주세요.');
     } finally {
       setLoading(prev => ({ ...prev, [plan.id]: false }));
       setSelectedPlan(null);
@@ -108,7 +90,7 @@ const SubscriptionPlansPage = () => {
 
   const formatPrice = (price) => {
     if (price === 0) return 'Free';
-    return `£${price}`;
+    return `₩${price.toLocaleString()}`;
   };
 
   if (paywallLoading) {
@@ -116,7 +98,7 @@ const SubscriptionPlansPage = () => {
       <div className="loading-container">
         <div className="loading-content">
           <div className="loading-spinner"></div>
-          <p className="loading-text">Loading plans...</p>
+          <p className="loading-text">플랜 로딩 중...</p>
         </div>
       </div>
     );
@@ -128,9 +110,9 @@ const SubscriptionPlansPage = () => {
       <div className="header-section">
         <div className="header-background"></div>
         <div className="header-content">
-          <h1 className="header-title">Choose Your Plan</h1>
+          <h1 className="header-title">프리미엄 티어 선택</h1>
           <p className="header-subtitle">
-            Unlock everything you need for successful university admissions prep
+            수능 준비를 위한 두 가지 프리미엄 티어
           </p>
         </div>
       </div>
@@ -146,9 +128,9 @@ const SubscriptionPlansPage = () => {
                 </svg>
               </div>
               <p className="login-notice-text">
-                <strong>Note:</strong> You'll need to{' '}
-                <a href="/login" className="login-link">log in</a>{' '}
-                to subscribe to a plan.
+                <strong>참고:</strong> 플랜을 구독하려면{' '}
+                <a href="/login" className="login-link">로그인</a>{' '}
+                하세요.
               </p>
             </div>
           </div>
@@ -165,7 +147,7 @@ const SubscriptionPlansPage = () => {
 
               {/* Current Badge */}
               {plan.current && (
-                <div className="badge-current">Current</div>
+                <div className="badge-current">현재</div>
               )}
 
               <div className="plan-content">
@@ -179,18 +161,15 @@ const SubscriptionPlansPage = () => {
                     </span>
                     {plan.period && (
                       <span className="price-period">
-                        {plan.period === 'one-time until end of 2025' ? 'one-time' : `/${plan.period}`}
+                        `/${plan.period}`
                       </span>
                     )}
                   </div>
-                  {plan.period === 'one-time until end of 2025' && (
-                    <p className="access-period">Access until Dec 31, 2025</p>
-                  )}
                 </div>
 
                 {/* Features */}
                 <div className="features-section">
-                  <h4 className="features-title">What's included:</h4>
+                  <h4 className="features-title">포함 내용:</h4>
                   <ul className="features-list">
                     {plan.features.map((feature, index) => (
                       <li key={index} className="feature-item">
@@ -206,40 +185,35 @@ const SubscriptionPlansPage = () => {
                 {/* Action Button */}
                 <button
                   onClick={() => handleUpgrade(plan)}
-                  disabled={loading[plan.id] || plan.current || (plan.id !== 'free' && !isLoggedIn)}
+                  disabled={loading[plan.id] || plan.current || !isLoggedIn}
                   className={`plan-button ${
                     plan.current ? 'button-current' : 
-                    plan.id === 'free' ? 'button-free' : 'button-default'
+                    'button-default'
                   } ${
-                    (loading[plan.id] || (plan.id !== 'free' && !isLoggedIn)) && !plan.current ? 'button-disabled' : ''
+                    (loading[plan.id] || !isLoggedIn) && !plan.current ? 'button-disabled' : ''
                   }`}
                 >
                   {loading[plan.id] ? (
                     <div className="button-loading">
                       <div className="button-spinner"></div>
-                      <span>Processing...</span>
+                      <span>처리 중...</span>
                     </div>
                   ) : plan.current ? (
-                    '✓ Current Plan'
-                  ) : plan.id === 'free' ? (
-                    'Free Forever'
+                    '✓ 현재 플랜'
                   ) : !isLoggedIn ? (
-                    'Log in to Subscribe'
+                    '구독하려면 로그인'
                   ) : (
                     plan.buttonText
                   )}
                 </button>
 
                 {/* Payment Info */}
-                {plan.id !== 'free' && (
-                  <div className="payment-info">
-                    <p className="payment-text">
-                      Secure payment by Stripe<br/>
-                      {plan.id === 'study' ? 'Cancel anytime • ' : ''}
-                      30-day money-back guarantee
-                    </p>
-                  </div>
-                )}
+                <div className="payment-info">
+                  <p className="payment-text">
+                    Stripe 보안 결제<br/>
+                    언제든지 취소 • 30일 환불 보장
+                  </p>
+                </div>
               </div>
             </div>
           ))}
