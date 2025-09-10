@@ -17,7 +17,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: linear-gradient(135deg, #3f72af, #2d4059);
+  background: linear-gradient(135deg, #6b5ca5, #221368);
   color: white;
   border: none;
   border-radius: 12px;
@@ -25,17 +25,17 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(63, 114, 175, 0.3);
+  box-shadow: 0 4px 12px rgba(107, 92, 165, 0.3);
 }
 
 .filters-toggle-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(63, 114, 175, 0.4);
+  box-shadow: 0 6px 16px rgba(107, 92, 165, 0.4);
 }
 
 .filter-count-badge {
   background: rgba(255, 255, 255, 0.9);
-  color: #3f72af;
+  color: #6b5ca5;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
   font-size: 0.9rem;
@@ -81,17 +81,17 @@
 }
 
 .category-tab:hover {
-  border-color: #3f72af;
-  color: #3f72af;
+  border-color: #6b5ca5;
+  color: #6b5ca5;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(63, 114, 175, 0.2);
+  box-shadow: 0 4px 12px rgba(107, 92, 165, 0.2);
 }
 
 .category-tab.active {
-  background: linear-gradient(135deg, #3f72af, #2d4059);
+  background: linear-gradient(135deg, #6b5ca5, #221368);
   border-color: transparent;
   color: white;
-  box-shadow: 0 4px 12px rgba(63, 114, 175, 0.3);
+  box-shadow: 0 4px 12px rgba(107, 92, 165, 0.3);
 }
 
 .active-indicator {
@@ -198,17 +198,17 @@
 }
 
 .filter-option:hover {
-  border-color: #3f72af;
-  background: linear-gradient(135deg, #f0f7ff, #ffffff);
+  border-color: #6b5ca5;
+  background: linear-gradient(135deg, #f3f0ff, #ffffff);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(63, 114, 175, 0.15);
+  box-shadow: 0 4px 12px rgba(107, 92, 165, 0.15);
 }
 
 .filter-option.selected {
-  background: linear-gradient(135deg, #3f72af, #2d4059);
+  background: linear-gradient(135deg, #6b5ca5, #221368);
   border-color: transparent;
   color: white;
-  box-shadow: 0 4px 12px rgba(63, 114, 175, 0.3);
+  box-shadow: 0 4px 12px rgba(107, 92, 165, 0.3);
 }
 
 .selected-checkmark {

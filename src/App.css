@@ -18437,6 +18437,19 @@ input[type="range"]::-moz-range-thumb {
   transform: translateY(-1px);
 }
 
+/* Theme-specific hover colors */
+.vocabulary-theme .subject-toggle-button:hover::before {
+  background: linear-gradient(45deg, #5b8f8a, #2a4442);
+}
+
+.korean-english-theme .subject-toggle-button:hover::before {
+  background: linear-gradient(45deg, #6b5ca5, #221368);
+}
+
+.community-theme .subject-toggle-button:hover::before {
+  background: linear-gradient(45deg, #6b5ca5, #221368);
+}
+
 .subject-toggle-button.active {
   background: linear-gradient(45deg, #667eea, #764ba2);
   color: white;
@@ -18458,6 +18471,21 @@ input[type="range"]::-moz-range-thumb {
 .alternate-theme .subject-toggle-button.active {
   background: linear-gradient(45deg, #2b55a1, #1a4490);
   box-shadow: 0 4px 15px rgba(43, 85, 161, 0.4);
+}
+
+.vocabulary-theme .subject-toggle-button.active {
+  background: linear-gradient(45deg, #5b8f8a, #2a4442);
+  box-shadow: 0 4px 15px rgba(91, 143, 138, 0.4);
+}
+
+.korean-english-theme .subject-toggle-button.active {
+  background: linear-gradient(45deg, #6b5ca5, #221368);
+  box-shadow: 0 4px 15px rgba(107, 92, 165, 0.4);
+}
+
+.community-theme .subject-toggle-button.active {
+  background: linear-gradient(45deg, #6b5ca5, #221368);
+  box-shadow: 0 4px 15px rgba(107, 92, 165, 0.4);
 }
 
 /* Responsive design for toggle */
