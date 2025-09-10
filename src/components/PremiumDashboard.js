@@ -186,16 +186,39 @@ const renderOverview = () => (
         gap: '1.5rem'
       }}>
         {sections.filter(s => s.id !== 'overview').map(section => {
-          const getIconUrl = (sectionId) => {
+          const getIconContent = (sectionId) => {
             switch (sectionId) {
               case 'learn':
-                return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbook.svg?alt=media&token=8f21ae0e-764d-4b03-ba1d-f1423329c325';
+                return (
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7z"/>
+                    <path d="M16 3v4"/>
+                    <path d="M8 3v4"/>
+                    <path d="M2 11h20"/>
+                  </svg>
+                );
               case 'profile':
-                return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbagback.svg?alt=media&token=65739e08-36db-4810-951c-91641f5d0084';
+                return (
+                  <img 
+                    src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbagback.svg?alt=media&token=65739e08-36db-4810-951c-91641f5d0084"
+                    alt="Profile"
+                    width="32"
+                    height="32"
+                    style={{ objectFit: 'contain' }}
+                  />
+                );
               case 'question-packs':
-                return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbulb.svg?alt=media&token=1f21ae0e-764d-4b03-ba1d-f1423329c325';
+                return (
+                  <img 
+                    src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbulb.svg?alt=media&token=1f21ae0e-764d-4b03-ba1d-f1423329c325"
+                    alt="Question Packs"
+                    width="32"
+                    height="32"
+                    style={{ objectFit: 'contain' }}
+                  />
+                );
               default:
-                return '';
+                return null;
             }
           };
 
@@ -237,15 +260,7 @@ const renderOverview = () => (
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}>
-                  <img 
-                    src={getIconUrl(section.id)} 
-                    alt={section.name}
-                    style={{ 
-                      width: '32px', 
-                      height: '32px',
-                      objectFit: 'contain'
-                    }}
-                  />
+                  {getIconContent(section.id)}
                 </div>
                 <h3 style={{ 
                   margin: '0', 
