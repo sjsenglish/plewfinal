@@ -110,7 +110,7 @@ const VocabularyPinterest = () => {
     } finally {
       setLoading(false);
     }
-  }, [selectedSubject, searchQuery, filters, words.length]);
+  }, [selectedSubject, filters, words.length]);
 
   // Load saved words for current user
   const loadSavedWords = useCallback(async () => {
