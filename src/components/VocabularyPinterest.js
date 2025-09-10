@@ -62,10 +62,16 @@ const VocabularyPinterest = () => {
       const result = await fetchVocabulary(options);
       
       if (result.success) {
-        const newWords = result.words.map(word => ({
+        const newWords = result.words.map((word, index) => ({
           ...word,
           id: word.word || word.id,
-          height: Math.floor(Math.random() * 200) + 300 // Random height for masonry
+          height: Math.floor(Math.random() * 200) + 300, // Random height for masonry
+          // Add sample enhanced data for testing Pinterest layout
+          synonyms: word.synonyms || (index % 3 === 0 ? ['remarkable', 'extraordinary', 'incredible'] : undefined),
+          antonyms: word.antonyms || (index % 4 === 0 ? ['ordinary', 'common', 'unremarkable'] : undefined),
+          etymology: word.etymology || (index % 5 === 0 ? 'From Latin "absolutus" meaning complete, perfect, or finished.' : undefined),
+          collocations: word.collocations || (index % 3 === 1 ? ['absolutely certain', 'absolutely perfect', 'absolutely necessary'] : undefined),
+          examples: word.examples || [`The answer was ${word.word} correct.`]
         }));
 
         if (reset) {
