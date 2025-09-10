@@ -399,13 +399,18 @@ const renderOverview = () => (
           display: flex;
         }
 
-        /* Modern Sleek Sidebar */
+        /* Modern Sleek Sidebar - White with Gradient */
         .modern-sidebar {
           width: 80px;
-          background: rgba(0, 0, 0, 0.85);
+          background: linear-gradient(180deg, 
+            rgba(255, 255, 255, 0.98) 0%, 
+            rgba(249, 250, 251, 0.95) 50%, 
+            rgba(243, 244, 246, 0.92) 100%);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          border-right: 1px solid rgba(255, 255, 255, 0.1);
+          border-right: 1px solid rgba(229, 231, 235, 0.5);
+          box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05), 
+                      inset -1px 0 0 rgba(255, 255, 255, 0.8);
           height: 100vh;
           position: fixed;
           left: 0;
@@ -414,6 +419,7 @@ const renderOverview = () => (
           display: flex;
           flex-direction: column;
           transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+          padding-top: 20px;
         }
 
         .modern-sidebar:hover {
@@ -436,7 +442,7 @@ const renderOverview = () => (
           margin: 0 0.75rem;
           border: none;
           background: transparent;
-          color: rgba(255, 255, 255, 0.6);
+          color: rgba(55, 65, 81, 0.7);
           border-radius: 12px;
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -450,7 +456,9 @@ const renderOverview = () => (
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+          background: linear-gradient(135deg, 
+            rgba(156, 163, 175, 0.08) 0%, 
+            rgba(209, 213, 219, 0.12) 100%);
           opacity: 0;
           transition: opacity 0.3s ease;
           border-radius: 12px;
@@ -461,19 +469,26 @@ const renderOverview = () => (
         }
 
         .sidebar-tab:hover {
-          color: rgba(255, 255, 255, 0.9);
+          color: rgba(31, 41, 55, 0.9);
           transform: translateX(4px);
+          background: rgba(249, 250, 251, 0.8);
         }
 
         .sidebar-tab.active {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg, 
+            rgba(99, 102, 241, 0.95) 0%, 
+            rgba(139, 92, 246, 0.95) 100%);
           color: white;
-          box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+          box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.2);
           transform: translateX(4px);
         }
 
         .sidebar-tab.active:hover {
           transform: translateX(4px);
+          background: linear-gradient(135deg, 
+            rgba(99, 102, 241, 1) 0%, 
+            rgba(139, 92, 246, 1) 100%);
         }
 
         .sidebar-tab.locked {
@@ -483,7 +498,8 @@ const renderOverview = () => (
 
         .sidebar-tab.locked:hover {
           transform: none;
-          color: rgba(255, 255, 255, 0.6);
+          color: rgba(55, 65, 81, 0.4);
+          background: transparent;
         }
 
         .tab-icon {
@@ -515,7 +531,10 @@ const renderOverview = () => (
 
         .sidebar-user {
           padding: 1.5rem 1rem;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-top: 1px solid rgba(229, 231, 235, 0.3);
+          background: linear-gradient(180deg, 
+            rgba(249, 250, 251, 0.5) 0%, 
+            rgba(243, 244, 246, 0.8) 100%);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -526,11 +545,14 @@ const renderOverview = () => (
           width: 40px;
           height: 40px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg, 
+            rgba(99, 102, 241, 0.9) 0%, 
+            rgba(139, 92, 246, 0.9) 100%);
           color: white;
           display: flex;
           align-items: center;
           justify-content: center;
+          box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
           font-weight: 700;
           font-size: 1rem;
           letter-spacing: 0.5px;
