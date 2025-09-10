@@ -58,7 +58,7 @@ const PremiumDashboard = () => {
             borderTop: '4px solid white', borderRadius: '50%',
             animation: 'spin 1s linear infinite', margin: '0 auto 1rem auto',
           }} />
-          <div>loading...</div>
+          <div>Loading...</div>
         </div>
       </div>
     );
@@ -66,9 +66,9 @@ const PremiumDashboard = () => {
 
   const sections = [
     { id: 'overview', name: '홈', icon: '', premium: false },
-    { id: 'learn', name: '학습', icon: '', premium: true },
+    { id: 'learn', name: ' 학습', icon: '', premium: true },
     { id: 'profile', name: '도서관', icon: '', premium: true },
-    { id: 'question-packs', name: '문재은행', icon: '', premium: true },
+    { id: 'question-packs', name: '문재 팩', icon: '', premium: true },
   ];
 
   const handleSectionClick = (sectionId, isPremiumSection) => {
@@ -85,13 +85,13 @@ const PremiumDashboard = () => {
     }
 
     switch (activeSection) {
-      case '홈':
+      case 'overview':
         return renderOverview();
       case 'learn':
         return <LearnTab />;
-      case '도서관':
+      case 'profile':
         return <ProfilePage />;
-      case '문재 팩 만들기':
+      case 'question-packs':
         return <QuestionPackPage />;
       default:
         return renderOverview();
@@ -120,14 +120,14 @@ const renderOverview = () => (
               fontSize: '2rem', 
               fontWeight: '700' 
             }}>
-              Hi!
+              Welcome!
             </h1>
             <p style={{ 
               margin: '0', 
               color: '#64748b', 
               fontSize: '1rem' 
             }}>
-              
+              Access your library, create question packs, and more
             </p>
           </div>
           
@@ -185,11 +185,11 @@ const renderOverview = () => (
           {sections.filter(s => s.id !== 'overview').map(section => {
             const getIconUrl = (sectionId) => {
               switch (sectionId) {
-                case '학습':
+                case 'learn':
                   return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbook.svg?alt=media&token=8f21ae0e-764d-4b03-ba1d-f1423329c325';
-                case '프로필':
+                case 'profile':
                   return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbagback.svg?alt=media&token=65739e08-36db-4810-951c-91641f5d0084';
-                case '문제은행':
+                case 'question-packs':
                   return 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbulb.svg?alt=media&token=1f21ae0e-764d-4b03-ba1d-f1423329c325';
                 default:
                   return '';
@@ -267,7 +267,7 @@ const renderOverview = () => (
       <div className="upgrade-content">
         <div className="upgrade-icon">🔒</div>
         <h2>프리미엄</h2>
-        <p>구독하기</p>
+        <p>구독</p>
         <button 
           className="upgrade-button"
           onClick={() => setShowUpgradeModal(true)}
@@ -280,12 +280,12 @@ const renderOverview = () => (
 
   const getFeatureDescription = (sectionId) => {
     switch (sectionId) {
-      case '학습':
-        return '귀하의 수준에 맞는 엄선된 코스를 따르세요';
-      case '도서관':
-        return '시간 문제 팩 풀기 연습하기';
-      case '문재 팩 만들기':
-        return '문재 팩 만들기';
+      case 'learn':
+        return 'Weekly curated content with question packs, videos, and vocabulary';
+      case 'profile':
+        return 'Practise timed question packs, review, and watch video solutions';
+      case 'question-packs':
+        return '문재은행';
       default:
         return '';
     }
