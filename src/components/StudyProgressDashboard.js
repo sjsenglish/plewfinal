@@ -1413,30 +1413,29 @@ const StudyProgressDashboard = ({ profileData, onProfileUpdate, refreshProfile }
         width: '100%',
         maxWidth: '1400px',
         minHeight: '100vh',
-        background: 'rgba(255, 255, 255, 0.5)',
-        backdropFilter: 'blur(10px)',
-        borderRadius: 0, // Remove border radius for full coverage
-        border: 'none', // Remove border for seamless layout
-        boxShadow: 'none', // Remove shadow for clean appearance
+        background: '#ffffff',
+        borderRadius: 0,
+        border: 'none',
+        boxShadow: 'none',
         position: 'relative',
         zIndex: 1,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        margin: '0 auto', // Center horizontally but no vertical margin
-        padding: '0' // Remove all padding from container
+        margin: '0 auto',
+        padding: '0'
       }}>
         {/* Header with Navigation */}
         <div style={{
-          padding: '24px 32px', // More generous padding
-          borderBottom: '1px solid rgba(168, 220, 198, 0.3)', // Subtle border
+          padding: '32px 32px 24px 32px', // Extra top padding to prevent cut-off
+          borderBottom: '1px solid #e5e7eb', // Clean light gray border
           flexShrink: 0,
-          background: 'rgba(255, 255, 255, 0.98)', // Slightly more opaque
-          backdropFilter: 'blur(20px)', // Stronger blur for Apple feel
+          background: '#ffffff', // Pure white background
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' // Subtle shadow
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)', // Subtle shadow
+          minHeight: '80px' // Ensure minimum height for visibility
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             {/* Navigation buttons */}
@@ -1444,28 +1443,30 @@ const StudyProgressDashboard = ({ profileData, onProfileUpdate, refreshProfile }
               <button
                 onClick={() => window.location.href = '/'}
                 style={{
-                  background: `linear-gradient(135deg, ${COLORS.primary} 0%, ${COLORS.secondary} 100%)`,
-                  border: 'none',
+                  background: '#ffffff',
+                  border: '1px solid #d1d5db',
                   fontSize: '14px',
                   cursor: 'pointer',
-                  padding: '12px 20px', // More generous padding
-                  borderRadius: '16px', // Larger, Apple-style radius
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', // Apple easing
+                  padding: '12px 20px',
+                  borderRadius: '8px',
+                  transition: 'all 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: '600',
-                  boxShadow: '0 2px 8px rgba(42, 68, 66, 0.15)', // Softer shadow
+                  color: '#374151',
+                  fontWeight: '500',
+                  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
                   transform: 'scale(1)'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.transform = 'scale(1.02)';
-                  e.target.style.boxShadow = '0 4px 16px rgba(42, 68, 66, 0.25)';
+                  e.target.style.background = '#f9fafb';
+                  e.target.style.borderColor = '#9ca3af';
+                  e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.transform = 'scale(1)';
-                  e.target.style.boxShadow = '0 2px 8px rgba(42, 68, 66, 0.15)';
+                  e.target.style.background = '#ffffff';
+                  e.target.style.borderColor = '#d1d5db';
+                  e.target.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.05)';
                 }}
                 title="Back to Homepage"
               >
@@ -1491,11 +1492,11 @@ const StudyProgressDashboard = ({ profileData, onProfileUpdate, refreshProfile }
             {/* View switcher */}
             <div style={{
               display: 'flex',
-              background: 'rgba(168, 220, 198, 0.15)', // More subtle
-              padding: '6px', // More padding
-              borderRadius: '12px', // Larger radius
-              border: '1px solid rgba(168, 220, 198, 0.2)', // Softer border
-              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)' // Subtle inner shadow feel
+              background: '#f3f4f6',
+              padding: '4px',
+              borderRadius: '8px',
+              border: '1px solid #e5e7eb',
+              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
             }}>
               <button
                 onClick={() => window.location.href = '/study-buddy'}
@@ -1503,11 +1504,20 @@ const StudyProgressDashboard = ({ profileData, onProfileUpdate, refreshProfile }
                   padding: '6px 12px',
                   border: 'none',
                   background: 'transparent',
-                  borderRadius: '6px',
+                  borderRadius: '4px',
                   cursor: 'pointer',
                   fontSize: '12px',
                   fontWeight: '500',
-                  color: '#374151'
+                  color: '#6b7280',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = '#ffffff';
+                  e.target.style.color = '#374151';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'transparent';
+                  e.target.style.color = '#6b7280';
                 }}
                 title="Switch to Chat"
               >
@@ -1517,12 +1527,13 @@ const StudyProgressDashboard = ({ profileData, onProfileUpdate, refreshProfile }
                 style={{
                   padding: '6px 12px',
                   border: 'none',
-                  background: COLORS.secondary,
-                  borderRadius: '6px',
+                  background: '#ffffff',
+                  borderRadius: '4px',
                   cursor: 'pointer',
                   fontSize: '12px',
-                  fontWeight: '500',
-                  color: 'white'
+                  fontWeight: '600',
+                  color: '#374151',
+                  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
                 }}
                 title="Current: Dashboard"
               >
@@ -1569,18 +1580,17 @@ const StudyProgressDashboard = ({ profileData, onProfileUpdate, refreshProfile }
           </div>
         </div>
 
-        {/* Tabs - Full width with Apple spacing */}
+        {/* Tabs - Full width with clean spacing */}
         <div style={{
           display: 'flex',
-          background: 'rgba(255, 255, 255, 0.95)', // More opaque
-          padding: '20px 32px', // More generous padding
+          background: '#ffffff',
+          padding: '16px 32px',
           margin: '0',
           borderRadius: '0',
-          borderTop: '1px solid rgba(168, 220, 198, 0.2)', // Softer borders
-          borderBottom: '1px solid rgba(168, 220, 198, 0.2)',
+          borderBottom: '1px solid #e5e7eb',
           flexShrink: 0,
-          gap: '16px', // Add gap between tabs
-          boxShadow: '0 1px 0 rgba(0, 0, 0, 0.05)' // Subtle shadow
+          gap: '12px',
+          boxShadow: '0 1px 0 rgba(0, 0, 0, 0.05)'
         }}>
 {[
   // { id: 'academic', label: 'Academic' }, // Hidden from view
@@ -1594,36 +1604,34 @@ const StudyProgressDashboard = ({ profileData, onProfileUpdate, refreshProfile }
               onClick={() => setActiveTab(tab.id)}
               style={{
                 flex: 1,
-                padding: '16px 24px', // More generous padding
-                border: 'none',
-                background: activeTab === tab.id 
-                  ? `linear-gradient(135deg, ${COLORS.primary} 0%, ${COLORS.secondary} 100%)` 
-                  : 'rgba(255, 255, 255, 0.8)',
-                borderRadius: '16px', // Larger, Apple-style radius
+                padding: '12px 20px',
+                border: activeTab === tab.id ? 'none' : '1px solid #d1d5db',
+                background: activeTab === tab.id ? '#374151' : '#ffffff',
+                borderRadius: '8px',
                 cursor: 'pointer',
-                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)', // Smoother Apple easing
-                ...TYPOGRAPHY.button,
-                color: activeTab === tab.id ? '#ffffff' : COLORS.primary,
+                transition: 'all 0.2s ease',
+                fontSize: '14px',
+                fontWeight: '500',
+                color: activeTab === tab.id ? '#ffffff' : '#374151',
                 boxShadow: activeTab === tab.id 
-                  ? '0 4px 16px rgba(42, 68, 66, 0.2)' // Softer shadows
-                  : '0 1px 3px rgba(0, 0, 0, 0.1)',
-                border: activeTab === tab.id ? 'none' : `1px solid rgba(168, 220, 198, 0.3)`, // Subtle border
+                  ? '0 2px 4px rgba(0, 0, 0, 0.1)' 
+                  : '0 1px 2px rgba(0, 0, 0, 0.05)',
                 transform: 'translateY(0)'
               }}
               onMouseEnter={(e) => {
                 if (activeTab !== tab.id) {
-                  e.target.style.background = `linear-gradient(135deg, ${COLORS.secondary}15 0%, ${COLORS.secondary}25 100%)`;
-                  e.target.style.color = COLORS.primary;
-                  e.target.style.transform = 'translateY(-1px)'; // Subtle lift
-                  e.target.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
+                  e.target.style.background = '#f9fafb';
+                  e.target.style.borderColor = '#9ca3af';
+                  e.target.style.color = '#374151';
+                  e.target.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
                 }
               }}
               onMouseLeave={(e) => {
                 if (activeTab !== tab.id) {
-                  e.target.style.background = 'rgba(255, 255, 255, 0.8)';
-                  e.target.style.color = COLORS.primary;
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+                  e.target.style.background = '#ffffff';
+                  e.target.style.borderColor = '#d1d5db';
+                  e.target.style.color = '#374151';
+                  e.target.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.05)';
                 }
               }}
             >
