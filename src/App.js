@@ -102,7 +102,6 @@ const SUBJECTS = {
     searchType: 'algolia'
   },
   vocabulary: {
-    index: 'korean-english-question-pairs',
     theme: 'vocabulary-theme',
     bannerText: 'master the vocab you need for exams',
     displayName: 'Vocabulary',
@@ -340,7 +339,8 @@ const buildAlgoliaFilters = (filters) => {
     }} />
   ), []);
 
-  if (!subjectConfig?.index) {
+  // Only check for index if using Algolia search
+  if (subjectConfig.searchType === 'algolia' && !subjectConfig?.index) {
     return <div className="container" style={{ padding: '2rem 0' }}><h1>buffering .. </h1></div>;
   }
 
@@ -597,6 +597,25 @@ const buildAlgoliaFilters = (filters) => {
             }
           }
         `}</style>
+      </>
+    );
+  }
+
+  // For Firebase search (Vocabulary), render component directly
+  if (subjectConfig.searchType === 'firebase') {
+    return (
+      <>
+        {headerContent}
+
+        {/* Vocabulary Pinterest Interface */}
+        <div className="modern-search-wrapper">
+          <div className="container">
+            <VocabularyPinterest />
+          </div>
+        </div>
+
+        {/* Video Popup */}
+        <VideoPopup isOpen={showVideoPopup} onClose={handleCloseVideo} />
       </>
     );
   }
