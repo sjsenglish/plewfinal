@@ -333,7 +333,6 @@ const VocabularyPinterest = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
-          <div className="search-icon">🔍</div>
           {searchTerm && (
             <button
               onClick={() => setSearchTerm('')}
