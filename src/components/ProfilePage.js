@@ -33,7 +33,7 @@ const ICONS = {
 // Subject configurations for getting the right index
 const SUBJECTS = {
   tsa: { index: 'copy_tsa_questions' },
-  plew: { index: 'korean-english-question-pairs' },
+  'korean-english': { index: 'korean-english-question-pairs' },
   maths: { index: 'edexel_mathematics_updated' },
 };
 
