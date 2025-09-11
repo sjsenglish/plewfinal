@@ -288,12 +288,10 @@ const VocabularyPinterest = () => {
 
   // Masonry layout helper
   const getMasonryColumns = () => {
-    if (typeof window === 'undefined') return 4;
+    if (typeof window === 'undefined') return 3;
     if (window.innerWidth < 768) return 1;
     if (window.innerWidth < 1024) return 2;
-    if (window.innerWidth < 1400) return 3;
-    if (window.innerWidth < 1600) return 4;
-    return 5;
+    return 3;
   };
 
   const [columns, setColumns] = useState(getMasonryColumns());
