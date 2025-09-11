@@ -279,7 +279,7 @@
 
 .answer-option {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   padding: 1rem 1.5rem;
   background: white;
@@ -291,6 +291,7 @@
   font-size: 1rem;
   position: relative;
   overflow: hidden;
+  min-height: 60px;
 }
 
 .answer-option:hover:not(:disabled) {
@@ -314,12 +315,15 @@
   justify-content: center;
   font-weight: 600;
   flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .option-text {
   flex: 1;
   color: #374151;
   font-weight: 500;
+  line-height: 1.5;
+  word-wrap: break-word;
 }
 
 .answer-option.correct {

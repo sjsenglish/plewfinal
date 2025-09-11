@@ -288,10 +288,12 @@ const VocabularyPinterest = () => {
 
   // Masonry layout helper
   const getMasonryColumns = () => {
-    if (typeof window === 'undefined') return 3;
+    if (typeof window === 'undefined') return 4;
     if (window.innerWidth < 768) return 1;
     if (window.innerWidth < 1024) return 2;
-    return 3;
+    if (window.innerWidth < 1400) return 3;
+    if (window.innerWidth < 1600) return 4;
+    return 5;
   };
 
   const [columns, setColumns] = useState(getMasonryColumns());
@@ -328,12 +330,31 @@ const VocabularyPinterest = () => {
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search vocabulary words..."
+            placeholder="Search vocabulary words and contexts..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
           <div className="search-icon">🔍</div>
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="clear-search-btn"
+              title="Clear search"
+            >
+              ×
+            </button>
+          )}
+          {searchTerm && (
+            <div className="search-info">
+              Searching in word names and context sentences
+              {words.length > 0 && (
+                <span className="search-results-count">
+                  ({words.length} {words.length === 1 ? 'result' : 'results'} found)
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Quick Actions */}

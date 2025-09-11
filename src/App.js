@@ -106,7 +106,7 @@ const SUBJECTS = {
     theme: 'vocabulary-theme',
     bannerText: 'master the vocab you need for exams',
     displayName: 'Vocabulary',
-    searchType: 'algolia'
+    searchType: 'firebase'
   },
   community: {
     index: 'plewcommunity',

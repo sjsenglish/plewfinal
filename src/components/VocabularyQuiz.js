@@ -20,11 +20,7 @@ const VocabularyQuiz = ({ words, onClose, onComplete }) => {
   const user = auth.currentUser;
 
   const quizTypes = [
-    { id: 'mixed', name: 'Mixed Questions', icon: '🎯', description: 'Variety of question types' },
-    { id: 'synonyms', name: 'Synonyms', icon: '🔄', description: 'Choose the correct synonym' },
-    { id: 'definitions', name: 'Definitions', icon: '📖', description: 'Match words to definitions' },
-    { id: 'context', name: 'Context Usage', icon: '💭', description: 'Best usage in context' },
-    { id: 'antonyms', name: 'Antonyms', icon: '↔️', description: 'Choose the opposite meaning' }
+    { id: 'context', name: 'Context Usage', icon: '💭', description: 'Choose correct sentence context' }
   ];
 
   // Generate quiz questions based on type
@@ -32,28 +28,7 @@ const VocabularyQuiz = ({ words, onClose, onComplete }) => {
     const questions = [];
 
     wordsArray.forEach((word, index) => {
-      const questionType = type === 'mixed' ? 
-        ['synonyms', 'definitions', 'context', 'antonyms'][Math.floor(Math.random() * 4)] : 
-        type;
-
-      let question;
-      
-      switch (questionType) {
-        case 'synonyms':
-          question = generateSynonymQuestion(word, wordsArray);
-          break;
-        case 'definitions':
-          question = generateDefinitionQuestion(word, wordsArray);
-          break;
-        case 'context':
-          question = generateContextQuestion(word, wordsArray);
-          break;
-        case 'antonyms':
-          question = generateAntonymQuestion(word, wordsArray);
-          break;
-        default:
-          question = generateDefinitionQuestion(word, wordsArray);
-      }
+      const question = generateContextQuestion(word, wordsArray);
 
       if (question) {
         questions.push({
@@ -68,154 +43,101 @@ const VocabularyQuiz = ({ words, onClose, onComplete }) => {
     return questions.sort(() => Math.random() - 0.5); // Shuffle questions
   }, []);
 
-  // Generate synonym question
-  const generateSynonymQuestion = (word, allWords) => {
-    if (!word.synonyms || word.synonyms.length === 0) {
-      return generateDefinitionQuestion(word, allWords);
+
+  // Generate context question with sentence options (Firebase data only)
+  const generateContextQuestion = (word, allWords) => {
+    console.log('Generating context question for word:', word.word);
+    console.log('Word data:', word);
+    
+    // Get the correct context sentence from Firebase data
+    let correctSentence = '';
+    
+    // Priority 1: Use contexts array from Firebase (extracted from CSAT passages)
+    if (word.contexts && Array.isArray(word.contexts) && word.contexts.length > 0) {
+      correctSentence = word.contexts[0];
+      console.log('Using contexts from Firebase:', correctSentence);
+    }
+    // Priority 2: Use examples array from Firebase 
+    else if (word.examples && Array.isArray(word.examples) && word.examples.length > 0) {
+      if (typeof word.examples[0] === 'object' && word.examples[0].sentence) {
+        correctSentence = word.examples[0].sentence;
+        console.log('Using examples.sentence from Firebase:', correctSentence);
+      } else if (typeof word.examples[0] === 'string') {
+        correctSentence = word.examples[0];
+        console.log('Using examples string from Firebase:', correctSentence);
+      }
+    }
+    
+    // If no context available, skip this word
+    if (!correctSentence) {
+      console.log('No context sentence available for word:', word.word);
+      return null;
     }
 
-    const correctAnswer = word.synonyms[0];
-    const wrongAnswers = [];
+    // Create the blanked version of the correct sentence
+    const correctBlank = correctSentence.replace(new RegExp(`\\b${word.word}\\b`, 'gi'), '_____');
     
-    // Get wrong answers from other words' synonyms or the words themselves
-    allWords.forEach(w => {
-      if (w.word !== word.word && wrongAnswers.length < 3) {
-        if (w.synonyms && w.synonyms.length > 0) {
-          wrongAnswers.push(w.synonyms[0]);
-        } else {
-          wrongAnswers.push(w.word);
+    // Generate 3 incorrect context sentences from other Firebase words
+    const wrongSentences = [];
+    const shuffledWords = [...allWords].sort(() => Math.random() - 0.5);
+    
+    for (const otherWord of shuffledWords) {
+      if (otherWord.word !== word.word && wrongSentences.length < 3) {
+        let wrongSentence = '';
+        
+        // Get context sentence from another Firebase word
+        if (otherWord.contexts && Array.isArray(otherWord.contexts) && otherWord.contexts.length > 0) {
+          wrongSentence = otherWord.contexts[0];
+        } else if (otherWord.examples && Array.isArray(otherWord.examples) && otherWord.examples.length > 0) {
+          if (typeof otherWord.examples[0] === 'object' && otherWord.examples[0].sentence) {
+            wrongSentence = otherWord.examples[0].sentence;
+          } else if (typeof otherWord.examples[0] === 'string') {
+            wrongSentence = otherWord.examples[0];
+          }
+        }
+        
+        if (wrongSentence && wrongSentence !== correctSentence && wrongSentence.length > 20) {
+          // Replace the other word with blank to create a distractor
+          const wrongBlank = wrongSentence.replace(new RegExp(`\\b${otherWord.word}\\b`, 'gi'), '_____');
+          wrongSentences.push(wrongBlank);
+          console.log('Added wrong sentence from Firebase word', otherWord.word, ':', wrongBlank);
         }
       }
-    });
-
-    // Fill with random common words if needed
-    const commonWords = ['happy', 'sad', 'big', 'small', 'good', 'bad', 'fast', 'slow'];
-    while (wrongAnswers.length < 3) {
-      const randomWord = commonWords[Math.floor(Math.random() * commonWords.length)];
-      if (!wrongAnswers.includes(randomWord) && randomWord !== correctAnswer) {
-        wrongAnswers.push(randomWord);
-      }
     }
 
-    const options = [correctAnswer, ...wrongAnswers.slice(0, 3)]
-      .sort(() => Math.random() - 0.5);
-
-    return {
-      type: 'synonyms',
-      question: `What is a synonym for "${word.word}"?`,
-      options,
-      correctAnswer,
-      explanation: `"${correctAnswer}" is a synonym for "${word.word}". ${word.definition}`
-    };
-  };
-
-  // Generate definition question
-  const generateDefinitionQuestion = (word, allWords) => {
-    const correctAnswer = word.definition;
-    const wrongAnswers = [];
-
-    allWords.forEach(w => {
-      if (w.word !== word.word && w.definition && wrongAnswers.length < 3) {
-        wrongAnswers.push(w.definition);
-      }
-    });
-
-    if (wrongAnswers.length < 3) {
-      const genericDefinitions = [
-        'A type of measurement used in science',
-        'An emotional state of being',
-        'A physical object or item',
-        'A process or action',
-        'A concept related to time',
-        'A form of communication'
+    // If we still don't have enough wrong sentences from Firebase, use generic academic sentences
+    while (wrongSentences.length < 3) {
+      const genericSentences = [
+        'The student carefully analyzed the _____ presented in the research paper.',
+        'Modern technology has significantly influenced how we understand _____ concepts.',
+        'The professor emphasized the importance of studying _____ patterns in literature.',
+        'Researchers have discovered new methods to examine _____ phenomena.',
+        'The committee discussed various _____ approaches to solving the problem.',
+        'Students must demonstrate their understanding of _____ principles in the examination.'
       ];
       
-      while (wrongAnswers.length < 3) {
-        const randomDef = genericDefinitions[Math.floor(Math.random() * genericDefinitions.length)];
-        if (!wrongAnswers.includes(randomDef)) {
-          wrongAnswers.push(randomDef);
-        }
+      const randomSentence = genericSentences[Math.floor(Math.random() * genericSentences.length)];
+      if (!wrongSentences.includes(randomSentence)) {
+        wrongSentences.push(randomSentence);
+        console.log('Added generic sentence:', randomSentence);
       }
     }
 
-    const options = [correctAnswer, ...wrongAnswers.slice(0, 3)]
+    // Create options array with all sentence options
+    const sentenceOptions = [correctBlank, ...wrongSentences.slice(0, 3)]
       .sort(() => Math.random() - 0.5);
 
-    return {
-      type: 'definitions',
-      question: `What does "${word.word}" mean?`,
-      options,
-      correctAnswer,
-      explanation: `"${word.word}" means: ${correctAnswer}`
-    };
-  };
-
-  // Generate context question
-  const generateContextQuestion = (word, allWords) => {
-    if (!word.examples || word.examples.length === 0) {
-      return generateDefinitionQuestion(word, allWords);
-    }
-
-    const example = word.examples[0];
-    const blankExample = example.replace(new RegExp(word.word, 'gi'), '_____');
-    
-    const wrongWords = [];
-    allWords.forEach(w => {
-      if (w.word !== word.word && wrongWords.length < 3) {
-        wrongWords.push(w.word);
-      }
-    });
-
-    const options = [word.word, ...wrongWords.slice(0, 3)]
-      .sort(() => Math.random() - 0.5);
+    console.log('Final question options:', sentenceOptions);
 
     return {
       type: 'context',
-      question: `Fill in the blank: "${blankExample}"`,
-      options,
-      correctAnswer: word.word,
-      explanation: `The correct word is "${word.word}". Full sentence: "${example}"`
+      question: `Which sentence correctly uses the word "${word.word}"?`,
+      options: sentenceOptions,
+      correctAnswer: correctBlank,
+      explanation: `The correct sentence is: "${correctSentence}" - This shows the proper usage of "${word.word}" from real CSAT passages.`
     };
   };
 
-  // Generate antonym question
-  const generateAntonymQuestion = (word, allWords) => {
-    if (!word.antonyms || word.antonyms.length === 0) {
-      return generateSynonymQuestion(word, allWords);
-    }
-
-    const correctAnswer = word.antonyms[0];
-    const wrongAnswers = [];
-    
-    allWords.forEach(w => {
-      if (w.word !== word.word && wrongAnswers.length < 3) {
-        if (w.antonyms && w.antonyms.length > 0) {
-          wrongAnswers.push(w.antonyms[0]);
-        } else {
-          wrongAnswers.push(w.word);
-        }
-      }
-    });
-
-    const commonWords = ['opposite', 'similar', 'different', 'same', 'reverse', 'contrary'];
-    while (wrongAnswers.length < 3) {
-      const randomWord = commonWords[Math.floor(Math.random() * commonWords.length)];
-      if (!wrongAnswers.includes(randomWord) && randomWord !== correctAnswer) {
-        wrongAnswers.push(randomWord);
-      }
-    }
-
-    const options = [correctAnswer, ...wrongAnswers.slice(0, 3)]
-      .sort(() => Math.random() - 0.5);
-
-    return {
-      type: 'antonyms',
-      question: `What is an antonym for "${word.word}"?`,
-      options,
-      correctAnswer,
-      explanation: `"${correctAnswer}" is an antonym for "${word.word}". ${word.definition}`
-    };
-  };
 
   // Start quiz
   const startQuiz = () => {
