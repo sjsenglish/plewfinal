@@ -115,7 +115,7 @@ const renderOverview = () => (
           <h1 style={{ 
             margin: '0 0 0.5rem 0', 
             color: '#1e293b', 
-            fontSize: '2.5rem', 
+            fontSize: '1.75rem', 
             fontWeight: '800',
             letterSpacing: '-0.02em' 
           }}>
@@ -124,7 +124,7 @@ const renderOverview = () => (
           <p style={{ 
             margin: '0', 
             color: '#64748b', 
-            fontSize: '1.125rem',
+            fontSize: '0.95rem',
             fontWeight: '400' 
           }}>
             Access your library, create question packs, and track your learning progress
@@ -173,7 +173,7 @@ const renderOverview = () => (
       <h2 style={{ 
         margin: '0 0 2rem 0', 
         color: '#1e293b', 
-        fontSize: '1.5rem', 
+        fontSize: '1.15rem', 
         fontWeight: '700',
         letterSpacing: '-0.01em' 
       }}>
@@ -265,14 +265,14 @@ const renderOverview = () => (
                 <h3 style={{ 
                   margin: '0', 
                   color: '#1e293b', 
-                  fontSize: '1.25rem', 
+                  fontSize: '1.05rem', 
                   fontWeight: '700',
                   letterSpacing: '-0.01em' 
                 }}>
                   {section.name}
                 </h3>
                 {section.premium && !isPaidUser && (
-                  <span style={{ marginLeft: 'auto', fontSize: '1.125rem', opacity: 0.6 }}>🔒</span>
+                  <span style={{ marginLeft: 'auto', fontSize: '1rem', opacity: 0.6 }}>🔒</span>
                 )}
               </div>
               
