@@ -245,11 +245,13 @@
 
 /* Quiz Content */
 .quiz-content {
-  padding: 2rem;
+  padding: 2rem 3rem;
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .question-section {
@@ -275,8 +277,8 @@
   color: #1e293b;
   margin: 0;
   line-height: 1.4;
-  max-width: 1000px;
-  margin: 0 auto;
+  width: 100%;
+  text-align: center;
 }
 
 /* Answer Options */
@@ -285,8 +287,6 @@
   gap: 1.5rem;
   margin-bottom: 2rem;
   flex: 1;
-  max-width: 1000px;
-  margin: 0 auto 2rem auto;
   width: 100%;
 }
 
@@ -621,7 +621,7 @@
   .quiz-content,
   .quiz-setup,
   .quiz-results {
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
   }
   
   .quiz-info {
