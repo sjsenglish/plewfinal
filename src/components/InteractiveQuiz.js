@@ -184,6 +184,22 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
     return match && match[2].length === 11 ? match[2] : null;
   };
 
+  // Helper function to convert Korean numbering symbols to indices (for QuizReview)
+  const getKoreanAnswerIndexForReview = (correctAnswer) => {
+    if (typeof correctAnswer === 'number') {
+      return correctAnswer;
+    }
+    if (typeof correctAnswer === 'string') {
+      const koreanNumberMap = { '①': 0, '②': 1, '③': 2, '④': 3, '⑤': 4 };
+      for (const [symbol, index] of Object.entries(koreanNumberMap)) {
+        if (correctAnswer.startsWith(symbol)) {
+          return index;
+        }
+      }
+    }
+    return null;
+  };
+
   return (
     <>
       {/* Updated overlay with ProfilePage styling */}
@@ -823,7 +839,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                               </h4>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {(question.answerOptions || question.options).map((option, optIndex) => {
-                                  const correctAnswerIndex = getKoreanAnswerIndex(question.correctAnswer);
+                                  const correctAnswerIndex = getKoreanAnswerIndexForReview(question.correctAnswer);
                                   const isCorrect = optIndex === correctAnswerIndex;
                                   const isUserAnswer = optIndex === result.userAnswer;
                                   const isWrongUserAnswer = isUserAnswer && !isCorrect;
@@ -936,7 +952,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                               marginTop: '4px'
                             }}>
                               {packData.subject === 'korean-english' ? (() => {
-                                const correctAnswerIndex = getKoreanAnswerIndex(result.correctAnswer);
+                                const correctAnswerIndex = getKoreanAnswerIndexForReview(result.correctAnswer);
                                 return typeof correctAnswerIndex === 'number'
                                   ? `${correctAnswerIndex + 1} - ${
                                       (question?.answerOptions || question?.options)?.[correctAnswerIndex] || 'Option ' + (correctAnswerIndex + 1)
