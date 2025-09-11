@@ -80,14 +80,14 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.category-tab:hover {
+.korean-english-filters .category-tab:hover {
   border-color: #6b5ca5;
   color: #6b5ca5;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(107, 92, 165, 0.2);
 }
 
-.category-tab.active {
+.korean-english-filters .category-tab.active {
   background: linear-gradient(135deg, #6b5ca5, #221368);
   border-color: transparent;
   color: white;
@@ -197,14 +197,14 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.filter-option:hover {
+.korean-english-filters .filter-option:hover {
   border-color: #6b5ca5;
   background: linear-gradient(135deg, #f3f0ff, #ffffff);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(107, 92, 165, 0.15);
 }
 
-.filter-option.selected {
+.korean-english-filters .filter-option.selected {
   background: linear-gradient(135deg, #6b5ca5, #221368);
   border-color: transparent;
   color: white;
