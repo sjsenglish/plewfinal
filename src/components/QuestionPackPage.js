@@ -933,7 +933,7 @@ const getQuestionPreview = (question) => {
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '24px 24px 40px 24px'
+        padding: '24px 24px 120px 24px'
       }}>
         {/* Step Indicator - standalone */}
         <div style={{
@@ -1337,25 +1337,27 @@ const getQuestionPreview = (question) => {
                   </p>
                 </div>
 
-                <button
-                  onClick={nextStep}
-                  disabled={!packData.packName || packData.totalQuestions < 1 || availableQuestions === 0}
-                  style={{
-                    width: '100%',
-                    padding: '12px 24px',
-                    backgroundColor: COLORS.teal,
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    cursor: packData.packName && packData.totalQuestions >= 1 && availableQuestions > 0 ? 'pointer' : 'not-allowed',
-                    opacity: packData.packName && packData.totalQuestions >= 1 && availableQuestions > 0 ? 1 : 0.6,
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  Next: Select Questions →
-                </button>
+                <div style={{ marginBottom: '60px' }}>
+                  <button
+                    onClick={nextStep}
+                    disabled={!packData.packName || packData.totalQuestions < 1 || availableQuestions === 0}
+                    style={{
+                      width: '100%',
+                      padding: '12px 24px',
+                      backgroundColor: COLORS.teal,
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      cursor: packData.packName && packData.totalQuestions >= 1 && availableQuestions > 0 ? 'pointer' : 'not-allowed',
+                      opacity: packData.packName && packData.totalQuestions >= 1 && availableQuestions > 0 ? 1 : 0.6,
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    Next: Select Questions →
+                  </button>
+                </div>
               </>
             )}
 
@@ -1565,7 +1567,8 @@ const getQuestionPreview = (question) => {
 
                 <div style={{
                   display: 'flex',
-                  gap: '12px'
+                  gap: '12px',
+                  marginBottom: '60px'
                 }}>
                   <button 
                     onClick={prevStep}
@@ -1825,7 +1828,7 @@ const getQuestionPreview = (question) => {
                 <div style={{
                   display: 'flex',
                   gap: '12px',
-                  marginBottom: '24px'
+                  marginBottom: '60px'
                 }}>
                   <button 
                     onClick={prevStep}
