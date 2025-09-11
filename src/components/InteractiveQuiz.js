@@ -987,6 +987,9 @@ const InteractiveQuiz = ({ packData, questions, onClose, onComplete, reviewMode 
         // For maths, consider any non-empty answer as "attempted" (not necessarily correct)
         // Since maths answers are subjective, we'll mark as "attempted" rather than correct/incorrect
         isCorrect = userAnswer && userAnswer.trim().length > 0;
+      } else if (packData.subject === 'korean-english') {
+        correctAnswer = question.correctAnswer;
+        isCorrect = userAnswer === correctAnswer;
       }
 
       if (isCorrect) correct++;
@@ -1010,7 +1013,7 @@ const InteractiveQuiz = ({ packData, questions, onClose, onComplete, reviewMode 
     };
   };
 
-  // Get question preview text - Updated for both subjects
+  // Get question preview text - Updated for all subjects
   const getQuestionPreview = (question) => {
     if (packData.subject === 'tsa') {
       return question.question || question.question_content || 'TSA Question';
@@ -1019,6 +1022,17 @@ const InteractiveQuiz = ({ packData, questions, onClose, onComplete, reviewMode 
       const examCode = question.id ? question.id.split('_')[1] : 'Unknown Exam';
       const questionTopic = question.question_topic || 'Unknown Topic';
       return `${year} ${examCode} - ${questionTopic}`;
+    } else if (packData.subject === 'korean-english') {
+      const korean = question.questionText || question.korean || '';
+      const english = question.actualQuestion || question.english || '';
+      if (korean && english) {
+        return `${korean.substring(0, 30)}... → ${english.substring(0, 30)}...`;
+      } else if (korean) {
+        return `Korean: ${korean.substring(0, 40)}...`;
+      } else if (english) {
+        return `English: ${english.substring(0, 40)}...`;
+      }
+      return 'Korean-English Question';
     }
     return 'Question';
   };
@@ -1865,6 +1879,168 @@ if (!isDemoMode && user) {
                     border: '1px solid #e2e8f0'
                   }}>
                     {currentQuestion.correct_answer}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Korean-English Question Content */}
+          {packData.subject === 'korean-english' && (
+            <div>
+              {/* Korean Text Display */}
+              {(currentQuestion.questionText || currentQuestion.korean) && (
+                <div style={{
+                  backgroundColor: '#f8fafc',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  marginBottom: '24px',
+                  border: '2px solid #e0f2fe',
+                  textAlign: 'center'
+                }}>
+                  <div style={{
+                    fontSize: '14px',
+                    color: COLORS.gray,
+                    marginBottom: '12px',
+                    fontWeight: '600'
+                  }}>
+                    Korean Text:
+                  </div>
+                  <div style={{
+                    fontSize: '28px',
+                    fontWeight: '600',
+                    color: '#111827',
+                    fontFamily: 'system-ui, -apple-system, sans-serif',
+                    lineHeight: '1.4'
+                  }}>
+                    {currentQuestion.questionText || currentQuestion.korean}
+                  </div>
+                </div>
+              )}
+
+              {/* Question/Instruction Display */}
+              {(currentQuestion.actualQuestion || currentQuestion.english || currentQuestion.question) && (
+                <div style={{
+                  marginBottom: '32px'
+                }}>
+                  <h3 style={{
+                    fontSize: '18px',
+                    fontWeight: '600',
+                    color: '#111827',
+                    margin: '0 0 16px 0'
+                  }}>
+                    Question
+                  </h3>
+                  <p style={{
+                    fontSize: '16px',
+                    lineHeight: '1.6',
+                    color: '#374151',
+                    margin: '0',
+                    padding: '16px',
+                    backgroundColor: '#fefce8',
+                    borderRadius: '8px',
+                    border: '1px solid #fde047'
+                  }}>
+                    {currentQuestion.actualQuestion || currentQuestion.english || currentQuestion.question}
+                  </p>
+                </div>
+              )}
+
+              {/* Multiple Choice Options */}
+              {(currentQuestion.answerOptions || currentQuestion.options) && (
+                <div>
+                  <h3 style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#111827',
+                    margin: '0 0 16px 0'
+                  }}>
+                    Choose the best answer:
+                  </h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {(currentQuestion.answerOptions || currentQuestion.options).map((option, index) => {
+                      const optionId = index; // For Korean-English, we use index as the answer
+                      const isSelected = userAnswers[currentQuestion.objectID] === optionId;
+                      const isCorrect = optionId === currentQuestion.correctAnswer;
+                      const showCorrect = reviewMode && isCorrect;
+                      const showIncorrect = reviewMode && isSelected && !isCorrect;
+
+                      let backgroundColor = COLORS.white;
+                      let borderColor = '#e2e8f0';
+                      let textColor = '#374151';
+
+                      if (showCorrect) {
+                        backgroundColor = COLORS.success + '20';
+                        borderColor = COLORS.success;
+                      } else if (showIncorrect) {
+                        backgroundColor = COLORS.error + '20';
+                        borderColor = COLORS.error;
+                      } else if (isSelected) {
+                        backgroundColor = COLORS.teal + '20';
+                        borderColor = COLORS.teal;
+                        textColor = COLORS.teal;
+                      }
+
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => handleAnswerSelect(optionId)}
+                          disabled={reviewMode}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '16px',
+                            padding: '16px 20px',
+                            backgroundColor,
+                            border: `2px solid ${borderColor}`,
+                            borderRadius: '12px',
+                            fontSize: '15px',
+                            color: textColor,
+                            cursor: reviewMode ? 'default' : 'pointer',
+                            transition: 'all 0.2s ease',
+                            textAlign: 'left',
+                            width: '100%'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!reviewMode && !isSelected) {
+                              e.target.style.borderColor = COLORS.teal;
+                              e.target.style.backgroundColor = COLORS.teal + '10';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!reviewMode && !isSelected) {
+                              e.target.style.borderColor = '#e2e8f0';
+                              e.target.style.backgroundColor = COLORS.white;
+                            }
+                          }}
+                        >
+                          <div style={{
+                            width: '24px',
+                            height: '24px',
+                            borderRadius: '50%',
+                            backgroundColor: isSelected ? (showCorrect ? COLORS.success : showIncorrect ? COLORS.error : COLORS.teal) : '#f3f4f6',
+                            color: isSelected ? 'white' : COLORS.gray,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            flexShrink: 0
+                          }}>
+                            {String.fromCharCode(65 + index)}
+                          </div>
+                          <span style={{ flex: 1 }}>
+                            {typeof option === 'string' ? option : option.text || option.option || `Option ${index + 1}`}
+                          </span>
+                          {showCorrect && (
+                            <div style={{ color: COLORS.success, fontSize: '18px' }}>✓</div>
+                          )}
+                          {showIncorrect && (
+                            <div style={{ color: COLORS.error, fontSize: '18px' }}>✗</div>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}

@@ -191,7 +191,7 @@ const PDFPreview = ({ packData, selectedQuestions }) => {
             </div>
 
             {/* Korean text */}
-            {question.korean && (
+            {(question.questionText || question.korean) && (
               <div style={{ 
                 fontSize: `${previewStyles.fontSize + 1}px`,
                 fontWeight: '500',
@@ -199,19 +199,19 @@ const PDFPreview = ({ packData, selectedQuestions }) => {
                 marginBottom: '8px',
                 fontFamily: 'Malgun Gothic, Noto Sans KR, serif'
               }}>
-                <strong>Korean:</strong> {question.korean}
+                <strong>Korean:</strong> {question.questionText || question.korean}
               </div>
             )}
 
             {/* English text */}
-            {question.english && (
+            {(question.actualQuestion || question.english) && (
               <div style={{ 
                 fontSize: `${previewStyles.fontSize + 1}px`,
                 fontWeight: '500',
                 color: '#111827',
                 marginBottom: '8px'
               }}>
-                <strong>English:</strong> {question.english}
+                <strong>English:</strong> {question.actualQuestion || question.english}
               </div>
             )}
 
@@ -228,9 +228,9 @@ const PDFPreview = ({ packData, selectedQuestions }) => {
             )}
 
             {/* Options for multiple choice */}
-            {question.options && question.options.length > 0 && (
+            {(question.answerOptions || question.options) && (question.answerOptions || question.options).length > 0 && (
               <div style={{ marginTop: '12px' }}>
-                {question.options.map((option, optIndex) => (
+                {(question.answerOptions || question.options).map((option, optIndex) => (
                   <div key={optIndex} style={{ 
                     display: 'flex', 
                     alignItems: 'flex-start', 
@@ -520,8 +520,8 @@ const colorOptions = [
 
 // Get question preview for Korean-English
 const getQuestionPreview = (question) => {
-  const korean = question.korean || question.korean_text || '';
-  const english = question.english || question.english_text || '';
+  const korean = question.questionText || question.korean || question.korean_text || '';
+  const english = question.actualQuestion || question.english || question.english_text || '';
   const questionType = question.question_type || '';
   const subjectArea = question.subject_area || '';
   
@@ -705,7 +705,7 @@ const getQuestionPreview = (question) => {
           return true;
         }
         // Check for Korean-English required fields
-        if (!q.korean && !q.english && !q.question) {
+        if (!q.questionText && !q.korean && !q.actualQuestion && !q.english && !q.question) {
           console.warn(`Korean-English question ${q.objectID || index} missing content`);
           return true;
         }

@@ -15,10 +15,11 @@ const KoreanEnglishHit = ({ hit }) => {
   // Extract data from your Korean-English hit structure
   // PLACEHOLDER FIELDS - Update these based on your actual data structure
   const questionId = hit.objectID || hit.id || '';
-  const koreanText = hit.korean_text || hit.korean || '';
-  const englishText = hit.english_text || hit.english || '';
+  const koreanText = hit.questionText || hit.korean_text || hit.korean || '';
+  const englishText = hit.actualQuestion || hit.english_text || hit.english || '';
   const questionText = hit.question || '';
-  const answer = hit.answer || '';
+  const answer = hit.correctAnswer || hit.answer || '';
+  const answerOptions = hit.answerOptions || hit.options || [];
   const explanation = hit.explanation || '';
   const level = hit.level || '';
   const category = hit.category || '';

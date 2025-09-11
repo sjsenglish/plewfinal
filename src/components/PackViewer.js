@@ -938,7 +938,7 @@ const PackViewer = () => {
                         </div>
 
                         {/* Korean Text Display */}
-                        {question.korean && (
+                        {(question.questionText || question.korean) && (
                           <div style={{
                             marginBottom: '16px',
                             padding: '20px',
@@ -962,13 +962,13 @@ const PackViewer = () => {
                               fontFamily: 'system-ui, -apple-system, sans-serif',
                               lineHeight: '1.4'
                             }}>
-                              {question.korean}
+                              {question.questionText || question.korean}
                             </div>
                           </div>
                         )}
 
                         {/* Question Display */}
-                        {question.question && (
+                        {(question.actualQuestion || question.question) && (
                           <div style={{
                             marginBottom: '16px',
                             fontWeight: '500',
@@ -980,12 +980,12 @@ const PackViewer = () => {
                             borderRadius: '8px',
                             border: '1px solid #fde047'
                           }}>
-                            {question.question}
+                            {question.actualQuestion || question.question}
                           </div>
                         )}
 
                         {/* Options Display */}
-                        {question.options && question.options.length > 0 && (
+                        {(question.answerOptions || question.options) && (question.answerOptions || question.options).length > 0 && (
                           <div style={{ marginBottom: '16px' }}>
                             <div style={{
                               fontSize: '14px',
@@ -995,7 +995,7 @@ const PackViewer = () => {
                             }}>
                               Choose the best English translation:
                             </div>
-                            {question.options.map((option, optIndex) => (
+                            {(question.answerOptions || question.options).map((option, optIndex) => (
                               <div
                                 key={optIndex}
                                 style={{
@@ -1017,23 +1017,8 @@ const PackViewer = () => {
                         )}
 
                         {/* English Translation Display */}
-                        {question.english && (
-                          <div style={{
-                            marginTop: '16px',
-                            padding: '16px',
-                            backgroundColor: '#dcfce7',
-                            borderRadius: '8px',
-                            borderLeft: `4px solid #16a34a`
-                          }}>
-                            <strong style={{ color: '#166534' }}>Correct Translation:</strong>{' '}
-                            <span style={{ color: '#166534', fontWeight: '600' }}>
-                              {question.english}
-                            </span>
-                          </div>
-                        )}
-
                         {/* Show correct answer if available */}
-                        {question.correctAnswer !== undefined && question.options && (
+                        {((question.correctAnswer !== undefined && (question.answerOptions || question.options)) || (question.english || question.actualQuestion)) && (
                           <div style={{
                             marginTop: '16px',
                             padding: '16px',
@@ -1043,7 +1028,11 @@ const PackViewer = () => {
                           }}>
                             <strong style={{ color: '#166534' }}>Correct Answer:</strong>{' '}
                             <span style={{ color: '#166534', fontWeight: '600' }}>
-                              {String.fromCharCode(65 + question.correctAnswer)} - {question.options[question.correctAnswer]}
+                              {question.correctAnswer !== undefined && (question.answerOptions || question.options) ? (
+                                `${String.fromCharCode(65 + question.correctAnswer)} - ${(question.answerOptions || question.options)[question.correctAnswer]}`
+                              ) : (
+                                question.english || question.actualQuestion || 'Answer not available'
+                              )}
                             </span>
                           </div>
                         )}
