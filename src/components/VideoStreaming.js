@@ -12,7 +12,7 @@ const SAMPLE_VIDEOS = {
   },
   categories: [
     {
-      title: 'Trending Now',
+      title: '인트로',
       videos: [
         {
           id: 'v1',
@@ -47,7 +47,7 @@ const SAMPLE_VIDEOS = {
       ]
     },
     {
-      title: 'Popular This Week',
+      title: '파트 2',
       videos: [
         {
           id: 'v6',
@@ -76,7 +76,7 @@ const SAMPLE_VIDEOS = {
       ]
     },
     {
-      title: 'Recently Added',
+      title: '파트 3',
       videos: [
         {
           id: 'v10',
