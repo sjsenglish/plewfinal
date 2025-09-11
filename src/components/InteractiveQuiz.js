@@ -1094,6 +1094,22 @@ const InteractiveQuiz = ({ packData, questions, onClose, onComplete, reviewMode 
     }));
   };
 
+  // Helper function to convert Korean numbering symbols to indices
+  const getKoreanAnswerIndex = (correctAnswer) => {
+    if (typeof correctAnswer === 'number') {
+      return correctAnswer;
+    }
+    if (typeof correctAnswer === 'string') {
+      const koreanNumberMap = { '①': 0, '②': 1, '③': 2, '④': 3, '⑤': 4 };
+      for (const [symbol, index] of Object.entries(koreanNumberMap)) {
+        if (correctAnswer.startsWith(symbol)) {
+          return index;
+        }
+      }
+    }
+    return null;
+  };
+
   // Navigate questions
   const goToQuestion = (index) => {
     setCurrentQuestionIndex(index);
@@ -1156,22 +1172,6 @@ const InteractiveQuiz = ({ packData, questions, onClose, onComplete, reviewMode 
       timeElapsed: timeElapsed,
       completedAt: new Date()
     };
-  };
-
-  // Helper function to convert Korean numbering symbols to indices
-  const getKoreanAnswerIndex = (correctAnswer) => {
-    if (typeof correctAnswer === 'number') {
-      return correctAnswer;
-    }
-    if (typeof correctAnswer === 'string') {
-      const koreanNumberMap = { '①': 0, '②': 1, '③': 2, '④': 3, '⑤': 4 };
-      for (const [symbol, index] of Object.entries(koreanNumberMap)) {
-        if (correctAnswer.startsWith(symbol)) {
-          return index;
-        }
-      }
-    }
-    return null;
   };
 
   // Get question preview text - Updated for all subjects
