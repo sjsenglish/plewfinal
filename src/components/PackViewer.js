@@ -956,9 +956,9 @@ const PackViewer = () => {
                               Korean Text:
                             </div>
                             <div style={{
-                              fontSize: '18px',
-                              fontWeight: '600',
-                              color: '#111827',
+                              fontSize: '15px',
+                              fontWeight: '500',
+                              color: '#374151',
                               fontFamily: 'system-ui, -apple-system, sans-serif',
                               lineHeight: '1.4'
                             }}>

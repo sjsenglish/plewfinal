@@ -756,6 +756,137 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                           )}
                         </>
                       )}
+
+                      {/* Korean-English Question Content */}
+                      {packData.subject === 'korean-english' && (
+                        <>
+                          {/* Korean Text Display */}
+                          {(question?.questionText || question?.korean) && (
+                            <div style={{ marginBottom: '16px' }}>
+                              <h4 style={{
+                                fontSize: '14px',
+                                fontWeight: '600',
+                                color: COLORS.darkGray,
+                                margin: '0 0 8px 0'
+                              }}>
+                                Korean Text
+                              </h4>
+                              <div style={{
+                                fontSize: '15px',
+                                fontWeight: '500',
+                                color: '#374151',
+                                fontFamily: 'system-ui, -apple-system, sans-serif',
+                                lineHeight: '1.4',
+                                backgroundColor: '#f8fafc',
+                                padding: '12px',
+                                borderRadius: '8px',
+                                border: '1px solid #e2e8f0',
+                                textAlign: 'center'
+                              }}>
+                                {question.questionText || question.korean}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Question/Instruction */}
+                          {(question?.actualQuestion || question?.english || question?.question) && (
+                            <div style={{ marginBottom: '16px' }}>
+                              <h4 style={{
+                                fontSize: '14px',
+                                fontWeight: '600',
+                                color: COLORS.darkGray,
+                                margin: '0 0 8px 0'
+                              }}>
+                                Question
+                              </h4>
+                              <p style={{
+                                fontSize: '14px',
+                                color: '#374151',
+                                lineHeight: '1.6',
+                                margin: '0'
+                              }}>
+                                {question.actualQuestion || question.english || question.question}
+                              </p>
+                            </div>
+                          )}
+                          
+                          {/* Answer Options */}
+                          {(question?.answerOptions || question?.options) && (question.answerOptions || question.options).length > 0 && (
+                            <div style={{ marginBottom: '16px' }}>
+                              <h4 style={{
+                                fontSize: '14px',
+                                fontWeight: '600',
+                                color: COLORS.darkGray,
+                                margin: '0 0 12px 0'
+                              }}>
+                                Options
+                              </h4>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                {(question.answerOptions || question.options).map((option, optIndex) => {
+                                  const isCorrect = optIndex === question.correctAnswer;
+                                  const isUserAnswer = optIndex === result.userAnswer;
+                                  const isWrongUserAnswer = isUserAnswer && !isCorrect;
+                                  
+                                  let backgroundColor = '#f8fafc';
+                                  let borderColor = '#e2e8f0';
+                                  let textColor = '#374151';
+                                  
+                                  if (isCorrect) {
+                                    backgroundColor = COLORS.success + '20';
+                                    borderColor = COLORS.success;
+                                  } else if (isWrongUserAnswer) {
+                                    backgroundColor = COLORS.error + '20';
+                                    borderColor = COLORS.error;
+                                  }
+
+                                  return (
+                                    <div 
+                                      key={optIndex} 
+                                      style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '12px',
+                                        padding: '12px 16px',
+                                        backgroundColor,
+                                        border: `1px solid ${borderColor}`,
+                                        borderRadius: '8px',
+                                        fontSize: '14px',
+                                        color: textColor
+                                      }}
+                                    >
+                                      <span style={{
+                                        fontWeight: '600',
+                                        minWidth: '20px'
+                                      }}>
+                                        {optIndex + 1}
+                                      </span>
+                                      <span style={{ flex: 1 }}>
+                                        {typeof option === 'string' ? option : option.text || option.option || `Option ${optIndex + 1}`}
+                                      </span>
+                                      {isCorrect && (
+                                        <span style={{
+                                          color: COLORS.success,
+                                          fontSize: '16px'
+                                        }}>
+                                          ✓
+                                        </span>
+                                      )}
+                                      {isWrongUserAnswer && (
+                                        <span style={{
+                                          color: COLORS.error,
+                                          fontSize: '16px'
+                                        }}>
+                                          ✗
+                                        </span>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      )}
                       
                       {/* Answer Summary */}
                       <div style={{
@@ -763,7 +894,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                         borderRadius: '8px',
                         padding: '16px',
                         display: 'grid',
-                        gridTemplateColumns: packData.subject === 'tsa' ? '1fr 1fr' : '1fr',
+                        gridTemplateColumns: (packData.subject === 'tsa' || packData.subject === 'korean-english') ? '1fr 1fr' : '1fr',
                         gap: '16px'
                       }}>
                         <div>
@@ -780,10 +911,15 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                             color: result.isCorrect ? COLORS.success : COLORS.error,
                             marginTop: '4px'
                           }}>
-                            {result.userAnswer || 'Not answered'}
+                            {packData.subject === 'korean-english' && typeof result.userAnswer === 'number' 
+                              ? `${result.userAnswer + 1} - ${
+                                  (question?.answerOptions || question?.options)?.[result.userAnswer] || 'Option ' + (result.userAnswer + 1)
+                                }`
+                              : result.userAnswer || 'Not answered'
+                            }
                           </div>
                         </div>
-                        {packData.subject === 'tsa' && (
+                        {(packData.subject === 'tsa' || packData.subject === 'korean-english') && (
                           <div>
                             <span style={{
                               fontSize: '13px',
@@ -798,7 +934,12 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                               color: COLORS.success,
                               marginTop: '4px'
                             }}>
-                              {result.correctAnswer}
+                              {packData.subject === 'korean-english' && typeof result.correctAnswer === 'number'
+                                ? `${result.correctAnswer + 1} - ${
+                                    (question?.answerOptions || question?.options)?.[result.correctAnswer] || 'Option ' + (result.correctAnswer + 1)
+                                  }`
+                                : result.correctAnswer
+                              }
                             </div>
                           </div>
                         )}
@@ -1907,9 +2048,9 @@ if (!isDemoMode && user) {
                     Korean Text:
                   </div>
                   <div style={{
-                    fontSize: '20px',
-                    fontWeight: '600',
-                    color: '#111827',
+                    fontSize: '15px',
+                    fontWeight: '500',
+                    color: '#374151',
                     fontFamily: 'system-ui, -apple-system, sans-serif',
                     lineHeight: '1.4'
                   }}>

@@ -193,9 +193,9 @@ const PDFPreview = ({ packData, selectedQuestions }) => {
             {/* Korean text */}
             {(question.questionText || question.korean) && (
               <div style={{ 
-                fontSize: `${previewStyles.fontSize + 1}px`,
+                fontSize: `${previewStyles.fontSize}px`,
                 fontWeight: '500',
-                color: '#111827',
+                color: '#374151',
                 marginBottom: '8px',
                 fontFamily: 'Malgun Gothic, Noto Sans KR, serif'
               }}>
