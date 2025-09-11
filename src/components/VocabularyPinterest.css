@@ -11,7 +11,7 @@
   color: white;
   padding: 3rem 2rem;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 }
 
 .header-content {
@@ -45,7 +45,7 @@
 .search-filters {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem 2rem 2rem;
+  padding: 1rem 2rem 2rem 2rem;
 }
 
 .search-container {
@@ -466,10 +466,11 @@
   
   .pinterest-header {
     padding: 2rem 1rem;
+    margin-bottom: 3rem;
   }
   
   .search-filters {
-    padding: 0 1rem 1rem 1rem;
+    padding: 1rem 1rem 1rem 1rem;
   }
   
   .masonry-container {
@@ -535,7 +536,7 @@
   }
   
   .search-filters {
-    padding: 0 0.5rem 0.5rem 0.5rem;
+    padding: 1rem 0.5rem 0.5rem 0.5rem;
   }
   
   .masonry-container {
