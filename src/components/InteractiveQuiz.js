@@ -823,7 +823,8 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                               </h4>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {(question.answerOptions || question.options).map((option, optIndex) => {
-                                  const isCorrect = optIndex === question.correctAnswer;
+                                  const correctAnswerIndex = getKoreanAnswerIndex(question.correctAnswer);
+                                  const isCorrect = optIndex === correctAnswerIndex;
                                   const isUserAnswer = optIndex === result.userAnswer;
                                   const isWrongUserAnswer = isUserAnswer && !isCorrect;
                                   
@@ -934,12 +935,14 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                               color: COLORS.success,
                               marginTop: '4px'
                             }}>
-                              {packData.subject === 'korean-english' && typeof result.correctAnswer === 'number'
-                                ? `${result.correctAnswer + 1} - ${
-                                    (question?.answerOptions || question?.options)?.[result.correctAnswer] || 'Option ' + (result.correctAnswer + 1)
-                                  }`
-                                : result.correctAnswer
-                              }
+                              {packData.subject === 'korean-english' ? (() => {
+                                const correctAnswerIndex = getKoreanAnswerIndex(result.correctAnswer);
+                                return typeof correctAnswerIndex === 'number'
+                                  ? `${correctAnswerIndex + 1} - ${
+                                      (question?.answerOptions || question?.options)?.[correctAnswerIndex] || 'Option ' + (correctAnswerIndex + 1)
+                                    }`
+                                  : result.correctAnswer;
+                              })() : result.correctAnswer}
                             </div>
                           </div>
                         )}
@@ -1130,7 +1133,8 @@ const InteractiveQuiz = ({ packData, questions, onClose, onComplete, reviewMode 
         isCorrect = userAnswer && userAnswer.trim().length > 0;
       } else if (packData.subject === 'korean-english') {
         correctAnswer = question.correctAnswer;
-        isCorrect = userAnswer === correctAnswer;
+        const correctAnswerIndex = getKoreanAnswerIndex(correctAnswer);
+        isCorrect = typeof userAnswer === 'number' && userAnswer === correctAnswerIndex;
       }
 
       if (isCorrect) correct++;
@@ -1152,6 +1156,22 @@ const InteractiveQuiz = ({ packData, questions, onClose, onComplete, reviewMode 
       timeElapsed: timeElapsed,
       completedAt: new Date()
     };
+  };
+
+  // Helper function to convert Korean numbering symbols to indices
+  const getKoreanAnswerIndex = (correctAnswer) => {
+    if (typeof correctAnswer === 'number') {
+      return correctAnswer;
+    }
+    if (typeof correctAnswer === 'string') {
+      const koreanNumberMap = { '①': 0, '②': 1, '③': 2, '④': 3, '⑤': 4 };
+      for (const [symbol, index] of Object.entries(koreanNumberMap)) {
+        if (correctAnswer.startsWith(symbol)) {
+          return index;
+        }
+      }
+    }
+    return null;
   };
 
   // Get question preview text - Updated for all subjects
