@@ -3179,7 +3179,7 @@ ul {
 }
 
 .btn-orange {
-  background: linear-gradient(45deg, #fd7e14, #ff8c00);
+  background: linear-gradient(45deg, #8b5cf6, #a855f7);
   color: white;
   border: none;
   padding: 0.6rem 1.2rem;
@@ -3188,12 +3188,12 @@ ul {
   font-size: 0.9rem;
   font-weight: 500;
   transition: all 0.3s ease;
-  box-shadow: 0 3px 10px rgba(253, 126, 20, 0.3);
+  box-shadow: 0 3px 10px rgba(139, 92, 246, 0.3);
 }
 
 .btn-orange:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(253, 126, 20, 0.4);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
 }
 
 .btn-disabled {
