@@ -941,14 +941,14 @@ const PackViewer = () => {
                         {(question.questionText || question.korean) && (
                           <div style={{
                             marginBottom: '16px',
-                            padding: '20px',
+                            padding: '16px',
                             backgroundColor: '#f8fafc',
                             borderRadius: '12px',
-                            border: '2px solid #e0f2fe',
+                            border: '1px solid #e2e8f0',
                             textAlign: 'center'
                           }}>
                             <div style={{
-                              fontSize: '14px',
+                              fontSize: '13px',
                               color: COLORS.gray,
                               marginBottom: '8px',
                               fontWeight: '500'
@@ -956,7 +956,7 @@ const PackViewer = () => {
                               Korean Text:
                             </div>
                             <div style={{
-                              fontSize: '24px',
+                              fontSize: '18px',
                               fontWeight: '600',
                               color: '#111827',
                               fontFamily: 'system-ui, -apple-system, sans-serif',
@@ -971,15 +971,17 @@ const PackViewer = () => {
                         {(question.actualQuestion || question.question) && (
                           <div style={{
                             marginBottom: '16px',
-                            fontWeight: '500',
-                            fontSize: '16px',
-                            color: COLORS.darkGray,
-                            lineHeight: '1.6',
-                            padding: '16px',
-                            backgroundColor: '#fefce8',
+                            fontSize: '14px',
+                            color: COLORS.gray,
+                            lineHeight: '1.5',
+                            padding: '12px',
+                            backgroundColor: '#f8fafc',
                             borderRadius: '8px',
-                            border: '1px solid #fde047'
+                            border: '1px solid #e2e8f0'
                           }}>
+                            <div style={{ marginBottom: '8px', fontWeight: '500' }}>
+                              Question:
+                            </div>
                             {question.actualQuestion || question.question}
                           </div>
                         )}

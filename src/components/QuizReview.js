@@ -383,8 +383,77 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                           </>
                         )}
 
+                        {/* Korean-English Question Content */}
+                        {packData?.subject === 'korean-english' && (
+                          <>
+                            {/* Korean Text Display */}
+                            {(question?.questionText || question?.korean) && (
+                              <div className="question-korean">
+                                <strong>Korean Text:</strong>
+                                <div style={{ 
+                                  fontSize: '18px', 
+                                  fontWeight: '600',
+                                  marginTop: '8px',
+                                  marginBottom: '12px',
+                                  color: '#111827',
+                                  fontFamily: 'system-ui, -apple-system, sans-serif'
+                                }}>
+                                  {question.questionText || question.korean}
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* Question/Instruction */}
+                            {(question?.actualQuestion || question?.english || question?.question) && (
+                              <div className="question-instruction">
+                                <strong>Question:</strong>
+                                <div style={{ marginTop: '8px', lineHeight: '1.6' }}>
+                                  {question.actualQuestion || question.english || question.question}
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* Answer Options */}
+                            {(question?.answerOptions || question?.options) && (question.answerOptions || question.options).length > 0 && (
+                              <div className="question-options">
+                                <strong>Options:</strong>
+                                <div className="options-list">
+                                  {(question.answerOptions || question.options).map((option, optIndex) => {
+                                    const isCorrect = optIndex === question.correctAnswer;
+                                    const isUserAnswer = optIndex === result.userAnswer;
+                                    
+                                    return (
+                                      <div 
+                                        key={optIndex} 
+                                        className={`option-item ${
+                                          isCorrect ? 'correct-option' : ''
+                                        } ${
+                                          isUserAnswer && !isCorrect ? 'user-wrong-answer' : ''
+                                        } ${
+                                          isUserAnswer && isCorrect ? 'user-correct-answer' : ''
+                                        }`}
+                                      >
+                                        <span className="option-id">{optIndex + 1}</span>
+                                        <span className="option-text">
+                                          {typeof option === 'string' ? option : option.text || option.option || `Option ${optIndex + 1}`}
+                                        </span>
+                                        {isCorrect && (
+                                          <span className="option-badge correct">Correct</span>
+                                        )}
+                                        {isUserAnswer && !isCorrect && (
+                                          <span className="option-badge your-answer">Your Answer</span>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        )}
+
                         {/* Default fallback for unknown subjects */}
-                        {(!packData?.subject || (packData.subject !== 'tsa' && packData.subject !== 'maths')) && (
+                        {(!packData?.subject || !['tsa', 'maths', 'korean-english'].includes(packData.subject)) && (
                           <div className="question-generic">
                             <div className="question-text">
                               {question?.question || question?.question_content || 'Question content'}
@@ -395,11 +464,23 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                         {/* Answer Summary */}
                         <div className="answers-section">
                           <div className="user-answer">
-                            <strong>Your answer:</strong> {result.userAnswer || 'Not answered'}
+                            <strong>Your answer:</strong> {
+                              packData?.subject === 'korean-english' && typeof result.userAnswer === 'number' 
+                                ? `${result.userAnswer + 1} - ${
+                                    (question?.answerOptions || question?.options)?.[result.userAnswer] || 'Option ' + (result.userAnswer + 1)
+                                  }`
+                                : result.userAnswer || 'Not answered'
+                            }
                           </div>
-                          {packData?.subject === 'tsa' && (
+                          {(packData?.subject === 'tsa' || packData?.subject === 'korean-english') && (
                             <div className="correct-answer">
-                              <strong>Correct answer:</strong> {result.correctAnswer}
+                              <strong>Correct answer:</strong> {
+                                packData?.subject === 'korean-english' && typeof result.correctAnswer === 'number'
+                                  ? `${result.correctAnswer + 1} - ${
+                                      (question?.answerOptions || question?.options)?.[result.correctAnswer] || 'Option ' + (result.correctAnswer + 1)
+                                    }`
+                                  : result.correctAnswer
+                              }
                             </div>
                           )}
                         </div>

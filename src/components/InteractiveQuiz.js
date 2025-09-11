@@ -1893,21 +1893,21 @@ if (!isDemoMode && user) {
                 <div style={{
                   backgroundColor: '#f8fafc',
                   borderRadius: '12px',
-                  padding: '24px',
+                  padding: '20px',
                   marginBottom: '24px',
-                  border: '2px solid #e0f2fe',
+                  border: '1px solid #e2e8f0',
                   textAlign: 'center'
                 }}>
                   <div style={{
                     fontSize: '14px',
                     color: COLORS.gray,
-                    marginBottom: '12px',
-                    fontWeight: '600'
+                    marginBottom: '8px',
+                    fontWeight: '500'
                   }}>
                     Korean Text:
                   </div>
                   <div style={{
-                    fontSize: '28px',
+                    fontSize: '20px',
                     fontWeight: '600',
                     color: '#111827',
                     fontFamily: 'system-ui, -apple-system, sans-serif',
@@ -1921,28 +1921,27 @@ if (!isDemoMode && user) {
               {/* Question/Instruction Display */}
               {(currentQuestion.actualQuestion || currentQuestion.english || currentQuestion.question) && (
                 <div style={{
-                  marginBottom: '32px'
+                  marginBottom: '24px'
                 }}>
                   <h3 style={{
-                    fontSize: '18px',
+                    fontSize: '16px',
                     fontWeight: '600',
                     color: '#111827',
-                    margin: '0 0 16px 0'
+                    margin: '0 0 12px 0'
                   }}>
                     Question
                   </h3>
-                  <p style={{
-                    fontSize: '16px',
+                  <div style={{
+                    fontSize: '15px',
                     lineHeight: '1.6',
                     color: '#374151',
-                    margin: '0',
                     padding: '16px',
-                    backgroundColor: '#fefce8',
+                    backgroundColor: '#f8fafc',
                     borderRadius: '8px',
-                    border: '1px solid #fde047'
+                    border: '1px solid #e2e8f0'
                   }}>
                     {currentQuestion.actualQuestion || currentQuestion.english || currentQuestion.question}
-                  </p>
+                  </div>
                 </div>
               )}
 
