@@ -1,10 +1,50 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getAuth } from 'firebase/auth';
-import { doc, setDoc, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc, collection, query, where, getDocs, orderBy, limit, startAfter } from 'firebase/firestore';
 import { db } from '../firebase';
-import { fetchVocabulary } from '../services/vocabularyAPIService';
 import VocabularyQuiz from './VocabularyQuiz';
 import './VocabularyPinterest.css';
+
+// Error Boundary Component
+class VocabularyErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Vocabulary Error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '2rem', textAlign: 'center', border: '1px solid #f56565', borderRadius: '8px', backgroundColor: '#fed7d7' }}>
+          <h3>🚨 Error Loading Vocabulary</h3>
+          <p>Something went wrong while displaying the vocabulary cards.</p>
+          <details style={{ marginTop: '1rem', textAlign: 'left' }}>
+            <summary>Error Details</summary>
+            <pre style={{ fontSize: '12px', overflow: 'auto', marginTop: '0.5rem' }}>
+              {this.state.error?.toString()}
+            </pre>
+          </details>
+          <button 
+            onClick={() => this.setState({ hasError: false, error: null })}
+            style={{ marginTop: '1rem', padding: '0.5rem 1rem', borderRadius: '4px', border: 'none', backgroundColor: '#4299e1', color: 'white' }}
+          >
+            Try Again
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 
 const VocabularyPinterest = () => {
@@ -14,6 +54,9 @@ const VocabularyPinterest = () => {
   const [selectedSubject, setSelectedSubject] = useState('all');
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizWords, setQuizWords] = useState([]);
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
   const [filters] = useState({
     difficulty: 'all',
     frequency: 'all'
@@ -38,73 +81,108 @@ const VocabularyPinterest = () => {
   ];
 
 
-  // Load vocabulary words - optimized for speed
+  // Load vocabulary words from Firebase
   const loadWords = useCallback(async (reset = false) => {
+    if (loading) return;
+    
     setLoading(true);
     try {
-      const options = {
-        limit: 20,
-        offset: reset ? 0 : words.length,
-        subjectArea: selectedSubject,
-        search: null,
-        difficulty: filters.difficulty !== 'all' ? filters.difficulty : null,
-        minFrequency: filters.frequency !== 'all' ? parseInt(filters.frequency) : 1
-      };
-
-      console.log('📚 Loading vocabulary words with options:', options);
-      const result = await fetchVocabulary(options);
+      let vocabularyQuery = collection(db, 'vocabulary');
       
-      console.log('📚 API Result:', result);
-      console.log('📚 First word sample:', result.words?.[0]);
-      
-      if (result.success && result.words && result.words.length > 0) {
-        // Process words with minimal enhancement for better performance
-        const enhancedWords = result.words.map(word => {
-          // Ensure word has basic required fields
-          if (!word || !word.word) {
-            console.warn('🚨 Invalid word data:', word);
-            return null;
-          }
-          
-          return {
-            ...word,
-            id: word.word || word.id || `word-${Date.now()}`,
-            height: Math.floor(Math.random() * 200) + 300, // Random height for masonry
-            // Use existing data from API or provide good fallbacks
-            word: word.word,
-            definition: word.definition || `${word.word}: An important vocabulary word for CSAT preparation.`,
-            synonyms: (word.synonyms && word.synonyms.length > 0) ? word.synonyms : 
-                     ['similar', 'related', 'comparable', 'equivalent'],
-            examples: (word.examples && word.examples.length > 0) ? word.examples :
-                     [`The word "${word.word}" appears frequently in CSAT reading passages.`],
-            questionInfo: word.questionInfo || null,
-            pronunciation: word.pronunciation || null,
-            difficulty: word.difficulty || 5,
-            frequency: word.frequency || 1,
-            subjectArea: word.subjectArea || selectedSubject,
-            koreanTranslation: word.koreanTranslation || null
-          };
-        }).filter(Boolean); // Remove any null entries
+      // Apply subject filter
+      if (selectedSubject !== 'all') {
+        vocabularyQuery = query(vocabularyQuery, where('subjects', 'array-contains', selectedSubject));
+      }
 
-        console.log(`📚 Processed ${enhancedWords.length} words`);
+      // Apply difficulty filter
+      if (filters.difficulty !== 'all') {
+        vocabularyQuery = query(vocabularyQuery, where('difficulty', '==', parseInt(filters.difficulty)));
+      }
 
-        if (reset) {
-          setWords(enhancedWords);
-        } else {
-          setWords(prev => [...prev, ...enhancedWords]);
-        }
+      // Apply search filter
+      if (searchTerm.trim()) {
+        // For search, we'll filter client-side since Firestore doesn't support full-text search
+        vocabularyQuery = query(vocabularyQuery, orderBy('frequency', 'desc'));
       } else {
-        console.warn('📚 No vocabulary words returned from API');
+        vocabularyQuery = query(vocabularyQuery, orderBy('frequency', 'desc'));
+      }
+
+      // Pagination
+      if (!reset && lastDoc) {
+        vocabularyQuery = query(vocabularyQuery, startAfter(lastDoc));
+      }
+      
+      vocabularyQuery = query(vocabularyQuery, limit(20));
+
+      const querySnapshot = await getDocs(vocabularyQuery);
+      
+      if (querySnapshot.empty) {
         if (reset) {
           setWords([]);
+          setHasMore(false);
         }
+        return;
       }
+
+      const newWords = [];
+      querySnapshot.forEach((doc) => {
+        const wordData = doc.data();
+        
+        // Debug logging for first few words
+        if (newWords.length < 3) {
+          console.log('Debug - Word data structure:', wordData);
+        }
+        
+        // Client-side search filtering
+        if (searchTerm.trim()) {
+          const searchLower = searchTerm.toLowerCase();
+          if (!wordData.word.toLowerCase().includes(searchLower) &&
+              !wordData.contexts?.some(context => context.toLowerCase().includes(searchLower))) {
+            return;
+          }
+        }
+
+        // Ensure required fields exist and are properly formatted
+        const sanitizedWord = {
+          id: doc.id,
+          word: wordData.word || doc.id,
+          frequency: wordData.frequency || 1,
+          difficulty: wordData.difficulty || 3,
+          definition: wordData.definition || '',
+          contexts: Array.isArray(wordData.contexts) ? wordData.contexts : [],
+          subjects: Array.isArray(wordData.subjects) ? wordData.subjects : [],
+          questions: Array.isArray(wordData.questions) ? wordData.questions : [],
+          examples: Array.isArray(wordData.examples) ? wordData.examples : [],
+          height: Math.floor(Math.random() * 200) + 300, // For masonry layout
+          createdAt: wordData.createdAt,
+          updatedAt: wordData.updatedAt
+        };
+
+        newWords.push(sanitizedWord);
+      });
+
+      // Set last document for pagination
+      if (querySnapshot.docs.length > 0) {
+        setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        setHasMore(querySnapshot.docs.length === 20);
+      } else {
+        setHasMore(false);
+      }
+
+      if (reset) {
+        setWords(newWords);
+      } else {
+        setWords(prev => [...prev, ...newWords]);
+      }
+
+      console.log(`📚 Loaded ${newWords.length} words from Firebase`);
+      
     } catch (error) {
-      console.error('Error loading words:', error);
+      console.error('Error loading vocabulary from Firebase:', error);
     } finally {
       setLoading(false);
     }
-  }, [selectedSubject, filters, words.length]);
+  }, [selectedSubject, filters, searchTerm, lastDoc, loading]);
 
   // Load saved words for current user
   const loadSavedWords = useCallback(async () => {
@@ -183,27 +261,15 @@ const VocabularyPinterest = () => {
   };
 
 
-  // Generate random words for subject
+  // Generate random words for subject  
   const generateRandomWords = async () => {
     if (selectedSubject === 'all') return;
     
-    const options = {
-      limit: 10,
-      offset: Math.floor(Math.random() * 100),
-      subjectArea: selectedSubject,
-      sortBy: 'random'
-    };
-
     try {
-      const result = await fetchVocabulary(options);
-      if (result.success) {
-        const newWords = result.words.map(word => ({
-          ...word,
-          id: word.word || word.id,
-          height: Math.floor(Math.random() * 200) + 300
-        }));
-        setWords(newWords);
-      }
+      // Reload words but shuffled for the selected subject
+      await loadWords(true);
+      const shuffled = [...words].sort(() => 0.5 - Math.random());
+      setWords(shuffled.slice(0, 10));
     } catch (error) {
       console.error('Error generating random words:', error);
     }
@@ -211,8 +277,10 @@ const VocabularyPinterest = () => {
 
 
   useEffect(() => {
+    setLastDoc(null);
+    setHasMore(true);
     loadWords(true);
-  }, [selectedSubject, filters, loadWords]);
+  }, [selectedSubject, filters, searchTerm]);
 
   useEffect(() => {
     loadSavedWords();
@@ -256,6 +324,18 @@ const VocabularyPinterest = () => {
           ))}
         </div>
 
+        {/* Search Bar */}
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search vocabulary words..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          <div className="search-icon">🔍</div>
+        </div>
+
         {/* Quick Actions */}
         <div className="quick-actions">
           {selectedSubject !== 'all' && (
@@ -278,17 +358,18 @@ const VocabularyPinterest = () => {
           style={{ '--columns': columns }}
         >
           {words.map((word, index) => (
-            <VocabularyCard
-              key={`${word.word}-${index}`}
-              word={word}
-              isSaved={savedWords.has(word.word)}
-              onToggleSave={() => toggleSaveWord(word)}
-            />
+            <VocabularyErrorBoundary key={`${word.word}-${index}`}>
+              <VocabularyCard
+                word={word}
+                isSaved={savedWords.has(word.word)}
+                onToggleSave={() => toggleSaveWord(word)}
+              />
+            </VocabularyErrorBoundary>
           ))}
         </div>
 
         {/* Load More */}
-        {!loading && words.length > 0 && (
+        {!loading && words.length > 0 && hasMore && (
           <div className="load-more-container">
             <button onClick={() => loadWords(false)} className="load-more-btn">
               Load More Words
@@ -356,6 +437,26 @@ const VocabularyCard = ({
     return 'Expert';
   };
 
+  // Highlight the target word in context sentences
+  const highlightWord = (sentence, targetWord) => {
+    if (!sentence || !targetWord) return sentence;
+    if (typeof sentence !== 'string') return String(sentence);
+    
+    const regex = new RegExp(`\\b(${targetWord})\\b`, 'gi');
+    const parts = sentence.split(regex);
+    
+    return (
+      <span>
+        {parts.map((part, index) => {
+          if (part.toLowerCase() === targetWord.toLowerCase()) {
+            return <strong key={index} style={{ backgroundColor: '#fef08a', padding: '2px 4px', borderRadius: '3px' }}>{part}</strong>;
+          }
+          return <span key={index}>{part}</span>;
+        })}
+      </span>
+    );
+  };
+
   return (
     <div className="vocabulary-card">
       {/* Card Header */}
@@ -383,43 +484,77 @@ const VocabularyCard = ({
         {getDifficultyLabel(word.difficulty)}
       </div>
 
-      {/* Subject Area Tags */}
-      {word.subjectArea && (
-        <div className="subject-tags">
-          <span className="subject-tag">{word.subjectArea}</span>
+      {/* Frequency and Subject Info */}
+      <div className="word-stats">
+        <div className="frequency-badge">
+          Appears {word.frequency} time{word.frequency !== 1 ? 's' : ''}
         </div>
-      )}
-
-      {/* Definition */}
-      <div className="definition-section">
-        <p className="definition-en">{word.definition}</p>
-        {word.koreanTranslation && (
-          <p className="definition-ko">{word.koreanTranslation}</p>
+        {word.subjects && word.subjects.length > 0 && (
+          <div className="subject-tags">
+            {word.subjects.slice(0, 2).map((subject, index) => (
+              <span key={index} className="subject-tag">{subject}</span>
+            ))}
+          </div>
         )}
       </div>
 
-      {/* Synonyms - Always Visible */}
-      {word.synonyms && word.synonyms.length > 0 && (
-        <div className="synonyms-section">
-          <span className="synonyms-label">Synonyms:</span>
-          <div className="synonyms-list">
-            {word.synonyms.map((synonym, index) => (
-              <span key={index} className="synonym-tag">{synonym}</span>
-            ))}
+      {/* Definition */}
+      <div className="definition-section">
+        <p className="definition-en">{word.definition || 'A key vocabulary word from CSAT passages.'}</p>
+      </div>
+
+      {/* Context Sentences from CSAT Questions */}
+      {word.contexts && Array.isArray(word.contexts) && word.contexts.length > 0 && (
+        <div className="context-section">
+          <h4 className="context-title">📖 CSAT Context:</h4>
+          <div className="context-sentence">
+            {highlightWord(word.contexts[0], word.word)}
           </div>
         </div>
       )}
 
-      {/* CSAT Example Sentences */}
-      {word.examples && word.examples.length > 0 && (
+      {/* Question Examples */}
+      {word.examples && Array.isArray(word.examples) && word.examples.length > 0 && (
         <div className="examples-section">
-          <h4 className="examples-title">
-            CSAT Example
-            {word.questionInfo && (
-              <span className="question-info"> - Q{word.questionInfo.number || ''} ({word.questionInfo.year || '2023'})</span>
-            )}:
-          </h4>
-          <p className="example-sentence">{word.examples[0]}</p>
+          <h4 className="examples-title">📋 Found in Questions:</h4>
+          {word.examples.slice(0, 2).map((example, index) => {
+            // Handle different example formats
+            if (typeof example === 'object' && example !== null) {
+              return (
+                <div key={index} className="example-item">
+                  <div className="question-id">{example.questionId || `Example ${index + 1}`}</div>
+                  <div className="example-sentence">
+                    {example.sentence ? highlightWord(example.sentence, word.word) : 'No sentence available'}
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <div key={index} className="example-item">
+                <div className="question-id">Example {index + 1}</div>
+                <div className="example-sentence">
+                  {typeof example === 'string' ? highlightWord(example, word.word) : 'No sentence available'}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Questions List */}
+      {word.questions && Array.isArray(word.questions) && word.questions.length > 0 && (
+        <div className="questions-section">
+          <h4 className="questions-title">🎯 Appears in:</h4>
+          <div className="questions-list">
+            {word.questions.slice(0, 3).map((questionId, index) => (
+              <span key={index} className="question-badge">
+                {typeof questionId === 'string' ? questionId : `Q${index + 1}`}
+              </span>
+            ))}
+            {word.questions.length > 3 && (
+              <span className="more-questions">+{word.questions.length - 3} more</span>
+            )}
+          </div>
         </div>
       )}
     </div>

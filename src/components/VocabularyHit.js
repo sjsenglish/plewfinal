@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { getEnhancedWordInfo } from '../services/vocabularyAPIService';
+// import { getEnhancedWordInfo } from '../services/vocabularyAPIService';
 import './VocabularyHit.css';
 
 const VocabularyHit = ({ hit = {} }) => {
@@ -40,7 +40,8 @@ const VocabularyHit = ({ hit = {} }) => {
       const context = contexts.length > 0 ? contexts[0] : '';
       console.log('Loading word info for:', word, 'with context:', context);
       
-      const enhancedInfo = await getEnhancedWordInfo(word, context);
+      // const enhancedInfo = await getEnhancedWordInfo(word, context);
+      const enhancedInfo = { word, definition: 'Enhanced word info temporarily disabled' };
       console.log('Received word info for:', word, enhancedInfo);
       setWordInfo(enhancedInfo);
     } catch (error) {
