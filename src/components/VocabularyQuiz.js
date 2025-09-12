@@ -158,14 +158,14 @@ const VocabularyQuiz = ({ words, onClose, onComplete }) => {
     const isCorrect = answer === currentQuestion.correctAnswer;
     
     const answerData = {
-      questionId: currentQuestion.id,
-      word: currentQuestion.word,
-      question: currentQuestion.question,
-      selectedAnswer: answer,
-      correctAnswer: currentQuestion.correctAnswer,
+      questionId: String(currentQuestion.id || 'unknown'),
+      word: String(currentQuestion.word || ''),
+      questionText: typeof currentQuestion.question === 'string' ? currentQuestion.question : String(currentQuestion.question || 'Unknown question'),
+      selectedAnswer: String(answer || ''),
+      correctAnswer: String(currentQuestion.correctAnswer || ''),
       isCorrect,
       timeSpent: 30 - timeLeft,
-      type: currentQuestion.type
+      type: String(currentQuestion.type || 'unknown')
     };
 
     setAnswers(prev => [...prev, answerData]);

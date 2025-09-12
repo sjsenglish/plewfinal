@@ -181,10 +181,14 @@ const VocabularyTest = ({ words, testType, onComplete, onClose }) => {
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
     
     const answerRecord = {
-      questionId: currentQuestion.id,
-      question: currentQuestion,
-      selectedAnswer,
-      correctAnswer: currentQuestion.correctAnswer,
+      questionId: String(currentQuestion.id || 'unknown'),
+      questionText: typeof currentQuestion.question === 'string' ? currentQuestion.question : String(currentQuestion.question || 'Unknown question'),
+      sentence: typeof currentQuestion.sentence === 'string' ? currentQuestion.sentence : 
+               typeof currentQuestion.sentence === 'object' && currentQuestion.sentence ?
+                 String(currentQuestion.sentence.text || currentQuestion.sentence.sentence || currentQuestion.sentence) :
+                 String(currentQuestion.sentence || ''),
+      selectedAnswer: String(selectedAnswer || ''),
+      correctAnswer: String(currentQuestion.correctAnswer || ''),
       isCorrect,
       timeSpent: getTestDuration() - timeLeft
     };
@@ -341,7 +345,10 @@ const VocabularyTest = ({ words, testType, onComplete, onClose }) => {
             )}
             {currentQuestion.sentence && (
               <div className="question-sentence">
-                <p>"{currentQuestion.sentence}"</p>
+                <p>"{typeof currentQuestion.sentence === 'string' ? currentQuestion.sentence : 
+                     typeof currentQuestion.sentence === 'object' && currentQuestion.sentence ?
+                       String(currentQuestion.sentence.text || currentQuestion.sentence.sentence || currentQuestion.sentence) :
+                       String(currentQuestion.sentence)}"</p>
               </div>
             )}
           </div>
