@@ -878,7 +878,9 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                         {optIndex + 1}
                                       </span>
                                       <span style={{ flex: 1 }}>
-                                        {typeof option === 'string' ? option : option.text || option.option || `Option ${optIndex + 1}`}
+                                        {typeof option === 'string' ? option : 
+                                         typeof option === 'object' ? (option?.text || option?.option || `Option ${optIndex + 1}`) : 
+                                         String(option) || `Option ${optIndex + 1}`}
                                       </span>
                                       {isCorrect && (
                                         <span style={{
@@ -930,9 +932,14 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                           }}>
                             {packData.subject === 'korean-english' && typeof result.userAnswer === 'number' 
                               ? `${result.userAnswer + 1} - ${
-                                  (question?.answerOptions || question?.options)?.[result.userAnswer] || 'Option ' + (result.userAnswer + 1)
+                                  (() => {
+                                    const option = (question?.answerOptions || question?.options)?.[result.userAnswer];
+                                    return typeof option === 'string' ? option : 
+                                           typeof option === 'object' ? (option?.text || option?.option || 'Option ' + (result.userAnswer + 1)) : 
+                                           String(option) || 'Option ' + (result.userAnswer + 1);
+                                  })()
                                 }`
-                              : result.userAnswer || 'Not answered'
+                              : String(result.userAnswer) || 'Not answered'
                             }
                           </div>
                         </div>
@@ -955,10 +962,15 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 const correctAnswerIndex = getKoreanAnswerIndexForReview(result.correctAnswer);
                                 return typeof correctAnswerIndex === 'number'
                                   ? `${correctAnswerIndex + 1} - ${
-                                      (question?.answerOptions || question?.options)?.[correctAnswerIndex] || 'Option ' + (correctAnswerIndex + 1)
+                                      (() => {
+                                        const option = (question?.answerOptions || question?.options)?.[correctAnswerIndex];
+                                        return typeof option === 'string' ? option : 
+                                               typeof option === 'object' ? (option?.text || option?.option || 'Option ' + (correctAnswerIndex + 1)) : 
+                                               String(option) || 'Option ' + (correctAnswerIndex + 1);
+                                      })()
                                     }`
-                                  : result.correctAnswer;
-                              })() : result.correctAnswer}
+                                  : String(result.correctAnswer);
+                              })() : String(result.correctAnswer)}
                             </div>
                           </div>
                         )}
@@ -2206,7 +2218,9 @@ if (!isDemoMode && user) {
                             {String.fromCharCode(65 + index)}
                           </div>
                           <span style={{ flex: 1 }}>
-                            {typeof option === 'string' ? option : option.text || option.option || `Option ${index + 1}`}
+                            {typeof option === 'string' ? option : 
+                             typeof option === 'object' ? (option?.text || option?.option || `Option ${index + 1}`) : 
+                             String(option) || `Option ${index + 1}`}
                           </span>
                           {showCorrect && (
                             <div style={{ color: COLORS.success, fontSize: '18px' }}>✓</div>
