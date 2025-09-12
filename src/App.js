@@ -78,14 +78,28 @@ const QuizProvider = ({ children }) => {
   );
 };
 
-const searchClient = algoliasearch(
-  process.env.REACT_APP_ALGOLIA_APP_ID,
-  process.env.REACT_APP_ALGOLIA_SEARCH_KEY
-);
-
-// Add error handling for missing environment variables
-if (!process.env.REACT_APP_ALGOLIA_APP_ID || !process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
-  console.error('❌ Missing Algolia environment variables. Please check your .env file.');
+let searchClient;
+try {
+  if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
+    searchClient = algoliasearch(
+      process.env.REACT_APP_ALGOLIA_APP_ID,
+      process.env.REACT_APP_ALGOLIA_SEARCH_KEY
+    );
+  } else {
+    console.error('❌ Missing Algolia environment variables. Please check your .env file.');
+    // Create a mock client to prevent crashes
+    searchClient = {
+      search: () => Promise.resolve({ hits: [], nbHits: 0 }),
+      searchForFacetValues: () => Promise.resolve({ facetHits: [] })
+    };
+  }
+} catch (error) {
+  console.error('❌ Failed to initialize Algolia client:', error);
+  // Create a mock client to prevent crashes
+  searchClient = {
+    search: () => Promise.resolve({ hits: [], nbHits: 0 }),
+    searchForFacetValues: () => Promise.resolve({ facetHits: [] })
+  };
 }
 
 if (!process.env.REACT_APP_OPENAI_API_KEY) {
@@ -281,60 +295,87 @@ const SearchPage = ({ currentSubject, subjectConfig, bannerText, user, handleSub
 
   // Handle filter changes for Korean-English subject  
   const handleKoreanEnglishFiltersChange = (filters) => {
-    console.log('Received Korean-English filters in App.js:', filters);
-    setKoreanEnglishFilters(filters);
+    try {
+      console.log('Received Korean-English filters in App.js:', filters);
+      setKoreanEnglishFilters(filters || {});
+    } catch (error) {
+      console.error('Error handling Korean-English filters:', error);
+      setKoreanEnglishFilters({});
+    }
   };
 
 // Replace your current buildAlgoliaFilters function in App.js with this:
 
 const buildAlgoliaFilters = (filters) => {
-  const filterArray = [];
-  
-  // Handle each filter type with proper field mapping
-  Object.entries(filters).forEach(([filterKey, filterValue]) => {
-    if (filterValue && filterValue.trim() !== '') {
-      // Check if the filter value is already properly formatted (contains field:value pattern)
-      if (filterValue.includes(':')) {
-        // Already properly formatted filter string from MathsFilters
-        filterArray.push(filterValue);
-      } else {
-        // Legacy format - convert to proper Algolia filter format
-        switch (filterKey) {
-          case 'year':
-            filterArray.push(`paper_info.year:"${filterValue}"`);
-            break;
-          case 'month':
-            filterArray.push(`paper_info.month:"${filterValue}"`);
-            break;
-          case 'paperTitle':
-            filterArray.push(`paper_info.paper_title:"${filterValue}"`);
-            break;
-          case 'specTopic':
-            filterArray.push(`spec_topic:"${filterValue}"`);
-            break;
-          case 'questionTopic':
-            filterArray.push(`question_topic:"${filterValue}"`);
-            break;
-          default:
-            // For any other simple filters
-            filterArray.push(`${filterKey}:"${filterValue}"`);
-            break;
-        }
-      }
+  try {
+    if (!filters || typeof filters !== 'object') {
+      return '';
     }
-  });
-  
-  console.log('Built Algolia filters:', filterArray.join(' AND ')); // Debug log
-  return filterArray.join(' AND ');
+    
+    const filterArray = [];
+    
+    // Handle each filter type with proper field mapping
+    Object.entries(filters).forEach(([filterKey, filterValue]) => {
+      try {
+        if (filterValue && typeof filterValue === 'string' && filterValue.trim() !== '') {
+          // Check if the filter value is already properly formatted (contains field:value pattern)
+          if (filterValue.includes(':')) {
+            // Already properly formatted filter string from MathsFilters
+            filterArray.push(filterValue);
+          } else {
+            // Legacy format - convert to proper Algolia filter format
+            const cleanValue = String(filterValue).replace(/"/g, '').trim();
+            switch (filterKey) {
+              case 'year':
+                filterArray.push(`paper_info.year:"${cleanValue}"`);
+                break;
+              case 'month':
+                filterArray.push(`paper_info.month:"${cleanValue}"`);
+                break;
+              case 'paperTitle':
+                filterArray.push(`paper_info.paper_title:"${cleanValue}"`);
+                break;
+              case 'specTopic':
+                filterArray.push(`spec_topic:"${cleanValue}"`);
+                break;
+              case 'questionTopic':
+                filterArray.push(`question_topic:"${cleanValue}"`);
+                break;
+              default:
+                // For any other simple filters
+                filterArray.push(`${filterKey}:"${cleanValue}"`);
+                break;
+            }
+          }
+        }
+      } catch (filterError) {
+        console.warn('Error processing filter:', filterKey, filterValue, filterError);
+      }
+    });
+    
+    const result = filterArray.join(' AND ');
+    console.log('Built Algolia filters:', result);
+    return result;
+  } catch (error) {
+    console.error('Error building Algolia filters:', error);
+    return '';
+  }
 };
 
 
   const statsComponent = useMemo(() => (
     <Stats translations={{
       stats(nbHits, processingTimeMS) {
-        return nbHits === 0
-          ? '🚫 No results'
-          : `✅ ${nbHits.toLocaleString()} results found in ${processingTimeMS.toLocaleString()}ms`;
+        try {
+          const hits = Number(nbHits) || 0;
+          const time = Number(processingTimeMS) || 0;
+          return hits === 0
+            ? '🚫 No results'
+            : `✅ ${hits.toLocaleString()} results found in ${time.toLocaleString()}ms`;
+        } catch (error) {
+          console.error('Error formatting stats:', error);
+          return 'Search results loading...';
+        }
       },
     }} />
   ), []);
@@ -682,42 +723,84 @@ function App() {
   const [authLoading, setAuthLoading] = useState(true);
   const [bannerText, setBannerText] = useState('');
 
-  const subjectConfig = useMemo(() => SUBJECTS[currentSubject] || SUBJECTS['vocabulary'], [currentSubject]);
+  const subjectConfig = useMemo(() => {
+    try {
+      const config = SUBJECTS && SUBJECTS[currentSubject] ? SUBJECTS[currentSubject] : SUBJECTS['vocabulary'];
+      return config || {
+        theme: 'vocabulary-theme',
+        bannerText: 'welcome to PLEW',
+        displayName: 'App',
+        searchType: 'firebase'
+      };
+    } catch (error) {
+      console.error('Error getting subject config:', error);
+      return {
+        theme: 'vocabulary-theme',
+        bannerText: 'welcome to PLEW',
+        displayName: 'App',
+        searchType: 'firebase'
+      };
+    }
+  }, [currentSubject]);
 
   useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    try {
+      const auth = getAuth();
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        try {
+          setUser(currentUser);
+          setAuthLoading(false);
+        } catch (error) {
+          console.error('Error setting user state:', error);
+          setAuthLoading(false);
+        }
+      });
+      return () => {
+        if (unsubscribe && typeof unsubscribe === 'function') {
+          unsubscribe();
+        }
+      };
+    } catch (error) {
+      console.error('Error setting up auth listener:', error);
       setAuthLoading(false);
-    });
-    return () => unsubscribe?.();
+    }
   }, []);
 
   useEffect(() => {
-    setBannerText('');
-    const fullText = subjectConfig?.bannerText || `Welcome to ${currentSubject.toUpperCase()}`;
-    let currentIndex = 0;
-    let typingInterval = null;
-    const startTimeout = setTimeout(() => {
-      typingInterval = setInterval(() => {
-        if (currentIndex <= fullText.length) {
-          setBannerText(fullText.slice(0, currentIndex));
-          currentIndex++;
-        } else {
-          clearInterval(typingInterval);
-        }
-      }, 50);
-    }, 100);
-    return () => {
-      clearTimeout(startTimeout);
-      if (typingInterval) clearInterval(typingInterval);
-    };
-  }, [currentSubject, subjectConfig?.bannerText]);
+    try {
+      setBannerText('');
+      const bannerTextValue = (subjectConfig && subjectConfig.bannerText) ? subjectConfig.bannerText : `Welcome to ${String(currentSubject || 'App').toUpperCase()}`;
+      const fullText = String(bannerTextValue);
+      let currentIndex = 0;
+      let typingInterval = null;
+      const startTimeout = setTimeout(() => {
+        typingInterval = setInterval(() => {
+          if (currentIndex <= fullText.length) {
+            setBannerText(fullText.slice(0, currentIndex));
+            currentIndex++;
+          } else {
+            clearInterval(typingInterval);
+          }
+        }, 50);
+      }, 100);
+      return () => {
+        clearTimeout(startTimeout);
+        if (typingInterval) clearInterval(typingInterval);
+      };
+    } catch (error) {
+      console.error('Error in banner text effect:', error);
+      setBannerText('Welcome to PLEW');
+    }
+  }, [currentSubject, subjectConfig]);
 
   const handleSubjectChange = useCallback((subject) => {
-    // Now allow all subjects including maths
-    if (subject !== currentSubject) {
-      setCurrentSubject(subject);
+    try {
+      // Now allow all subjects including maths
+      if (subject && typeof subject === 'string' && subject !== currentSubject) {
+        setCurrentSubject(subject);
+      }
+    } catch (error) {
+      console.error('Error changing subject:', error);
     }
   }, [currentSubject]);
 
@@ -745,65 +828,104 @@ function App() {
 
   if (authLoading) return <LoadingScreen />;
 
-  return (
-    <StripeProvider>
-      <QuizProvider>
-        <Router>
-          <div className={`app ${subjectConfig.theme}`}>
-            <NavbarWrapper onSubjectChange={handleSubjectChange} />
-            <ErrorBoundary theme={subjectConfig.theme}>
-              <Routes>
-                <Route path="/" element={SearchComponent} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/success" element={<SuccessPage />} />
-                <Route path="/community" element={<CommunityPage />} />
-                <Route path="/vocabulary" element={<VocabularyPinterest />} />
-                <Route path="/videos" element={<VideoStreaming />} />
-                <Route path="/admin/quiz-creator" element={<QuizCreator />} />
-                <Route path="/test" element={<TestPage />} />
-                <Route path="/subscription-plans" element={<SubscriptionPlansPage />} />
-                <Route path="/quiz/:subject" element={<ProtectedRoute><QuizTaking /></ProtectedRoute>} />
-                <Route path="/quiz/:subject/results" element={<ProtectedRoute><QuizResults /></ProtectedRoute>} />
-                <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-                <Route path="/question-pack" element={<ProtectedRoute><QuestionPackPage /></ProtectedRoute>} />
-                <Route path="/pack/:packId" element={<ProtectedRoute><PackViewer /></ProtectedRoute>} />
-                <Route path="/premium/*" element={<ProtectedRoute><PremiumDashboard /></ProtectedRoute>} />
-                <Route path="/practice/:packId" element={<ProtectedRoute><PracticeMode /></ProtectedRoute>} />
-                <Route path="/premium/quiz/:subject" element={<ProtectedRoute><QuizTaking /></ProtectedRoute>} />
-                <Route path="/premium/quiz/:subject/results" element={<ProtectedRoute><QuizResults /></ProtectedRoute>} />
-                <Route path="/reset-password" element={<ProtectedRoute><PasswordResetConfirm /></ProtectedRoute>} />
-                <Route path="/admin/questions" element={<ProtectedRoute><AdminQuestionUpload /></ProtectedRoute>} />
-                <Route path="/admin/learn-content" element={<ProtectedRoute><LearnContentAdmin /></ProtectedRoute>} />
-                <Route path="/admin/setup" element={<AdminSetup />} />
-                <Route path="/submit-question" element={<SubmitQuestionForm />} />
-                <Route path="/admin/pack-creator" element={<AdminPackCreator />} />
-                {/* <Route path="/submit-maths-question" element={<MathsSubmitQuestionForm />} /> */}
-                {/* <Route path="/study-buddy" element={<FeatureProtectedRoute feature="study-buddy"><StudyBuddyApp /></FeatureProtectedRoute>} /> */}
-                {/* <Route path="/study-progress" element={<FeatureProtectedRoute feature="application-builder"><StudyBuddyApp /></FeatureProtectedRoute>} /> */}
-                <Route path="/debug" element={<DebugTest />} />
-              </Routes>
-            </ErrorBoundary>
-            {/* Feature Flag Debug Component - Only shows in development or with ?debugFeatures=true */}
-            <FeatureFlagDebug user={user} />
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
-          </div>
-        </Router>
-      </QuizProvider>
-    </StripeProvider>
-  );
+  try {
+    const theme = (subjectConfig && subjectConfig.theme) ? subjectConfig.theme : 'vocabulary-theme';
+    
+    return (
+      <StripeProvider>
+        <QuizProvider>
+          <Router>
+            <div className={`app ${theme}`}>
+              <NavbarWrapper onSubjectChange={handleSubjectChange} />
+              <ErrorBoundary theme={theme}>
+                <Routes>
+                  <Route path="/" element={SearchComponent} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/success" element={<SuccessPage />} />
+                  <Route path="/community" element={<CommunityPage />} />
+                  <Route path="/vocabulary" element={<VocabularyPinterest />} />
+                  <Route path="/videos" element={<VideoStreaming />} />
+                  <Route path="/admin/quiz-creator" element={<QuizCreator />} />
+                  <Route path="/test" element={<TestPage />} />
+                  <Route path="/subscription-plans" element={<SubscriptionPlansPage />} />
+                  <Route path="/quiz/:subject" element={<ProtectedRoute><QuizTaking /></ProtectedRoute>} />
+                  <Route path="/quiz/:subject/results" element={<ProtectedRoute><QuizResults /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+                  <Route path="/question-pack" element={<ProtectedRoute><QuestionPackPage /></ProtectedRoute>} />
+                  <Route path="/pack/:packId" element={<ProtectedRoute><PackViewer /></ProtectedRoute>} />
+                  <Route path="/premium/*" element={<ProtectedRoute><PremiumDashboard /></ProtectedRoute>} />
+                  <Route path="/practice/:packId" element={<ProtectedRoute><PracticeMode /></ProtectedRoute>} />
+                  <Route path="/premium/quiz/:subject" element={<ProtectedRoute><QuizTaking /></ProtectedRoute>} />
+                  <Route path="/premium/quiz/:subject/results" element={<ProtectedRoute><QuizResults /></ProtectedRoute>} />
+                  <Route path="/reset-password" element={<ProtectedRoute><PasswordResetConfirm /></ProtectedRoute>} />
+                  <Route path="/admin/questions" element={<ProtectedRoute><AdminQuestionUpload /></ProtectedRoute>} />
+                  <Route path="/admin/learn-content" element={<ProtectedRoute><LearnContentAdmin /></ProtectedRoute>} />
+                  <Route path="/admin/setup" element={<AdminSetup />} />
+                  <Route path="/submit-question" element={<SubmitQuestionForm />} />
+                  <Route path="/admin/pack-creator" element={<AdminPackCreator />} />
+                  <Route path="/debug" element={<DebugTest />} />
+                </Routes>
+              </ErrorBoundary>
+              <FeatureFlagDebug user={user} />
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+            </div>
+          </Router>
+        </QuizProvider>
+      </StripeProvider>
+    );
+  } catch (error) {
+    console.error('Fatal error rendering App:', error);
+    return (
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column',
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        height: '100vh',
+        padding: '2rem',
+        textAlign: 'center',
+        fontFamily: 'system-ui, -apple-system, sans-serif'
+      }}>
+        <h1 style={{ color: '#dc2626', marginBottom: '1rem' }}>Application Error</h1>
+        <p style={{ color: '#6b7280', marginBottom: '2rem', maxWidth: '400px' }}>
+          We're sorry, but the application encountered a critical error. Please refresh the page to try again.
+        </p>
+        <button 
+          onClick={() => window.location.reload()} 
+          style={{
+            padding: '0.75rem 1.5rem',
+            backgroundColor: '#3b82f6',
+            color: 'white',
+            border: 'none',
+            borderRadius: '0.5rem',
+            fontSize: '1rem',
+            cursor: 'pointer'
+          }}
+        >
+          Reload Page
+        </button>
+      </div>
+    );
+  }
 }
 
 // Navbar Wrapper Component that uses Quiz Context
 const NavbarWrapper = ({ onSubjectChange }) => {
-  const { isQuizActive } = useQuizContext();
-  
-  // Don't render navbar if quiz is active
-  if (isQuizActive) {
-    return null;
+  try {
+    const { isQuizActive } = useQuizContext();
+    
+    // Don't render navbar if quiz is active
+    if (isQuizActive) {
+      return null;
+    }
+    
+    return <Navbar onSubjectChange={onSubjectChange} />;
+  } catch (error) {
+    console.error('Error in NavbarWrapper:', error);
+    // Fallback: always show navbar if context fails
+    return <Navbar onSubjectChange={onSubjectChange} />;
   }
-  
-  return <Navbar onSubjectChange={onSubjectChange} />;
 };
 
 export default App;
