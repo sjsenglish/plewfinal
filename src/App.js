@@ -912,20 +912,24 @@ function App() {
 
 // Navbar Wrapper Component that uses Quiz Context
 const NavbarWrapper = ({ onSubjectChange }) => {
+  // React Hooks must be called at the top level - cannot be conditional
+  let isQuizActive = false;
+  let contextError = null;
+  
   try {
-    const { isQuizActive } = useQuizContext();
-    
-    // Don't render navbar if quiz is active
-    if (isQuizActive) {
-      return null;
-    }
-    
-    return <Navbar onSubjectChange={onSubjectChange} />;
+    const context = useQuizContext();
+    isQuizActive = context.isQuizActive;
   } catch (error) {
-    console.error('Error in NavbarWrapper:', error);
-    // Fallback: always show navbar if context fails
-    return <Navbar onSubjectChange={onSubjectChange} />;
+    console.error('Error accessing QuizContext:', error);
+    contextError = error;
   }
+  
+  // Don't render navbar if quiz is active (or if there's a context error, show navbar as fallback)
+  if (isQuizActive && !contextError) {
+    return null;
+  }
+  
+  return <Navbar onSubjectChange={onSubjectChange} />;
 };
 
 export default App;
