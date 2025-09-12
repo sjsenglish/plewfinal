@@ -506,62 +506,144 @@ const buildAlgoliaFilters = (filters) => {
   );
 
   // For Algolia search, we need InstantSearch wrapper around the entire component
-  if (subjectConfig.searchType === 'algolia') {
-    return (
-      <>
-        <InstantSearch 
-  key={currentSubject} 
-  indexName={subjectConfig.index} 
-  searchClient={searchClient} 
-  future={{ preserveSharedStateOnUnmount: false }}
->
-          {/* Configure Algolia with filters */}
-          <Configure 
-            key={JSON.stringify(currentSubject === 'korean-english' ? koreanEnglishFilters : {})} 
-            filters={buildAlgoliaFilters(currentSubject === 'korean-english' ? koreanEnglishFilters : {})} 
-          />
-          
-          {headerContent}
+  if (subjectConfig && subjectConfig.searchType === 'algolia' && subjectConfig.index) {
+    try {
+      return (
+        <>
+          <InstantSearch 
+            key={`${currentSubject}-${subjectConfig.index}`} 
+            indexName={subjectConfig.index} 
+            searchClient={searchClient} 
+            future={{ preserveSharedStateOnUnmount: false }}
+          >
+            {/* Configure Algolia with filters */}
+            <Configure 
+              key={`filters-${currentSubject}-${JSON.stringify(currentSubject === 'korean-english' ? koreanEnglishFilters : {})}`}
+              filters={buildAlgoliaFilters(currentSubject === 'korean-english' ? koreanEnglishFilters : {})} 
+            />
+            
+            {headerContent}
 
-          {/* Search Results Section */}
-          <div className="modern-search-wrapper">
-            <div className="container">
-              {/* Add KoreanEnglishFilters component for Korean-English subject */}
-              {currentSubject === 'korean-english' && user && (
-                <KoreanEnglishFilters 
-                  onFiltersChange={handleKoreanEnglishFiltersChange}
-                  currentFilters={koreanEnglishFilters}
-                />
-              )}
+            {/* Search Results Section - ONLY for Algolia subjects */}
+            <div className="modern-search-wrapper">
+              <div className="container">
+                {/* Add KoreanEnglishFilters component for Korean-English subject */}
+                {currentSubject === 'korean-english' && user && (
+                  <KoreanEnglishFilters 
+                    onFiltersChange={handleKoreanEnglishFiltersChange}
+                    currentFilters={koreanEnglishFilters}
+                  />
+                )}
 
-              {/* Vocabulary Pinterest Component */}
-              {currentSubject === 'vocabulary' ? (
-                <VocabularyPinterest />
-              ) : (
+                {/* Only render Algolia components here - NO VocabularyPinterest */}
                 <div className="results-container">
-                <div className="stats-container">{statsComponent}</div>
-                <div className="hits-container">
-                  {user && <Hits hitComponent={HitWrapper} />}
+                  <div className="stats-container">{statsComponent}</div>
+                  <div className="hits-container">
+                    {user && <Hits hitComponent={HitWrapper} />}
+                  </div>
                 </div>
               </div>
-              )}
+            </div>
+
+            {/* Popout Components */}
+            {/* <LiveLeaderboard subject={currentSubject} /> */}
+          </InstantSearch>
+
+          {/* Video Popup */}
+          <VideoPopup isOpen={showVideoPopup} onClose={handleCloseVideo} />
+          {/* Demo Mode */}
+          {showDemoMode && (
+            <DemoMode onClose={() => setShowDemoMode(false)} />
+          )}
+        </>
+      );
+    } catch (error) {
+      console.error('Error rendering Algolia search:', error);
+      // Fallback to basic header if InstantSearch fails
+      return (
+        <>
+          {headerContent}
+          <div className="modern-search-wrapper">
+            <div className="container">
+              <div className="error-message" style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
+                Search temporarily unavailable. Please refresh the page.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    }
+  }
+
+  // For Firebase search (Vocabulary), render component directly
+  if (subjectConfig && subjectConfig.searchType === 'firebase') {
+    try {
+      return (
+        <>
+          {headerContent}
+
+          {/* Vocabulary Pinterest Interface */}
+          <div className="modern-search-wrapper">
+            <div className="container">
+              <VocabularyPinterest key={`vocab-${currentSubject}`} />
             </div>
           </div>
 
-          {/* Popout Components */}
-          {/* <LiveLeaderboard subject={currentSubject} /> */}
-        </InstantSearch>
+          {/* Video Popup */}
+          <VideoPopup isOpen={showVideoPopup} onClose={handleCloseVideo} />
+          {/* Demo Mode */}
+          {showDemoMode && (
+            <DemoMode onClose={() => setShowDemoMode(false)} />
+          )}
+        </>
+      );
+    } catch (error) {
+      console.error('Error rendering vocabulary search:', error);
+      return (
+        <>
+          {headerContent}
+          <div className="modern-search-wrapper">
+            <div className="container">
+              <div className="error-message" style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
+                Vocabulary search temporarily unavailable. Please refresh the page.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    }
+  }
+
+  // For Pinecone search (Community) or fallback, no InstantSearch wrapper needed
+  try {
+    return (
+      <>
+        {headerContent}
+
+        {/* Community Search Interface */}
+        <div className="modern-search-wrapper">
+          <div className="container">
+            <CommunitySearch 
+              key={`community-${currentSubject}`}
+              user={user} 
+              placeholder={`search ${(subjectConfig && subjectConfig.displayName) ? subjectConfig.displayName.toLowerCase() : 'community'} questions...`}
+            />
+          </div>
+        </div>
+
+        {/* Popout Components */}
+        {/* <LiveLeaderboard subject={currentSubject} /> */}
 
         {/* Video Popup */}
         <VideoPopup isOpen={showVideoPopup} onClose={handleCloseVideo} />
-              {/* Demo Mode */}
-      {showDemoMode && (
-        <DemoMode onClose={() => setShowDemoMode(false)} />
-      )}
+        {/* Demo Mode */}
+        {showDemoMode && (
+          <DemoMode onClose={() => setShowDemoMode(false)} />
+        )}
 
         {/* Personal Statement Grader - HIDDEN */}
 
-        {/* Add CSS for the grading button and Discord enhancement */}
+        {/* Add CSS for the grading button */}
         <style jsx>{`
           .grading-button-container {
             display: flex;
@@ -579,41 +661,6 @@ const buildAlgoliaFilters = (filters) => {
             opacity: 0.8;
           }
           
-          .discord-enhanced-button {
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 8px !important;
-            padding: 8px 16px !important;
-            border-radius: 12px !important;
-            background: linear-gradient(135deg, #5865f2, #4752c4) !important;
-            color: white !important;
-            text-decoration: none !important;
-            font-size: 14px !important;
-            font-weight: 500 !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            box-shadow: 0 4px 14px rgba(88, 101, 242, 0.3) !important;
-            border: none !important;
-            width: auto !important;
-            height: auto !important;
-            position: relative !important;
-          }
-          
-          .discord-enhanced-button:hover {
-            background: linear-gradient(135deg, #6b73ff, #5865f2) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4) !important;
-          }
-          
-          .discord-enhanced-button svg {
-            width: 18px !important;
-            height: 18px !important;
-          }
-          
-          .discord-enhanced-button span {
-            font-size: 13px !important;
-            white-space: nowrap !important;
-          }
-          
           @media (max-width: 768px) {
             .grading-button-container {
               gap: 2px;
@@ -622,98 +669,25 @@ const buildAlgoliaFilters = (filters) => {
             .grading-locked-message {
               font-size: 10px;
             }
-            
-            .discord-enhanced-button {
-              font-size: 12px !important;
-              padding: 6px 12px !important;
-            }
-            
-            .discord-enhanced-button span {
-              font-size: 11px !important;
-            }
-            
-            .discord-enhanced-button svg {
-              width: 16px !important;
-              height: 16px !important;
-            }
           }
         `}</style>
       </>
     );
-  }
-
-  // For Firebase search (Vocabulary), render component directly
-  if (subjectConfig.searchType === 'firebase') {
+  } catch (error) {
+    console.error('Error rendering community search:', error);
     return (
       <>
         {headerContent}
-
-        {/* Vocabulary Pinterest Interface */}
         <div className="modern-search-wrapper">
           <div className="container">
-            <VocabularyPinterest />
+            <div className="error-message" style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
+              Search temporarily unavailable. Please refresh the page.
+            </div>
           </div>
         </div>
-
-        {/* Video Popup */}
-        <VideoPopup isOpen={showVideoPopup} onClose={handleCloseVideo} />
       </>
     );
   }
-
-  // For Pinecone search (Community), no InstantSearch wrapper needed
-  return (
-    <>
-      {headerContent}
-
-      {/* Community Search Interface */}
-      <div className="modern-search-wrapper">
-        <div className="container">
-          <CommunitySearch 
-            user={user} 
-            placeholder={`search ${subjectConfig.displayName.toLowerCase()} questions...`}
-          />
-        </div>
-      </div>
-
-      {/* Popout Components */}
-      {/* <LiveLeaderboard subject={currentSubject} /> */}
-
-      {/* Video Popup */}
-      <VideoPopup isOpen={showVideoPopup} onClose={handleCloseVideo} />
-
-      {/* Personal Statement Grader - HIDDEN */}
-
-      {/* Add CSS for the grading button */}
-      <style jsx>{`
-        .grading-button-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 4px;
-        }
-        
-        .grading-locked-message {
-          font-size: 11px;
-          color: #999;
-          font-weight: 400;
-          text-align: center;
-          white-space: nowrap;
-          opacity: 0.8;
-        }
-        
-        @media (max-width: 768px) {
-          .grading-button-container {
-            gap: 2px;
-          }
-          
-          .grading-locked-message {
-            font-size: 10px;
-          }
-        }
-      `}</style>
-    </>
-  );
 };
 
 function App() {
@@ -795,12 +769,29 @@ function App() {
 
   const handleSubjectChange = useCallback((subject) => {
     try {
-      // Now allow all subjects including maths
-      if (subject && typeof subject === 'string' && subject !== currentSubject) {
+      // Validate subject and ensure it exists in SUBJECTS
+      if (subject && 
+          typeof subject === 'string' && 
+          subject !== currentSubject && 
+          SUBJECTS && 
+          SUBJECTS[subject]) {
+        
+        console.log(`Switching from ${currentSubject} to ${subject}`);
+        
+        // Clear any existing state that might interfere
+        setBannerText('');
+        
+        // Change subject
         setCurrentSubject(subject);
+      } else if (subject && !SUBJECTS[subject]) {
+        console.warn(`Unknown subject: ${subject}. Available subjects:`, Object.keys(SUBJECTS));
       }
     } catch (error) {
-      console.error('Error changing subject:', error);
+      console.error('Error changing subject:', error, {
+        from: currentSubject,
+        to: subject,
+        availableSubjects: Object.keys(SUBJECTS || {})
+      });
     }
   }, [currentSubject]);
 
@@ -816,15 +807,60 @@ function App() {
 
   // Feature Protected Route - simplified to just check authentication
 
-  const SearchComponent = useMemo(() => (
-    <SearchPage
-      currentSubject={currentSubject}
-      subjectConfig={subjectConfig}
-      bannerText={bannerText}
-      user={user}
-      handleSubjectChange={handleSubjectChange}
-    />
-  ), [currentSubject, subjectConfig, bannerText, user, handleSubjectChange]);
+  const SearchComponent = useMemo(() => {
+    // Add defensive checks for subject transitions
+    if (!currentSubject || !subjectConfig) {
+      return (
+        <LoadingScreen />
+      );
+    }
+
+    try {
+      return (
+        <SearchPage
+          key={`search-${currentSubject}-${subjectConfig.searchType}`}
+          currentSubject={currentSubject}
+          subjectConfig={subjectConfig}
+          bannerText={bannerText}
+          user={user}
+          handleSubjectChange={handleSubjectChange}
+        />
+      );
+    } catch (error) {
+      console.error('Error creating SearchComponent:', error);
+      return (
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          height: '50vh',
+          padding: '2rem',
+          textAlign: 'center',
+          fontFamily: 'system-ui, -apple-system, sans-serif'
+        }}>
+          <h2 style={{ color: '#dc2626', marginBottom: '1rem' }}>Loading Error</h2>
+          <p style={{ color: '#6b7280', marginBottom: '2rem' }}>
+            Unable to load the search interface. Please refresh the page.
+          </p>
+          <button 
+            onClick={() => window.location.reload()} 
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: '#3b82f6',
+              color: 'white',
+              border: 'none',
+              borderRadius: '0.5rem',
+              fontSize: '1rem',
+              cursor: 'pointer'
+            }}
+          >
+            Refresh Page
+          </button>
+        </div>
+      );
+    }
+  }, [currentSubject, subjectConfig, bannerText, user, handleSubjectChange]);
 
   if (authLoading) return <LoadingScreen />;
 
