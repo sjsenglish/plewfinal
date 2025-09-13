@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './VocabularyTest.css';
+import { safeString } from '../utils/safeRender';
 
 const VocabularyTest = ({ words, testType, onComplete, onClose }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -181,14 +182,11 @@ const VocabularyTest = ({ words, testType, onComplete, onClose }) => {
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
     
     const answerRecord = {
-      questionId: String(currentQuestion.id || 'unknown'),
-      questionText: typeof currentQuestion.question === 'string' ? currentQuestion.question : String(currentQuestion.question || 'Unknown question'),
-      sentence: typeof currentQuestion.sentence === 'string' ? currentQuestion.sentence : 
-               typeof currentQuestion.sentence === 'object' && currentQuestion.sentence ?
-                 String(currentQuestion.sentence.text || currentQuestion.sentence.sentence || currentQuestion.sentence) :
-                 String(currentQuestion.sentence || ''),
-      selectedAnswer: String(selectedAnswer || ''),
-      correctAnswer: String(currentQuestion.correctAnswer || ''),
+      questionId: safeString(currentQuestion.id || 'unknown'),
+      questionText: safeString(currentQuestion.question || 'Unknown question'),
+      sentence: safeString(currentQuestion.sentence || ''),
+      selectedAnswer: safeString(selectedAnswer || ''),
+      correctAnswer: safeString(currentQuestion.correctAnswer || ''),
       isCorrect,
       timeSpent: getTestDuration() - timeLeft
     };
@@ -345,10 +343,7 @@ const VocabularyTest = ({ words, testType, onComplete, onClose }) => {
             )}
             {currentQuestion.sentence && (
               <div className="question-sentence">
-                <p>"{typeof currentQuestion.sentence === 'string' ? currentQuestion.sentence : 
-                     typeof currentQuestion.sentence === 'object' && currentQuestion.sentence ?
-                       String(currentQuestion.sentence.text || currentQuestion.sentence.sentence || currentQuestion.sentence) :
-                       String(currentQuestion.sentence)}"</p>
+                <p>"{safeString(currentQuestion.sentence)}"</p>
               </div>
             )}
           </div>

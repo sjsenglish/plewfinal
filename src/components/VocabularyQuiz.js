@@ -3,6 +3,7 @@ import { getAuth } from 'firebase/auth';
 import { doc, setDoc, collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import './VocabularyQuiz.css';
+import { safeString } from '../utils/safeRender';
 
 const VocabularyQuiz = ({ words, onClose, onComplete }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -158,14 +159,14 @@ const VocabularyQuiz = ({ words, onClose, onComplete }) => {
     const isCorrect = answer === currentQuestion.correctAnswer;
     
     const answerData = {
-      questionId: String(currentQuestion.id || 'unknown'),
-      word: String(currentQuestion.word || ''),
-      questionText: typeof currentQuestion.question === 'string' ? currentQuestion.question : String(currentQuestion.question || 'Unknown question'),
-      selectedAnswer: String(answer || ''),
-      correctAnswer: String(currentQuestion.correctAnswer || ''),
+      questionId: safeString(currentQuestion.id || 'unknown'),
+      word: safeString(currentQuestion.word || ''),
+      questionText: safeString(currentQuestion.question || 'Unknown question'),
+      selectedAnswer: safeString(answer || ''),
+      correctAnswer: safeString(currentQuestion.correctAnswer || ''),
       isCorrect,
       timeSpent: 30 - timeLeft,
-      type: String(currentQuestion.type || 'unknown')
+      type: safeString(currentQuestion.type || 'unknown')
     };
 
     setAnswers(prev => [...prev, answerData]);
@@ -337,7 +338,7 @@ const VocabularyQuiz = ({ words, onClose, onComplete }) => {
                       </span>
                     </div>
                     <div className="answer-details">
-                      <div className="question-text">{answer.question}</div>
+                      <div className="question-text">{answer.questionText}</div>
                       <div className="answer-comparison">
                         <div className="answer-row">
                           <span className="label">Your answer:</span>
