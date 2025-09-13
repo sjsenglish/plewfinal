@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './WordDetailModal.css';
+import { safeString } from '../utils/safeRender';
 
 const WordDetailModal = ({ word, isOpen, onClose, onStartTest }) => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -133,7 +134,7 @@ const WordDetailModal = ({ word, isOpen, onClose, onStartTest }) => {
         <div className="modal-quick-examples">
           <h4>Example Usage</h4>
           <div className="quick-example">
-            <p className="example-sentence">{examples[0].sentence || examples[0]}</p>
+            <p className="example-sentence">{safeString(examples[0].sentence || examples[0])}</p>
             {examples[0].translation && (
               <p className="example-translation">{examples[0].translation}</p>
             )}
@@ -186,7 +187,7 @@ const WordDetailModal = ({ word, isOpen, onClose, onStartTest }) => {
           <div key={index} className="detailed-example-item">
             <div className="example-number">#{index + 1}</div>
             <div className="example-content">
-              <p className="detailed-example-text">{example.sentence || example}</p>
+              <p className="detailed-example-text">{safeString(example.sentence || example)}</p>
               {example.translation && (
                 <p className="detailed-example-translation">{example.translation}</p>
               )}

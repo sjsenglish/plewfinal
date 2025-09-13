@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { safeString } from '../utils/safeRender';
 // import { getEnhancedWordInfo } from '../services/vocabularyAPIService';
 import './VocabularyHit.css';
 
@@ -189,7 +190,7 @@ const VocabularyHit = ({ hit = {} }) => {
           <div className="example-list">
             {examples.map((example, index) => (
               <div key={index} className="example-item">
-                <p className="example-text">"{example.sentence || example}"</p>
+                <p className="example-text">"{safeString(example.sentence || example)}"</p>
                 {example.translation && (
                   <p className="example-translation">{example.translation}</p>
                 )}
