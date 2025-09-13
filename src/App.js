@@ -83,8 +83,10 @@ const QuizProvider = ({ children }) => {
 const createMockSearchClient = () => ({
   search: (queries) => {
     console.warn('Using mock search client - search functionality disabled');
+    // Ensure queries is always an array with safe query objects
+    const safeQueries = Array.isArray(queries) ? queries : [queries || {}];
     return Promise.resolve({
-      results: (queries || []).map(() => ({
+      results: safeQueries.map((query) => ({
         hits: [],
         nbHits: 0,
         page: 0,
@@ -92,8 +94,8 @@ const createMockSearchClient = () => ({
         hitsPerPage: 20,
         processingTimeMS: 0,
         exhaustiveNbHits: true,
-        query: '',
-        params: ''
+        query: typeof query?.query === 'string' ? query.query : '',
+        params: typeof query?.params === 'string' ? query.params : ''
       }))
     });
   },
@@ -782,8 +784,9 @@ function App() {
       const errorMessage = event.reason?.message || '';
       const errorStack = event.reason?.stack || '';
       
-      if (errorMessage.includes('match') || errorStack.includes('index.mjs:144')) {
-        console.error('Algolia search error detected:', event.reason);
+      if (errorMessage.includes('match') || errorStack.includes('index.mjs:144') || 
+          errorMessage.includes('Cannot read properties of undefined (reading \'match\')')) {
+        console.error('Algolia search/match error detected:', event.reason);
         // Don't show error to user for search issues, just log them
         event.preventDefault();
         return;
