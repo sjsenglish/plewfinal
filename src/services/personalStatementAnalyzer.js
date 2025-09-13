@@ -289,6 +289,9 @@ class PersonalStatementAnalyzer {
   }
 
   splitIntoSentences(text) {
+    if (!text || typeof text !== 'string') {
+      return [];
+    }
     return text.match(/[^\.!?]+[\.!?]+/g) || [];
   }
 

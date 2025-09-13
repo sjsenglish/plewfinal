@@ -4,6 +4,7 @@ import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { InstantSearch, Stats, Hits, Configure } from 'react-instantsearch';
 import './firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { safeString, ensureRenderSafe } from './utils/safeRender';
 
 import { StripeProvider } from './contexts/StripeContext';
 // Feature flags removed - all features now enabled for all users
@@ -363,22 +364,29 @@ const buildAlgoliaFilters = (filters) => {
 };
 
 
-  const statsComponent = useMemo(() => (
-    <Stats translations={{
-      stats(nbHits, processingTimeMS) {
-        try {
-          const hits = Number(nbHits) || 0;
-          const time = Number(processingTimeMS) || 0;
-          return hits === 0
-            ? '🚫 No results'
-            : `✅ ${hits.toLocaleString()} results found in ${time.toLocaleString()}ms`;
-        } catch (error) {
-          console.error('Error formatting stats:', error);
-          return 'Search results loading...';
-        }
-      },
-    }} />
-  ), []);
+  const statsComponent = useMemo(() => {
+    try {
+      return (
+        <Stats translations={{
+          stats(nbHits, processingTimeMS) {
+            try {
+              const hits = Number(nbHits) || 0;
+              const time = Number(processingTimeMS) || 0;
+              return hits === 0
+                ? '🚫 No results'
+                : `✅ ${hits.toLocaleString()} results found in ${time.toLocaleString()}ms`;
+            } catch (error) {
+              console.error('Error formatting stats:', error);
+              return 'Search results loading...';
+            }
+          },
+        }} />
+      );
+    } catch (error) {
+      console.error('Error creating stats component:', error);
+      return <div>Loading...</div>;
+    }
+  }, []);
 
   // Only check for index if using Algolia search
   if (subjectConfig.searchType === 'algolia' && !subjectConfig?.index) {
@@ -696,6 +704,34 @@ function App() {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [bannerText, setBannerText] = useState('');
+  const [appError, setAppError] = useState(null);
+
+  // Global error handler
+  useEffect(() => {
+    const handleError = (event) => {
+      console.error('Global error caught:', event.error);
+      if (event.error?.message?.includes('match')) {
+        console.error('Match error detected - likely undefined string operation');
+        setAppError('A rendering error occurred. Please refresh the page.');
+        event.preventDefault();
+      }
+    };
+
+    const handleUnhandledRejection = (event) => {
+      console.error('Unhandled promise rejection:', event.reason);
+      if (event.reason?.message?.includes('match')) {
+        setAppError('A rendering error occurred. Please refresh the page.');
+      }
+    };
+
+    window.addEventListener('error', handleError);
+    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+
+    return () => {
+      window.removeEventListener('error', handleError);
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+    };
+  }, []);
 
   const subjectConfig = useMemo(() => {
     try {
@@ -864,6 +900,45 @@ function App() {
 
   if (authLoading) return <LoadingScreen />;
 
+  // Show app-level error if one occurred
+  if (appError) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column',
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        height: '100vh',
+        padding: '2rem',
+        textAlign: 'center',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+        background: '#f8f9fa'
+      }}>
+        <h1 style={{ color: '#dc2626', marginBottom: '1rem' }}>Application Error</h1>
+        <p style={{ color: '#6b7280', marginBottom: '2rem', maxWidth: '400px' }}>
+          {safeString(appError)}
+        </p>
+        <button 
+          onClick={() => {
+            setAppError(null);
+            window.location.reload();
+          }} 
+          style={{
+            padding: '0.75rem 1.5rem',
+            backgroundColor: '#3b82f6',
+            color: 'white',
+            border: 'none',
+            borderRadius: '0.5rem',
+            fontSize: '1rem',
+            cursor: 'pointer'
+          }}
+        >
+          Reload Page
+        </button>
+      </div>
+    );
+  }
+
   try {
     const theme = (subjectConfig && subjectConfig.theme) ? subjectConfig.theme : 'vocabulary-theme';
     
@@ -873,7 +948,7 @@ function App() {
           <Router>
             <div className={`app ${theme}`}>
               <NavbarWrapper onSubjectChange={handleSubjectChange} />
-              <ErrorBoundary theme={theme}>
+              <ErrorBoundary theme={theme} showDetails={true}>
                 <Routes>
                   <Route path="/" element={SearchComponent} />
                   <Route path="/login" element={<Login />} />
