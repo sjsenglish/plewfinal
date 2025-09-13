@@ -79,28 +79,58 @@ const QuizProvider = ({ children }) => {
   );
 };
 
+// Create a more comprehensive mock client
+const createMockSearchClient = () => ({
+  search: (queries) => {
+    console.warn('Using mock search client - search functionality disabled');
+    return Promise.resolve({
+      results: (queries || []).map(() => ({
+        hits: [],
+        nbHits: 0,
+        page: 0,
+        nbPages: 0,
+        hitsPerPage: 20,
+        processingTimeMS: 0,
+        exhaustiveNbHits: true,
+        query: '',
+        params: ''
+      }))
+    });
+  },
+  searchForFacetValues: () => Promise.resolve({ 
+    facetHits: [],
+    exhaustiveFacetsCount: true,
+    processingTimeMS: 0
+  }),
+  // Add these methods that InstantSearch might call
+  initIndex: () => ({
+    search: () => Promise.resolve({ hits: [], nbHits: 0 }),
+    searchForFacetValues: () => Promise.resolve({ facetHits: [] })
+  }),
+  addAlgoliaAgent: () => {},
+  clearCache: () => {}
+});
+
 let searchClient;
 try {
   if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
-    searchClient = algoliasearch(
-      process.env.REACT_APP_ALGOLIA_APP_ID,
-      process.env.REACT_APP_ALGOLIA_SEARCH_KEY
-    );
+    // Validate the environment variables are proper strings
+    const appId = String(process.env.REACT_APP_ALGOLIA_APP_ID).trim();
+    const searchKey = String(process.env.REACT_APP_ALGOLIA_SEARCH_KEY).trim();
+    
+    if (appId && searchKey && appId !== 'undefined' && searchKey !== 'undefined') {
+      searchClient = algoliasearch(appId, searchKey);
+    } else {
+      console.error('❌ Invalid Algolia credentials. Using mock client.');
+      searchClient = createMockSearchClient();
+    }
   } else {
     console.error('❌ Missing Algolia environment variables. Please check your .env file.');
-    // Create a mock client to prevent crashes
-    searchClient = {
-      search: () => Promise.resolve({ hits: [], nbHits: 0 }),
-      searchForFacetValues: () => Promise.resolve({ facetHits: [] })
-    };
+    searchClient = createMockSearchClient();
   }
 } catch (error) {
   console.error('❌ Failed to initialize Algolia client:', error);
-  // Create a mock client to prevent crashes
-  searchClient = {
-    search: () => Promise.resolve({ hits: [], nbHits: 0 }),
-    searchForFacetValues: () => Promise.resolve({ facetHits: [] })
-  };
+  searchClient = createMockSearchClient();
 }
 
 if (!process.env.REACT_APP_OPENAI_API_KEY) {
@@ -516,19 +546,47 @@ const buildAlgoliaFilters = (filters) => {
   // For Algolia search, we need InstantSearch wrapper around the entire component
   if (subjectConfig && subjectConfig.searchType === 'algolia' && subjectConfig.index) {
     try {
+      // Validate all required props before rendering InstantSearch
+      const indexName = String(subjectConfig.index || '');
+      if (!indexName || !searchClient) {
+        throw new Error('Missing required InstantSearch props');
+      }
+
       return (
         <>
           <InstantSearch 
-            key={`${currentSubject}-${subjectConfig.index}`} 
-            indexName={subjectConfig.index} 
+            key={`search-${currentSubject}-${indexName}`} 
+            indexName={indexName}
             searchClient={searchClient} 
             future={{ preserveSharedStateOnUnmount: false }}
+            onSearchStateChange={(searchState) => {
+              // Safely handle search state changes
+              try {
+                // This prevents any undefined values from being processed
+                if (searchState && typeof searchState === 'object') {
+                  // Log for debugging but don't process further to avoid errors
+                  console.debug('Search state changed:', searchState);
+                }
+              } catch (error) {
+                console.warn('Error handling search state change:', error);
+              }
+            }}
           >
             {/* Configure Algolia with filters */}
-            <Configure 
-              key={`filters-${currentSubject}-${JSON.stringify(currentSubject === 'korean-english' ? koreanEnglishFilters : {})}`}
-              filters={buildAlgoliaFilters(currentSubject === 'korean-english' ? koreanEnglishFilters : {})} 
-            />
+            {(() => {
+              try {
+                const filters = buildAlgoliaFilters(currentSubject === 'korean-english' ? koreanEnglishFilters : {});
+                return (
+                  <Configure 
+                    key={`filters-${currentSubject}-${Date.now()}`}
+                    filters={filters || ''} 
+                  />
+                );
+              } catch (error) {
+                console.warn('Error configuring Algolia filters:', error);
+                return <Configure key={`filters-fallback-${currentSubject}`} />;
+              }
+            })()}
             
             {headerContent}
 
@@ -719,8 +777,22 @@ function App() {
 
     const handleUnhandledRejection = (event) => {
       console.error('Unhandled promise rejection:', event.reason);
-      if (event.reason?.message?.includes('match')) {
+      
+      // Handle specific error patterns
+      const errorMessage = event.reason?.message || '';
+      const errorStack = event.reason?.stack || '';
+      
+      if (errorMessage.includes('match') || errorStack.includes('index.mjs:144')) {
+        console.error('Algolia search error detected:', event.reason);
+        // Don't show error to user for search issues, just log them
+        event.preventDefault();
+        return;
+      }
+      
+      if (errorMessage.includes('Cannot read properties of undefined')) {
+        console.error('Property access error:', event.reason);
         setAppError('A rendering error occurred. Please refresh the page.');
+        event.preventDefault();
       }
     };
 
@@ -945,7 +1017,14 @@ function App() {
     return (
       <StripeProvider>
         <QuizProvider>
-          <Router>
+          <Router
+            onError={(error) => {
+              console.error('Router error:', error);
+              if (error.message && error.message.includes('match')) {
+                setAppError('Navigation error occurred. Please refresh the page.');
+              }
+            }}
+          >
             <div className={`app ${theme}`}>
               <NavbarWrapper onSubjectChange={handleSubjectChange} />
               <ErrorBoundary theme={theme} showDetails={true}>
