@@ -98,15 +98,15 @@
   display: inline-block;
   margin-left: 0.5rem;
   font-size: 0.8rem;
-  color: #a855f7;
+  color: #ffc107;
 }
 
 .active-filters-summary {
-  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
   padding: 1rem;
   border-radius: 12px;
   margin-bottom: 1.5rem;
-  border: 2px solid #a855f7;
+  border: 2px solid #ff9800;
   display: flex;
   justify-content: space-between;
   align-items: center;
