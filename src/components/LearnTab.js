@@ -5,6 +5,7 @@ import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import { generateQuestionPackPDF, downloadPDF } from '../services/pdfGenerator';
 import InteractiveQuiz from './InteractiveQuiz';
 import VocabularyStudy from './VocabularyStudy';
+import { safeString } from '../utils/safeRender';
 import './LearnTab.css';
 
 const searchClient = algoliasearch(

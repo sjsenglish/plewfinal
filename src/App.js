@@ -39,8 +39,7 @@ import LearnContentAdmin from './components/LearnContentAdmin';
 // import MathsSubmitQuestionForm from './components/MathsSubmitQuestionForm'; // HIDDEN
 // import MathsFilters from './components/MathsFilters'; // HIDDEN
 import KoreanEnglishFilters from './components/KoreanEnglishFilters';
-import VocabularySearch from './components/VocabularySearch';
-// import VocabularyPinterest from './components/VocabularyPinterest';
+import VocabularyPinterest from './components/VocabularyPinterest';
 import VideoStreaming from './components/VideoStreaming';
 import DemoMode from './components/DemoMode';
 // import StudyBuddyApp from './components/StudyBuddyApp'; // HIDDEN - Ask Bo and Application Builder
@@ -149,11 +148,10 @@ const SUBJECTS = {
     searchType: 'algolia'
   },
   vocabulary: {
-    index: 'korean-english-question-pairs',
     theme: 'vocabulary-theme',
     bannerText: 'master the vocab you need for exams',
     displayName: 'Vocabulary',
-    searchType: 'algolia'
+    searchType: 'firebase'
   },
   community: {
     index: 'plewcommunity',
@@ -604,22 +602,13 @@ const buildAlgoliaFilters = (filters) => {
                   />
                 )}
 
-                {/* Vocabulary Search Component */}
-                {currentSubject === 'vocabulary' ? (
-                  <VocabularySearch 
-                    searchClient={searchClient}
-                    subjectConfig={subjectConfig}
-                    bannerText={bannerText}
-                    user={user}
-                  />
-                ) : (
-                  <div className="results-container">
-                    <div className="stats-container">{statsComponent}</div>
-                    <div className="hits-container">
-                      {user && <Hits hitComponent={HitWrapper} />}
-                    </div>
+                {/* Algolia Search Results */}
+                <div className="results-container">
+                  <div className="stats-container">{statsComponent}</div>
+                  <div className="hits-container">
+                    {user && <Hits hitComponent={HitWrapper} />}
                   </div>
-                )}
+                </div>
               </div>
             </div>
 
@@ -653,6 +642,44 @@ const buildAlgoliaFilters = (filters) => {
     }
   }
 
+  // For Firebase search (Vocabulary), render component directly
+  if (subjectConfig && subjectConfig.searchType === 'firebase') {
+    try {
+      return (
+        <>
+          {headerContent}
+
+          {/* Vocabulary Pinterest Interface */}
+          <div className="modern-search-wrapper">
+            <div className="container">
+              <VocabularyPinterest key={`vocab-${currentSubject}`} />
+            </div>
+          </div>
+
+          {/* Video Popup */}
+          <VideoPopup isOpen={showVideoPopup} onClose={handleCloseVideo} />
+          {/* Demo Mode */}
+          {showDemoMode && (
+            <DemoMode onClose={() => setShowDemoMode(false)} />
+          )}
+        </>
+      );
+    } catch (error) {
+      console.error('Error rendering vocabulary search:', error);
+      return (
+        <>
+          {headerContent}
+          <div className="modern-search-wrapper">
+            <div className="container">
+              <div className="error-message" style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
+                Vocabulary search temporarily unavailable. Please refresh the page.
+              </div>
+            </div>
+          </div>
+        </>
+      );
+    }
+  }
 
   // For Pinecone search (Community) or fallback, no InstantSearch wrapper needed
   try {
@@ -1009,7 +1036,7 @@ function App() {
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/success" element={<SuccessPage />} />
                   <Route path="/community" element={<CommunityPage />} />
-                  <Route path="/vocabulary" element={<VocabularySearch />} />
+                  <Route path="/vocabulary" element={<VocabularyPinterest />} />
                   <Route path="/videos" element={<VideoStreaming />} />
                   <Route path="/admin/quiz-creator" element={<QuizCreator />} />
                   <Route path="/test" element={<TestPage />} />
