@@ -66,9 +66,9 @@ const PremiumDashboard = () => {
 
   const sections = [
     { id: 'overview', name: '홈', icon: '', premium: false },
-    { id: 'learn', name: ' 학습', icon: '', premium: true },
-    { id: 'profile', name: '도서관', icon: '', premium: true },
-    { id: 'question-packs', name: '문재 팩', icon: '', premium: true },
+    { id: 'learn', name: ' 학습 도우미', icon: '', premium: true },
+    { id: 'profile', name: '내 서고', icon: '', premium: true },
+    { id: 'question-packs', name: '마이 문제은행 ', icon: '', premium: true },
   ];
 
   const handleSectionClick = (sectionId, isPremiumSection) => {
@@ -127,7 +127,7 @@ const renderOverview = () => (
             fontSize: '0.95rem',
             fontWeight: '400' 
           }}>
-            Access your library, create question packs, and track your learning progress
+            이곳은 여러분의 학습 공간입니다. 문제지를 제작하고, 배운 내용을 복습하고, 실전연습과 진도확인 및 학습 도움도 받아 보세요.
           </p>
         </div>
         
@@ -312,11 +312,11 @@ const renderOverview = () => (
   const getFeatureDescription = (sectionId) => {
     switch (sectionId) {
       case 'learn':
-        return 'Weekly curated content with question packs, videos, and vocabulary';
+        return '매 주 내게 맞춤형으로 문제지, 단어, 비디오 학습 자료가 대시보드에 표시 되어 학습 관리를 도와 줍니다.';
       case 'profile':
-        return 'Practise timed question packs, review, and watch video solutions';
+        return '내가 공부한 학습 자료를 보관하고 복습 및 타이머 실전문제 연습까지 할 수 있어요.';
       case 'question-packs':
-        return '문재은행';
+        return '내가 선택한 문제지를 무한 제작할 수 있어요';
       default:
         return '';
     }

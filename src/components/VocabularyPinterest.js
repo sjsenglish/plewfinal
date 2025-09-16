@@ -329,8 +329,8 @@ const VocabularyPinterest = () => {
 
   return (
     <div className="vocabulary-pinterest">
-      {/* Filters */}
-      <div className="search-filters">
+      {/* Filters - Hidden for now */}
+      <div className="search-filters" style={{ display: 'none' }}>
 
         {/* Subject Area Tabs */}
         <div className="subject-tabs">

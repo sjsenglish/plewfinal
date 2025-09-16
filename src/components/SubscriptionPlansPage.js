@@ -29,20 +29,18 @@ const SubscriptionPlansPage = () => {
     {
       id: 'tier1',
       name: '프리미엄',
-      price: 29000,
+      price: 20000,
       period: '월',
       priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',
       paymentLink: 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01',
       description: '수능 준비를 위한 완전한 프리미엄 플랜',
       features: [
-        '무제한 일일 검색',
-        '무제한 비디오 솔루션',
-        '무제한 문제 팩',
-        '타이머 연습 모드',
-        '우선 커뮤니티 지원',
-        '주간 큐레이션 콘텐츠',
-        '고급 분석 대시보드',
-        '개인화된 학습 계획',
+        '무제한 문제 검색',
+        '무제한 비디오 검색',
+        '무제한 문제지 제작',
+        '타이머 실전 문제 연습',
+        '커뮤니티 지원',
+        '학습 도우미 지원',
       ],
       buttonText: '프리미엄 선택',
       popular: true,
@@ -168,7 +166,6 @@ const SubscriptionPlansPage = () => {
             fontSize: '48px',
             boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
           }}>
-            💎
           </div>
           
           <h1 style={{
@@ -335,7 +332,6 @@ const SubscriptionPlansPage = () => {
                     zIndex: 10,
                     border: '2px solid white'
                   }}>
-                    ✨ 추천 플랜
                   </div>
                 )}
 
@@ -380,7 +376,6 @@ const SubscriptionPlansPage = () => {
                       boxShadow: '0 16px 40px rgba(30, 41, 59, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
                       border: '1px solid rgba(255, 255, 255, 0.1)'
                     }}>
-                      ⚡
                     </div>
                     
                     <h3 style={{
@@ -455,7 +450,6 @@ const SubscriptionPlansPage = () => {
                       margin: '0 0 2rem 0',
                       textAlign: 'center'
                     }}>
-                      포함된 모든 기능
                     </h4>
                     
                     <div style={{

@@ -167,7 +167,7 @@ const Navbar = ({ onSubjectChange }) => {
               to="/videos" 
               className="navbar-glass-button"
             >
-              <span>📚</span>
+              <span></span>
               학습
             </Link>
 
@@ -176,7 +176,7 @@ const Navbar = ({ onSubjectChange }) => {
               to="/premium" 
               className="navbar-glass-button"
             >
-              <span>👤</span>
+              <span></span>
               프로필
             </Link>
           </div>
