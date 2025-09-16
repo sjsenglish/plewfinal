@@ -818,23 +818,26 @@ export const ProfilePage = () => {
                           View Pack
                         </button>
 
-                        <button
-                          onClick={() => handleDownloadPDF(pack)}
-                          disabled={isGeneratingPDFForThisPack}
-                          style={{
-                            backgroundColor: '#f8fafc',
-                            color: COLORS.darkGray,
-                            border: '1px solid #e2e8f0',
-                            padding: '6px 12px',
-                            borderRadius: '6px',
-                            fontSize: '13px',
-                            fontWeight: '500',
-                            cursor: isGeneratingPDFForThisPack ? 'not-allowed' : 'pointer',
-                            opacity: isGeneratingPDFForThisPack ? 0.6 : 1
-                          }}
-                        >
-                          {isGeneratingPDFForThisPack ? 'Generating...' : 'Download PDF'}
-                        </button>
+                        {/* Hide PDF button for Korean-English questions */}
+                        {pack.subject !== 'korean-english' && (
+                          <button
+                            onClick={() => handleDownloadPDF(pack)}
+                            disabled={isGeneratingPDFForThisPack}
+                            style={{
+                              backgroundColor: '#f8fafc',
+                              color: COLORS.darkGray,
+                              border: '1px solid #e2e8f0',
+                              padding: '6px 12px',
+                              borderRadius: '6px',
+                              fontSize: '13px',
+                              fontWeight: '500',
+                              cursor: isGeneratingPDFForThisPack ? 'not-allowed' : 'pointer',
+                              opacity: isGeneratingPDFForThisPack ? 0.6 : 1
+                            }}
+                          >
+                            {isGeneratingPDFForThisPack ? 'Generating...' : 'Download PDF'}
+                          </button>
+                        )}
 
                         <button
                           onClick={() => handlePractice(pack)}
