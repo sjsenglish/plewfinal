@@ -541,11 +541,11 @@ const VocabularyCard = ({
               return (
                 <div key={index} className="example-item">
                   <div className="question-id">
-                    {typeof example.questionId === 'string' ? example.questionId : 
-                     typeof example.questionId === 'object' && example.questionId ? 
-                       String(example.questionId.id || example.questionId.questionId || `Example ${index + 1}`) : 
-                       String(example.questionId) || `Example ${index + 1}`}
-                  </div>
+  {String(typeof example.questionId === 'string' ? example.questionId : 
+    typeof example.questionId === 'object' && example.questionId ? 
+      (example.questionId.id || example.questionId.questionId || `Example ${index + 1}`) : 
+      `Example ${index + 1}`)}
+</div>
                   <div className="example-sentence">
                     {typeof example.sentence === 'string' ? highlightWord(example.sentence, word.word) : 
                      typeof example.sentence === 'object' && example.sentence ? 
@@ -574,11 +574,11 @@ const VocabularyCard = ({
           <div className="questions-list">
             {word.questions.slice(0, 3).map((questionId, index) => (
               <span key={index} className="question-badge">
-                {typeof questionId === 'string' ? questionId : 
-                 typeof questionId === 'object' && questionId ? 
-                   (questionId.id || questionId.questionId || `Q${index + 1}`) : 
-                   String(questionId) || `Q${index + 1}`}
-              </span>
+  {String(typeof questionId === 'string' ? questionId : 
+    typeof questionId === 'object' && questionId ? 
+      (questionId.id || questionId.questionId || `Q${index + 1}`) : 
+      `Q${index + 1}`)}
+</span>
             ))}
             {word.questions.length > 3 && (
               <span className="more-questions">+{word.questions.length - 3} more</span>
