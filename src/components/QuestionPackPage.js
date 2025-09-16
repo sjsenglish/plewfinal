@@ -25,7 +25,9 @@ const COLORS = {
 // Firebase Storage icons
 const ICONS = {
   ghost: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fpurple%20ghost.svg?alt=media&token=8f68c264-89dd-4563-8858-07b8f9fd87e0',
-  note: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ffile%20icon.svg?alt=media&token=19369fc7-4d0c-499a-ad43-d47372a13b09'
+  note: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ffile%20icon.svg?alt=media&token=19369fc7-4d0c-499a-ad43-d47372a13b09',
+  tsa: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-with-books.svg?alt=media&token=2c2149db-8726-447c-b966-2d010e4b22b0',
+  maths: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-with-books.svg?alt=media&token=2c2149db-8726-447c-b966-2d010e4b22b0'
 };
 
 // Helper function to convert Firebase Storage URLs to direct URLs
@@ -1128,7 +1130,7 @@ const getQuestionPreview = (question) => {
                           justifyContent: 'center'
                         }}>
                           <img 
-                            src={key === 'tsa' ? ICONS.tsa : ICONS.maths}
+                            src={key === 'korean-english' ? ICONS.tsa : key === 'tsa' ? ICONS.tsa : ICONS.maths}
                             alt={config.displayName}
                             style={{ width: '32px', height: '32px' }}
                             onError={(e) => {
