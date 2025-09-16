@@ -106,7 +106,7 @@ const renderOverview = () => (
       background: 'rgba(255, 255, 255, 0.5)', 
       backdropFilter: 'blur(10px)',
       padding: '2.5rem', 
-      border: '1px solid #a8dcc6',
+      border: '1px solid rgba(212, 208, 255, 0.5)',
       marginBottom: '2rem',
       borderRadius: '16px',
     }}>
@@ -136,7 +136,7 @@ const renderOverview = () => (
             onClick={() => setShowUpgradeModal(true)}
             style={{
               padding: '1rem 2rem',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #221468 0%, #5c4ba5 100%)',
               color: 'white',
               border: 'none',
               borderRadius: '12px',
@@ -168,7 +168,7 @@ const renderOverview = () => (
       borderRadius: '16px', 
       padding: '2.5rem', 
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)', 
-      border: '1px solid #a8dcc6'
+      border: '1px solid rgba(212, 208, 255, 0.5)'
     }}>
       <h2 style={{ 
         margin: '0 0 2rem 0', 
@@ -230,7 +230,7 @@ const renderOverview = () => (
               style={{
                 background: 'rgba(255, 255, 255, 0.6)',
                 backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(168, 220, 198, 0.5)',
+                border: '1px solid rgba(212, 208, 255, 0.5)',
                 borderRadius: '16px',
                 padding: '2rem',
                 cursor: 'pointer',
@@ -246,7 +246,7 @@ const renderOverview = () => (
                 }
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(168, 220, 198, 0.5)';
+                e.currentTarget.style.borderColor = 'rgba(212, 208, 255, 0.5)';
                 e.currentTarget.style.transform = 'translateY(0) scale(1)';
                 e.currentTarget.style.boxShadow = 'none';
               }}
@@ -256,7 +256,7 @@ const renderOverview = () => (
                   width: '56px',
                   height: '56px',
                   borderRadius: '12px',
-                  background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                  background: 'linear-gradient(135deg, rgba(212, 208, 255, 0.3) 0%, rgba(225, 223, 255, 0.3) 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -434,7 +434,7 @@ const renderOverview = () => (
       <style jsx>{`
         .premium-dashboard {
           height: 100vh;
-          background: linear-gradient(135deg, #b8e6d3 0%, #a8dcc6 20%, #d4edda 40%, #f0c5a0 60%, #f5b885 80%, #fad0c4 100%);
+          background: linear-gradient(135deg, #f5f3ff 0%, #e8e5ff 100%);
           position: relative;
           font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
           margin: 0;

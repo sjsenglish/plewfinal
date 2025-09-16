@@ -64,19 +64,19 @@ const extractQuestionIds = (selectedQuestionIds) => {
   }
 };
 
-// Color constants
+// Color constants - Updated to match purple theme
 const COLORS = {
-  primary: '#00ced1',
-  primaryLight: '#d8f0ed',
-  purple: '#ccccff',
+  primary: '#221468',
+  primaryLight: '#e1dfff',
+  purple: '#d4d0ff',
   white: '#ffffff',
-  gray: '#6b7280',
-  darkGray: '#374151',
+  gray: '#9691c4',
+  darkGray: '#221468',
   success: '#10b981',
   warning: '#f59e0b',
   error: '#ef4444',
-  light: '#f8fafc',
-  border: '#e2e8f0'
+  light: '#f5f3ff',
+  border: '#d4d0ff'
 };
 
 // Difficulty level configuration
@@ -247,7 +247,7 @@ const PackCard = ({ pack, onPractice, onReview, quizAttempts, user }) => {
               flex: 1
             }}
             onMouseEnter={(e) => {
-              e.target.style.backgroundColor = '#00b4b8';
+              e.target.style.backgroundColor = '#5c4ba5';
             }}
             onMouseLeave={(e) => {
               e.target.style.backgroundColor = COLORS.primary;
@@ -302,7 +302,7 @@ const PackCard = ({ pack, onPractice, onReview, quizAttempts, user }) => {
             width: '100%'
           }}
           onMouseEnter={(e) => {
-            e.target.style.backgroundColor = '#00b4b8';
+            e.target.style.backgroundColor = '#5c4ba5';
           }}
           onMouseLeave={(e) => {
             e.target.style.backgroundColor = COLORS.primary;
