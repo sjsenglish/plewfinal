@@ -1,188 +1,213 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getAuth } from 'firebase/auth';
-import { doc, setDoc, collection, addDoc } from 'firebase/firestore';
+import { collection, getDocs, query, limit, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
-import './VocabularyQuiz.css';
-import { safeString } from '../utils/safeRender';
 
-const VocabularyQuiz = ({ words, onClose, onComplete }) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+// Modern color palette matching the site design
+const COLORS = {
+  primary: '#00ced1',
+  primaryLight: '#d8f0ed',
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+  white: '#ffffff',
+  gray: '#6b7280',
+  darkGray: '#374151',
+  light: '#f8fafc',
+  border: '#e2e8f0',
+  purple: '#8b5cf6',
+  gradient: 'linear-gradient(135deg, #00ced1 0%, #8b5cf6 100%)'
+};
+
+// Safe render utility
+const safeRender = (value, fallback = '') => {
+  if (value === null || value === undefined) return String(fallback);
+  if (typeof value === 'string' || typeof value === 'number') return String(value);
+  if (typeof value === 'object') {
+    if (value.sentence) return String(value.sentence);
+    if (value.text) return String(value.text);
+    if (value.content) return String(value.content);
+    return String(fallback || '[Complex Object]');
+  }
+  return String(value || fallback);
+};
+
+// Question types for different quiz modes
+const QUIZ_MODES = {
+  CONTEXT: 'context',
+  DEFINITION: 'definition',
+  SYNONYM: 'synonym'
+};
+
+const VocabularyQuiz = () => {
+  // State management
+  const [words, setWords] = useState([]);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [quizWords, setQuizWords] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
-  const [answers, setAnswers] = useState([]);
-  const [quizQuestions, setQuizQuestions] = useState([]);
-  const [quizType, setQuizType] = useState('mixed'); // 'synonyms', 'definitions', 'context', 'mixed'
-  const [timeLeft, setTimeLeft] = useState(30);
   const [quizStarted, setQuizStarted] = useState(false);
-  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [answers, setAnswers] = useState([]);
+  const [currentOptions, setCurrentOptions] = useState([]);
+  const [quizMode, setQuizMode] = useState(QUIZ_MODES.CONTEXT);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [timerActive, setTimerActive] = useState(false);
 
-  const auth = getAuth();
-  const user = auth.currentUser;
-
-  const quizTypes = [
-    { id: 'context', name: 'Context Usage', icon: '💭', description: 'Choose correct sentence context' }
-  ];
-
-  // Generate quiz questions based on type
-  const generateQuestions = useCallback((wordsArray, type) => {
-    const questions = [];
-
-    wordsArray.forEach((word, index) => {
-      const question = generateContextQuestion(word, wordsArray);
-
-      if (question) {
-        questions.push({
-          ...question,
-          id: index,
-          word: word.word,
-          originalWord: word
-        });
-      }
-    });
-
-    return questions.sort(() => Math.random() - 0.5); // Shuffle questions
+  // Load vocabulary words from Firebase
+  const loadVocabularyWords = useCallback(async () => {
+    setLoading(true);
+    try {
+      const wordsRef = collection(db, 'vocabulary');
+      const wordsQuery = query(wordsRef, orderBy('frequency', 'desc'), limit(100));
+      const snapshot = await getDocs(wordsQuery);
+      
+      const loadedWords = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.word && (data.contexts || data.definition || data.synonyms)) {
+          loadedWords.push({
+            id: doc.id,
+            word: safeRender(data.word),
+            definition: safeRender(data.definition),
+            contexts: Array.isArray(data.contexts) ? data.contexts : [],
+            synonyms: Array.isArray(data.synonyms) ? data.synonyms : [],
+            difficulty: safeRender(data.difficulty, 'medium'),
+            frequency: data.frequency || 0
+          });
+        }
+      });
+      
+      console.log(`Loaded ${loadedWords.length} vocabulary words`);
+      setWords(loadedWords);
+    } catch (error) {
+      console.error('Error loading vocabulary:', error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  // Load words on component mount
+  useEffect(() => {
+    loadVocabularyWords();
+  }, [loadVocabularyWords]);
 
-  // Generate context question with sentence options (Firebase data only)
-  const generateContextQuestion = (word, allWords) => {
-    console.log('Generating context question for word:', word.word);
-    console.log('Word data:', word);
-    
-    // Get the correct context sentence from Firebase data
-    let correctSentence = '';
-    
-    // Priority 1: Use contexts array from Firebase (extracted from CSAT passages)
-    if (word.contexts && Array.isArray(word.contexts) && word.contexts.length > 0) {
-      correctSentence = word.contexts[0];
-      console.log('Using contexts from Firebase:', correctSentence);
+  // Timer effect
+  useEffect(() => {
+    let interval = null;
+    if (timerActive && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(timeLeft - 1);
+      }, 1000);
+    } else if (timeLeft === 0 && timerActive) {
+      handleTimeUp();
     }
-    // Priority 2: Use examples array from Firebase 
-    else if (word.examples && Array.isArray(word.examples) && word.examples.length > 0) {
-      if (typeof word.examples[0] === 'object' && word.examples[0].sentence) {
-        correctSentence = word.examples[0].sentence;
-        console.log('Using examples.sentence from Firebase:', correctSentence);
-      } else if (typeof word.examples[0] === 'string') {
-        correctSentence = word.examples[0];
-        console.log('Using examples string from Firebase:', correctSentence);
-      }
+    return () => clearInterval(interval);
+  }, [timerActive, timeLeft]);
+
+  // Handle time up
+  const handleTimeUp = () => {
+    setTimerActive(false);
+    if (selectedAnswer === null) {
+      handleAnswerSelect(-1); // Mark as wrong due to timeout
     }
-    
-    // If no context available, skip this word
-    if (!correctSentence) {
-      console.log('No context sentence available for word:', word.word);
-      return null;
-    }
-
-    // Create the blanked version of the correct sentence
-    const correctBlank = correctSentence.replace(new RegExp(`\\b${word.word}\\b`, 'gi'), '_____');
-    
-    // Generate 3 incorrect context sentences from other Firebase words
-    const wrongSentences = [];
-    const shuffledWords = [...allWords].sort(() => Math.random() - 0.5);
-    
-    for (const otherWord of shuffledWords) {
-      if (otherWord.word !== word.word && wrongSentences.length < 3) {
-        let wrongSentence = '';
-        
-        // Get context sentence from another Firebase word
-        if (otherWord.contexts && Array.isArray(otherWord.contexts) && otherWord.contexts.length > 0) {
-          wrongSentence = otherWord.contexts[0];
-        } else if (otherWord.examples && Array.isArray(otherWord.examples) && otherWord.examples.length > 0) {
-          if (typeof otherWord.examples[0] === 'object' && otherWord.examples[0].sentence) {
-            wrongSentence = otherWord.examples[0].sentence;
-          } else if (typeof otherWord.examples[0] === 'string') {
-            wrongSentence = otherWord.examples[0];
-          }
-        }
-        
-        if (wrongSentence && wrongSentence !== correctSentence && wrongSentence.length > 20) {
-          // Replace the other word with blank to create a distractor
-          const wrongBlank = wrongSentence.replace(new RegExp(`\\b${otherWord.word}\\b`, 'gi'), '_____');
-          wrongSentences.push(wrongBlank);
-          console.log('Added wrong sentence from Firebase word', otherWord.word, ':', wrongBlank);
-        }
-      }
-    }
-
-    // If we still don't have enough wrong sentences from Firebase, use generic academic sentences
-    while (wrongSentences.length < 3) {
-      const genericSentences = [
-        'The student carefully analyzed the _____ presented in the research paper.',
-        'Modern technology has significantly influenced how we understand _____ concepts.',
-        'The professor emphasized the importance of studying _____ patterns in literature.',
-        'Researchers have discovered new methods to examine _____ phenomena.',
-        'The committee discussed various _____ approaches to solving the problem.',
-        'Students must demonstrate their understanding of _____ principles in the examination.'
-      ];
-      
-      const randomSentence = genericSentences[Math.floor(Math.random() * genericSentences.length)];
-      if (!wrongSentences.includes(randomSentence)) {
-        wrongSentences.push(randomSentence);
-        console.log('Added generic sentence:', randomSentence);
-      }
-    }
-
-    // Create options array with all sentence options
-    const sentenceOptions = [correctBlank, ...wrongSentences.slice(0, 3)]
-      .sort(() => Math.random() - 0.5);
-
-    console.log('Final question options:', sentenceOptions);
-
-    return {
-      type: 'context',
-      question: `Which sentence correctly uses the word "${word.word}"?`,
-      options: sentenceOptions,
-      correctAnswer: correctBlank,
-      explanation: `The correct sentence is: "${correctSentence}" - This shows the proper usage of "${word.word}" from real CSAT passages.`
-    };
   };
 
+  // Generate random quiz questions
+  const generateQuiz = (questionCount = 10) => {
+    if (words.length < questionCount) {
+      alert(`Not enough words loaded. Only ${words.length} words available.`);
+      return;
+    }
 
-  // Start quiz
-  const startQuiz = () => {
-    const questions = generateQuestions(words, quizType);
-    setQuizQuestions(questions);
+    // Randomly select words
+    const shuffledWords = [...words].sort(() => Math.random() - 0.5);
+    const selectedWords = shuffledWords.slice(0, questionCount);
+    
+    setQuizWords(selectedWords);
+    setCurrentQuestion(0);
+    setScore(0);
+    setAnswers([]);
     setQuizStarted(true);
+    setShowResult(false);
+    generateQuestionOptions(selectedWords[0], selectedWords);
     setTimeLeft(30);
+    setTimerActive(true);
+  };
+
+  // Generate options for current question
+  const generateQuestionOptions = (currentWord, allWords) => {
+    let options = [];
+    let correctAnswer = '';
+
+    if (quizMode === QUIZ_MODES.CONTEXT) {
+      // Context-based question
+      if (currentWord.contexts && currentWord.contexts.length > 0) {
+        const randomContext = currentWord.contexts[Math.floor(Math.random() * currentWord.contexts.length)];
+        correctAnswer = currentWord.word;
+        
+        // Get 3 other random words as wrong options
+        const otherWords = allWords.filter(w => w.word !== currentWord.word);
+        const wrongOptions = otherWords.sort(() => Math.random() - 0.5).slice(0, 3);
+        
+        options = [
+          { text: correctAnswer, isCorrect: true },
+          ...wrongOptions.map(w => ({ text: w.word, isCorrect: false }))
+        ];
+        
+        // Store the context for display
+        currentWord.questionContext = safeRender(randomContext);
+      }
+    } else if (quizMode === QUIZ_MODES.DEFINITION) {
+      // Definition-based question
+      correctAnswer = currentWord.definition;
+      
+      // Get 3 other definitions as wrong options
+      const otherWords = allWords.filter(w => w.word !== currentWord.word && w.definition);
+      const wrongOptions = otherWords.sort(() => Math.random() - 0.5).slice(0, 3);
+      
+      options = [
+        { text: correctAnswer, isCorrect: true },
+        ...wrongOptions.map(w => ({ text: w.definition, isCorrect: false }))
+      ];
+    }
+
+    // Shuffle options
+    options = options.sort(() => Math.random() - 0.5);
+    setCurrentOptions(options);
   };
 
   // Handle answer selection
-  const handleAnswerSelect = (answer) => {
-    if (selectedAnswer !== null) return;
+  const handleAnswerSelect = (optionIndex) => {
+    if (selectedAnswer !== null) return; // Already answered
     
-    setSelectedAnswer(answer);
-    setTimeLeft(0); // Stop timer
+    setTimerActive(false);
+    setSelectedAnswer(optionIndex);
     
-    const currentQuestion = quizQuestions[currentQuestionIndex];
-    const isCorrect = answer === currentQuestion.correctAnswer;
-    
-    const answerData = {
-      questionId: safeString(currentQuestion.id || 'unknown'),
-      word: safeString(currentQuestion.word || ''),
-      questionText: safeString(currentQuestion.question || 'Unknown question'),
-      selectedAnswer: safeString(answer || ''),
-      correctAnswer: safeString(currentQuestion.correctAnswer || ''),
-      isCorrect,
-      timeSpent: 30 - timeLeft,
-      type: safeString(currentQuestion.type || 'unknown')
+    const isCorrect = optionIndex >= 0 && currentOptions[optionIndex]?.isCorrect;
+    const newAnswer = {
+      word: quizWords[currentQuestion].word,
+      selectedIndex: optionIndex,
+      isCorrect: isCorrect,
+      correctAnswer: currentOptions.find(opt => opt.isCorrect)?.text,
+      selectedAnswer: optionIndex >= 0 ? currentOptions[optionIndex]?.text : 'No answer (timeout)',
+      timeLeft: timeLeft
     };
-
-    setAnswers(prev => [...prev, answerData]);
+    
+    setAnswers([...answers, newAnswer]);
     
     if (isCorrect) {
-      setScore(prev => prev + 1);
+      setScore(score + 1);
     }
 
-    // Show result for 2 seconds, then move to next question
-    setShowResult(true);
+    // Auto advance after 2 seconds
     setTimeout(() => {
-      if (currentQuestionIndex < quizQuestions.length - 1) {
-        setCurrentQuestionIndex(prev => prev + 1);
+      if (currentQuestion + 1 < quizWords.length) {
+        setCurrentQuestion(currentQuestion + 1);
         setSelectedAnswer(null);
-        setShowResult(false);
+        generateQuestionOptions(quizWords[currentQuestion + 1], quizWords);
         setTimeLeft(30);
+        setTimerActive(true);
       } else {
         finishQuiz();
       }
@@ -190,254 +215,675 @@ const VocabularyQuiz = ({ words, onClose, onComplete }) => {
   };
 
   // Finish quiz
-  const finishQuiz = async () => {
-    const finalResults = {
-      score,
-      totalQuestions: quizQuestions.length,
-      percentage: Math.round((score / quizQuestions.length) * 100),
-      answers,
-      quizType,
-      completedAt: new Date(),
-      words: words.map(w => w.word)
-    };
-
-    setResults(finalResults);
-
-    // Save to Firebase if user is logged in
-    if (user) {
-      try {
-        await addDoc(collection(db, 'vocabularyQuizResults'), {
-          userId: user.uid,
-          ...finalResults
-        });
-      } catch (error) {
-        console.error('Error saving quiz results:', error);
-      }
-    }
-
-    onComplete(finalResults);
+  const finishQuiz = () => {
+    setTimerActive(false);
+    setShowResult(true);
   };
 
-  // Timer effect
-  useEffect(() => {
-    if (!quizStarted || showResult || timeLeft <= 0) return;
+  // Reset quiz
+  const resetQuiz = () => {
+    setQuizStarted(false);
+    setShowResult(false);
+    setCurrentQuestion(0);
+    setScore(0);
+    setAnswers([]);
+    setSelectedAnswer(null);
+    setCurrentOptions([]);
+    setTimerActive(false);
+    setTimeLeft(30);
+  };
 
-    const timer = setTimeout(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          handleAnswerSelect(null); // Time's up, no answer selected
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  // Get performance message
+  const getPerformanceMessage = () => {
+    const percentage = (score / quizWords.length) * 100;
+    if (percentage >= 90) return { message: "Outstanding! 🎉", color: COLORS.success };
+    if (percentage >= 80) return { message: "Excellent work! 👏", color: COLORS.success };
+    if (percentage >= 70) return { message: "Good job! 👍", color: COLORS.warning };
+    if (percentage >= 60) return { message: "Not bad! 💪", color: COLORS.warning };
+    return { message: "Keep practicing! 📚", color: COLORS.error };
+  };
 
-    return () => clearTimeout(timer);
-  }, [timeLeft, quizStarted, showResult]);
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '400px',
+        flexDirection: 'column',
+        gap: '16px'
+      }}>
+        <div style={{
+          width: '48px',
+          height: '48px',
+          border: `4px solid ${COLORS.border}`,
+          borderTop: `4px solid ${COLORS.primary}`,
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }} />
+        <span style={{
+          fontSize: '16px',
+          color: COLORS.gray,
+          fontWeight: '500'
+        }}>
+          Loading vocabulary...
+        </span>
+        
+        <style jsx>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   if (!quizStarted) {
     return (
-      <div className="quiz-modal">
-        <div className="quiz-container setup-container">
-          <div className="quiz-header">
-            <h2>Setup Your Vocabulary Quiz</h2>
-            <button onClick={onClose} className="close-btn">×</button>
-          </div>
+      <div style={{
+        maxWidth: '600px',
+        margin: '0 auto',
+        padding: '40px 24px',
+        textAlign: 'center'
+      }}>
+        {/* Header */}
+        <div style={{
+          background: COLORS.gradient,
+          borderRadius: '20px',
+          padding: '40px',
+          marginBottom: '32px',
+          color: COLORS.white
+        }}>
+          <div style={{
+            fontSize: '48px',
+            marginBottom: '16px'
+          }}>📚</div>
+          <h1 style={{
+            fontSize: '32px',
+            fontWeight: '700',
+            margin: '0 0 12px 0'
+          }}>
+            Vocabulary Quiz
+          </h1>
+          <p style={{
+            fontSize: '16px',
+            margin: '0',
+            opacity: '0.9'
+          }}>
+            Test your knowledge of CSAT vocabulary words
+          </p>
+        </div>
 
-          <div className="quiz-setup">
-            <div className="quiz-info">
-              <div className="info-item">
-                <span className="info-label">Words:</span>
-                <span className="info-value">{words.length}</span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Time per question:</span>
-                <span className="info-value">30 seconds</span>
-              </div>
-            </div>
-
-            <div className="quiz-type-selection">
-              <h3>Choose Quiz Type</h3>
-              <div className="quiz-types">
-                {quizTypes.map(type => (
-                  <button
-                    key={type.id}
-                    onClick={() => setQuizType(type.id)}
-                    className={`quiz-type-btn ${quizType === type.id ? 'active' : ''}`}
-                  >
-                    <div className="type-icon">{type.icon}</div>
-                    <div className="type-info">
-                      <div className="type-name">{type.name}</div>
-                      <div className="type-description">{type.description}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button onClick={startQuiz} className="start-quiz-btn">
-              🚀 Start Quiz
+        {/* Quiz Mode Selection */}
+        <div style={{
+          backgroundColor: COLORS.white,
+          borderRadius: '16px',
+          padding: '24px',
+          marginBottom: '24px',
+          border: `1px solid ${COLORS.border}`,
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+        }}>
+          <h3 style={{
+            fontSize: '18px',
+            fontWeight: '600',
+            color: COLORS.darkGray,
+            margin: '0 0 16px 0'
+          }}>
+            Choose Quiz Mode
+          </h3>
+          
+          <div style={{
+            display: 'flex',
+            gap: '12px',
+            flexWrap: 'wrap',
+            justifyContent: 'center'
+          }}>
+            <button
+              onClick={() => setQuizMode(QUIZ_MODES.CONTEXT)}
+              style={{
+                padding: '12px 20px',
+                borderRadius: '12px',
+                border: `2px solid ${quizMode === QUIZ_MODES.CONTEXT ? COLORS.primary : COLORS.border}`,
+                backgroundColor: quizMode === QUIZ_MODES.CONTEXT ? COLORS.primary + '20' : COLORS.white,
+                color: quizMode === QUIZ_MODES.CONTEXT ? COLORS.primary : COLORS.gray,
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              📖 Context Quiz
+            </button>
+            
+            <button
+              onClick={() => setQuizMode(QUIZ_MODES.DEFINITION)}
+              style={{
+                padding: '12px 20px',
+                borderRadius: '12px',
+                border: `2px solid ${quizMode === QUIZ_MODES.DEFINITION ? COLORS.primary : COLORS.border}`,
+                backgroundColor: quizMode === QUIZ_MODES.DEFINITION ? COLORS.primary + '20' : COLORS.white,
+                color: quizMode === QUIZ_MODES.DEFINITION ? COLORS.primary : COLORS.gray,
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              💡 Definition Quiz
             </button>
           </div>
+          
+          <p style={{
+            fontSize: '14px',
+            color: COLORS.gray,
+            margin: '12px 0 0 0'
+          }}>
+            {quizMode === QUIZ_MODES.CONTEXT 
+              ? 'Identify the correct word from context sentences'
+              : 'Match words with their definitions'
+            }
+          </p>
         </div>
+
+        {/* Stats */}
+        <div style={{
+          backgroundColor: COLORS.white,
+          borderRadius: '16px',
+          padding: '24px',
+          marginBottom: '32px',
+          border: `1px solid ${COLORS.border}`,
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+        }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+            gap: '16px',
+            textAlign: 'center'
+          }}>
+            <div>
+              <div style={{
+                fontSize: '24px',
+                fontWeight: '700',
+                color: COLORS.primary,
+                margin: '0 0 4px 0'
+              }}>
+                {words.length}
+              </div>
+              <div style={{
+                fontSize: '12px',
+                color: COLORS.gray,
+                fontWeight: '500'
+              }}>
+                Words Available
+              </div>
+            </div>
+            <div>
+              <div style={{
+                fontSize: '24px',
+                fontWeight: '700',
+                color: COLORS.warning,
+                margin: '0 0 4px 0'
+              }}>
+                10
+              </div>
+              <div style={{
+                fontSize: '12px',
+                color: COLORS.gray,
+                fontWeight: '500'
+              }}>
+                Questions
+              </div>
+            </div>
+            <div>
+              <div style={{
+                fontSize: '24px',
+                fontWeight: '700',
+                color: COLORS.error,
+                margin: '0 0 4px 0'
+              }}>
+                30s
+              </div>
+              <div style={{
+                fontSize: '12px',
+                color: COLORS.gray,
+                fontWeight: '500'
+              }}>
+                Per Question
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Start Button */}
+        <button
+          onClick={() => generateQuiz(10)}
+          disabled={words.length === 0}
+          style={{
+            background: words.length === 0 ? COLORS.gray : COLORS.gradient,
+            color: COLORS.white,
+            border: 'none',
+            padding: '16px 32px',
+            borderRadius: '16px',
+            fontSize: '18px',
+            fontWeight: '600',
+            cursor: words.length === 0 ? 'not-allowed' : 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)',
+            transform: 'translateY(0)'
+          }}
+          onMouseEnter={(e) => {
+            if (words.length > 0) {
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 12px 25px rgba(0, 0, 0, 0.2)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
+          }}
+        >
+          🚀 Start Quiz
+        </button>
       </div>
     );
   }
 
-  if (results.score !== undefined) {
+  if (showResult) {
+    const performance = getPerformanceMessage();
+    const percentage = Math.round((score / quizWords.length) * 100);
+    
     return (
-      <div className="quiz-modal">
-        <div className="quiz-container results-container">
-          <div className="quiz-header">
-            <h2>Quiz Complete!</h2>
-            <button onClick={onClose} className="close-btn">×</button>
+      <div style={{
+        maxWidth: '600px',
+        margin: '0 auto',
+        padding: '40px 24px',
+        textAlign: 'center'
+      }}>
+        {/* Results Header */}
+        <div style={{
+          background: COLORS.gradient,
+          borderRadius: '20px',
+          padding: '40px',
+          marginBottom: '32px',
+          color: COLORS.white
+        }}>
+          <div style={{
+            fontSize: '64px',
+            marginBottom: '16px'
+          }}>
+            {percentage >= 80 ? '🎉' : percentage >= 60 ? '👍' : '💪'}
           </div>
+          <h1 style={{
+            fontSize: '32px',
+            fontWeight: '700',
+            margin: '0 0 12px 0'
+          }}>
+            Quiz Complete!
+          </h1>
+          <p style={{
+            fontSize: '18px',
+            margin: '0',
+            opacity: '0.9'
+          }}>
+            {performance.message}
+          </p>
+        </div>
 
-          <div className="quiz-results">
-            <div className="score-display">
-              <div className="score-circle">
-                <div className="score-text">
-                  <span className="score-number">{results.percentage}%</span>
-                  <span className="score-label">{results.score}/{results.totalQuestions}</span>
-                </div>
+        {/* Score Display */}
+        <div style={{
+          backgroundColor: COLORS.white,
+          borderRadius: '20px',
+          padding: '32px',
+          marginBottom: '24px',
+          border: `1px solid ${COLORS.border}`,
+          boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)'
+        }}>
+          <div style={{
+            fontSize: '48px',
+            fontWeight: '700',
+            color: performance.color,
+            margin: '0 0 8px 0'
+          }}>
+            {percentage}%
+          </div>
+          <div style={{
+            fontSize: '18px',
+            color: COLORS.darkGray,
+            fontWeight: '600',
+            margin: '0 0 16px 0'
+          }}>
+            {score} out of {quizWords.length} correct
+          </div>
+          
+          {/* Detailed Stats */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '16px',
+            padding: '20px',
+            backgroundColor: COLORS.light,
+            borderRadius: '12px'
+          }}>
+            <div>
+              <div style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: COLORS.success,
+                margin: '0 0 4px 0'
+              }}>
+                {score}
+              </div>
+              <div style={{
+                fontSize: '12px',
+                color: COLORS.gray,
+                fontWeight: '500'
+              }}>
+                Correct
               </div>
             </div>
-
-            <div className="performance-message">
-              {results.percentage >= 90 && (
-                <div className="message excellent">
-                  🎉 Excellent! You're mastering vocabulary!
-                </div>
-              )}
-              {results.percentage >= 70 && results.percentage < 90 && (
-                <div className="message good">
-                  👏 Great job! Keep practicing to improve!
-                </div>
-              )}
-              {results.percentage >= 50 && results.percentage < 70 && (
-                <div className="message okay">
-                  💪 Good effort! Review the words and try again!
-                </div>
-              )}
-              {results.percentage < 50 && (
-                <div className="message needs-work">
-                  📚 Keep studying! Practice makes perfect!
-                </div>
-              )}
-            </div>
-
-            <div className="results-breakdown">
-              <h3>Question Breakdown</h3>
-              <div className="answers-list">
-                {answers.map((answer, index) => (
-                  <div key={index} className={`answer-item ${answer.isCorrect ? 'correct' : 'incorrect'}`}>
-                    <div className="answer-header">
-                      <span className="question-number">Q{index + 1}</span>
-                      <span className={`result-icon ${answer.isCorrect ? 'correct' : 'incorrect'}`}>
-                        {answer.isCorrect ? '✅' : '❌'}
-                      </span>
-                    </div>
-                    <div className="answer-details">
-                      <div className="question-text">{String(answer.questionText || '')}</div>
-                      <div className="answer-comparison">
-                        <div className="answer-row">
-                          <span className="label">Your answer:</span>
-                          <span className={`value ${answer.isCorrect ? 'correct' : 'incorrect'}`}>
-                            {String(answer.selectedAnswer || 'No answer')}
-                          </span>
-                        </div>
-                        {!answer.isCorrect && (
-                          <div className="answer-row">
-                            <span className="label">Correct answer:</span>
-                            <span className="value correct">{String(answer.correctAnswer || '')}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+            <div>
+              <div style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: COLORS.error,
+                margin: '0 0 4px 0'
+              }}>
+                {quizWords.length - score}
+              </div>
+              <div style={{
+                fontSize: '12px',
+                color: COLORS.gray,
+                fontWeight: '500'
+              }}>
+                Incorrect
               </div>
             </div>
-
-            <div className="results-actions">
-              <button onClick={() => window.location.reload()} className="retry-btn">
-                🔄 Try Again
-              </button>
-              <button onClick={onClose} className="finish-btn">
-                ✅ Finish
-              </button>
+            <div>
+              <div style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: COLORS.primary,
+                margin: '0 0 4px 0'
+              }}>
+                {Math.round(answers.reduce((sum, ans) => sum + (30 - ans.timeLeft), 0) / answers.length)}s
+              </div>
+              <div style={{
+                fontSize: '12px',
+                color: COLORS.gray,
+                fontWeight: '500'
+              }}>
+                Avg Time
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div style={{
+          display: 'flex',
+          gap: '12px',
+          justifyContent: 'center',
+          flexWrap: 'wrap'
+        }}>
+          <button
+            onClick={() => generateQuiz(10)}
+            style={{
+              background: COLORS.gradient,
+              color: COLORS.white,
+              border: 'none',
+              padding: '14px 24px',
+              borderRadius: '12px',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'translateY(0)';
+            }}
+          >
+            🔄 Try Again
+          </button>
+          
+          <button
+            onClick={resetQuiz}
+            style={{
+              backgroundColor: COLORS.light,
+              color: COLORS.darkGray,
+              border: `1px solid ${COLORS.border}`,
+              padding: '14px 24px',
+              borderRadius: '12px',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = COLORS.border;
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = COLORS.light;
+            }}
+          >
+            🏠 Main Menu
+          </button>
         </div>
       </div>
     );
   }
 
-  const currentQuestion = quizQuestions[currentQuestionIndex];
-  if (!currentQuestion) return null;
-
+  // Quiz Questions UI
+  const currentWord = quizWords[currentQuestion];
+  
   return (
-    <div className="quiz-modal">
-      <div className="quiz-container">
-        <div className="quiz-header">
-          <div className="quiz-progress">
-            <span>Question {currentQuestionIndex + 1} of {quizQuestions.length}</span>
-            <div className="progress-bar">
-              <div 
-                className="progress-fill"
-                style={{ width: `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%` }}
-              />
-            </div>
+    <div style={{
+      maxWidth: '700px',
+      margin: '0 auto',
+      padding: '24px'
+    }}>
+      {/* Quiz Header */}
+      <div style={{
+        backgroundColor: COLORS.white,
+        borderRadius: '16px',
+        padding: '20px',
+        marginBottom: '24px',
+        border: `1px solid ${COLORS.border}`,
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '12px'
+        }}>
+          <div style={{
+            fontSize: '16px',
+            fontWeight: '600',
+            color: COLORS.darkGray
+          }}>
+            Question {currentQuestion + 1} of {quizWords.length}
           </div>
-          <div className="quiz-timer">
-            <div className={`timer ${timeLeft <= 10 ? 'warning' : ''}`}>
-              ⏱️ {timeLeft}s
-            </div>
+          
+          {/* Timer */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            backgroundColor: timeLeft <= 10 ? COLORS.error + '20' : COLORS.primary + '20',
+            color: timeLeft <= 10 ? COLORS.error : COLORS.primary,
+            padding: '8px 12px',
+            borderRadius: '20px',
+            fontSize: '14px',
+            fontWeight: '600'
+          }}>
+            ⏱️ {timeLeft}s
           </div>
-          <button onClick={onClose} className="close-btn">×</button>
         </div>
+        
+        {/* Progress Bar */}
+        <div style={{
+          width: '100%',
+          height: '6px',
+          backgroundColor: COLORS.light,
+          borderRadius: '3px',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            width: `${((currentQuestion + 1) / quizWords.length) * 100}%`,
+            height: '100%',
+            background: COLORS.gradient,
+            borderRadius: '3px',
+            transition: 'width 0.3s ease'
+          }} />
+        </div>
+        
+        {/* Score */}
+        <div style={{
+          textAlign: 'center',
+          marginTop: '12px',
+          fontSize: '14px',
+          color: COLORS.gray
+        }}>
+          Score: <span style={{ fontWeight: '600', color: COLORS.primary }}>{score}</span>
+        </div>
+      </div>
 
-        <div className="quiz-content">
-          <div className="question-section">
-            <div className="question-type">
-              {currentQuestion.type === 'synonyms' && '🔄 Synonym'}
-              {currentQuestion.type === 'definitions' && '📖 Definition'}
-              {currentQuestion.type === 'context' && '💭 Context'}
-              {currentQuestion.type === 'antonyms' && '↔️ Antonym'}
+      {/* Question Card */}
+      <div style={{
+        backgroundColor: COLORS.white,
+        borderRadius: '20px',
+        padding: '32px',
+        marginBottom: '24px',
+        border: `1px solid ${COLORS.border}`,
+        boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)'
+      }}>
+        {quizMode === QUIZ_MODES.CONTEXT ? (
+          <>
+            <h2 style={{
+              fontSize: '20px',
+              fontWeight: '600',
+              color: COLORS.darkGray,
+              margin: '0 0 16px 0',
+              textAlign: 'center'
+            }}>
+              Which word fits best in this context?
+            </h2>
+            
+            <div style={{
+              backgroundColor: COLORS.light,
+              borderRadius: '12px',
+              padding: '20px',
+              fontSize: '16px',
+              lineHeight: '1.6',
+              color: COLORS.darkGray,
+              fontStyle: 'italic',
+              textAlign: 'center',
+              marginBottom: '24px'
+            }}>
+              "{safeRender(currentWord.questionContext)}"
             </div>
-            <h3 className="question-text">{currentQuestion.question}</h3>
-          </div>
+          </>
+        ) : (
+          <>
+            <h2 style={{
+              fontSize: '20px',
+              fontWeight: '600',
+              color: COLORS.darkGray,
+              margin: '0 0 16px 0',
+              textAlign: 'center'
+            }}>
+              What is the definition of "{currentWord.word}"?
+            </h2>
+          </>
+        )}
 
-          <div className="answers-section">
-            {currentQuestion.options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleAnswerSelect(option)}
-                disabled={selectedAnswer !== null}
-                className={`answer-option ${
-                  selectedAnswer === option ? 
-                    (option === currentQuestion.correctAnswer ? 'correct' : 'incorrect') :
-                    ''
-                } ${
-                  showResult && option === currentQuestion.correctAnswer ? 'correct' : ''
-                }`}
-              >
-                <span className="option-letter">{String.fromCharCode(65 + index)}</span>
-                <span className="option-text">{option}</span>
-              </button>
-            ))}
-          </div>
-
-          {showResult && (
-            <div className="result-explanation">
-              <div className={`result-message ${selectedAnswer === currentQuestion.correctAnswer ? 'correct' : 'incorrect'}`}>
-                {selectedAnswer === currentQuestion.correctAnswer ? '🎉 Correct!' : '❌ Incorrect'}
+        {/* Answer Options */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
+        }}>
+          {currentOptions.map((option, index) => (
+            <button
+              key={index}
+              onClick={() => handleAnswerSelect(index)}
+              disabled={selectedAnswer !== null}
+              style={{
+                padding: '16px 20px',
+                borderRadius: '12px',
+                border: selectedAnswer === null 
+                  ? `2px solid ${COLORS.border}`
+                  : selectedAnswer === index
+                    ? `2px solid ${option.isCorrect ? COLORS.success : COLORS.error}`
+                    : option.isCorrect
+                      ? `2px solid ${COLORS.success}`
+                      : `2px solid ${COLORS.border}`,
+                backgroundColor: selectedAnswer === null 
+                  ? COLORS.white
+                  : selectedAnswer === index
+                    ? option.isCorrect ? COLORS.success + '20' : COLORS.error + '20'
+                    : option.isCorrect
+                      ? COLORS.success + '20'
+                      : COLORS.white,
+                color: COLORS.darkGray,
+                fontSize: '15px',
+                fontWeight: '500',
+                cursor: selectedAnswer === null ? 'pointer' : 'not-allowed',
+                transition: 'all 0.2s ease',
+                textAlign: 'left',
+                position: 'relative'
+              }}
+              onMouseEnter={(e) => {
+                if (selectedAnswer === null) {
+                  e.target.style.backgroundColor = COLORS.primary + '10';
+                  e.target.style.borderColor = COLORS.primary;
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (selectedAnswer === null) {
+                  e.target.style.backgroundColor = COLORS.white;
+                  e.target.style.borderColor = COLORS.border;
+                }
+              }}
+            >
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}>
+                <div style={{
+                  width: '24px',
+                  height: '24px',
+                  borderRadius: '50%',
+                  backgroundColor: COLORS.light,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  color: COLORS.gray
+                }}>
+                  {String.fromCharCode(65 + index)}
+                </div>
+                <span>{safeRender(option.text)}</span>
+                
+                {selectedAnswer !== null && (
+                  <div style={{
+                    marginLeft: 'auto',
+                    fontSize: '18px'
+                  }}>
+                    {selectedAnswer === index && option.isCorrect ? '✅' :
+                     selectedAnswer === index && !option.isCorrect ? '❌' :
+                     option.isCorrect ? '✅' : ''}
+                  </div>
+                )}
               </div>
-              <div className="explanation">
-                {currentQuestion.explanation}
-              </div>
-            </div>
-          )}
+            </button>
+          ))}
         </div>
       </div>
     </div>
