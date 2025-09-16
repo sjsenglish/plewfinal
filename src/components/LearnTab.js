@@ -6,6 +6,7 @@ import { generateQuestionPackPDF, downloadPDF } from '../services/pdfGenerator';
 import InteractiveQuiz from './InteractiveQuiz';
 import VocabularyStudy from './VocabularyStudy';
 import { safeString } from '../utils/safeRender';
+import { deepSanitize } from '../utils/sanitizeData';
 import './LearnTab.css';
 
 const searchClient = algoliasearch(
@@ -297,53 +298,17 @@ if (pack.selectedQuestionIds[0] && typeof pack.selectedQuestionIds[0] === 'objec
     }
 
     try {
-      const questions = await fetchQuestionsForPack(pack);
+      const rawQuestions = await fetchQuestionsForPack(pack);
       
-      if (questions.length === 0) {
+      if (rawQuestions.length === 0) {
         alert('Failed to load questions for practice. Please try again.');
         return;
       }
 
-      // Sanitize question data to prevent React error #31
-      const sanitizedQuestions = questions.map((question, index) => {
-        console.log(`Sanitizing question ${index + 1}:`, question);
-        
-        const sanitizedQuestion = {};
-        
-        // Iterate through all question properties
-        Object.keys(question).forEach(key => {
-          const value = question[key];
-          
-          if (value === null || value === undefined) {
-            sanitizedQuestion[key] = '';
-          } else if (typeof value === 'object' && !Array.isArray(value)) {
-            // Convert object to string by extracting common text properties
-            const extractedText = value.sentence || 
-                                 value.text || 
-                                 value.content || 
-                                 value.value || 
-                                 String(value);
-            sanitizedQuestion[key] = String(extractedText || '');
-            console.log(`Converted object property '${key}' from object to string:`, extractedText);
-          } else if (Array.isArray(value)) {
-            // Handle arrays by converting each element to string
-            sanitizedQuestion[key] = value.map(item => {
-              if (typeof item === 'object' && item !== null) {
-                return String(item.sentence || item.text || item.content || item.value || item);
-              }
-              return String(item || '');
-            });
-          } else {
-            // For primitives, ensure they're strings if they should be
-            sanitizedQuestion[key] = String(value);
-          }
-        });
-        
-        console.log(`Sanitized question ${index + 1}:`, sanitizedQuestion);
-        return sanitizedQuestion;
-      });
-
-      console.log('All questions sanitized successfully:', sanitizedQuestions);
+      // Apply deep sanitization to prevent any nested objects from reaching React
+      const sanitizedQuestions = rawQuestions.map(question => deepSanitize(question));
+      
+      console.log('Questions after deep sanitization:', sanitizedQuestions);
 
       setCurrentQuizPack(pack);
       setCurrentQuizQuestions(sanitizedQuestions);
