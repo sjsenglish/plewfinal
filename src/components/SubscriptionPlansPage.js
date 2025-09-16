@@ -118,71 +118,82 @@ const SubscriptionPlansPage = () => {
     <div className="subscription-page">
       {/* Header */}
       <div style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        padding: '4rem 2rem 3rem 2rem',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
+        padding: '5rem 2rem 4rem 2rem',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden'
       }}>
+        {/* Geometric shapes for modern look */}
         <div style={{
           position: 'absolute',
-          top: '20px',
-          right: '20px',
-          width: '100px',
-          height: '100px',
-          background: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '50%',
-          filter: 'blur(40px)'
+          top: '10%',
+          right: '10%',
+          width: '200px',
+          height: '200px',
+          background: 'linear-gradient(45deg, #06b6d4, #0891b2)',
+          borderRadius: '30%',
+          opacity: '0.1',
+          transform: 'rotate(45deg)',
+          filter: 'blur(20px)'
         }} />
         <div style={{
           position: 'absolute',
-          bottom: '20px',
-          left: '20px',
-          width: '80px',
-          height: '80px',
-          background: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '50%',
-          filter: 'blur(30px)'
+          bottom: '15%',
+          left: '15%',
+          width: '150px',
+          height: '150px',
+          background: 'linear-gradient(45deg, #10b981, #059669)',
+          borderRadius: '40%',
+          opacity: '0.1',
+          transform: 'rotate(-30deg)',
+          filter: 'blur(15px)'
         }} />
         
         <div style={{
           position: 'relative',
           zIndex: 1,
-          maxWidth: '600px',
+          maxWidth: '700px',
           margin: '0 auto'
         }}>
           <div style={{
-            width: '80px',
-            height: '80px',
-            background: 'rgba(255, 255, 255, 0.2)',
-            borderRadius: '24px',
+            width: '120px',
+            height: '120px',
+            background: 'linear-gradient(135deg, #f8fafc, #e2e8f0)',
+            borderRadius: '28px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            margin: '0 auto 2rem auto',
-            fontSize: '32px',
-            backdropFilter: 'blur(10px)'
+            margin: '0 auto 2.5rem auto',
+            fontSize: '48px',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
           }}>
-            ✨
+            💎
           </div>
           
           <h1 style={{
-            fontSize: '48px',
-            fontWeight: '800',
-            color: 'white',
-            margin: '0 0 1rem 0',
-            letterSpacing: '-0.025em',
-            textShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+            fontSize: '56px',
+            fontWeight: '900',
+            background: 'linear-gradient(135deg, #f8fafc, #cbd5e1)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            margin: '0 0 1.5rem 0',
+            letterSpacing: '-0.02em',
+            textShadow: 'none'
           }}>
             프리미엄 플랜
           </h1>
           
           <p style={{
-            fontSize: '20px',
-            color: 'rgba(255, 255, 255, 0.9)',
+            fontSize: '22px',
+            color: '#94a3b8',
             margin: '0',
-            lineHeight: '1.6',
-            fontWeight: '400'
+            lineHeight: '1.7',
+            fontWeight: '400',
+            maxWidth: '500px',
+            marginLeft: 'auto',
+            marginRight: 'auto'
           }}>
             수능 준비를 위한 완전한 프리미엄 경험
           </p>
@@ -191,7 +202,7 @@ const SubscriptionPlansPage = () => {
 
       <div style={{
         padding: '4rem 2rem 2rem 2rem',
-        background: 'linear-gradient(135deg, #f9fafb 0%, #e0e7ff 100%)',
+        background: '#f8fafc',
         minHeight: 'calc(100vh - 300px)'
       }}>
         {/* Login Notice */}
@@ -202,29 +213,31 @@ const SubscriptionPlansPage = () => {
             marginBottom: '3rem'
           }}>
             <div style={{
-              maxWidth: '500px',
+              maxWidth: '600px',
               width: '100%',
-              background: 'linear-gradient(135deg, #fef3c7, #fcd34d)',
-              border: '1px solid #f59e0b',
-              borderRadius: '16px',
-              padding: '1.5rem',
+              background: 'white',
+              border: '1px solid #e2e8f0',
+              borderRadius: '20px',
+              padding: '2rem',
               display: 'flex',
               alignItems: 'center',
-              gap: '1rem'
+              gap: '1.5rem',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
             }}>
               <div style={{
-                width: '40px',
-                height: '40px',
-                backgroundColor: '#f59e0b',
-                borderRadius: '50%',
+                width: '56px',
+                height: '56px',
+                background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                borderRadius: '16px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                flexShrink: 0
+                flexShrink: 0,
+                boxShadow: '0 8px 16px rgba(245, 158, 11, 0.3)'
               }}>
                 <svg 
-                  width="20" 
-                  height="20" 
+                  width="24" 
+                  height="24" 
                   fill="white" 
                   viewBox="0 0 20 20"
                 >
@@ -233,19 +246,28 @@ const SubscriptionPlansPage = () => {
               </div>
               
               <div>
+                <h3 style={{
+                  fontSize: '18px',
+                  fontWeight: '700',
+                  color: '#1e293b',
+                  margin: '0 0 0.5rem 0'
+                }}>
+                  로그인이 필요합니다
+                </h3>
                 <p style={{
                   fontSize: '15px',
-                  color: '#92400e',
+                  color: '#64748b',
                   margin: '0',
-                  fontWeight: '500'
+                  fontWeight: '400'
                 }}>
-                  <strong>참고:</strong> 플랜을 구독하려면{' '}
+                  프리미엄 플랜을 구독하려면{' '}
                   <a 
                     href="/login" 
                     style={{
-                      color: '#92400e',
-                      textDecoration: 'underline',
-                      fontWeight: '600'
+                      color: '#f59e0b',
+                      textDecoration: 'none',
+                      fontWeight: '600',
+                      borderBottom: '2px solid #f59e0b'
                     }}
                   >
                     로그인
@@ -261,10 +283,10 @@ const SubscriptionPlansPage = () => {
         <div style={{
           display: 'flex',
           justifyContent: 'center',
-          padding: '0 2rem'
+          padding: '0 1rem'
         }}>
           <div style={{
-            maxWidth: '500px',
+            maxWidth: '600px',
             width: '100%'
           }}>
             {plans.map((plan) => (
@@ -273,56 +295,47 @@ const SubscriptionPlansPage = () => {
                 style={{
                   position: 'relative',
                   backgroundColor: 'white',
-                  borderRadius: '24px',
-                  boxShadow: plan.popular 
-                    ? '0 25px 50px -12px rgba(139, 92, 246, 0.25), 0 0 0 1px rgba(139, 92, 246, 0.1)' 
-                    : '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                  border: plan.popular 
-                    ? '2px solid rgba(139, 92, 246, 0.2)' 
-                    : plan.current 
-                      ? '2px solid #10b981' 
-                      : '1px solid #e5e7eb',
+                  borderRadius: '32px',
+                  boxShadow: '0 32px 64px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08)',
+                  border: plan.current 
+                    ? '2px solid #10b981' 
+                    : '1px solid rgba(226, 232, 240, 0.8)',
                   overflow: 'hidden',
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                   margin: '0 auto',
-                  background: plan.popular 
-                    ? 'linear-gradient(135deg, #ffffff 0%, #faf5ff 100%)'
-                    : 'white'
+                  background: 'linear-gradient(135deg, #ffffff 0%, #fafbff 100%)'
                 }}
                 onMouseEnter={(e) => {
                   if (!plan.current) {
-                    e.target.style.transform = 'translateY(-8px)';
-                    e.target.style.boxShadow = plan.popular 
-                      ? '0 35px 60px -12px rgba(139, 92, 246, 0.35), 0 0 0 1px rgba(139, 92, 246, 0.15)'
-                      : '0 25px 35px -5px rgba(0, 0, 0, 0.15), 0 15px 15px -5px rgba(0, 0, 0, 0.06)';
+                    e.target.style.transform = 'translateY(-12px) scale(1.02)';
+                    e.target.style.boxShadow = '0 40px 80px rgba(0, 0, 0, 0.16), 0 8px 32px rgba(0, 0, 0, 0.12)';
                   }
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = plan.popular 
-                    ? '0 25px 50px -12px rgba(139, 92, 246, 0.25), 0 0 0 1px rgba(139, 92, 246, 0.1)'
-                    : '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
+                  e.target.style.transform = 'translateY(0) scale(1)';
+                  e.target.style.boxShadow = '0 32px 64px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08)';
                 }}
               >
                 {/* Popular Badge */}
                 {plan.popular && (
                   <div style={{
                     position: 'absolute',
-                    top: '-12px',
+                    top: '-16px',
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
+                    background: 'linear-gradient(135deg, #1e293b, #0f172a)',
                     color: 'white',
-                    padding: '8px 20px',
-                    borderRadius: '20px',
-                    fontSize: '12px',
+                    padding: '12px 24px',
+                    borderRadius: '24px',
+                    fontSize: '13px',
                     fontWeight: '700',
                     textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                    boxShadow: '0 8px 20px rgba(139, 92, 246, 0.4)',
-                    zIndex: 10
+                    letterSpacing: '1px',
+                    boxShadow: '0 12px 32px rgba(30, 41, 59, 0.4)',
+                    zIndex: 10,
+                    border: '2px solid white'
                   }}>
-                    ⭐ 추천
+                    ✨ 추천 플랜
                   </div>
                 )}
 
@@ -330,61 +343,64 @@ const SubscriptionPlansPage = () => {
                 {plan.current && (
                   <div style={{
                     position: 'absolute',
-                    top: '20px',
-                    right: '20px',
+                    top: '24px',
+                    right: '24px',
                     background: 'linear-gradient(135deg, #10b981, #059669)',
                     color: 'white',
-                    padding: '6px 14px',
-                    borderRadius: '16px',
-                    fontSize: '11px',
-                    fontWeight: '600',
-                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
+                    padding: '8px 16px',
+                    borderRadius: '20px',
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    boxShadow: '0 8px 20px rgba(16, 185, 129, 0.3)'
                   }}>
-                    ✓ 현재 플랜
+                    ✓ 현재 이용중
                   </div>
                 )}
 
                 <div style={{
-                  padding: '3rem 2.5rem 2.5rem 2.5rem'
+                  padding: '3.5rem 3rem 3rem 3rem'
                 }}>
                   {/* Plan Header */}
                   <div style={{
                     textAlign: 'center',
-                    marginBottom: '2.5rem',
-                    paddingBottom: '2rem',
+                    marginBottom: '3rem',
+                    paddingBottom: '2.5rem',
                     borderBottom: '1px solid #f1f5f9'
                   }}>
                     <div style={{
-                      width: '60px',
-                      height: '60px',
-                      background: plan.popular 
-                        ? 'linear-gradient(135deg, #8b5cf6, #7c3aed)'
-                        : 'linear-gradient(135deg, #06b6d4, #0891b2)',
-                      borderRadius: '20px',
+                      width: '96px',
+                      height: '96px',
+                      background: 'linear-gradient(135deg, #1e293b, #334155)',
+                      borderRadius: '32px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      margin: '0 auto 1.5rem auto',
-                      fontSize: '24px'
+                      margin: '0 auto 2rem auto',
+                      fontSize: '36px',
+                      boxShadow: '0 16px 40px rgba(30, 41, 59, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)'
                     }}>
-                      👑
+                      ⚡
                     </div>
                     
                     <h3 style={{
-                      fontSize: '28px',
-                      fontWeight: '700',
-                      color: '#1e293b',
-                      margin: '0 0 0.5rem 0',
-                      letterSpacing: '-0.025em'
+                      fontSize: '32px',
+                      fontWeight: '900',
+                      color: '#0f172a',
+                      margin: '0 0 1rem 0',
+                      letterSpacing: '-0.02em'
                     }}>
                       {plan.name}
                     </h3>
                     
                     <p style={{
-                      fontSize: '16px',
+                      fontSize: '18px',
                       color: '#64748b',
-                      margin: '0 0 2rem 0',
-                      lineHeight: '1.6'
+                      margin: '0 0 2.5rem 0',
+                      lineHeight: '1.6',
+                      maxWidth: '400px',
+                      marginLeft: 'auto',
+                      marginRight: 'auto'
                     }}>
                       {plan.description}
                     </p>
@@ -393,69 +409,94 @@ const SubscriptionPlansPage = () => {
                       display: 'flex',
                       alignItems: 'baseline',
                       justifyContent: 'center',
-                      gap: '0.25rem'
+                      gap: '0.5rem',
+                      marginBottom: '1rem'
                     }}>
                       <span style={{
-                        fontSize: '48px',
-                        fontWeight: '800',
-                        color: plan.popular ? '#8b5cf6' : '#1e293b',
+                        fontSize: '56px',
+                        fontWeight: '900',
+                        background: 'linear-gradient(135deg, #1e293b, #64748b)',
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
                         lineHeight: '1'
                       }}>
                         {formatPrice(plan.price)}
                       </span>
                       {plan.period && (
                         <span style={{
-                          fontSize: '18px',
+                          fontSize: '20px',
                           color: '#64748b',
-                          fontWeight: '500'
+                          fontWeight: '600'
                         }}>
                           /{plan.period}
                         </span>
                       )}
                     </div>
+                    
+                    <p style={{
+                      fontSize: '14px',
+                      color: '#94a3b8',
+                      margin: '0',
+                      fontWeight: '500'
+                    }}>
+                      VAT 포함 • 언제든지 취소 가능
+                    </p>
                   </div>
 
                   {/* Features */}
                   <div style={{
-                    marginBottom: '2.5rem'
+                    marginBottom: '3rem'
                   }}>
                     <h4 style={{
-                      fontSize: '20px',
-                      fontWeight: '600',
+                      fontSize: '22px',
+                      fontWeight: '700',
                       color: '#1e293b',
-                      margin: '0 0 1.5rem 0',
+                      margin: '0 0 2rem 0',
                       textAlign: 'center'
                     }}>
-                      포함된 기능들
+                      포함된 모든 기능
                     </h4>
                     
                     <div style={{
                       display: 'grid',
-                      gap: '1rem'
+                      gap: '1.25rem'
                     }}>
                       {plan.features.map((feature, index) => (
                         <div key={index} style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '0.75rem',
-                          padding: '0.75rem',
-                          backgroundColor: '#f8fafc',
-                          borderRadius: '12px',
-                          border: '1px solid #e2e8f0'
-                        }}>
+                          gap: '1rem',
+                          padding: '1rem 1.25rem',
+                          backgroundColor: 'rgba(248, 250, 252, 0.8)',
+                          borderRadius: '16px',
+                          border: '1px solid rgba(226, 232, 240, 0.6)',
+                          transition: 'all 0.2s ease',
+                          cursor: 'default'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = 'rgba(241, 245, 249, 1)';
+                          e.target.style.borderColor = 'rgba(203, 213, 225, 0.8)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = 'rgba(248, 250, 252, 0.8)';
+                          e.target.style.borderColor = 'rgba(226, 232, 240, 0.6)';
+                        }}
+                        >
                           <div style={{
-                            width: '24px',
-                            height: '24px',
-                            backgroundColor: plan.popular ? '#8b5cf6' : '#10b981',
-                            borderRadius: '50%',
+                            width: '28px',
+                            height: '28px',
+                            background: 'linear-gradient(135deg, #10b981, #059669)',
+                            borderRadius: '8px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            flexShrink: 0
+                            flexShrink: 0,
+                            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
                           }}>
                             <svg 
-                              width="14" 
-                              height="14" 
+                              width="16" 
+                              height="16" 
                               fill="white" 
                               viewBox="0 0 24 24"
                             >
@@ -463,9 +504,10 @@ const SubscriptionPlansPage = () => {
                             </svg>
                           </div>
                           <span style={{
-                            fontSize: '15px',
+                            fontSize: '16px',
                             color: '#374151',
-                            fontWeight: '500'
+                            fontWeight: '600',
+                            lineHeight: '1.4'
                           }}>
                             {feature}
                           </span>
@@ -480,54 +522,59 @@ const SubscriptionPlansPage = () => {
                     disabled={loading[plan.id] || plan.current || !isLoggedIn}
                     style={{
                       width: '100%',
-                      padding: '1rem 2rem',
-                      fontSize: '16px',
-                      fontWeight: '600',
-                      borderRadius: '16px',
+                      padding: '1.25rem 2rem',
+                      fontSize: '18px',
+                      fontWeight: '700',
+                      borderRadius: '20px',
                       border: 'none',
                       cursor: (loading[plan.id] || plan.current || !isLoggedIn) ? 'not-allowed' : 'pointer',
-                      transition: 'all 0.3s ease',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       background: plan.current 
                         ? 'linear-gradient(135deg, #10b981, #059669)'
-                        : plan.popular 
-                          ? 'linear-gradient(135deg, #8b5cf6, #7c3aed)'
-                          : 'linear-gradient(135deg, #1e293b, #0f172a)',
+                        : 'linear-gradient(135deg, #1e293b, #0f172a)',
                       color: 'white',
                       opacity: (loading[plan.id] || !isLoggedIn) && !plan.current ? 0.6 : 1,
                       boxShadow: plan.current 
-                        ? '0 8px 20px rgba(16, 185, 129, 0.3)'
-                        : plan.popular 
-                          ? '0 8px 20px rgba(139, 92, 246, 0.3)'
-                          : '0 8px 20px rgba(30, 41, 59, 0.3)',
-                      marginBottom: '1.5rem'
+                        ? '0 12px 28px rgba(16, 185, 129, 0.3)'
+                        : '0 12px 28px rgba(30, 41, 59, 0.4)',
+                      marginBottom: '2rem',
+                      position: 'relative',
+                      overflow: 'hidden'
                     }}
                     onMouseEnter={(e) => {
                       if (!plan.current && !loading[plan.id] && isLoggedIn) {
-                        e.target.style.transform = 'translateY(-2px)';
-                        e.target.style.boxShadow = plan.popular 
-                          ? '0 12px 25px rgba(139, 92, 246, 0.4)'
-                          : '0 12px 25px rgba(30, 41, 59, 0.4)';
+                        e.target.style.transform = 'translateY(-3px)';
+                        e.target.style.boxShadow = '0 16px 36px rgba(30, 41, 59, 0.5)';
                       }
                     }}
                     onMouseLeave={(e) => {
                       e.target.style.transform = 'translateY(0)';
                       e.target.style.boxShadow = plan.current 
-                        ? '0 8px 20px rgba(16, 185, 129, 0.3)'
-                        : plan.popular 
-                          ? '0 8px 20px rgba(139, 92, 246, 0.3)'
-                          : '0 8px 20px rgba(30, 41, 59, 0.3)';
+                        ? '0 12px 28px rgba(16, 185, 129, 0.3)'
+                        : '0 12px 28px rgba(30, 41, 59, 0.4)';
                     }}
                   >
+                    {/* Button shine effect */}
+                    <div style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: '-100%',
+                      width: '100%',
+                      height: '100%',
+                      background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+                      transition: 'left 0.6s ease'
+                    }} />
+                    
                     {loading[plan.id] ? (
                       <div style={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '0.5rem'
+                        gap: '0.75rem'
                       }}>
                         <div style={{
-                          width: '20px',
-                          height: '20px',
+                          width: '22px',
+                          height: '22px',
                           border: '2px solid transparent',
                           borderTop: '2px solid currentColor',
                           borderRadius: '50%',
@@ -538,9 +585,9 @@ const SubscriptionPlansPage = () => {
                     ) : plan.current ? (
                       '✓ 현재 이용 중인 플랜'
                     ) : !isLoggedIn ? (
-                      '구독하려면 로그인하세요'
+                      '먼저 로그인해 주세요'
                     ) : (
-                      plan.buttonText
+                      `지금 ${plan.buttonText}`
                     )}
                   </button>
 
