@@ -10,6 +10,20 @@ import { useQuizContext } from '../App';
 import { convertFirebaseStorageUrl, getQuestionImageUrl as getQuestionImageUrlFromUtils } from '../utils/urlUtils';
 import './QuizReview.css';
 
+// Safe render helper to prevent React error #31
+const safeRender = (value) => {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'string' || typeof value === 'number') return value;
+  if (typeof value === 'object') {
+    // Extract text from common object patterns
+    if (value.sentence) return String(value.sentence);
+    if (value.text) return String(value.text);
+    if (value.content) return String(value.content);
+    return '[Complex Object]';
+  }
+  return String(value);
+};
+
 // Color palette matching ProfilePage
 const COLORS = {
   lightPurple: '#ccccff',
@@ -1688,7 +1702,7 @@ if (!isDemoMode && user) {
                     color: '#374151',
                     margin: '0'
                   }}>
-                    {currentQuestion.question_content}
+                    {safeRender(currentQuestion.question_content)}
                   </p>
                 </div>
               )}
@@ -1742,7 +1756,7 @@ if (!isDemoMode && user) {
                     color: '#374151',
                     margin: '0'
                   }}>
-                    {currentQuestion.question}
+                    {safeRender(currentQuestion.question)}
                   </p>
                 </div>
               )}
@@ -1829,7 +1843,7 @@ if (!isDemoMode && user) {
                             {option.id}
                           </div>
                           <div style={{ flex: 1 }}>
-                            {option.text}
+                            {safeRender(option.text)}
                           </div>
                           {showCorrect && (
                             <span style={{
@@ -1878,7 +1892,7 @@ if (!isDemoMode && user) {
                     color: COLORS.gray,
                     margin: '4px 0 0 0'
                   }}>
-                    {currentQuestion.marks} marks
+                    {safeRender(currentQuestion.marks)} marks
                   </p>
                 )}
               </div>
@@ -1898,7 +1912,7 @@ if (!isDemoMode && user) {
                       color: COLORS.gray,
                       marginBottom: '4px'
                     }}>
-                      <strong>Exam:</strong> {currentQuestion.id.replace(/_/g, ' ')}
+                      <strong>Exam:</strong> {safeRender(currentQuestion.id?.replace(/_/g, ' '))}
                     </div>
                   )}
                   {currentQuestion.question_topic && (
@@ -1907,7 +1921,7 @@ if (!isDemoMode && user) {
                       color: COLORS.gray,
                       marginBottom: '4px'
                     }}>
-                      <strong>Topic:</strong> {currentQuestion.question_topic}
+                      <strong>Topic:</strong> {safeRender(currentQuestion.question_topic)}
                     </div>
                   )}
                   {currentQuestion.spec_topic && (
@@ -1915,8 +1929,8 @@ if (!isDemoMode && user) {
                       fontSize: '13px',
                       color: COLORS.gray
                     }}>
-                      <strong>Specification:</strong> {currentQuestion.spec_topic}
-                      {currentQuestion.spec_point && ` (${currentQuestion.spec_point})`}
+                      <strong>Specification:</strong> {safeRender(currentQuestion.spec_topic)}
+                      {currentQuestion.spec_point && ` (${safeRender(currentQuestion.spec_point)})`}
                     </div>
                   )}
                 </div>
@@ -2079,7 +2093,7 @@ if (!isDemoMode && user) {
                     borderRadius: '8px',
                     border: '1px solid #e2e8f0'
                   }}>
-                    {currentQuestion.correct_answer}
+                    {safeRender(currentQuestion.correct_answer)}
                   </div>
                 </div>
               )}
@@ -2120,7 +2134,7 @@ if (!isDemoMode && user) {
                     fontFamily: 'system-ui, -apple-system, sans-serif',
                     lineHeight: '1.4'
                   }}>
-                    {String(koreanText || '')}
+                    {safeRender(koreanText)}
                   </div>
                 </div>
               ) : null;
@@ -2154,7 +2168,7 @@ if (!isDemoMode && user) {
                     borderRadius: '8px',
                     border: '1px solid #e2e8f0'
                   }}>
-                    {String(englishText || '')}
+                    {safeRender(englishText)}
                   </div>
                 </div>
               ) : null;
@@ -2244,9 +2258,9 @@ if (!isDemoMode && user) {
                             {String.fromCharCode(65 + index)}
                           </div>
                           <span style={{ flex: 1 }}>
-                            {typeof option === 'string' ? option : 
+                            {safeRender(typeof option === 'string' ? option : 
                              typeof option === 'object' ? (option?.text || option?.option || `Option ${index + 1}`) : 
-                             String(option) || `Option ${index + 1}`}
+                             String(option) || `Option ${index + 1}`)}
                           </span>
                           {showCorrect && (
                             <div style={{ color: COLORS.success, fontSize: '18px' }}>✓</div>
