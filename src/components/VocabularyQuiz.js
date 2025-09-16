@@ -55,29 +55,73 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
     setLoading(true);
     try {
       const wordsRef = collection(db, 'vocabulary');
-      const wordsQuery = query(wordsRef, orderBy('frequency', 'desc'), limit(100));
+      // Try with limit only first, no orderBy to avoid index issues
+      const wordsQuery = query(wordsRef, limit(100));
       const snapshot = await getDocs(wordsQuery);
       
       const loadedWords = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
-        if (data.word && (data.contexts || data.definition || data.synonyms)) {
+        console.log('Document data:', data); // Debug log to see what's in each document
+        
+        // More flexible check - just need word and at least one of contexts, definition, or synonyms
+        if (data.word && (
+          (data.contexts && Array.isArray(data.contexts) && data.contexts.length > 0) ||
+          data.definition ||
+          (data.synonyms && Array.isArray(data.synonyms) && data.synonyms.length > 0)
+        )) {
           loadedWords.push({
             id: doc.id,
             word: safeRender(data.word),
             definition: safeRender(data.definition),
-            contexts: Array.isArray(data.contexts) ? data.contexts : [],
-            synonyms: Array.isArray(data.synonyms) ? data.synonyms : [],
+            contexts: Array.isArray(data.contexts) ? data.contexts.filter(c => c && c.trim()) : [],
+            synonyms: Array.isArray(data.synonyms) ? data.synonyms.filter(s => s && s.trim()) : [],
             difficulty: safeRender(data.difficulty, 'medium'),
             frequency: data.frequency || 0
           });
         }
       });
       
-      console.log(`Loaded ${loadedWords.length} vocabulary words`);
+      console.log(`Loaded ${loadedWords.length} vocabulary words from Firebase`);
+      console.log('Sample word:', loadedWords[0]);
       setWords(loadedWords);
     } catch (error) {
-      console.error('Error loading vocabulary:', error);
+      console.error('Error loading vocabulary from Firebase:', error);
+      // Try alternative approach without query
+      try {
+        console.log('Trying alternative Firebase approach...');
+        const wordsRef = collection(db, 'vocabulary');
+        const snapshot = await getDocs(wordsRef);
+        
+        const loadedWords = [];
+        let docCount = 0;
+        snapshot.forEach((doc) => {
+          docCount++;
+          const data = doc.data();
+          if (data.word && data.contexts && Array.isArray(data.contexts) && data.contexts.length > 0) {
+            loadedWords.push({
+              id: doc.id,
+              word: safeRender(data.word),
+              definition: safeRender(data.definition),
+              contexts: data.contexts.filter(c => c && c.trim()),
+              synonyms: Array.isArray(data.synonyms) ? data.synonyms.filter(s => s && s.trim()) : [],
+              difficulty: safeRender(data.difficulty, 'medium'),
+              frequency: data.frequency || 0
+            });
+          }
+          
+          // Limit to 100 words
+          if (loadedWords.length >= 100) {
+            return;
+          }
+        });
+        
+        console.log(`Alternative approach: processed ${docCount} docs, loaded ${loadedWords.length} words`);
+        setWords(loadedWords);
+      } catch (altError) {
+        console.error('Alternative Firebase approach also failed:', altError);
+        setWords([]);
+      }
     } finally {
       setLoading(false);
     }
@@ -128,14 +172,46 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
 
   // Generate random quiz questions
   const generateQuiz = (questionCount = 10) => {
-    if (words.length < questionCount) {
-      alert(`Not enough words loaded. Only ${words.length} words available.`);
+    console.log('Generating quiz with', words.length, 'available words');
+    
+    if (words.length < 4) {
+      alert(`Not enough words loaded. Need at least 4 words, only ${words.length} available.`);
       return;
     }
 
-    // Randomly select words
-    const shuffledWords = [...words].sort(() => Math.random() - 0.5);
-    const selectedWords = shuffledWords.slice(0, questionCount);
+    // Filter words that have valid contexts for quiz questions
+    const wordsWithContexts = words.filter(word => 
+      word.contexts && 
+      Array.isArray(word.contexts) && 
+      word.contexts.length > 0 &&
+      word.contexts.some(context => context && context.trim() && context.length > 10)
+    );
+    
+    console.log(`Found ${wordsWithContexts.length} words with valid contexts out of ${words.length} total words`);
+    
+    if (wordsWithContexts.length < 4) {
+      console.log('Not enough words with contexts, using all available words');
+      // Use all words if not enough have contexts, fallback will handle it
+      const availableWords = words.length >= 4 ? words : [...words];
+      const selectedWords = availableWords.sort(() => Math.random() - 0.5).slice(0, Math.min(questionCount, availableWords.length));
+      
+      setQuizWords(selectedWords);
+      setCurrentQuestion(0);
+      setScore(0);
+      setAnswers([]);
+      setQuizStarted(true);
+      setShowResult(false);
+      generateQuestionOptions(selectedWords[0], selectedWords);
+      setTimeLeft(30);
+      setTimerActive(true);
+      return;
+    }
+
+    // Randomly select words with contexts
+    const shuffledWords = [...wordsWithContexts].sort(() => Math.random() - 0.5);
+    const selectedWords = shuffledWords.slice(0, Math.min(questionCount, shuffledWords.length));
+    
+    console.log('Selected words for quiz:', selectedWords.map(w => w.word));
     
     setQuizWords(selectedWords);
     setCurrentQuestion(0);
@@ -153,12 +229,43 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
     let options = [];
     let correctAnswer = '';
 
+    console.log('Generating question for word:', currentWord);
+
     // Context-based question only
-    if (currentWord.contexts && currentWord.contexts.length > 0) {
-      const randomContext = currentWord.contexts[Math.floor(Math.random() * currentWord.contexts.length)];
+    if (currentWord.contexts && Array.isArray(currentWord.contexts) && currentWord.contexts.length > 0) {
+      const validContexts = currentWord.contexts.filter(context => context && context.trim() && context.length > 10);
+      
+      if (validContexts.length > 0) {
+        const randomContext = validContexts[Math.floor(Math.random() * validContexts.length)];
+        correctAnswer = currentWord.word;
+        
+        // Get 3 other random words as wrong options
+        const otherWords = allWords.filter(w => w.word !== currentWord.word);
+        const wrongOptions = otherWords.sort(() => Math.random() - 0.5).slice(0, 3);
+        
+        options = [
+          { text: correctAnswer, isCorrect: true },
+          ...wrongOptions.map(w => ({ text: w.word, isCorrect: false }))
+        ];
+        
+        // Store the context for display
+        currentWord.questionContext = safeRender(randomContext);
+        console.log('Generated context question with context:', randomContext);
+      } else {
+        console.log('No valid contexts found for word:', currentWord.word);
+      }
+    } else {
+      console.log('Word has no contexts array:', currentWord.word);
+    }
+
+    // If we couldn't generate options, create a fallback
+    if (options.length === 0) {
+      console.log('Creating fallback question for:', currentWord.word);
       correctAnswer = currentWord.word;
       
-      // Get 3 other random words as wrong options
+      // Create a generic context
+      currentWord.questionContext = `The student needs to understand the meaning of the word _____ in this academic context.`;
+      
       const otherWords = allWords.filter(w => w.word !== currentWord.word);
       const wrongOptions = otherWords.sort(() => Math.random() - 0.5).slice(0, 3);
       
@@ -166,14 +273,12 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
         { text: correctAnswer, isCorrect: true },
         ...wrongOptions.map(w => ({ text: w.word, isCorrect: false }))
       ];
-      
-      // Store the context for display
-      currentWord.questionContext = safeRender(randomContext);
     }
 
     // Shuffle options
     options = options.sort(() => Math.random() - 0.5);
     setCurrentOptions(options);
+    console.log('Final options:', options);
   };
 
   // Handle answer selection
