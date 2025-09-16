@@ -404,6 +404,10 @@ const LearnTab = () => {
   const [showInteractiveQuiz, setShowInteractiveQuiz] = useState(false);
   const [currentQuizPack, setCurrentQuizPack] = useState(null);
   const [currentQuizQuestions, setCurrentQuizQuestions] = useState([]);
+  
+  // Video modal states
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [currentVideo, setCurrentVideo] = useState(null);
 
   // Load data on component mount and level change
   useEffect(() => {
@@ -639,8 +643,8 @@ const LearnTab = () => {
       duration: safeRender(video?.duration)
     });
     
-    // TODO: Integrate with video player
-    alert(`Video player for "${safeRender(video?.title)}" will be available soon!`);
+    setCurrentVideo(video);
+    setShowVideoModal(true);
   };
 
   // Handle quiz completion
@@ -648,6 +652,12 @@ const LearnTab = () => {
     setShowInteractiveQuiz(false);
     setCurrentQuizPack(null);
     setCurrentQuizQuestions([]);
+  };
+
+  // Handle video modal close
+  const handleVideoClose = () => {
+    setShowVideoModal(false);
+    setCurrentVideo(null);
   };
 
   // Loading state
@@ -744,7 +754,7 @@ const LearnTab = () => {
 
   return (
     <div style={{
-      padding: '24px',
+      padding: '24px 24px 80px 24px',
       maxWidth: '1200px',
       margin: '0 auto',
       minHeight: '100vh'
@@ -951,6 +961,174 @@ const LearnTab = () => {
           onComplete={handleQuizComplete}
           onClose={handleQuizComplete}
         />
+      )}
+
+      {/* Video Modal */}
+      {showVideoModal && currentVideo && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999
+        }}>
+          <div style={{
+            backgroundColor: COLORS.white,
+            borderRadius: '16px',
+            padding: '24px',
+            maxWidth: '90vw',
+            maxHeight: '90vh',
+            width: '800px',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            {/* Close button */}
+            <button
+              onClick={handleVideoClose}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                background: 'none',
+                border: 'none',
+                fontSize: '24px',
+                cursor: 'pointer',
+                color: COLORS.gray,
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = COLORS.light;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+              }}
+            >
+              ✕
+            </button>
+
+            {/* Video title */}
+            <h2 style={{
+              fontSize: '24px',
+              fontWeight: '600',
+              color: COLORS.darkGray,
+              margin: '0 0 16px 0',
+              paddingRight: '40px'
+            }}>
+              {safeRender(currentVideo.title)}
+            </h2>
+
+            {/* Video description */}
+            {currentVideo.description && (
+              <p style={{
+                fontSize: '14px',
+                color: COLORS.gray,
+                margin: '0 0 20px 0',
+                lineHeight: '1.5'
+              }}>
+                {safeRender(currentVideo.description)}
+              </p>
+            )}
+
+            {/* Video player */}
+            <div style={{
+              flex: 1,
+              backgroundColor: COLORS.light,
+              borderRadius: '12px',
+              overflow: 'hidden',
+              minHeight: '400px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              {currentVideo.videoUrl ? (
+                // Check if it's a YouTube URL
+                currentVideo.videoUrl.includes('youtube.com') || currentVideo.videoUrl.includes('youtu.be') ? (
+                  <iframe
+                    src={currentVideo.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}
+                    style={{
+                      width: '100%',
+                      height: '400px',
+                      border: 'none',
+                      borderRadius: '8px'
+                    }}
+                    allowFullScreen
+                    title={safeRender(currentVideo.title)}
+                  />
+                ) : (
+                  <video
+                    controls
+                    style={{
+                      width: '100%',
+                      height: '400px',
+                      borderRadius: '8px'
+                    }}
+                    src={safeRender(currentVideo.videoUrl)}
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                )
+              ) : (
+                <div style={{
+                  textAlign: 'center',
+                  color: COLORS.gray,
+                  fontSize: '16px'
+                }}>
+                  <div style={{ fontSize: '48px', marginBottom: '16px' }}>📹</div>
+                  Video URL not available
+                </div>
+              )}
+            </div>
+
+            {/* Video info */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: '16px',
+              padding: '12px',
+              backgroundColor: COLORS.light,
+              borderRadius: '8px'
+            }}>
+              <div style={{
+                display: 'flex',
+                gap: '12px',
+                alignItems: 'center'
+              }}>
+                <span style={{
+                  backgroundColor: COLORS.primary + '20',
+                  color: COLORS.primary,
+                  padding: '4px 8px',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  textTransform: 'uppercase'
+                }}>
+                  {safeRender(currentVideo.difficulty)}
+                </span>
+                {currentVideo.duration && (
+                  <span style={{
+                    fontSize: '14px',
+                    color: COLORS.gray,
+                    fontWeight: '500'
+                  }}>
+                    ⏱️ {safeRender(currentVideo.duration)}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
