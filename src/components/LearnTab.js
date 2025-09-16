@@ -1,1027 +1,828 @@
+// src/components/LearnTab.js - Complete remake with safe data handling
 import React, { useState, useEffect } from 'react';
-import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDoc, updateDoc, Timestamp, collection, getDocs, query, where, orderBy } from 'firebase/firestore';
-import { liteClient as algoliasearch } from 'algoliasearch/lite';
-import { generateQuestionPackPDF, downloadPDF } from '../services/pdfGenerator';
-import InteractiveQuiz from './InteractiveQuiz';
-import VocabularyStudy from './VocabularyStudy';
-import { safeString } from '../utils/safeRender';
-import { deepSanitize } from '../utils/sanitizeData';
-import './LearnTab.css';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../firebase';
 
-const searchClient = algoliasearch(
-  process.env.REACT_APP_ALGOLIA_APP_ID,
-  process.env.REACT_APP_ALGOLIA_SEARCH_KEY
-);
-
-// Subject configurations for getting the right index
-const SUBJECTS = {
-  'korean-english': { index: 'korean-english-question-pairs' },
+// Safe data access utility - CRITICAL for preventing React error #31
+const safeGet = (obj, path, fallback = '') => {
+  try {
+    const keys = path.split('.');
+    let result = obj;
+    for (const key of keys) {
+      result = result?.[key];
+    }
+    return String(result || fallback);
+  } catch {
+    return String(fallback);
+  }
 };
 
-// Color palette matching ProfilePage
+// Safe render utility for any value
+const safeRender = (value, fallback = '') => {
+  if (value === null || value === undefined) return String(fallback);
+  if (typeof value === 'string' || typeof value === 'number') return String(value);
+  if (typeof value === 'object') {
+    // Extract text from common object patterns
+    if (value.sentence) return String(value.sentence);
+    if (value.text) return String(value.text);
+    if (value.content) return String(value.content);
+    if (value.value) return String(value.value);
+    return String(fallback || '[Complex Object]');
+  }
+  return String(value || fallback);
+};
+
+// Safe array processing for question IDs
+const extractQuestionIds = (selectedQuestionIds) => {
+  try {
+    if (!Array.isArray(selectedQuestionIds)) return [];
+    
+    return selectedQuestionIds.map(item => {
+      if (typeof item === 'string') return item;
+      if (typeof item === 'object' && item !== null) {
+        return String(item.objectID || item.questionId || item.id || '');
+      }
+      return String(item || '');
+    }).filter(id => id.length > 0);
+  } catch (error) {
+    console.error('Error extracting question IDs:', error);
+    return [];
+  }
+};
+
+// Color constants
 const COLORS = {
-  lightPurple: '#ccccff',
-  teal: '#00ced1', 
-  lightTeal: '#d8f0ed',
+  primary: '#00ced1',
+  primaryLight: '#d8f0ed',
+  purple: '#ccccff',
   white: '#ffffff',
   gray: '#6b7280',
-  darkGray: '#374151'
+  darkGray: '#374151',
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+  light: '#f8fafc',
+  border: '#e2e8f0'
 };
 
+// Difficulty level configuration
+const DIFFICULTY_LEVELS = [
+  { id: 'beginner', label: 'Beginner', color: COLORS.success },
+  { id: 'intermediate', label: 'Intermediate', color: COLORS.warning },
+  { id: 'advanced', label: 'Advanced', color: COLORS.error }
+];
 
-const LearnTab = () => {
-  const [selectedLevel, setSelectedLevel] = useState('beginner');
-  const [adminPacks, setAdminPacks] = useState([]);
-  const [adminVideos, setAdminVideos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [quizAttempts, setQuizAttempts] = useState([]);
+// PackCard subcomponent
+const PackCard = ({ pack, onPractice }) => {
+  // Safe data extraction
+  const packName = safeRender(pack?.packName, 'Unnamed Pack');
+  const description = safeRender(pack?.description, 'No description available');
+  const difficulty = safeRender(pack?.difficulty, 'beginner').toLowerCase();
+  const subject = safeRender(pack?.subject, 'general').toLowerCase();
   
-  // InteractiveQuiz states
-  const [showInteractiveQuiz, setShowInteractiveQuiz] = useState(false);
-  const [currentQuizPack, setCurrentQuizPack] = useState(null);
-  const [currentQuizQuestions, setCurrentQuizQuestions] = useState([]);
-  const [generatingPDF, setGeneratingPDF] = useState(null);
-  
-  // Video modal states
-  const [showVideoModal, setShowVideoModal] = useState(false);
-  const [currentVideo, setCurrentVideo] = useState(null);
-  
-  const auth = getAuth();
-  const db = getFirestore();
-  const user = auth.currentUser;
-
-  // Calculate current week number for content rotation
-  const getCurrentWeek = () => {
-    const startOfYear = new Date(new Date().getFullYear(), 0, 1);
-    const today = new Date();
-    const daysSinceStart = Math.floor((today - startOfYear) / (1000 * 60 * 60 * 24));
-    return Math.floor(daysSinceStart / 7) + 1;
-  };
-
-  // Load admin packs and user progress
-  useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        // Load admin packs and videos for the selected difficulty level
-        await loadAdminPacks();
-        await loadAdminVideos();
-        
-        if (user) {
-          // Load user's level preference and progress
-          await loadUserData();
-          // Load quiz attempts
-          await loadQuizAttempts();
-        }
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, [selectedLevel, user, db]);
-
-  const loadAdminPacks = async () => {
+  // Safe question count calculation
+  const getQuestionCount = () => {
     try {
-      const q = query(
-        collection(db, 'adminQuestionPacks'),
-        where('difficulty', '==', selectedLevel),
-        where('isActive', '==', true),
-        orderBy('createdAt', 'desc')
-      );
-      const querySnapshot = await getDocs(q);
-      const packs = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setAdminPacks(packs);
-    } catch (error) {
-      console.error('Error loading admin packs:', error);
-      setAdminPacks([]);
+      const ids = extractQuestionIds(pack?.selectedQuestionIds);
+      return ids.length;
+    } catch {
+      return 0;
     }
   };
 
-  const loadAdminVideos = async () => {
-    try {
-      const q = query(
-        collection(db, 'adminVideos'),
-        where('difficulty', '==', selectedLevel),
-        where('isActive', '==', true),
-        orderBy('createdAt', 'desc')
-      );
-      const querySnapshot = await getDocs(q);
-      const videos = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setAdminVideos(videos);
-    } catch (error) {
-      console.error('Error loading admin videos:', error);
-      setAdminVideos([]);
-    }
-  };
+  const questionCount = getQuestionCount();
+  const difficultyConfig = DIFFICULTY_LEVELS.find(level => level.id === difficulty) || DIFFICULTY_LEVELS[0];
 
-  const loadUserData = async () => {
-    try {
-      // Load user's level preference
-      const userDoc = await getDoc(doc(db, 'users', user.uid));
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        if (userData.learningLevel && userData.learningLevel !== selectedLevel) {
-          setSelectedLevel(userData.learningLevel);
-          return; // This will trigger a re-render and reload with new level
-        }
-      }
-
-    } catch (error) {
-      console.error('Error loading user data:', error);
-    }
-  };
-
-  const loadQuizAttempts = async () => {
-    try {
-      const attemptsRef = collection(db, 'users', user.uid, 'quizAttempts');
-      const q = query(attemptsRef, orderBy('completedAt', 'desc'));
-      const snapshot = await getDocs(q);
+  return (
+    <div style={{
+      backgroundColor: COLORS.white,
+      borderRadius: '16px',
+      padding: '24px',
+      border: `1px solid ${COLORS.border}`,
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+      transition: 'all 0.3s ease',
+      cursor: 'pointer',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column'
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = 'translateY(-4px)';
+      e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = 'translateY(0)';
+      e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+    }}>
       
-      const attempts = [];
-      snapshot.forEach((doc) => {
-        attempts.push({ id: doc.id, ...doc.data() });
+      {/* Header with difficulty badge */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: '16px'
+      }}>
+        <div style={{
+          backgroundColor: difficultyConfig.color + '20',
+          color: difficultyConfig.color,
+          padding: '4px 12px',
+          borderRadius: '12px',
+          fontSize: '12px',
+          fontWeight: '600',
+          textTransform: 'uppercase'
+        }}>
+          {safeRender(difficultyConfig.label)}
+        </div>
+        
+        <div style={{
+          backgroundColor: COLORS.primary + '20',
+          color: COLORS.primary,
+          padding: '4px 8px',
+          borderRadius: '8px',
+          fontSize: '11px',
+          fontWeight: '500',
+          textTransform: 'uppercase'
+        }}>
+          {safeRender(subject)}
+        </div>
+      </div>
+
+      {/* Pack name */}
+      <h3 style={{
+        fontSize: '18px',
+        fontWeight: '600',
+        color: COLORS.darkGray,
+        margin: '0 0 12px 0',
+        lineHeight: '1.4'
+      }}>
+        {packName}
+      </h3>
+
+      {/* Description */}
+      <p style={{
+        fontSize: '14px',
+        color: COLORS.gray,
+        margin: '0 0 16px 0',
+        lineHeight: '1.5',
+        flex: 1
+      }}>
+        {description}
+      </p>
+
+      {/* Question count */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        marginBottom: '20px',
+        padding: '12px',
+        backgroundColor: COLORS.light,
+        borderRadius: '8px'
+      }}>
+        <span style={{
+          fontSize: '14px',
+          color: COLORS.gray,
+          fontWeight: '500'
+        }}>
+          📝 {String(questionCount)} questions
+        </span>
+      </div>
+
+      {/* Practice button */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onPractice(pack);
+        }}
+        style={{
+          backgroundColor: COLORS.primary,
+          color: COLORS.white,
+          border: 'none',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          fontSize: '14px',
+          fontWeight: '600',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          width: '100%'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.backgroundColor = '#00b4b8';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.backgroundColor = COLORS.primary;
+        }}
+      >
+        Start Practice
+      </button>
+    </div>
+  );
+};
+
+// VideoCard subcomponent
+const VideoCard = ({ video, onWatch }) => {
+  // Safe data extraction
+  const title = safeRender(video?.title, 'Untitled Video');
+  const description = safeRender(video?.description, 'No description available');
+  const duration = safeRender(video?.duration, '0:00');
+  const difficulty = safeRender(video?.difficulty, 'beginner').toLowerCase();
+  const thumbnail = safeRender(video?.thumbnail, '');
+
+  const difficultyConfig = DIFFICULTY_LEVELS.find(level => level.id === difficulty) || DIFFICULTY_LEVELS[0];
+
+  return (
+    <div style={{
+      backgroundColor: COLORS.white,
+      borderRadius: '16px',
+      padding: '20px',
+      border: `1px solid ${COLORS.border}`,
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+      transition: 'all 0.3s ease',
+      cursor: 'pointer',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column'
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = 'translateY(-4px)';
+      e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = 'translateY(0)';
+      e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+    }}>
+      
+      {/* Thumbnail */}
+      <div style={{
+        width: '100%',
+        height: '150px',
+        backgroundColor: COLORS.light,
+        borderRadius: '8px',
+        marginBottom: '16px',
+        backgroundImage: thumbnail ? `url(${thumbnail})` : 'none',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative'
+      }}>
+        {!thumbnail && (
+          <span style={{ color: COLORS.gray, fontSize: '14px' }}>
+            📹 Video Preview
+          </span>
+        )}
+        
+        {/* Play overlay */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '50px',
+          height: '50px',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          fontSize: '18px'
+        }}>
+          ▶
+        </div>
+      </div>
+
+      {/* Header with difficulty and duration */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '12px'
+      }}>
+        <div style={{
+          backgroundColor: difficultyConfig.color + '20',
+          color: difficultyConfig.color,
+          padding: '4px 12px',
+          borderRadius: '12px',
+          fontSize: '12px',
+          fontWeight: '600',
+          textTransform: 'uppercase'
+        }}>
+          {safeRender(difficultyConfig.label)}
+        </div>
+        
+        <span style={{
+          fontSize: '12px',
+          color: COLORS.gray,
+          fontWeight: '500'
+        }}>
+          ⏱️ {duration}
+        </span>
+      </div>
+
+      {/* Video title */}
+      <h3 style={{
+        fontSize: '16px',
+        fontWeight: '600',
+        color: COLORS.darkGray,
+        margin: '0 0 10px 0',
+        lineHeight: '1.4'
+      }}>
+        {title}
+      </h3>
+
+      {/* Description */}
+      <p style={{
+        fontSize: '13px',
+        color: COLORS.gray,
+        margin: '0 0 20px 0',
+        lineHeight: '1.5',
+        flex: 1
+      }}>
+        {description}
+      </p>
+
+      {/* Watch button */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onWatch(video);
+        }}
+        style={{
+          backgroundColor: COLORS.primary,
+          color: COLORS.white,
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '8px',
+          fontSize: '13px',
+          fontWeight: '600',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.backgroundColor = '#00b4b8';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.backgroundColor = COLORS.primary;
+        }}
+      >
+        ▶️ Watch Video
+      </button>
+    </div>
+  );
+};
+
+// Main LearnTab component
+const LearnTab = () => {
+  // State management
+  const [selectedLevel, setSelectedLevel] = useState('beginner');
+  const [questionPacks, setQuestionPacks] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load data on component mount and level change
+  useEffect(() => {
+    loadData();
+  }, [selectedLevel]);
+
+  const loadData = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      console.log('Loading data for level:', selectedLevel);
+      
+      // Load question packs and videos in parallel
+      await Promise.all([
+        loadQuestionPacks(),
+        loadVideos()
+      ]);
+      
+    } catch (error) {
+      console.error('Error loading data:', error);
+      setError('Failed to load content. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadQuestionPacks = async () => {
+    try {
+      const packsRef = collection(db, 'adminQuestionPacks');
+      const packsQuery = query(
+        packsRef,
+        where('difficulty', '==', selectedLevel),
+        where('isActive', '==', true)
+      );
+      
+      const snapshot = await getDocs(packsQuery);
+      const packs = [];
+      
+      snapshot.forEach(doc => {
+        try {
+          const data = doc.data();
+          console.log('Raw pack data:', data);
+          
+          // Safe data processing
+          const pack = {
+            id: String(doc.id || ''),
+            packId: String(data.packId || doc.id || ''),
+            packName: safeRender(data.packName, 'Unnamed Pack'),
+            description: safeRender(data.description, 'No description available'),
+            difficulty: safeRender(data.difficulty, 'beginner'),
+            subject: safeRender(data.subject, 'general'),
+            selectedQuestionIds: data.selectedQuestionIds || [],
+            isActive: Boolean(data.isActive),
+            createdAt: data.createdAt || null
+          };
+          
+          console.log('Processed pack:', pack);
+          packs.push(pack);
+        } catch (packError) {
+          console.error('Error processing pack:', packError, doc.data());
+        }
       });
       
-      setQuizAttempts(attempts);
+      console.log(`Loaded ${packs.length} question packs for ${selectedLevel}`);
+      setQuestionPacks(packs);
+      
     } catch (error) {
-      console.error('Error loading quiz attempts:', error);
-      setQuizAttempts([]);
+      console.error('Error loading question packs:', error);
+      setQuestionPacks([]);
     }
   };
 
-  // Helper function to fetch questions for a pack from Algolia
-  const fetchQuestionsForPack = async (pack) => {
+  const loadVideos = async () => {
     try {
-      if (!pack.selectedQuestionIds || pack.selectedQuestionIds.length === 0) {
-        console.error('No question IDs found for pack:', pack.id);
-        return [];
-      }
-
-      // Debug: Check what selectedQuestionIds contains
-      console.log('Pack selectedQuestionIds:', pack.selectedQuestionIds);
-      console.log('First ID type:', typeof pack.selectedQuestionIds[0]);
+      const videosRef = collection(db, 'adminVideos');
+      const videosQuery = query(
+        videosRef,
+        where('difficulty', '==', selectedLevel),
+        where('isActive', '==', true)
+      );
       
-      // Check if selectedQuestionIds contains objects instead of strings
-if (pack.selectedQuestionIds[0] && typeof pack.selectedQuestionIds[0] === 'object') {
-  console.error('ERROR: selectedQuestionIds contains objects instead of strings!');
-  console.log('First ID object:', pack.selectedQuestionIds[0]);
-  
-  // Try to extract IDs from objects if they have objectID property
-  const extractedIds = pack.selectedQuestionIds.map(item => {
-    if (typeof item === 'string') return item;
-    if (item && typeof item === 'object') {
-      return String(item.objectID || item.questionId || '');
-    }
-    console.error('Cannot extract ID from:', item);
-    return null;
-  }).filter(Boolean);
-  
-  if (extractedIds.length > 0) {
-    pack = { ...pack, selectedQuestionIds: extractedIds };
-    console.log('Extracted IDs:', extractedIds);
-  }
-}
-
-      const subjectConfig = SUBJECTS[pack.subject];
-      if (!subjectConfig) {
-        console.error('Unknown subject:', pack.subject);
-        return [];
-      }
-
-      const response = await searchClient.search([
-        {
-          indexName: subjectConfig.index,
-          params: {
-            query: '',
-            filters: pack.selectedQuestionIds.map((id) => `objectID:"${id}"`).join(' OR '),
-            hitsPerPage: pack.selectedQuestionIds.length,
-          },
-        },
-      ]);
-
-      const fetchedQuestions = response.results[0].hits;
+      const snapshot = await getDocs(videosQuery);
+      const videoList = [];
       
-      // Debug: Check the structure of fetched questions
-      if (fetchedQuestions.length > 0) {
-        console.log('Sample fetched question:', fetchedQuestions[0]);
-        console.log('questionText type:', typeof fetchedQuestions[0].questionText);
-        console.log('actualQuestion type:', typeof fetchedQuestions[0].actualQuestion);
-      }
-
-      // Sort questions to match the original order
-      const sortedQuestions = pack.selectedQuestionIds
-        .map((id) => fetchedQuestions.find((q) => q.objectID === id))
-        .filter(Boolean);
-
-      return sortedQuestions;
+      snapshot.forEach(doc => {
+        try {
+          const data = doc.data();
+          console.log('Raw video data:', data);
+          
+          // Safe data processing
+          const video = {
+            id: String(doc.id || ''),
+            title: safeRender(data.title, 'Untitled Video'),
+            description: safeRender(data.description, 'No description available'),
+            duration: safeRender(data.duration, '0:00'),
+            difficulty: safeRender(data.difficulty, 'beginner'),
+            thumbnail: safeRender(data.thumbnail, ''),
+            videoUrl: safeRender(data.videoUrl, ''),
+            isActive: Boolean(data.isActive),
+            createdAt: data.createdAt || null
+          };
+          
+          console.log('Processed video:', video);
+          videoList.push(video);
+        } catch (videoError) {
+          console.error('Error processing video:', videoError, doc.data());
+        }
+      });
+      
+      console.log(`Loaded ${videoList.length} videos for ${selectedLevel}`);
+      setVideos(videoList);
+      
     } catch (error) {
-      console.error('Error fetching questions for pack:', error);
-      return [];
+      console.error('Error loading videos:', error);
+      setVideos([]);
     }
   };
 
-  // Save level preference and reload packs
-  const handleLevelChange = async (newLevel) => {
-    setSelectedLevel(newLevel);
-    if (user) {
-      try {
-        await updateDoc(doc(db, 'users', user.uid), {
-          learningLevel: newLevel,
-          updatedAt: Timestamp.now()
-        });
-      } catch (error) {
-        console.error('Error saving level preference:', error);
-      }
-    }
-  };
-
-  // Handle PDF download for admin packs
-  const handleDownloadPDF = async (pack) => {
-    if (!pack || !pack.selectedQuestionIds || pack.selectedQuestionIds.length === 0) {
-      console.error('PDF Download Error: Invalid pack data', pack);
-      alert('No questions available to download. Please check that this pack has questions.');
-      return;
-    }
-
-    setGeneratingPDF(pack.id);
+  // Event handlers
+  const handlePractice = (pack) => {
+    console.log('Starting practice with pack:', {
+      packId: safeRender(pack?.packId),
+      packName: safeRender(pack?.packName),
+      difficulty: safeRender(pack?.difficulty),
+      subject: safeRender(pack?.subject),
+      questionCount: extractQuestionIds(pack?.selectedQuestionIds).length
+    });
     
-    try {
-      const questions = await fetchQuestionsForPack(pack);
-      
-      if (questions.length === 0) {
-        alert('Failed to fetch questions for PDF generation');
-        return;
-      }
-
-      const pdfResult = await generateQuestionPackPDF({
-        ...pack,
-        packName: pack.packName,
-        totalQuestions: pack.totalQuestions
-      }, questions);
-
-      if (!pdfResult || !pdfResult.pdf) {
-        throw new Error('PDF generation failed - no PDF returned');
-      }
-
-      const sanitizedName = pack.packName
-        .replace(/[^a-zA-Z0-9\s\-_]/g, '')
-        .replace(/\s+/g, '_')
-        .toLowerCase();
-      const dateStr = new Date().toISOString().split('T')[0];
-      const filename = `${sanitizedName}_learn_pack_${dateStr}.pdf`;
-      
-      downloadPDF(pdfResult.pdf, filename);
-      
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('Error generating PDF. Please try again.');
-    } finally {
-      setGeneratingPDF(null);
-    }
+    // TODO: Integrate with InteractiveQuiz component
+    alert(`Practice mode for "${safeRender(pack?.packName)}" will be available soon!`);
   };
 
-  // Handle practice quiz start
-  const handlePractice = async (pack) => {
-    if (!pack || !pack.selectedQuestionIds || pack.selectedQuestionIds.length === 0) {
-      alert('No questions available for practice');
-      return;
-    }
-
-    try {
-      const rawQuestions = await fetchQuestionsForPack(pack);
-      
-      if (rawQuestions.length === 0) {
-        alert('Failed to load questions for practice. Please try again.');
-        return;
-      }
-
-      // Apply deep sanitization to prevent any nested objects from reaching React
-      const sanitizedQuestions = rawQuestions.map(question => deepSanitize(question));
-      
-      console.log('Questions after deep sanitization:', sanitizedQuestions);
-
-      setCurrentQuizPack(pack);
-      setCurrentQuizQuestions(sanitizedQuestions);
-      setShowInteractiveQuiz(true);
-    } catch (error) {
-      console.error('Error starting practice:', error);
-      alert('Failed to load questions for practice. Please try again.');
-    }
-  };
-
-  // Handle quiz completion
-  const handleQuizComplete = () => {
-    setShowInteractiveQuiz(false);
-    setCurrentQuizPack(null);
-    setCurrentQuizQuestions([]);
+  const handleWatch = (video) => {
+    console.log('Watching video:', {
+      videoId: safeRender(video?.id),
+      title: safeRender(video?.title),
+      difficulty: safeRender(video?.difficulty),
+      duration: safeRender(video?.duration)
+    });
     
-    if (user) {
-      loadQuizAttempts(); // Reload to show new attempt
-    }
+    // TODO: Integrate with video player
+    alert(`Video player for "${safeRender(video?.title)}" will be available soon!`);
   };
 
-
-
+  // Loading state
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{
-            width: '40px', height: '40px', border: '4px solid #f3f3f3',
-            borderTop: '4px solid #6b5ca5', borderRadius: '50%',
-            animation: 'spin 1s linear infinite', margin: '0 auto 1rem auto',
-          }} />
-          <div>Loading your learning content...</div>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '400px',
+        flexDirection: 'column',
+        gap: '16px'
+      }}>
+        <div style={{
+          width: '40px',
+          height: '40px',
+          border: `4px solid ${COLORS.border}`,
+          borderTop: `4px solid ${COLORS.primary}`,
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }} />
+        <span style={{
+          fontSize: '16px',
+          color: COLORS.gray,
+          fontWeight: '500'
+        }}>
+          Loading content...
+        </span>
+        
+        <style jsx>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '400px',
+        flexDirection: 'column',
+        gap: '16px',
+        padding: '40px'
+      }}>
+        <div style={{
+          fontSize: '48px',
+          marginBottom: '16px'
+        }}>
+          ⚠️
         </div>
+        <h3 style={{
+          fontSize: '18px',
+          fontWeight: '600',
+          color: COLORS.error,
+          margin: '0 0 8px 0',
+          textAlign: 'center'
+        }}>
+          Error Loading Content
+        </h3>
+        <p style={{
+          fontSize: '14px',
+          color: COLORS.gray,
+          margin: '0 0 24px 0',
+          textAlign: 'center',
+          maxWidth: '400px'
+        }}>
+          {safeRender(error)}
+        </p>
+        <button
+          onClick={loadData}
+          style={{
+            backgroundColor: COLORS.primary,
+            color: COLORS.white,
+            border: 'none',
+            padding: '12px 24px',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}
+        >
+          Try Again
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="learn-tab">
-      {/* Minimal Header */}
-      <div className="learn-header">
-        <div className="learn-header-content">
-          <div className="learn-title-section">
-            <h1>Week {getCurrentWeek()}</h1>
-            <p>당신의 개인 맞춤 학습 경로</p>
-          </div>
-          
-          <div className="level-selector">
-            {['beginner', 'intermediate', 'advanced'].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleLevelChange(level)}
-                className={`level-btn ${selectedLevel === level ? 'active' : ''}`}
-              >
-                {level}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content Grid */}
-      <div className="learn-content">
-        
-        {/* Admin Curated Packs Section */}
-        <section className="learn-section">
-          <div className="section-header">
-            <h2>📚 큐레이트된 연습 팩</h2>
-            <span className="pack-count">
-              {adminPacks.length}개 팩 이용 가능
-            </span>
-          </div>
-          
-          {loading ? (
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '3rem',
-              textAlign: 'center'
-            }}>
-              <div style={{
-                width: '32px',
-                height: '32px',
-                border: '3px solid #e5e7eb',
-                borderTop: '3px solid var(--accent-primary)',
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite',
-                marginBottom: '1rem'
-              }} />
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                Loading practice packs...
-              </p>
-            </div>
-          ) : adminPacks.length === 0 ? (
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '3rem',
-              textAlign: 'center',
-              background: 'var(--bg-primary)',
-              borderRadius: 'var(--radius-lg)',
-              border: '1px solid var(--border-light)'
-            }}>
-              <div style={{
-                fontSize: '3rem',
-                marginBottom: '1rem',
-                opacity: 0.7
-              }}>
-                📚
-              </div>
-              <h3 style={{ 
-                color: 'var(--text-secondary)', 
-                margin: '0 0 0.5rem 0',
-                fontWeight: '500'
-              }}>
-                No packs available for {selectedLevel} level
-              </h3>
-              <p style={{ 
-                color: 'var(--text-tertiary)', 
-                margin: '0',
-                fontSize: '0.875rem'
-              }}>
-                Check back later or try a different difficulty level
-              </p>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {adminPacks.map((pack) => {
-                const latestAttempt = quizAttempts.find(attempt => 
-                  attempt.packId === pack.id
-                );
-                const isGeneratingPDFForThisPack = generatingPDF === pack.id;
-
-                return (
-                  <div key={pack.id} style={{
-                    backgroundColor: COLORS.white,
-                    borderRadius: '12px',
-                    padding: '1.5rem',
-                    border: '1px solid #e2e8f0',
-                    boxShadow: 'var(--shadow-sm)',
-                    transition: 'all 0.2s ease'
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                      marginBottom: '1rem'
-                    }}>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
-                          <h3 style={{
-                            fontSize: '1.125rem',
-                            fontWeight: '600',
-                            color: '#111827',
-                            margin: '0'
-                          }}>
-                            {pack.packName}
-                          </h3>
-                          <span style={{
-                            padding: '0.25rem 0.75rem',
-                            borderRadius: '12px',
-                            fontSize: '0.75rem',
-                            fontWeight: '600',
-                            textTransform: 'capitalize',
-                            background: pack.difficulty === 'beginner' ? '#dbeafe' : 
-                                       pack.difficulty === 'intermediate' ? '#fef3c7' : '#fecaca',
-                            color: pack.difficulty === 'beginner' ? '#1e40af' : 
-                                   pack.difficulty === 'intermediate' ? '#92400e' : '#dc2626'
-                          }}>
-                            {pack.difficulty}
-                          </span>
-                        </div>
-                        
-                        {pack.description && (
-                          <p style={{
-                            fontSize: '0.875rem',
-                            color: COLORS.gray,
-                            margin: '0 0 0.5rem 0',
-                            lineHeight: '1.4'
-                          }}>
-                            {pack.description}
-                          </p>
-                        )}
-                        
-                        <div style={{
-                          fontSize: '0.875rem',
-                          color: COLORS.gray,
-                          marginBottom: '0.5rem'
-                        }}>
-                          Korean-English • {pack.totalQuestions} questions
-                          {latestAttempt && (
-                            <span style={{ 
-                              marginLeft: '12px', 
-                              color: latestAttempt.percentage >= 80 ? '#10b981' : 
-                                     latestAttempt.percentage >= 60 ? '#f59e0b' : '#ef4444',
-                              fontWeight: '500'
-                            }}>
-                              Best: {latestAttempt.percentage}%
-                            </span>
-                          )}
-                        </div>
-
-                        <div style={{
-                          fontSize: '0.75rem',
-                          color: '#9ca3af'
-                        }}>
-                          Created: {new Date(pack.createdAt.toDate()).toLocaleDateString()}
-                          {pack.tags && pack.tags.length > 0 && (
-                            <span style={{ marginLeft: '8px' }}>
-                              • Tags: {pack.tags.slice(0, 3).join(', ')}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div style={{
-                      display: 'flex',
-                      gap: '0.5rem',
-                      flexWrap: 'wrap'
-                    }}>
-                      {/* Hide PDF button for Korean-English questions */}
-                      {pack.subject !== 'korean-english' && (
-                        <button
-                          onClick={() => handleDownloadPDF(pack)}
-                          disabled={isGeneratingPDFForThisPack}
-                          style={{
-                            backgroundColor: '#f8fafc',
-                            color: COLORS.darkGray,
-                            border: '1px solid #e2e8f0',
-                            padding: '0.5rem 1rem',
-                            borderRadius: '6px',
-                            fontSize: '0.875rem',
-                            fontWeight: '500',
-                            cursor: isGeneratingPDFForThisPack ? 'not-allowed' : 'pointer',
-                            opacity: isGeneratingPDFForThisPack ? 0.6 : 1,
-                            transition: 'all 0.2s ease'
-                          }}
-                        >
-                          {isGeneratingPDFForThisPack ? 'Generating...' : 'Download PDF'}
-                        </button>
-                      )}
-
-                      <button
-                        onClick={() => handlePractice(pack)}
-                        style={{
-                          backgroundColor: COLORS.teal,
-                          color: 'white',
-                          border: 'none',
-                          padding: '0.5rem 1rem',
-                          borderRadius: '6px',
-                          fontSize: '0.875rem',
-                          fontWeight: '500',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease'
-                        }}
-                        onMouseOver={(e) => e.target.style.backgroundColor = '#00b4c5'}
-                        onMouseOut={(e) => e.target.style.backgroundColor = COLORS.teal}
-                      >
-                        Practice
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </section>
-
-        {/* Videos Section */}
-        <section className="learn-section">
-          <div className="section-header">
-            <h2>🎥 비디오 수업</h2>
-          </div>
-          
-          {adminVideos.length > 0 ? (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-              gap: '1.5rem',
-              marginTop: '1rem'
-            }}>
-              {adminVideos.map((video) => (
-                <div
-                  key={video.id}
-                  style={{
-                    background: COLORS.white,
-                    borderRadius: 'var(--radius-lg)',
-                    border: '1px solid var(--border-light)',
-                    overflow: 'hidden',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                    transition: 'all 0.2s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.15)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
-                  }}
-                  onClick={() => {
-                    setCurrentVideo(video);
-                    setShowVideoModal(true);
-                  }}
-                >
-                  {/* Video Thumbnail */}
-                  <div style={{
-                    position: 'relative',
-                    width: '100%',
-                    height: '180px',
-                    background: video.thumbnailUrl ? `url(${video.thumbnailUrl})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    {!video.thumbnailUrl && (
-                      <div style={{
-                        fontSize: '3rem',
-                        color: 'white',
-                        opacity: 0.8
-                      }}>
-                        🎥
-                      </div>
-                    )}
-                    <div style={{
-                      position: 'absolute',
-                      top: '12px',
-                      right: '12px',
-                      background: 'rgba(0, 0, 0, 0.8)',
-                      color: 'white',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '0.75rem',
-                      fontWeight: '500'
-                    }}>
-                      {video.duration || 'N/A'}
-                    </div>
-                    <div style={{
-                      position: 'absolute',
-                      top: '0',
-                      left: '0',
-                      right: '0',
-                      bottom: '0',
-                      background: 'rgba(0, 0, 0, 0.3)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      opacity: 0,
-                      transition: 'opacity 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.opacity = 1;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.opacity = 0;
-                    }}
-                    >
-                      <div style={{
-                        width: '60px',
-                        height: '60px',
-                        background: 'rgba(255, 255, 255, 0.9)',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '1.5rem',
-                        color: COLORS.teal
-                      }}>
-                        ▶
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Video Info */}
-                  <div style={{ padding: '1rem' }}>
-                    <h3 style={{
-                      fontSize: '1.1rem',
-                      fontWeight: '600',
-                      color: COLORS.darkGray,
-                      margin: '0 0 0.5rem 0',
-                      lineHeight: '1.4'
-                    }}>
-                      {video.title}
-                    </h3>
-                    
-                    {video.description && (
-                      <p style={{
-                        fontSize: '0.875rem',
-                        color: COLORS.gray,
-                        margin: '0 0 1rem 0',
-                        lineHeight: '1.5',
-                        overflow: 'hidden',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical'
-                      }}>
-                        {video.description}
-                      </p>
-                    )}
-
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginTop: '1rem'
-                    }}>
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                      }}>
-                        <span style={{
-                          fontSize: '0.75rem',
-                          padding: '0.25rem 0.5rem',
-                          background: COLORS.lightTeal,
-                          color: COLORS.teal,
-                          borderRadius: '12px',
-                          fontWeight: '500',
-                          textTransform: 'capitalize'
-                        }}>
-                          {video.difficulty}
-                        </span>
-                      </div>
-                      
-                      <button
-                        style={{
-                          background: COLORS.teal,
-                          color: 'white',
-                          border: 'none',
-                          padding: '0.5rem 1rem',
-                          borderRadius: '6px',
-                          fontSize: '0.875rem',
-                          fontWeight: '500',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#00a3a3';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = COLORS.teal;
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setCurrentVideo(video);
-                          setShowVideoModal(true);
-                        }}
-                      >
-                        Watch Now
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '3rem',
-              textAlign: 'center',
-              background: 'var(--bg-primary)',
-              borderRadius: 'var(--radius-lg)',
-              border: '1px solid var(--border-light)'
-            }}>
-              <div style={{
-                fontSize: '3rem',
-                marginBottom: '1rem',
-                opacity: 0.7
-              }}>
-                🎥
-              </div>
-              <h3 style={{ 
-                color: 'var(--text-secondary)', 
-                margin: '0 0 0.5rem 0',
-                fontWeight: '500'
-              }}>
-                No video lessons available
-              </h3>
-              <p style={{ 
-                color: 'var(--text-tertiary)', 
-                margin: '0',
-                fontSize: '0.875rem'
-              }}>
-                Check back later for {selectedLevel} level video content
-              </p>
-            </div>
-          )}
-        </section>
-
-        {/* Vocabulary Section */}
-        <section className="learn-section">
-          <VocabularyStudy />
-        </section>
-      </div>
-
-
-      <style jsx>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        
-        /* Custom scrollbar styles */
-        div::-webkit-scrollbar {
-          height: 8px;
-          width: 8px;
-        }
-        
-        div::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        
-        div::-webkit-scrollbar-thumb {
-          background-color: #cbd5e1;
-          border-radius: 4px;
-        }
-        
-        div::-webkit-scrollbar-thumb:hover {
-          background-color: #94a3b8;
-        }
-      `}</style>
+    <div style={{
+      padding: '24px',
+      maxWidth: '1200px',
+      margin: '0 auto',
+      minHeight: '100vh'
+    }}>
       
-      {/* Video Modal */}
-      {showVideoModal && currentVideo && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.95)',
+      {/* Header */}
+      <div style={{
+        marginBottom: '32px',
+        textAlign: 'center'
+      }}>
+        <h1 style={{
+          fontSize: '32px',
+          fontWeight: '700',
+          color: COLORS.darkGray,
+          margin: '0 0 8px 0'
+        }}>
+          Learn & Practice
+        </h1>
+        <p style={{
+          fontSize: '16px',
+          color: COLORS.gray,
+          margin: '0',
+          maxWidth: '600px',
+          marginLeft: 'auto',
+          marginRight: 'auto'
+        }}>
+          Choose your difficulty level and start learning with question packs and video courses
+        </p>
+      </div>
+
+      {/* Level selector */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '12px',
+        marginBottom: '40px',
+        flexWrap: 'wrap'
+      }}>
+        {DIFFICULTY_LEVELS.map(level => (
+          <button
+            key={level.id}
+            onClick={() => setSelectedLevel(level.id)}
+            style={{
+              padding: '12px 24px',
+              borderRadius: '25px',
+              border: selectedLevel === level.id ? `2px solid ${level.color}` : `2px solid ${COLORS.border}`,
+              backgroundColor: selectedLevel === level.id ? level.color + '20' : COLORS.white,
+              color: selectedLevel === level.id ? level.color : COLORS.gray,
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              textTransform: 'capitalize'
+            }}
+            onMouseEnter={(e) => {
+              if (selectedLevel !== level.id) {
+                e.target.style.borderColor = level.color;
+                e.target.style.color = level.color;
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (selectedLevel !== level.id) {
+                e.target.style.borderColor = COLORS.border;
+                e.target.style.color = COLORS.gray;
+              }
+            }}
+          >
+            {safeRender(level.label)}
+          </button>
+        ))}
+      </div>
+
+      {/* Question Packs Section */}
+      <section style={{ marginBottom: '48px' }}>
+        <h2 style={{
+          fontSize: '24px',
+          fontWeight: '600',
+          color: COLORS.darkGray,
+          margin: '0 0 20px 0',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 9999,
-          padding: '2rem'
+          gap: '8px'
         }}>
-          <div style={{
-            position: 'relative',
-            width: '100%',
-            maxWidth: '1200px',
-            maxHeight: '90vh',
-            background: '#000',
-            borderRadius: '16px',
-            overflow: 'hidden',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.8)'
+          📝 Question Packs
+          <span style={{
+            fontSize: '14px',
+            color: COLORS.gray,
+            fontWeight: '400'
           }}>
-            {/* Close button */}
-            <button
-              onClick={() => {
-                setShowVideoModal(false);
-                setCurrentVideo(null);
-              }}
-              style={{
-                position: 'absolute',
-                top: '1rem',
-                right: '1rem',
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                color: 'white',
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                fontSize: '1.5rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 10,
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-                e.currentTarget.style.transform = 'scale(1.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              ×
-            </button>
-
-            {/* Video container */}
-            <div style={{
-              position: 'relative',
-              width: '100%',
-              paddingTop: '56.25%', // 16:9 aspect ratio
-              background: '#000'
-            }}>
-              {/* Check if it's a YouTube URL */}
-              {currentVideo.videoUrl.includes('youtube.com') || currentVideo.videoUrl.includes('youtu.be') ? (
-                <iframe
-                  src={(() => {
-                    let videoId = '';
-                    if (currentVideo.videoUrl.includes('youtube.com')) {
-                      const urlParams = new URLSearchParams(new URL(currentVideo.videoUrl).search);
-                      videoId = urlParams.get('v');
-                    } else if (currentVideo.videoUrl.includes('youtu.be')) {
-                      videoId = currentVideo.videoUrl.split('/').pop();
-                    }
-                    return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-                  })()}
-                  title={currentVideo.title}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    border: 'none'
-                  }}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : (
-                <video
-                  controls
-                  autoPlay
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%'
-                  }}
-                >
-                  <source src={currentVideo.videoUrl} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-            </div>
-
-            {/* Video info bar */}
-            <div style={{
-              background: 'linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%)',
-              padding: '1.5rem',
-              borderTop: '1px solid rgba(255, 255, 255, 0.1)'
-            }}>
-              <h2 style={{
-                color: 'white',
-                margin: '0 0 0.5rem 0',
-                fontSize: '1.5rem',
-                fontWeight: '600'
-              }}>
-                {currentVideo.title}
-              </h2>
-              {currentVideo.description && (
-                <p style={{
-                  color: 'rgba(255, 255, 255, 0.7)',
-                  margin: '0',
-                  fontSize: '0.9rem',
-                  lineHeight: '1.5'
-                }}>
-                  {currentVideo.description}
-                </p>
-              )}
-              <div style={{
-                display: 'flex',
-                gap: '1rem',
-                marginTop: '1rem'
-              }}>
-                <span style={{
-                  fontSize: '0.8rem',
-                  padding: '0.25rem 0.75rem',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  color: 'rgba(255, 255, 255, 0.8)',
-                  borderRadius: '12px',
-                  textTransform: 'capitalize'
-                }}>
-                  {currentVideo.difficulty}
-                </span>
-                {currentVideo.duration && (
-                  <span style={{
-                    fontSize: '0.8rem',
-                    padding: '0.25rem 0.75rem',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    color: 'rgba(255, 255, 255, 0.8)',
-                    borderRadius: '12px'
-                  }}>
-                    Duration: {currentVideo.duration}
-                  </span>
-                )}
-              </div>
-            </div>
+            ({String(questionPacks.length)} available)
+          </span>
+        </h2>
+        
+        {questionPacks.length > 0 ? (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '20px'
+          }}>
+            {questionPacks.map(pack => (
+              <PackCard
+                key={safeRender(pack?.id)}
+                pack={pack}
+                onPractice={handlePractice}
+              />
+            ))}
           </div>
-        </div>
-      )}
-      
-      {/* InteractiveQuiz Modal */}
-      {showInteractiveQuiz && currentQuizPack && currentQuizQuestions.length > 0 && (
-        <InteractiveQuiz
-          questions={currentQuizQuestions}
-          packName={currentQuizPack.packName}
-          packId={currentQuizPack.id}
-          onComplete={handleQuizComplete}
-          onClose={handleQuizComplete}
-          showResults={true}
-        />
-      )}
+        ) : (
+          <div style={{
+            textAlign: 'center',
+            padding: '40px',
+            backgroundColor: COLORS.light,
+            borderRadius: '12px',
+            border: `1px solid ${COLORS.border}`
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>📚</div>
+            <h3 style={{
+              fontSize: '18px',
+              fontWeight: '600',
+              color: COLORS.darkGray,
+              margin: '0 0 8px 0'
+            }}>
+              No Question Packs Available
+            </h3>
+            <p style={{
+              fontSize: '14px',
+              color: COLORS.gray,
+              margin: '0'
+            }}>
+              No {String(selectedLevel)} level question packs found. Try a different difficulty level.
+            </p>
+          </div>
+        )}
+      </section>
+
+      {/* Videos Section */}
+      <section>
+        <h2 style={{
+          fontSize: '24px',
+          fontWeight: '600',
+          color: COLORS.darkGray,
+          margin: '0 0 20px 0',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          🎥 Video Courses
+          <span style={{
+            fontSize: '14px',
+            color: COLORS.gray,
+            fontWeight: '400'
+          }}>
+            ({String(videos.length)} available)
+          </span>
+        </h2>
+        
+        {videos.length > 0 ? (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gap: '20px'
+          }}>
+            {videos.map(video => (
+              <VideoCard
+                key={safeRender(video?.id)}
+                video={video}
+                onWatch={handleWatch}
+              />
+            ))}
+          </div>
+        ) : (
+          <div style={{
+            textAlign: 'center',
+            padding: '40px',
+            backgroundColor: COLORS.light,
+            borderRadius: '12px',
+            border: `1px solid ${COLORS.border}`
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎬</div>
+            <h3 style={{
+              fontSize: '18px',
+              fontWeight: '600',
+              color: COLORS.darkGray,
+              margin: '0 0 8px 0'
+            }}>
+              No Videos Available
+            </h3>
+            <p style={{
+              fontSize: '14px',
+              color: COLORS.gray,
+              margin: '0'
+            }}>
+              No {String(selectedLevel)} level videos found. Try a different difficulty level.
+            </p>
+          </div>
+        )}
+      </section>
     </div>
   );
 };
