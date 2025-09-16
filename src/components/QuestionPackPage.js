@@ -1860,42 +1860,45 @@ const getQuestionPreview = (question) => {
                     ← Back
                   </button>
 
-                  <button
-                    onClick={handleDownloadPDF}
-                    disabled={generatingPDF || selectedQuestions.length === 0}
-                    style={{
-                      flex: 1,
-                      padding: '12px 24px',
-                      backgroundColor: '#8b5cf6',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontSize: '14px',
-                      fontWeight: '500',
-                      cursor: !generatingPDF && selectedQuestions.length > 0 ? 'pointer' : 'not-allowed',
-                      opacity: !generatingPDF && selectedQuestions.length > 0 ? 1 : 0.6,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px'
-                    }}
-                  >
-                    {generatingPDF ? (
-                      <>
-                        <div style={{
-                          width: '16px',
-                          height: '16px',
-                          border: '2px solid rgba(255, 255, 255, 0.3)',
-                          borderTop: '2px solid white',
-                          borderRadius: '50%',
-                          animation: 'spin 1s linear infinite'
-                        }} />
-                        PDF...
-                      </>
-                    ) : (
-                      <>📄 Download PDF</>
-                    )}
-                  </button>
+                  {/* Hide PDF button for Korean-English questions */}
+                  {packData.subject !== 'korean-english' && (
+                    <button
+                      onClick={handleDownloadPDF}
+                      disabled={generatingPDF || selectedQuestions.length === 0}
+                      style={{
+                        flex: 1,
+                        padding: '12px 24px',
+                        backgroundColor: '#8b5cf6',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        cursor: !generatingPDF && selectedQuestions.length > 0 ? 'pointer' : 'not-allowed',
+                        opacity: !generatingPDF && selectedQuestions.length > 0 ? 1 : 0.6,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px'
+                      }}
+                    >
+                      {generatingPDF ? (
+                        <>
+                          <div style={{
+                            width: '16px',
+                            height: '16px',
+                            border: '2px solid rgba(255, 255, 255, 0.3)',
+                            borderTop: '2px solid white',
+                            borderRadius: '50%',
+                            animation: 'spin 1s linear infinite'
+                          }} />
+                          PDF...
+                        </>
+                      ) : (
+                        <>📄 Download PDF</>
+                      )}
+                    </button>
+                  )}
                   
                   <button
                     onClick={handleCreatePack}
@@ -1977,22 +1980,25 @@ const getQuestionPreview = (question) => {
                       >
                         📖 View Pack
                       </a>
-                      <button
-                        onClick={handleDownloadPDF}
-                        disabled={generatingPDF}
-                        style={{
-                          backgroundColor: '#8b5cf6',
-                          color: 'white',
-                          padding: '8px 12px',
-                          borderRadius: '6px',
-                          fontSize: '12px',
-                          border: 'none',
-                          cursor: !generatingPDF ? 'pointer' : 'not-allowed',
-                          fontWeight: '500'
-                        }}
-                      >
-                        {generatingPDF ? 'Generating...' : '📄 Download PDF'}
-                      </button>
+                      {/* Hide PDF button for Korean-English questions */}
+                      {packData.subject !== 'korean-english' && (
+                        <button
+                          onClick={handleDownloadPDF}
+                          disabled={generatingPDF}
+                          style={{
+                            backgroundColor: '#8b5cf6',
+                            color: 'white',
+                            padding: '8px 12px',
+                            borderRadius: '6px',
+                            fontSize: '12px',
+                            border: 'none',
+                            cursor: !generatingPDF ? 'pointer' : 'not-allowed',
+                            fontWeight: '500'
+                          }}
+                        >
+                          {generatingPDF ? 'Generating...' : '📄 Download PDF'}
+                        </button>
+                      )}
                       <a 
                         href="/profile"
                         style={{
@@ -2062,10 +2068,13 @@ const getQuestionPreview = (question) => {
               </div>
             </div>
 
-            <PDFPreview 
-              packData={packData} 
-              selectedQuestions={selectedQuestions} 
-            />
+            {/* Hide PDF preview for Korean-English questions */}
+            {packData.subject !== 'korean-english' && (
+              <PDFPreview 
+                packData={packData} 
+                selectedQuestions={selectedQuestions} 
+              />
+            )}
           </div>
         </div>
       </div>
