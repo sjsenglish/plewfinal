@@ -31,14 +31,10 @@ const safeRender = (value, fallback = '') => {
   return String(value || fallback);
 };
 
-// Question types for different quiz modes
-const QUIZ_MODES = {
-  CONTEXT: 'context',
-  DEFINITION: 'definition',
-  SYNONYM: 'synonym'
-};
+// Context-based quiz mode only
+const QUIZ_MODE = 'context';
 
-const VocabularyQuiz = () => {
+const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
   // State management
   const [words, setWords] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -50,7 +46,7 @@ const VocabularyQuiz = () => {
   const [loading, setLoading] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [currentOptions, setCurrentOptions] = useState([]);
-  const [quizMode, setQuizMode] = useState(QUIZ_MODES.CONTEXT);
+  const [quizMode] = useState(QUIZ_MODE);
   const [timeLeft, setTimeLeft] = useState(30);
   const [timerActive, setTimerActive] = useState(false);
 
@@ -87,10 +83,27 @@ const VocabularyQuiz = () => {
     }
   }, []);
 
-  // Load words on component mount
+  // Load words on component mount or use provided words
   useEffect(() => {
-    loadVocabularyWords();
-  }, [loadVocabularyWords]);
+    if (propWords && propWords.length > 0) {
+      // Use words provided from parent component
+      const formattedWords = propWords.map(word => ({
+        id: word.id || word.word,
+        word: safeRender(word.word),
+        definition: safeRender(word.definition),
+        contexts: Array.isArray(word.contexts) ? word.contexts : [],
+        synonyms: Array.isArray(word.synonyms) ? word.synonyms : [],
+        difficulty: safeRender(word.difficulty, 'medium'),
+        frequency: word.frequency || 0
+      }));
+      setWords(formattedWords);
+      // Auto-start quiz with provided words
+      setTimeout(() => generateQuiz(Math.min(formattedWords.length, 10)), 100);
+    } else {
+      // Load from Firebase
+      loadVocabularyWords();
+    }
+  }, [propWords, loadVocabularyWords]);
 
   // Timer effect
   useEffect(() => {
@@ -140,36 +153,22 @@ const VocabularyQuiz = () => {
     let options = [];
     let correctAnswer = '';
 
-    if (quizMode === QUIZ_MODES.CONTEXT) {
-      // Context-based question
-      if (currentWord.contexts && currentWord.contexts.length > 0) {
-        const randomContext = currentWord.contexts[Math.floor(Math.random() * currentWord.contexts.length)];
-        correctAnswer = currentWord.word;
-        
-        // Get 3 other random words as wrong options
-        const otherWords = allWords.filter(w => w.word !== currentWord.word);
-        const wrongOptions = otherWords.sort(() => Math.random() - 0.5).slice(0, 3);
-        
-        options = [
-          { text: correctAnswer, isCorrect: true },
-          ...wrongOptions.map(w => ({ text: w.word, isCorrect: false }))
-        ];
-        
-        // Store the context for display
-        currentWord.questionContext = safeRender(randomContext);
-      }
-    } else if (quizMode === QUIZ_MODES.DEFINITION) {
-      // Definition-based question
-      correctAnswer = currentWord.definition;
+    // Context-based question only
+    if (currentWord.contexts && currentWord.contexts.length > 0) {
+      const randomContext = currentWord.contexts[Math.floor(Math.random() * currentWord.contexts.length)];
+      correctAnswer = currentWord.word;
       
-      // Get 3 other definitions as wrong options
-      const otherWords = allWords.filter(w => w.word !== currentWord.word && w.definition);
+      // Get 3 other random words as wrong options
+      const otherWords = allWords.filter(w => w.word !== currentWord.word);
       const wrongOptions = otherWords.sort(() => Math.random() - 0.5).slice(0, 3);
       
       options = [
         { text: correctAnswer, isCorrect: true },
-        ...wrongOptions.map(w => ({ text: w.definition, isCorrect: false }))
+        ...wrongOptions.map(w => ({ text: w.word, isCorrect: false }))
       ];
+      
+      // Store the context for display
+      currentWord.questionContext = safeRender(randomContext);
     }
 
     // Shuffle options
@@ -218,6 +217,19 @@ const VocabularyQuiz = () => {
   const finishQuiz = () => {
     setTimerActive(false);
     setShowResult(true);
+    
+    // Call onComplete callback if provided
+    if (onComplete) {
+      const results = {
+        score,
+        totalQuestions: quizWords.length,
+        percentage: Math.round((score / quizWords.length) * 100),
+        answers,
+        completedAt: new Date(),
+        words: quizWords.map(w => w.word)
+      };
+      onComplete(results);
+    }
   };
 
   // Reset quiz
@@ -293,8 +305,35 @@ const VocabularyQuiz = () => {
           borderRadius: '20px',
           padding: '40px',
           marginBottom: '32px',
-          color: COLORS.white
+          color: COLORS.white,
+          position: 'relative'
         }}>
+          {onClose && (
+            <button
+              onClick={onClose}
+              style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                backgroundColor: 'transparent',
+                border: `1px solid ${COLORS.white}40`,
+                borderRadius: '8px',
+                padding: '8px 12px',
+                fontSize: '16px',
+                color: COLORS.white,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = COLORS.white + '20';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+              }}
+            >
+              ✕
+            </button>
+          )}
           <div style={{
             fontSize: '48px',
             marginBottom: '16px'
@@ -315,7 +354,7 @@ const VocabularyQuiz = () => {
           </p>
         </div>
 
-        {/* Quiz Mode Selection */}
+        {/* Quiz Info */}
         <div style={{
           backgroundColor: COLORS.white,
           borderRadius: '16px',
@@ -324,66 +363,33 @@ const VocabularyQuiz = () => {
           border: `1px solid ${COLORS.border}`,
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
         }}>
-          <h3 style={{
-            fontSize: '18px',
-            fontWeight: '600',
-            color: COLORS.darkGray,
-            margin: '0 0 16px 0'
-          }}>
-            Choose Quiz Mode
-          </h3>
-          
           <div style={{
-            display: 'flex',
-            gap: '12px',
-            flexWrap: 'wrap',
-            justifyContent: 'center'
+            textAlign: 'center',
+            padding: '20px',
+            backgroundColor: COLORS.primary + '10',
+            borderRadius: '12px',
+            border: `2px solid ${COLORS.primary}`
           }}>
-            <button
-              onClick={() => setQuizMode(QUIZ_MODES.CONTEXT)}
-              style={{
-                padding: '12px 20px',
-                borderRadius: '12px',
-                border: `2px solid ${quizMode === QUIZ_MODES.CONTEXT ? COLORS.primary : COLORS.border}`,
-                backgroundColor: quizMode === QUIZ_MODES.CONTEXT ? COLORS.primary + '20' : COLORS.white,
-                color: quizMode === QUIZ_MODES.CONTEXT ? COLORS.primary : COLORS.gray,
-                fontSize: '14px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              📖 Context Quiz
-            </button>
-            
-            <button
-              onClick={() => setQuizMode(QUIZ_MODES.DEFINITION)}
-              style={{
-                padding: '12px 20px',
-                borderRadius: '12px',
-                border: `2px solid ${quizMode === QUIZ_MODES.DEFINITION ? COLORS.primary : COLORS.border}`,
-                backgroundColor: quizMode === QUIZ_MODES.DEFINITION ? COLORS.primary + '20' : COLORS.white,
-                color: quizMode === QUIZ_MODES.DEFINITION ? COLORS.primary : COLORS.gray,
-                fontSize: '14px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              💡 Definition Quiz
-            </button>
+            <div style={{
+              fontSize: '32px',
+              marginBottom: '8px'
+            }}>📖</div>
+            <h3 style={{
+              fontSize: '18px',
+              fontWeight: '600',
+              color: COLORS.primary,
+              margin: '0 0 8px 0'
+            }}>
+              Context Quiz
+            </h3>
+            <p style={{
+              fontSize: '14px',
+              color: COLORS.gray,
+              margin: '0'
+            }}>
+              Identify the correct word from context sentences
+            </p>
           </div>
-          
-          <p style={{
-            fontSize: '14px',
-            color: COLORS.gray,
-            margin: '12px 0 0 0'
-          }}>
-            {quizMode === QUIZ_MODES.CONTEXT 
-              ? 'Identify the correct word from context sentences'
-              : 'Match words with their definitions'
-            }
-          </p>
         </div>
 
         {/* Stats */}
@@ -650,7 +656,7 @@ const VocabularyQuiz = () => {
           </button>
           
           <button
-            onClick={resetQuiz}
+            onClick={onClose || resetQuiz}
             style={{
               backgroundColor: COLORS.light,
               color: COLORS.darkGray,
@@ -669,7 +675,7 @@ const VocabularyQuiz = () => {
               e.target.style.backgroundColor = COLORS.light;
             }}
           >
-            🏠 Main Menu
+            {onClose ? '✕ Close' : '🏠 Main Menu'}
           </button>
         </div>
       </div>
@@ -708,19 +714,52 @@ const VocabularyQuiz = () => {
             Question {currentQuestion + 1} of {quizWords.length}
           </div>
           
-          {/* Timer */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
-            backgroundColor: timeLeft <= 10 ? COLORS.error + '20' : COLORS.primary + '20',
-            color: timeLeft <= 10 ? COLORS.error : COLORS.primary,
-            padding: '8px 12px',
-            borderRadius: '20px',
-            fontSize: '14px',
-            fontWeight: '600'
+            gap: '12px'
           }}>
-            ⏱️ {timeLeft}s
+            {/* Timer */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              backgroundColor: timeLeft <= 10 ? COLORS.error + '20' : COLORS.primary + '20',
+              color: timeLeft <= 10 ? COLORS.error : COLORS.primary,
+              padding: '8px 12px',
+              borderRadius: '20px',
+              fontSize: '14px',
+              fontWeight: '600'
+            }}>
+              ⏱️ {timeLeft}s
+            </div>
+            
+            {/* Close Button */}
+            {onClose && (
+              <button
+                onClick={onClose}
+                style={{
+                  backgroundColor: COLORS.light,
+                  border: `1px solid ${COLORS.border}`,
+                  borderRadius: '8px',
+                  padding: '6px 10px',
+                  fontSize: '16px',
+                  color: COLORS.gray,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = COLORS.border;
+                  e.target.style.color = COLORS.darkGray;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = COLORS.light;
+                  e.target.style.color = COLORS.gray;
+                }}
+              >
+                ✕
+              </button>
+            )}
           </div>
         </div>
         
@@ -761,45 +800,29 @@ const VocabularyQuiz = () => {
         border: `1px solid ${COLORS.border}`,
         boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)'
       }}>
-        {quizMode === QUIZ_MODES.CONTEXT ? (
-          <>
-            <h2 style={{
-              fontSize: '20px',
-              fontWeight: '600',
-              color: COLORS.darkGray,
-              margin: '0 0 16px 0',
-              textAlign: 'center'
-            }}>
-              Which word fits best in this context?
-            </h2>
-            
-            <div style={{
-              backgroundColor: COLORS.light,
-              borderRadius: '12px',
-              padding: '20px',
-              fontSize: '16px',
-              lineHeight: '1.6',
-              color: COLORS.darkGray,
-              fontStyle: 'italic',
-              textAlign: 'center',
-              marginBottom: '24px'
-            }}>
-              "{safeRender(currentWord.questionContext)}"
-            </div>
-          </>
-        ) : (
-          <>
-            <h2 style={{
-              fontSize: '20px',
-              fontWeight: '600',
-              color: COLORS.darkGray,
-              margin: '0 0 16px 0',
-              textAlign: 'center'
-            }}>
-              What is the definition of "{currentWord.word}"?
-            </h2>
-          </>
-        )}
+        <h2 style={{
+          fontSize: '20px',
+          fontWeight: '600',
+          color: COLORS.darkGray,
+          margin: '0 0 16px 0',
+          textAlign: 'center'
+        }}>
+          Which word fits best in this context?
+        </h2>
+        
+        <div style={{
+          backgroundColor: COLORS.light,
+          borderRadius: '12px',
+          padding: '20px',
+          fontSize: '16px',
+          lineHeight: '1.6',
+          color: COLORS.darkGray,
+          fontStyle: 'italic',
+          textAlign: 'center',
+          marginBottom: '24px'
+        }}>
+          "{safeRender(currentWord.questionContext)}"
+        </div>
 
         {/* Answer Options */}
         <div style={{
