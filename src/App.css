@@ -21459,7 +21459,7 @@ input[type="range"]::-moz-range-thumb {
   --primary-color: #7c3aed; /* Purple instead of green */
   --secondary-color: #5b21b6;
   --accent-color: #a855f7;
-  --background-gradient: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  --background-gradient: linear-gradient(135deg, #4c1d95 0%, #6b21a8 100%);
 }
 
 .community-theme .modern-main-header {
@@ -21467,19 +21467,18 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .community-theme .modern-brand-title {
-  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .community-theme .modern-cursor {
-  color: var(--primary-color);
+  color: white;
 }
 
 .community-theme .typing-text {
-  color: #374151;
+  color: white;
   font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Community Search Specific Styles */
@@ -21598,7 +21597,7 @@ input[type="range"]::-moz-range-thumb {
   --primary-color: #7c3aed; /* Purple instead of green */
   --secondary-color: #5b21b6;
   --accent-color: #a855f7;
-  --background-gradient: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  --background-gradient: linear-gradient(135deg, #4c1d95 0%, #6b21a8 100%);
 }
 
 .community-theme .modern-main-header {
@@ -21606,19 +21605,18 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .community-theme .modern-brand-title {
-  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .community-theme .modern-cursor {
-  color: var(--primary-color);
+  color: white;
 }
 
 .community-theme .typing-text {
-  color: #374151;
+  color: white;
   font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Fix Mathematics tab visibility */
