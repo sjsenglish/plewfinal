@@ -533,7 +533,7 @@ export const ProfilePage = () => {
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '32px 24px 40px 24px'
+        padding: '32px 24px 120px 24px'
       }}>
         
         {/* Header */}
