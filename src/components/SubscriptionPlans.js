@@ -5,7 +5,7 @@ import { createCheckoutSession } from '../services/checkoutService';
 import { usePaywall } from '../hooks/usePaywall';
 
 const SubscriptionPlansPage = () => {
-  const [loading, setLoading] = useState({ study: false, pro: false });
+  const [loading, setLoading] = useState({ tier1: false });
   const [selectedPlan, setSelectedPlan] = useState(null);
   
   const auth = getAuth();
@@ -22,16 +22,16 @@ const SubscriptionPlansPage = () => {
 
   const planInfo = getPlanInfo();
 
-  // New tier configurations
+  // Premium plan configuration
   const plans = [
     {
       id: 'tier1',
-      name: '티어 1 프리미엄',
+      name: '프리미엄',
       price: 29000,
       period: '월',
       priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',
       paymentLink: 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01',
-      description: '수능 준비를 위한 기본 프리미엄 플랜',
+      description: '수능 준비를 위한 완전한 프리미엄 플랜',
       features: [
         '무제한 일일 검색',
         '무제한 비디오 솔루션',
@@ -39,31 +39,12 @@ const SubscriptionPlansPage = () => {
         '타이머 연습 모드',
         '우선 커뮤니티 지원',
         '주간 큐레이션 콘텐츠',
-      ],
-      buttonText: '티어 1 선택',
-      popular: true,
-      current: subscription?.plan === 'tier1'
-    },
-    {
-      id: 'tier2',
-      name: '티어 2 프리미엄',
-      price: 49000,
-      period: '월',
-      priceId: 'price_1Rl7qwRslRN77kT8cBvGyMXo',
-      paymentLink: 'https://buy.stripe.com/5kQbJ377ZeDh4TE8EJ8EM02',
-      description: '고급 기능이 포함된 완전한 프리미엄 플랜',
-      features: [
-        '티어 1의 모든 기능',
         '고급 분석 대시보드',
         '개인화된 학습 계획',
-        '1:1 과외 세션',
-        '독점 워크숍 액세스',
-        '우선 이메일 지원',
-        '맞춤 문제 팩 생성',
       ],
-      buttonText: '티어 2 선택',
-      popular: false,
-      current: subscription?.plan === 'tier2'
+      buttonText: '프리미엄 선택',
+      popular: true,
+      current: subscription?.plan === 'tier1'
     }
   ];
 
@@ -110,9 +91,9 @@ const SubscriptionPlansPage = () => {
       <div className="header-section">
         <div className="header-background"></div>
         <div className="header-content">
-          <h1 className="header-title">프리미엄 티어 선택</h1>
+          <h1 className="header-title">프리미엄 플랜</h1>
           <p className="header-subtitle">
-            수능 준비를 위한 두 가지 프리미엄 티어
+            수능 준비를 위한 완전한 프리미엄 경험
           </p>
         </div>
       </div>

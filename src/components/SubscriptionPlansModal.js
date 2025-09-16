@@ -5,7 +5,7 @@ import { createCheckoutSession } from '../services/checkoutService';
 import { usePaywall } from '../hooks/usePaywall';
 
 const SubscriptionPlansModal = ({ onClose }) => {
-  const [loading, setLoading] = useState({ study: false, pro: false });
+  const [loading, setLoading] = useState({ tier1: false });
   const [selectedPlan, setSelectedPlan] = useState(null);
   
   const auth = getAuth();
@@ -22,11 +22,11 @@ const SubscriptionPlansModal = ({ onClose }) => {
 
   const planInfo = getPlanInfo();
 
-  // New tier configurations
+  // Premium plan configuration
   const plans = [
     {
       id: 'tier1',
-      name: '티어 1 프리미엄',
+      name: '프리미엄',
       price: 29000,
       period: '월',
       priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',
@@ -38,30 +38,12 @@ const SubscriptionPlansModal = ({ onClose }) => {
         '타이머 연습 모드',
         '우선 커뮤니티 지원',
         '주간 큐레이션 콘텐츠',
-      ],
-      buttonText: '티어 1 선택',
-      popular: true,
-      current: subscription?.plan === 'tier1'
-    },
-    {
-      id: 'tier2',
-      name: '티어 2 프리미엄',
-      price: 49000,
-      period: '월',
-      priceId: 'price_1Rl7qwRslRN77kT8cBvGyMXo',
-      paymentLink: 'https://buy.stripe.com/5kQbJ377ZeDh4TE8EJ8EM02',
-      features: [
-        '티어 1의 모든 기능',
         '고급 분석 대시보드',
         '개인화된 학습 계획',
-        '1:1 과외 세션',
-        '독점 워크숍 액세스',
-        '우선 이메일 지원',
-        '맞춤 문제 팩 생성',
       ],
-      buttonText: '티어 2 선택',
-      popular: false,
-      current: subscription?.plan === 'tier2'
+      buttonText: '프리미엄 선택',
+      popular: true,
+      current: subscription?.plan === 'tier1'
     }
   ];
 
@@ -163,14 +145,14 @@ const SubscriptionPlansModal = ({ onClose }) => {
             marginBottom: '0.5rem',
             color: '#1f2937'
           }}>
-            프리미엄 티어 선택
+            프리미엄 플랜
           </h1>
           <p style={{ 
             fontSize: '1rem', 
             color: '#6b7280',
             marginBottom: '1rem'
           }}>
-            수능 준비를 위한 두 가지 프리미엄 티어
+            수능 준비를 위한 완전한 프리미엄 경험
           </p>
           
           {isLoggedIn && (

@@ -129,7 +129,12 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
 
   // Load words on component mount or use provided words
   useEffect(() => {
+    console.log('VocabularyQuiz useEffect - propWords:', propWords?.length, 'words available');
+    
     if (propWords && propWords.length > 0) {
+      console.log('Using words from parent component:', propWords.length, 'words');
+      console.log('Sample word from parent:', propWords[0]);
+      
       // Use words provided from parent component
       const formattedWords = propWords.map(word => ({
         id: word.id || word.word,
@@ -140,14 +145,26 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
         difficulty: safeRender(word.difficulty, 'medium'),
         frequency: word.frequency || 0
       }));
+      
+      console.log('Formatted words for quiz:', formattedWords.length);
+      console.log('Sample formatted word:', formattedWords[0]);
+      
       setWords(formattedWords);
-      // Auto-start quiz with provided words
-      setTimeout(() => generateQuiz(Math.min(formattedWords.length, 10)), 100);
+      setLoading(false); // Make sure loading is false
+      
+      // Auto-start quiz with provided words - use formattedWords directly
+      setTimeout(() => {
+        console.log('Auto-starting quiz with', formattedWords.length, 'words');
+        generateQuizWithWords(formattedWords, Math.min(formattedWords.length, 10));
+      }, 100);
     } else {
-      // Load from Firebase
-      loadVocabularyWords();
+      console.log('No propWords provided, loading from Firebase');
+      // Only load from Firebase if no words are provided
+      if (!propWords) {
+        loadVocabularyWords();
+      }
     }
-  }, [propWords, loadVocabularyWords]);
+  }, [propWords]);
 
   // Timer effect
   useEffect(() => {
@@ -170,46 +187,36 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
     }
   };
 
-  // Generate random quiz questions
-  const generateQuiz = (questionCount = 10) => {
-    console.log('Generating quiz with', words.length, 'available words');
+  // Generate quiz with specific words array (used when words are passed from parent)
+  const generateQuizWithWords = (wordsArray, questionCount = 10) => {
+    console.log('generateQuizWithWords called with:', wordsArray.length, 'words');
     
-    if (words.length < 4) {
-      alert(`Not enough words loaded. Need at least 4 words, only ${words.length} available.`);
+    if (wordsArray.length < 4) {
+      console.log('Not enough words for quiz. Need at least 4, have:', wordsArray.length);
+      alert(`Not enough words loaded. Need at least 4 words, only ${wordsArray.length} available.`);
       return;
     }
 
     // Filter words that have valid contexts for quiz questions
-    const wordsWithContexts = words.filter(word => 
+    const wordsWithContexts = wordsArray.filter(word => 
       word.contexts && 
       Array.isArray(word.contexts) && 
       word.contexts.length > 0 &&
       word.contexts.some(context => context && context.trim() && context.length > 10)
     );
     
-    console.log(`Found ${wordsWithContexts.length} words with valid contexts out of ${words.length} total words`);
+    console.log(`Found ${wordsWithContexts.length} words with valid contexts out of ${wordsArray.length} total words`);
     
-    if (wordsWithContexts.length < 4) {
+    let selectedWords;
+    if (wordsWithContexts.length >= 4) {
+      // Use words with contexts
+      const shuffledWords = [...wordsWithContexts].sort(() => Math.random() - 0.5);
+      selectedWords = shuffledWords.slice(0, Math.min(questionCount, shuffledWords.length));
+    } else {
+      // Use all available words, fallback will handle missing contexts
       console.log('Not enough words with contexts, using all available words');
-      // Use all words if not enough have contexts, fallback will handle it
-      const availableWords = words.length >= 4 ? words : [...words];
-      const selectedWords = availableWords.sort(() => Math.random() - 0.5).slice(0, Math.min(questionCount, availableWords.length));
-      
-      setQuizWords(selectedWords);
-      setCurrentQuestion(0);
-      setScore(0);
-      setAnswers([]);
-      setQuizStarted(true);
-      setShowResult(false);
-      generateQuestionOptions(selectedWords[0], selectedWords);
-      setTimeLeft(30);
-      setTimerActive(true);
-      return;
+      selectedWords = wordsArray.sort(() => Math.random() - 0.5).slice(0, Math.min(questionCount, wordsArray.length));
     }
-
-    // Randomly select words with contexts
-    const shuffledWords = [...wordsWithContexts].sort(() => Math.random() - 0.5);
-    const selectedWords = shuffledWords.slice(0, Math.min(questionCount, shuffledWords.length));
     
     console.log('Selected words for quiz:', selectedWords.map(w => w.word));
     
@@ -222,6 +229,14 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
     generateQuestionOptions(selectedWords[0], selectedWords);
     setTimeLeft(30);
     setTimerActive(true);
+  };
+
+  // Generate random quiz questions (used when loading from Firebase)
+  const generateQuiz = (questionCount = 10) => {
+    console.log('generateQuiz called with questionCount:', questionCount);
+    console.log('Current words state:', words.length, 'available words');
+    
+    generateQuizWithWords(words, questionCount);
   };
 
   // Generate options for current question
