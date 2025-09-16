@@ -166,6 +166,30 @@ const LearnTab = () => {
         return [];
       }
 
+      // Debug: Check what selectedQuestionIds contains
+      console.log('Pack selectedQuestionIds:', pack.selectedQuestionIds);
+      console.log('First ID type:', typeof pack.selectedQuestionIds[0]);
+      
+      // Check if selectedQuestionIds contains objects instead of strings
+      if (pack.selectedQuestionIds[0] && typeof pack.selectedQuestionIds[0] === 'object') {
+        console.error('ERROR: selectedQuestionIds contains objects instead of strings!');
+        console.log('First ID object:', pack.selectedQuestionIds[0]);
+        
+        // Try to extract IDs from objects if they have objectID property
+        const extractedIds = pack.selectedQuestionIds.map(item => {
+          if (typeof item === 'string') return item;
+          if (item.objectID) return item.objectID;
+          if (item.questionId) return item.questionId;
+          console.error('Cannot extract ID from:', item);
+          return null;
+        }).filter(Boolean);
+        
+        if (extractedIds.length > 0) {
+          pack.selectedQuestionIds = extractedIds;
+          console.log('Extracted IDs:', extractedIds);
+        }
+      }
+
       const subjectConfig = SUBJECTS[pack.subject];
       if (!subjectConfig) {
         console.error('Unknown subject:', pack.subject);
@@ -184,6 +208,13 @@ const LearnTab = () => {
       ]);
 
       const fetchedQuestions = response.results[0].hits;
+      
+      // Debug: Check the structure of fetched questions
+      if (fetchedQuestions.length > 0) {
+        console.log('Sample fetched question:', fetchedQuestions[0]);
+        console.log('questionText type:', typeof fetchedQuestions[0].questionText);
+        console.log('actualQuestion type:', typeof fetchedQuestions[0].actualQuestion);
+      }
 
       // Sort questions to match the original order
       const sortedQuestions = pack.selectedQuestionIds

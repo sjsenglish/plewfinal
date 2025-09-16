@@ -777,7 +777,13 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                       {packData.subject === 'korean-english' && (
                         <>
                           {/* Korean Text Display */}
-                          {(question?.questionText || question?.korean) && (
+                          {(() => {
+                            let koreanText = question?.questionText || question?.korean || '';
+                            // Handle object format
+                            if (typeof koreanText === 'object' && koreanText !== null) {
+                              koreanText = koreanText.sentence || koreanText.text || koreanText.value || '';
+                            }
+                            return koreanText ? (
                             <div style={{ marginBottom: '16px' }}>
                               <h4 style={{
                                 fontSize: '14px',
@@ -799,13 +805,20 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 border: '1px solid #e2e8f0',
                                 textAlign: 'center'
                               }}>
-                                {question.questionText || question.korean}
+                                {koreanText}
                               </div>
                             </div>
-                          )}
+                          ) : null;
+                          })()}
                           
                           {/* Question/Instruction */}
-                          {(question?.actualQuestion || question?.english || question?.question) && (
+                          {(() => {
+                            let englishText = question?.actualQuestion || question?.english || question?.question || '';
+                            // Handle object format
+                            if (typeof englishText === 'object' && englishText !== null) {
+                              englishText = englishText.sentence || englishText.text || englishText.value || '';
+                            }
+                            return englishText ? (
                             <div style={{ marginBottom: '16px' }}>
                               <h4 style={{
                                 fontSize: '14px',
@@ -821,10 +834,11 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 lineHeight: '1.6',
                                 margin: '0'
                               }}>
-                                {question.actualQuestion || question.english || question.question}
+                                {englishText}
                               </p>
                             </div>
-                          )}
+                          ) : null;
+                          })()}
                           
                           {/* Answer Options */}
                           {(question?.answerOptions || question?.options) && (question.answerOptions || question.options).length > 0 && (
@@ -1212,8 +1226,24 @@ const InteractiveQuiz = ({ packData, questions, onClose, onComplete, reviewMode 
       const questionTopic = question.question_topic || 'Unknown Topic';
       return `${year} ${examCode} - ${questionTopic}`;
     } else if (packData.subject === 'korean-english') {
-      const korean = question.questionText || question.korean || '';
-      const english = question.actualQuestion || question.english || '';
+      // Handle both string and object formats for questionText and actualQuestion
+      let korean = question.questionText || question.korean || '';
+      let english = question.actualQuestion || question.english || '';
+      
+      // If these fields are objects, extract the string value
+      if (typeof korean === 'object' && korean !== null) {
+        korean = korean.sentence || korean.text || korean.value || '';
+        console.warn('questionText is an object, extracted:', korean);
+      }
+      if (typeof english === 'object' && english !== null) {
+        english = english.sentence || english.text || english.value || '';
+        console.warn('actualQuestion is an object, extracted:', english);
+      }
+      
+      // Ensure we have strings before calling substring
+      korean = String(korean || '');
+      english = String(english || '');
+      
       if (korean && english) {
         return `${korean.substring(0, 30)}... → ${english.substring(0, 30)}...`;
       } else if (korean) {
@@ -2078,7 +2108,13 @@ if (!isDemoMode && user) {
           {packData.subject === 'korean-english' && (
             <div>
               {/* Korean Text Display */}
-              {(currentQuestion.questionText || currentQuestion.korean) && (
+              {(() => {
+                let koreanText = currentQuestion?.questionText || currentQuestion?.korean || '';
+                // Handle object format
+                if (typeof koreanText === 'object' && koreanText !== null) {
+                  koreanText = koreanText.sentence || koreanText.text || koreanText.value || '';
+                }
+                return koreanText ? (
                 <div style={{
                   backgroundColor: '#f8fafc',
                   borderRadius: '12px',
@@ -2102,13 +2138,20 @@ if (!isDemoMode && user) {
                     fontFamily: 'system-ui, -apple-system, sans-serif',
                     lineHeight: '1.4'
                   }}>
-                    {currentQuestion.questionText || currentQuestion.korean}
+                    {koreanText}
                   </div>
                 </div>
-              )}
+              ) : null;
+              })()}
 
               {/* Question/Instruction Display */}
-              {(currentQuestion.actualQuestion || currentQuestion.english || currentQuestion.question) && (
+              {(() => {
+                let englishText = currentQuestion?.actualQuestion || currentQuestion?.english || currentQuestion?.question || '';
+                // Handle object format
+                if (typeof englishText === 'object' && englishText !== null) {
+                  englishText = englishText.sentence || englishText.text || englishText.value || '';
+                }
+                return englishText ? (
                 <div style={{
                   marginBottom: '24px'
                 }}>
@@ -2129,10 +2172,11 @@ if (!isDemoMode && user) {
                     borderRadius: '8px',
                     border: '1px solid #e2e8f0'
                   }}>
-                    {currentQuestion.actualQuestion || currentQuestion.english || currentQuestion.question}
+                    {englishText}
                   </div>
                 </div>
-              )}
+              ) : null;
+              })()}
 
               {/* Multiple Choice Options */}
               {(currentQuestion.answerOptions || currentQuestion.options) && (
