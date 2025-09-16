@@ -1,7 +1,8 @@
 // src/components/LearnTab.js - Complete remake with safe data handling
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
+import { getAuth } from 'firebase/auth';
 import { liteClient as algoliasearch } from 'algoliasearch/lite';
 import InteractiveQuiz from './InteractiveQuiz';
 import { deepSanitize } from '../utils/sanitizeData';
@@ -86,7 +87,7 @@ const DIFFICULTY_LEVELS = [
 ];
 
 // PackCard subcomponent
-const PackCard = ({ pack, onPractice }) => {
+const PackCard = ({ pack, onPractice, onReview, quizAttempts, user }) => {
   // Safe data extraction
   const packName = safeRender(pack?.packName, 'Unnamed Pack');
   const description = safeRender(pack?.description, 'No description available');
@@ -105,6 +106,13 @@ const PackCard = ({ pack, onPractice }) => {
 
   const questionCount = getQuestionCount();
   const difficultyConfig = DIFFICULTY_LEVELS.find(level => level.id === difficulty) || DIFFICULTY_LEVELS[0];
+  
+  // Check if pack is completed
+  const latestAttempt = user && quizAttempts ? quizAttempts.find(attempt => 
+    attempt.packId === pack.id || attempt.packId === pack.packId
+  ) : null;
+  
+  const isCompleted = Boolean(latestAttempt);
 
   return (
     <div style={{
@@ -182,11 +190,11 @@ const PackCard = ({ pack, onPractice }) => {
         {description}
       </p>
 
-      {/* Question count */}
+      {/* Question count and completion status */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
+        justifyContent: 'space-between',
         marginBottom: '20px',
         padding: '12px',
         backgroundColor: COLORS.light,
@@ -199,35 +207,110 @@ const PackCard = ({ pack, onPractice }) => {
         }}>
           📝 {String(questionCount)} questions
         </span>
+        
+        {isCompleted && (
+          <span style={{
+            fontSize: '12px',
+            fontWeight: '600',
+            color: COLORS.success,
+            backgroundColor: COLORS.success + '20',
+            padding: '4px 8px',
+            borderRadius: '12px',
+            textTransform: 'uppercase'
+          }}>
+            ✓ Complete
+          </span>
+        )}
       </div>
 
-      {/* Practice button */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onPractice(pack);
-        }}
-        style={{
-          backgroundColor: COLORS.primary,
-          color: COLORS.white,
-          border: 'none',
-          padding: '12px 24px',
-          borderRadius: '8px',
-          fontSize: '14px',
-          fontWeight: '600',
-          cursor: 'pointer',
-          transition: 'all 0.2s ease',
-          width: '100%'
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.backgroundColor = '#00b4b8';
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.backgroundColor = COLORS.primary;
-        }}
-      >
-        Start Practice
-      </button>
+      {/* Action buttons */}
+      {isCompleted ? (
+        <div style={{
+          display: 'flex',
+          gap: '8px'
+        }}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onReview(pack, latestAttempt);
+            }}
+            style={{
+              backgroundColor: COLORS.primary,
+              color: COLORS.white,
+              border: 'none',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              flex: 1
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#00b4b8';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = COLORS.primary;
+            }}
+          >
+            📝 Review
+          </button>
+          
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onPractice(pack);
+            }}
+            style={{
+              backgroundColor: COLORS.light,
+              color: COLORS.darkGray,
+              border: `1px solid ${COLORS.border}`,
+              padding: '12px 16px',
+              borderRadius: '8px',
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              flex: 1
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = COLORS.border;
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = COLORS.light;
+            }}
+          >
+            🔄 Retry
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onPractice(pack);
+          }}
+          style={{
+            backgroundColor: COLORS.primary,
+            color: COLORS.white,
+            border: 'none',
+            padding: '12px 24px',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            width: '100%'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = '#00b4b8';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = COLORS.primary;
+          }}
+        >
+          Start Practice
+        </button>
+      )}
     </div>
   );
 };
@@ -399,6 +482,11 @@ const LearnTab = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [quizAttempts, setQuizAttempts] = useState([]);
+  
+  // Auth
+  const auth = getAuth();
+  const user = auth.currentUser;
   
   // InteractiveQuiz states
   const [showInteractiveQuiz, setShowInteractiveQuiz] = useState(false);
@@ -417,7 +505,7 @@ const LearnTab = () => {
   // Load data on component mount and level change
   useEffect(() => {
     loadData();
-  }, [selectedLevel]);
+  }, [selectedLevel, user]);
 
   const loadData = async () => {
     setLoading(true);
@@ -426,11 +514,18 @@ const LearnTab = () => {
     try {
       console.log('Loading data for level:', selectedLevel);
       
-      // Load question packs and videos in parallel
-      await Promise.all([
+      // Load question packs, videos, and quiz attempts in parallel
+      const promises = [
         loadQuestionPacks(),
         loadVideos()
-      ]);
+      ];
+      
+      // Load quiz attempts only if user is logged in
+      if (user) {
+        promises.push(loadQuizAttempts());
+      }
+      
+      await Promise.all(promises);
       
     } catch (error) {
       console.error('Error loading data:', error);
@@ -529,6 +624,31 @@ const LearnTab = () => {
     } catch (error) {
       console.error('Error loading videos:', error);
       setVideos([]);
+    }
+  };
+
+  const loadQuizAttempts = async () => {
+    if (!user) {
+      setQuizAttempts([]);
+      return;
+    }
+
+    try {
+      const attemptsRef = collection(db, 'users', user.uid, 'quizAttempts');
+      const attemptsQuery = query(attemptsRef, orderBy('completedAt', 'desc'));
+      const snapshot = await getDocs(attemptsQuery);
+      
+      const attempts = [];
+      snapshot.forEach((doc) => {
+        attempts.push({ id: doc.id, ...doc.data() });
+      });
+      
+      console.log(`Loaded ${attempts.length} quiz attempts for user`);
+      setQuizAttempts(attempts);
+      
+    } catch (error) {
+      console.error('Error loading quiz attempts:', error);
+      setQuizAttempts([]);
     }
   };
 
@@ -679,6 +799,11 @@ const LearnTab = () => {
     setQuizResults(null);
     setCurrentQuizPack(null);
     setCurrentQuizQuestions([]);
+    
+    // Reload quiz attempts to show updated completion status
+    if (user) {
+      loadQuizAttempts();
+    }
   };
 
   const handleShowQuizReview = () => {
@@ -691,6 +816,31 @@ const LearnTab = () => {
     setQuizResults(null);
     setCurrentQuizPack(null);
     setCurrentQuizQuestions([]);
+  };
+
+  // Handle review mode from completed pack card
+  const handleReviewPack = async (pack, attempt) => {
+    try {
+      console.log('Starting review for pack:', pack.packName, 'attempt:', attempt.id);
+      
+      const rawQuestions = await fetchQuestionsForPack(pack);
+      
+      if (rawQuestions.length === 0) {
+        alert('Failed to load questions for review. Please try again.');
+        return;
+      }
+
+      // Apply deep sanitization to prevent any nested objects from reaching React
+      const sanitizedQuestions = rawQuestions.map(question => deepSanitize(question));
+      
+      setCurrentQuizPack(pack);
+      setCurrentQuizQuestions(sanitizedQuestions);
+      setQuizResults(attempt);
+      setShowQuizReview(true);
+    } catch (error) {
+      console.error('Error starting review:', error);
+      alert('Failed to load questions for review. Please try again.');
+    }
   };
 
   // Loading state
@@ -892,6 +1042,9 @@ const LearnTab = () => {
                 key={safeRender(pack?.id)}
                 pack={pack}
                 onPractice={handlePractice}
+                onReview={handleReviewPack}
+                quizAttempts={quizAttempts}
+                user={user}
               />
             ))}
           </div>
