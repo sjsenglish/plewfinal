@@ -65,10 +65,10 @@ const PremiumDashboard = () => {
   }
 
   const sections = [
-    { id: 'overview', name: '홈', icon: '', premium: false },
-    { id: 'learn', name: ' 학습 도우미', icon: '', premium: true },
-    { id: 'profile', name: '내 서고', icon: '', premium: true },
-    { id: 'question-packs', name: '마이 문제은행 ', icon: '', premium: true },
+    { id: 'overview', name: '홈', icon: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftoaster.svg?alt=media&token=744ba4bf-336d-4dd2-b2dc-25bd4df85af6', premium: false },
+    { id: 'learn', name: ' 학습 도우미', icon: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftv.svg?alt=media&token=c65f115a-2543-483b-99ff-0a30d47a2dd6', premium: true },
+    { id: 'profile', name: '내 서고', icon: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbagback.svg?alt=media&token=65739e08-36db-4810-951c-91641f5d0084', premium: true },
+    { id: 'question-packs', name: '마이 문제은행 ', icon: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbulb.svg?alt=media&token=1f21ae0e-764d-4b03-ba1d-f1423329c325', premium: true },
   ];
 
   const handleSectionClick = (sectionId, isPremiumSection) => {
@@ -190,12 +190,13 @@ const renderOverview = () => (
             switch (sectionId) {
               case 'learn':
                 return (
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7z"/>
-                    <path d="M16 3v4"/>
-                    <path d="M8 3v4"/>
-                    <path d="M2 11h20"/>
-                  </svg>
+                  <img 
+                    src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftv.svg?alt=media&token=c65f115a-2543-483b-99ff-0a30d47a2dd6"
+                    alt="Learn"
+                    width="32"
+                    height="32"
+                    style={{ objectFit: 'contain' }}
+                  />
                 );
               case 'profile':
                 return (
@@ -339,10 +340,46 @@ const renderOverview = () => (
           {sections.map(section => {
             const getTabIcon = (sectionId) => {
               switch (sectionId) {
-                case 'overview': return '🏠';
-                case 'learn': return '📚';
-                case 'profile': return '📖';
-                case 'question-packs': return '💡';
+                case 'overview': 
+                  return (
+                    <img 
+                      src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftoaster.svg?alt=media&token=744ba4bf-336d-4dd2-b2dc-25bd4df85af6"
+                      alt="Home"
+                      width="24"
+                      height="24"
+                      style={{ objectFit: 'contain' }}
+                    />
+                  );
+                case 'learn': 
+                  return (
+                    <img 
+                      src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftv.svg?alt=media&token=c65f115a-2543-483b-99ff-0a30d47a2dd6"
+                      alt="Learn"
+                      width="24"
+                      height="24"
+                      style={{ objectFit: 'contain' }}
+                    />
+                  );
+                case 'profile': 
+                  return (
+                    <img 
+                      src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbagback.svg?alt=media&token=65739e08-36db-4810-951c-91641f5d0084"
+                      alt="Library"
+                      width="24"
+                      height="24"
+                      style={{ objectFit: 'contain' }}
+                    />
+                  );
+                case 'question-packs': 
+                  return (
+                    <img 
+                      src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbulb.svg?alt=media&token=1f21ae0e-764d-4b03-ba1d-f1423329c325"
+                      alt="Question Packs"
+                      width="24"
+                      height="24"
+                      style={{ objectFit: 'contain' }}
+                    />
+                  );
                 default: return '•';
               }
             };
