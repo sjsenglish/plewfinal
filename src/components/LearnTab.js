@@ -171,24 +171,25 @@ const LearnTab = () => {
       console.log('First ID type:', typeof pack.selectedQuestionIds[0]);
       
       // Check if selectedQuestionIds contains objects instead of strings
-      if (pack.selectedQuestionIds[0] && typeof pack.selectedQuestionIds[0] === 'object') {
-        console.error('ERROR: selectedQuestionIds contains objects instead of strings!');
-        console.log('First ID object:', pack.selectedQuestionIds[0]);
-        
-        // Try to extract IDs from objects if they have objectID property
-        const extractedIds = pack.selectedQuestionIds.map(item => {
-          if (typeof item === 'string') return item;
-          if (item.objectID) return item.objectID;
-          if (item.questionId) return item.questionId;
-          console.error('Cannot extract ID from:', item);
-          return null;
-        }).filter(Boolean);
-        
-        if (extractedIds.length > 0) {
-          pack.selectedQuestionIds = extractedIds;
-          console.log('Extracted IDs:', extractedIds);
-        }
-      }
+if (pack.selectedQuestionIds[0] && typeof pack.selectedQuestionIds[0] === 'object') {
+  console.error('ERROR: selectedQuestionIds contains objects instead of strings!');
+  console.log('First ID object:', pack.selectedQuestionIds[0]);
+  
+  // Try to extract IDs from objects if they have objectID property
+  const extractedIds = pack.selectedQuestionIds.map(item => {
+    if (typeof item === 'string') return item;
+    if (item && typeof item === 'object') {
+      return String(item.objectID || item.questionId || '');
+    }
+    console.error('Cannot extract ID from:', item);
+    return null;
+  }).filter(Boolean);
+  
+  if (extractedIds.length > 0) {
+    pack = { ...pack, selectedQuestionIds: extractedIds };
+    console.log('Extracted IDs:', extractedIds);
+  }
+}
 
       const subjectConfig = SUBJECTS[pack.subject];
       if (!subjectConfig) {
