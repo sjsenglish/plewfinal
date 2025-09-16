@@ -803,7 +803,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 padding: '12px',
                                 borderRadius: '8px',
                                 border: '1px solid #e2e8f0',
-                                textAlign: 'center'
+                                textAlign: 'left'
                               }}>
                                 {koreanText}
                               </div>
@@ -1880,7 +1880,7 @@ if (!isDemoMode && user) {
               {/* Question Title */}
               <div style={{
                 marginBottom: '20px',
-                textAlign: 'center'
+                textAlign: 'left'
               }}>
                 <h3 style={{
                   fontSize: '18px',
@@ -2121,7 +2121,7 @@ if (!isDemoMode && user) {
                   padding: '20px',
                   marginBottom: '24px',
                   border: '1px solid #e2e8f0',
-                  textAlign: 'center'
+                  textAlign: 'left'
                 }}>
                   <div style={{
                     fontSize: '14px',
