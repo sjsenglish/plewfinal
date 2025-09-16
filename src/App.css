@@ -22199,6 +22199,17 @@ input[type="range"]::-moz-range-thumb {
   transform: translateY(-2px);
 }
 
+/* Instagram icon styling to match other social icons */
+.modern-header-social .instagram-link {
+  background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: white;
+}
+
+.modern-header-social .instagram-link:hover {
+  background: linear-gradient(135deg, #f5a94a 0%, #ea7349 25%, #e13050 50%, #d12972 75%, #c11d95 100%);
+  transform: translateY(-2px);
+}
+
 /* Ensure all social icons have consistent styling */
 .modern-social-link {
   display: flex;
