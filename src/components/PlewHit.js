@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './PlewHit.css';
 import VideoPopup from './VideoPopup';
+import { convertFirebaseStorageUrl } from '../utils/urlUtils';
 
 const PlewHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
   const [showAnswer, setShowAnswer] = useState(false);
@@ -71,8 +72,8 @@ const PlewHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
     setShowVideo(false);
   };
 
-  // Generate image URL or use placeholder
-  const imageUrl = imageFile && imageFile !== 'default_image.jpg' ? imageFile : null;
+  // Generate image URL or use placeholder - convert Firebase Storage URLs
+  const imageUrl = imageFile && imageFile !== 'default_image.jpg' ? convertFirebaseStorageUrl(imageFile) : null;
 
   return (
     <div className="plew-hit">

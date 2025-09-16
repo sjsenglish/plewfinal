@@ -15,6 +15,17 @@ export const convertFirebaseStorageUrl = (url) => {
   
   console.log('convertFirebaseStorageUrl: Processing URL:', url);
   
+  // Handle filename-only values by constructing full gs:// URL
+  if (url && !url.startsWith('gs://') && !url.startsWith('http')) {
+    console.warn('convertFirebaseStorageUrl: Received filename-only value:', url);
+    console.log('convertFirebaseStorageUrl: Constructing full gs:// URL from filename');
+    
+    // Construct full gs:// URL assuming default bucket and path structure
+    // This assumes images are stored in a standard path structure
+    url = `gs://plewcsat1.firebasestorage.app/${url}`;
+    console.log('convertFirebaseStorageUrl: Constructed gs:// URL:', url);
+  }
+  
   // If it's already a public Firebase Storage URL, return as-is
   if (url.startsWith('https://firebasestorage.googleapis.com/')) {
     console.log('convertFirebaseStorageUrl: URL is already public, returning as-is');

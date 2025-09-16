@@ -269,8 +269,9 @@ const MathsHit = ({ hit }) => {
   const year = paperInfo.year || '';
   const subject = paperInfo.subject || '';
   
-  // Handle image and PDF
-  const imageUrl = hit.imageUrl || '';
+  // Handle image and PDF - convert Firebase Storage URLs
+  const rawImageUrl = hit.imageUrl || hit.imageFile || hit.image_url || hit.image_file || '';
+  const imageUrl = convertFirebaseStorageUrl(rawImageUrl);
   const pdfAnswerUrl = hit.markscheme_url || ''; // PDF URL stored in markscheme_url field
 
   // Get video URLs for each part - more robust detection

@@ -4,23 +4,11 @@ import { getAuth } from 'firebase/auth';
 import { usePaywall } from '../hooks/usePaywall';
 import { checkVideoAccess, incrementVideoUsage } from '../services/videoUsageService';
 import VideoLimitModal from './VideoLimitModal';
+import { convertFirebaseStorageUrl, getQuestionImageUrl } from '../utils/urlUtils';
 
-// Helper function to convert Firebase Storage URLs to direct URLs
+// Helper function to convert Firebase Storage URLs to direct URLs - using centralized utility
 const getImageUrl = (url) => {
-  if (!url) return '';
-  
-  // If it's a Firebase Storage gs:// URL, convert it
-  if (url.startsWith('gs://')) {
-    // Extract bucket and path from gs://bucket/path format
-    const gsMatch = url.match(/^gs:\/\/([^/]+)\/(.+)$/);
-    if (gsMatch) {
-      const bucket = gsMatch[1];
-      const path = gsMatch[2];
-      return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media`;
-    }
-  }
-  
-  return url;
+  return convertFirebaseStorageUrl(url);
 };
 
 const QuizReview = ({ results, questions, onClose, packData }) => {
@@ -254,7 +242,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                             {(question?.image_url || question?.imageFile || question?.image_file) && (
                               <div className="question-image">
                                 <img
-                                  src={getImageUrl(question.image_url || question.imageFile || question.image_file)}
+                                  src={getQuestionImageUrl(question)}
                                   alt={`Question ${index + 1}`}
                                   loading="lazy"
                                   style={{ maxWidth: '100%', height: 'auto', margin: '10px 0', borderRadius: '8px' }}
@@ -344,7 +332,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                             {(question?.image_url || question?.imageFile || question?.image_file || question?.imageUrl) && (
                               <div className="question-image">
                                 <img
-                                  src={getImageUrl(question.image_url || question.imageFile || question.image_file || question.imageUrl)}
+                                  src={getQuestionImageUrl(question)}
                                   alt={`Question ${index + 1}`}
                                   loading="lazy"
                                   style={{ maxWidth: '100%', height: 'auto', margin: '10px 0', borderRadius: '8px' }}

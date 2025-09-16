@@ -38,8 +38,9 @@ const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
   const subTypes = Array.isArray(hit.sub_types) ? hit.sub_types : [];
   const year = hit.year || '';
   
-  // Handle image - try multiple possible field names
-  const imageUrl = hit.image_url || hit.imageFile || hit.image_file || '';
+  // Handle image - try multiple possible field names and convert Firebase Storage URLs
+  const rawImageUrl = hit.image_url || hit.imageFile || hit.image_file || '';
+  const imageUrl = convertFirebaseStorageUrl(rawImageUrl);
   
   // Handle video - try multiple possible field names
   const videoUrl = hit.solution_video || hit.videoSolutionLink || hit.video_solution_link || '';

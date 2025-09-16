@@ -677,7 +677,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                           {(question?.image_url || question?.imageFile || question?.image_file || question?.imageUrl) && (
                             <div style={{ marginBottom: '16px' }}>
                               <img
-                                src={getImageUrl(question.image_url || question.imageFile || question.image_file || question.imageUrl)}
+                                src={getQuestionImageUrl(question)}
                                 alt={`Question ${index + 1}`}
                                 loading="lazy"
                                 style={{
