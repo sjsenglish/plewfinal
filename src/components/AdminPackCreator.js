@@ -313,6 +313,40 @@ const AdminPackCreator = () => {
     }
   };
 
+  // Get question preview for Korean-English - same as QuestionPackPage
+  const getQuestionPreview = (question) => {
+    let korean = question.questionText || question.korean || question.korean_text || '';
+    let english = question.actualQuestion || question.english || question.english_text || '';
+    const questionType = question.question_type || '';
+    const subjectArea = question.subject_area || '';
+    
+    // Handle object values
+    if (typeof korean === 'object' && korean !== null) {
+      korean = korean.sentence || korean.text || korean.value || '';
+    }
+    if (typeof english === 'object' && english !== null) {
+      english = english.sentence || english.text || english.value || '';
+    }
+    
+    // Convert to strings
+    korean = String(korean || '');
+    english = String(english || '');
+    const questionStr = String(question.question || '');
+    
+    // Create a meaningful preview
+    if (korean && english) {
+      return `${korean.substring(0, 30)}... → ${english.substring(0, 30)}...`;
+    } else if (korean) {
+      return `Korean: ${korean.substring(0, 40)}...`;
+    } else if (english) {
+      return `English: ${english.substring(0, 40)}...`;
+    } else if (questionStr) {
+      return questionStr.substring(0, 50) + (questionStr.length > 50 ? '...' : '');
+    } else {
+      return `${subjectArea || 'Korean-English'} ${questionType || 'Question'}`;
+    }
+  };
+
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
       <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '2rem', color: '#1f2937' }}>
@@ -548,7 +582,7 @@ const AdminPackCreator = () => {
                       />
                       <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: '500', marginBottom: '0.25rem' }}>
-                          {question.question || question.korean_text || 'No question text'}
+                          {getQuestionPreview(question)}
                         </div>
                         <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
                           {question.difficulty} | {question.subject_area} | {question.question_type}

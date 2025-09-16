@@ -2,6 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
+import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import InteractiveQuiz from './InteractiveQuiz';
+import { deepSanitize } from '../utils/sanitizeData';
+
+const searchClient = algoliasearch(
+  process.env.REACT_APP_ALGOLIA_APP_ID,
+  process.env.REACT_APP_ALGOLIA_SEARCH_KEY
+);
+
+// Subject configurations for getting the right index
+const SUBJECTS = {
+  'korean-english': { index: 'korean-english-question-pairs' },
+};
 
 // Safe data access utility - CRITICAL for preventing React error #31
 const safeGet = (obj, path, fallback = '') => {
@@ -386,6 +399,11 @@ const LearnTab = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // InteractiveQuiz states
+  const [showInteractiveQuiz, setShowInteractiveQuiz] = useState(false);
+  const [currentQuizPack, setCurrentQuizPack] = useState(null);
+  const [currentQuizQuestions, setCurrentQuizQuestions] = useState([]);
 
   // Load data on component mount and level change
   useEffect(() => {
@@ -505,18 +523,112 @@ const LearnTab = () => {
     }
   };
 
+  // Helper function to fetch questions for a pack from Algolia
+  const fetchQuestionsForPack = async (pack) => {
+    try {
+      if (!pack.selectedQuestionIds || pack.selectedQuestionIds.length === 0) {
+        console.error('No question IDs found for pack:', pack.id);
+        return [];
+      }
+
+      // Debug: Check what selectedQuestionIds contains
+      console.log('Pack selectedQuestionIds:', pack.selectedQuestionIds);
+      console.log('First ID type:', typeof pack.selectedQuestionIds[0]);
+      
+      // Check if selectedQuestionIds contains objects instead of strings
+      if (pack.selectedQuestionIds[0] && typeof pack.selectedQuestionIds[0] === 'object') {
+        console.error('ERROR: selectedQuestionIds contains objects instead of strings!');
+        console.log('First ID object:', pack.selectedQuestionIds[0]);
+        
+        // Try to extract IDs from objects if they have objectID property
+        const extractedIds = pack.selectedQuestionIds.map(item => {
+          if (typeof item === 'string') return item;
+          if (item && typeof item === 'object') {
+            return String(item.objectID || item.questionId || '');
+          }
+          console.error('Cannot extract ID from:', item);
+          return null;
+        }).filter(Boolean);
+        
+        if (extractedIds.length > 0) {
+          pack = { ...pack, selectedQuestionIds: extractedIds };
+          console.log('Extracted IDs:', extractedIds);
+        }
+      }
+
+      const subjectConfig = SUBJECTS[pack.subject];
+      if (!subjectConfig) {
+        console.error('Unknown subject:', pack.subject);
+        return [];
+      }
+
+      const response = await searchClient.search([
+        {
+          indexName: subjectConfig.index,
+          params: {
+            query: '',
+            filters: pack.selectedQuestionIds.map((id) => `objectID:"${id}"`).join(' OR '),
+            hitsPerPage: pack.selectedQuestionIds.length,
+          },
+        },
+      ]);
+
+      const fetchedQuestions = response.results[0].hits;
+      
+      // Debug: Check the structure of fetched questions
+      if (fetchedQuestions.length > 0) {
+        console.log('Sample fetched question:', fetchedQuestions[0]);
+        console.log('questionText type:', typeof fetchedQuestions[0].questionText);
+        console.log('actualQuestion type:', typeof fetchedQuestions[0].actualQuestion);
+      }
+
+      // Sort questions to match the original order
+      const sortedQuestions = pack.selectedQuestionIds
+        .map((id) => fetchedQuestions.find((q) => q.objectID === id))
+        .filter(Boolean);
+
+      return sortedQuestions;
+    } catch (error) {
+      console.error('Error fetching questions for pack:', error);
+      return [];
+    }
+  };
+
   // Event handlers
-  const handlePractice = (pack) => {
-    console.log('Starting practice with pack:', {
-      packId: safeRender(pack?.packId),
-      packName: safeRender(pack?.packName),
-      difficulty: safeRender(pack?.difficulty),
-      subject: safeRender(pack?.subject),
-      questionCount: extractQuestionIds(pack?.selectedQuestionIds).length
-    });
-    
-    // TODO: Integrate with InteractiveQuiz component
-    alert(`Practice mode for "${safeRender(pack?.packName)}" will be available soon!`);
+  const handlePractice = async (pack) => {
+    if (!pack || !pack.selectedQuestionIds || pack.selectedQuestionIds.length === 0) {
+      alert('No questions available for practice');
+      return;
+    }
+
+    try {
+      console.log('Starting practice with pack:', {
+        packId: safeRender(pack?.packId),
+        packName: safeRender(pack?.packName),
+        difficulty: safeRender(pack?.difficulty),
+        subject: safeRender(pack?.subject),
+        questionCount: extractQuestionIds(pack?.selectedQuestionIds).length
+      });
+
+      const rawQuestions = await fetchQuestionsForPack(pack);
+      
+      if (rawQuestions.length === 0) {
+        alert('Failed to load questions for practice. Please try again.');
+        return;
+      }
+
+      // Apply deep sanitization to prevent any nested objects from reaching React
+      const sanitizedQuestions = rawQuestions.map(question => deepSanitize(question));
+      
+      console.log('Questions after deep sanitization:', sanitizedQuestions);
+
+      setCurrentQuizPack(pack);
+      setCurrentQuizQuestions(sanitizedQuestions);
+      setShowInteractiveQuiz(true);
+    } catch (error) {
+      console.error('Error starting practice:', error);
+      alert('Failed to load questions for practice. Please try again.');
+    }
   };
 
   const handleWatch = (video) => {
@@ -529,6 +641,13 @@ const LearnTab = () => {
     
     // TODO: Integrate with video player
     alert(`Video player for "${safeRender(video?.title)}" will be available soon!`);
+  };
+
+  // Handle quiz completion
+  const handleQuizComplete = () => {
+    setShowInteractiveQuiz(false);
+    setCurrentQuizPack(null);
+    setCurrentQuizQuestions([]);
   };
 
   // Loading state
@@ -823,6 +942,16 @@ const LearnTab = () => {
           </div>
         )}
       </section>
+
+      {/* InteractiveQuiz Modal */}
+      {showInteractiveQuiz && currentQuizPack && currentQuizQuestions.length > 0 && (
+        <InteractiveQuiz
+          packData={currentQuizPack}
+          questions={currentQuizQuestions}
+          onComplete={handleQuizComplete}
+          onClose={handleQuizComplete}
+        />
+      )}
     </div>
   );
 };
