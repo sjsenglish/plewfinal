@@ -516,10 +516,6 @@ const VocabularyCard = ({
         )}
       </div>
 
-      {/* Definition */}
-      <div className="definition-section">
-        <p className="definition-en">{word.definition || 'A key vocabulary word from CSAT passages.'}</p>
-      </div>
 
       {/* Context Sentences from CSAT Questions */}
       {word.contexts && Array.isArray(word.contexts) && word.contexts.length > 0 && (

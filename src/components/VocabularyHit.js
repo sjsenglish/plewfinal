@@ -144,13 +144,6 @@ const VocabularyHit = ({ hit = {} }) => {
         </div>
       )}
 
-      {/* Definition */}
-      <div className="word-definition">
-        <p>{definition}</p>
-        {koreanTranslation && (
-          <p className="korean-translation">{koreanTranslation}</p>
-        )}
-      </div>
 
       {/* Action Buttons */}
       <div className="word-actions">
