@@ -22188,26 +22188,161 @@ input[type="range"]::-moz-range-thumb {
     grid-template-columns: 1fr;
   }
 }
-/* TikTok icon styling to match other social icons */
-.modern-header-social .tiktok-link {
-  background: #000000;
+/* Enhanced Social Icons Styling */
+.modern-header-social {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.modern-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modern-social-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  z-index: -1;
+}
+
+.modern-social-link:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* YouTube specific styling */
+.modern-header-social .youtube-link {
+  background: linear-gradient(135deg, #ff0000, #cc0000);
   color: white;
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+.modern-header-social .youtube-link:hover {
+  background: linear-gradient(135deg, #ff3333, #ff0000);
+  box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+}
+
+/* TikTok specific styling */
+.modern-header-social .tiktok-link {
+  background: linear-gradient(135deg, #000000, #333333);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .modern-header-social .tiktok-link:hover {
-  background: #ff0050;
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #ff0050, #000000);
+  box-shadow: 0 8px 25px rgba(255, 0, 80, 0.4);
 }
 
-/* Instagram icon styling to match other social icons */
+/* Instagram specific styling - improved gradient */
 .modern-header-social .instagram-link {
-  background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 25%, #fcb045 50%, #833ab4 75%, #405de6 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(131, 58, 180, 0.3);
 }
 
 .modern-header-social .instagram-link:hover {
-  background: linear-gradient(135deg, #f5a94a 0%, #ea7349 25%, #e13050 50%, #d12972 75%, #c11d95 100%);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #a04ae0 0%, #ff4444 25%, #ffcc66 50%, #a04ae0 75%, #5577ff 100%);
+  box-shadow: 0 8px 25px rgba(131, 58, 180, 0.4);
+}
+
+/* Discord specific styling */
+.modern-header-social .discord-link {
+  background: linear-gradient(135deg, #5865f2, #4752c4);
+  color: white;
+  box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+  padding: 8px 12px;
+  width: auto;
+  min-width: 48px;
+  border-radius: 24px;
+  gap: 8px;
+}
+
+.modern-header-social .discord-link:hover {
+  background: linear-gradient(135deg, #6b73ff, #5865f2);
+  box-shadow: 0 8px 25px rgba(88, 101, 242, 0.4);
+}
+
+.modern-header-social .discord-link span {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* SVG icon consistency */
+.modern-social-link svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.modern-social-link:hover svg {
+  transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modern-header-social {
+    gap: 12px;
+  }
+  
+  .modern-social-link {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .modern-header-social .discord-link {
+    padding: 6px 10px;
+    min-width: 44px;
+  }
+  
+  .modern-header-social .discord-link span {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-header-social {
+    gap: 8px;
+  }
+  
+  .modern-social-link {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .modern-social-link svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .modern-header-social .discord-link {
+    padding: 4px 8px;
+    min-width: 40px;
+  }
+  
+  .modern-header-social .discord-link span {
+    font-size: 10px;
+  }
 }
 
 /* Ensure all social icons have consistent styling */
