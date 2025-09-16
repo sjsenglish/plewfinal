@@ -249,6 +249,13 @@ const VocabularyPinterest = () => {
     }
   };
 
+  // Close quiz function
+  const closeQuiz = useCallback(() => {
+    console.log('Closing quiz and resetting state');
+    setShowQuiz(false);
+    setQuizWords([]);
+  }, []);
+
   // Start quiz for subject area
   const startSubjectQuiz = () => {
     console.log('Quiz button clicked! Words available:', words.length);
@@ -266,10 +273,11 @@ const VocabularyPinterest = () => {
     
     // Get 10 random words from current subject
     const shuffled = [...words].sort(() => 0.5 - Math.random());
-    const quizWords = shuffled.slice(0, 10);
+    const selectedQuizWords = shuffled.slice(0, 10);
     
-    console.log('Setting quiz words:', quizWords.length);
-    setQuizWords(quizWords);
+    console.log('Setting quiz words:', selectedQuizWords.length);
+    console.log('Quiz words sample:', selectedQuizWords[0]);
+    setQuizWords(selectedQuizWords);
     setShowQuiz(true);
     console.log('Quiz modal should now be visible');
   };
@@ -441,14 +449,66 @@ const VocabularyPinterest = () => {
 
       {/* Quiz Modal */}
       {showQuiz && (
-        <VocabularyQuiz
-          words={quizWords}
-          onClose={() => setShowQuiz(false)}
-          onComplete={(results) => {
-            console.log('Quiz completed:', results);
-            setShowQuiz(false);
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem'
           }}
-        />
+          onClick={(e) => {
+            // Close when clicking on backdrop
+            if (e.target === e.currentTarget) {
+              closeQuiz();
+            }
+          }}
+          onKeyDown={(e) => {
+            // Close on Escape key
+            if (e.key === 'Escape') {
+              closeQuiz();
+            }
+          }}
+          tabIndex={-1}
+        >
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            width: '100%',
+            maxWidth: '900px',
+            maxHeight: '90vh',
+            overflow: 'auto',
+            position: 'relative'
+          }}>
+            {quizWords && quizWords.length > 0 ? (
+              <VocabularyErrorBoundary>
+                <VocabularyQuiz
+                  key={`quiz-${Date.now()}`} // Force re-render each time
+                  words={quizWords}
+                  onClose={closeQuiz}
+                  onComplete={(results) => {
+                    console.log('Quiz completed:', results);
+                    closeQuiz();
+                  }}
+                />
+              </VocabularyErrorBoundary>
+            ) : (
+              <div style={{
+                padding: '2rem',
+                textAlign: 'center'
+              }}>
+                <p>Loading quiz...</p>
+                <button onClick={closeQuiz}>Close</button>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
