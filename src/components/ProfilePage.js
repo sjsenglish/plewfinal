@@ -225,12 +225,8 @@ export const ProfilePage = () => {
         color: '#3B82F6'
       };
     } else {
-      return {
-        name: 'Ghost Learner',
-        achievement: 'Keep practicing to unlock higher badges!',
-        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fghost%20badge%20white.svg?alt=media&token=599d4414-99cf-4084-858b-5b3512557023',
-        color: '#6B7280'
-      };
+      // Return null when no badge is earned yet
+      return null;
     }
   };
 

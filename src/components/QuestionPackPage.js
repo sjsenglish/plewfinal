@@ -50,8 +50,8 @@ const getImageUrl = (url) => {
 const SUBJECTS = {
   'korean-english': {
     index: 'korean-english-question-pairs',
-    displayName: 'Korean-English',
-    description: 'Korean-English Language Questions',
+    displayName: '수능영어 문재들',
+    description: '다양한 내게 맞는 문제들을 찾아 리딩 레벨을 올려 가 보세요.',
     filterCategories: {
       year: [
         { id: 'year-2024', label: '2024', value: 'year:2024' },
