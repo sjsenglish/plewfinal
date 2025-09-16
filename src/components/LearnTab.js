@@ -570,24 +570,27 @@ if (pack.selectedQuestionIds[0] && typeof pack.selectedQuestionIds[0] === 'objec
                       gap: '0.5rem',
                       flexWrap: 'wrap'
                     }}>
-                      <button
-                        onClick={() => handleDownloadPDF(pack)}
-                        disabled={isGeneratingPDFForThisPack}
-                        style={{
-                          backgroundColor: '#f8fafc',
-                          color: COLORS.darkGray,
-                          border: '1px solid #e2e8f0',
-                          padding: '0.5rem 1rem',
-                          borderRadius: '6px',
-                          fontSize: '0.875rem',
-                          fontWeight: '500',
-                          cursor: isGeneratingPDFForThisPack ? 'not-allowed' : 'pointer',
-                          opacity: isGeneratingPDFForThisPack ? 0.6 : 1,
-                          transition: 'all 0.2s ease'
-                        }}
-                      >
-                        {isGeneratingPDFForThisPack ? 'Generating...' : 'Download PDF'}
-                      </button>
+                      {/* Hide PDF button for Korean-English questions */}
+                      {pack.subject !== 'korean-english' && (
+                        <button
+                          onClick={() => handleDownloadPDF(pack)}
+                          disabled={isGeneratingPDFForThisPack}
+                          style={{
+                            backgroundColor: '#f8fafc',
+                            color: COLORS.darkGray,
+                            border: '1px solid #e2e8f0',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '6px',
+                            fontSize: '0.875rem',
+                            fontWeight: '500',
+                            cursor: isGeneratingPDFForThisPack ? 'not-allowed' : 'pointer',
+                            opacity: isGeneratingPDFForThisPack ? 0.6 : 1,
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          {isGeneratingPDFForThisPack ? 'Generating...' : 'Download PDF'}
+                        </button>
+                      )}
 
                       <button
                         onClick={() => handlePractice(pack)}
