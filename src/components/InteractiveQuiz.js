@@ -1216,45 +1216,46 @@ const InteractiveQuiz = ({ packData, questions, onClose, onComplete, reviewMode 
     };
   };
 
-  // Get question preview text - Updated for all subjects
-  const getQuestionPreview = (question) => {
-    if (packData.subject === 'tsa') {
-      return question.question || question.question_content || 'TSA Question';
-    } else if (packData.subject === 'maths') {
-      const year = question.id ? question.id.split('_')[0] : 'Unknown Year';
-      const examCode = question.id ? question.id.split('_')[1] : 'Unknown Exam';
-      const questionTopic = question.question_topic || 'Unknown Topic';
-      return `${year} ${examCode} - ${questionTopic}`;
-    } else if (packData.subject === 'korean-english') {
-      // Handle both string and object formats for questionText and actualQuestion
-      let korean = question.questionText || question.korean || '';
-      let english = question.actualQuestion || question.english || '';
-      
-      // If these fields are objects, extract the string value
-      if (typeof korean === 'object' && korean !== null) {
-        korean = korean.sentence || korean.text || korean.value || '';
-        console.warn('questionText is an object, extracted:', korean);
-      }
-      if (typeof english === 'object' && english !== null) {
-        english = english.sentence || english.text || english.value || '';
-        console.warn('actualQuestion is an object, extracted:', english);
-      }
-      
-      // Ensure we have strings before calling substring
-      korean = String(korean || '');
-      english = String(english || '');
-      
-      if (korean && english) {
-        return `${korean.substring(0, 30)}... → ${english.substring(0, 30)}...`;
-      } else if (korean) {
-        return `Korean: ${korean.substring(0, 40)}...`;
-      } else if (english) {
-        return `English: ${english.substring(0, 40)}...`;
-      }
-      return 'Korean-English Question';
+// Get question preview text - Updated for all subjects
+const getQuestionPreview = (question) => {
+  if (packData.subject === 'tsa') {
+    return question.question || question.question_content || 'TSA Question';
+  } else if (packData.subject === 'maths') {
+    const year = question.id ? question.id.split('_')[0] : 'Unknown Year';
+    const examCode = question.id ? question.id.split('_')[1] : 'Unknown Exam';
+    const questionTopic = question.question_topic || 'Unknown Topic';
+    return `${year} ${examCode} - ${questionTopic}`;
+  } else if (packData.subject === 'korean-english') {
+    // Handle both string and object formats for questionText and actualQuestion
+    let korean = question.questionText || question.korean || '';
+    let english = question.actualQuestion || question.english || '';
+    
+    // If these fields are objects, extract the string value
+    if (typeof korean === 'object' && korean !== null) {
+      korean = korean.sentence || korean.text || korean.value || '';
+      console.warn('questionText is an object, extracted:', korean);
     }
-    return 'Question';
-  };
+    if (typeof english === 'object' && english !== null) {
+      english = english.sentence || english.text || english.value || '';
+      console.warn('actualQuestion is an object, extracted:', english);
+    }
+    
+    // Ensure we have strings before calling substring - FIXED
+    korean = String(korean || '');
+    english = String(english || '');
+    
+    // Only call substring if we have actual content
+    if (korean && english) {
+      return `${korean.substring(0, 30)}... → ${english.substring(0, 30)}...`;
+    } else if (korean) {
+      return `Korean: ${korean.substring(0, 40)}...`;
+    } else if (english) {
+      return `English: ${english.substring(0, 40)}...`;
+    }
+    return 'Korean-English Question';
+  }
+  return 'Question';
+};
 
 const submitQuiz = async () => {
   if (!isDemoMode && !user) {
