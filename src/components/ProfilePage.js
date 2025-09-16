@@ -648,7 +648,7 @@ export const ProfilePage = () => {
                 color: '#111827',
                 margin: '0'
               }}>
-                Question Packs
+                마이 문제은행
               </h2>
               <button
                 onClick={() => navigate('/question-pack')}

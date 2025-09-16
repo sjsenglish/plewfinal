@@ -1,4 +1,4 @@
-// Updated SubscriptionPlansPage.js - Trial plan removed, additional info section removed
+// SubscriptionPlansPage.js - Discord/Claude-inspired clean design
 import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { createCheckoutSession } from '../services/checkoutService';
@@ -28,12 +28,12 @@ const SubscriptionPlansPage = () => {
   const plans = [
     {
       id: 'tier1',
-      name: '프리미엄',
+      name: 'Premium',
       price: 20000,
-      period: '월',
+      period: 'month',
       priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',
       paymentLink: 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01',
-      description: '수능 준비를 위한 완전한 프리미엄 플랜',
+      description: 'Everything you need for exam preparation',
       features: [
         '무제한 문제 검색',
         '무제한 비디오 검색',
@@ -42,7 +42,7 @@ const SubscriptionPlansPage = () => {
         '커뮤니티 지원',
         '학습 도우미 지원',
       ],
-      buttonText: '프리미엄 선택',
+      buttonText: 'Start with Premium',
       popular: true,
       current: subscription?.plan === 'tier1'
     }
@@ -50,7 +50,7 @@ const SubscriptionPlansPage = () => {
 
   const handleUpgrade = async (plan) => {
     if (!user) {
-      alert('플랜 업그레이드를 하려면 로그인하세요');
+      alert('Please sign in to upgrade your plan');
       return;
     }
 
@@ -58,11 +58,10 @@ const SubscriptionPlansPage = () => {
     setSelectedPlan(plan.id);
 
     try {
-      // Use Stripe payment links for direct checkout
       window.open(plan.paymentLink, '_blank');
     } catch (error) {
       console.error('Error opening payment link:', error);
-      alert('결제 페이지를 열 수 없습니다. 다시 시도해주세요.');
+      alert('Unable to open payment page. Please try again.');
     } finally {
       setLoading(prev => ({ ...prev, [plan.id]: false }));
       setSelectedPlan(null);
@@ -73,7 +72,7 @@ const SubscriptionPlansPage = () => {
     if (!user || !subscription) return;
     
     const confirmed = window.confirm(
-      '정말로 구독을 취소하시겠습니까? 유료 기능에 대한 액세스를 즉시 잃게 됩니다.'
+      'Are you sure you want to cancel? You will lose access to premium features immediately.'
     );
     
     if (!confirmed) return;
@@ -84,13 +83,13 @@ const SubscriptionPlansPage = () => {
       const result = await cancelSubscription();
       
       if (result.success) {
-        alert('구독이 성공적으로 취소되었습니다. 그동안 이용해 주셔서 감사합니다!');
+        alert('Your subscription has been cancelled successfully.');
       } else {
-        alert(`구독 취소 실패: ${result.error}`);
+        alert(`Failed to cancel subscription: ${result.error}`);
       }
     } catch (error) {
       console.error('Error cancelling subscription:', error);
-      alert('구독 취소에 실패했습니다. 다시 시도하거나 고객지원에 문의하세요.');
+      alert('Failed to cancel subscription. Please contact support.');
     } finally {
       setCancelLoading(false);
     }
@@ -103,613 +102,526 @@ const SubscriptionPlansPage = () => {
 
   if (paywallLoading) {
     return (
-      <div className="loading-container">
-        <div className="loading-content">
-          <div className="loading-spinner"></div>
-          <p className="loading-text">플랜 로딩 중...</p>
-        </div>
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0a0a0a'
+      }}>
+        <div style={{
+          width: '32px',
+          height: '32px',
+          border: '2px solid rgba(255, 255, 255, 0.1)',
+          borderTop: '2px solid white',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }} />
       </div>
     );
   }
 
   return (
-    <div className="subscription-page">
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#0a0a0a',
+      color: '#ffffff',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+    }}>
       {/* Header */}
       <div style={{
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
-        padding: '5rem 2rem 4rem 2rem',
+        padding: '80px 24px 60px',
         textAlign: 'center',
         position: 'relative',
-        overflow: 'hidden'
+        background: 'radial-gradient(circle at 50% 0%, rgba(88, 101, 242, 0.08) 0%, transparent 50%)'
       }}>
-        {/* Geometric shapes for modern look */}
-        <div style={{
-          position: 'absolute',
-          top: '10%',
-          right: '10%',
-          width: '200px',
-          height: '200px',
-          background: 'linear-gradient(45deg, #06b6d4, #0891b2)',
-          borderRadius: '30%',
-          opacity: '0.1',
-          transform: 'rotate(45deg)',
-          filter: 'blur(20px)'
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '15%',
-          left: '15%',
-          width: '150px',
-          height: '150px',
-          background: 'linear-gradient(45deg, #10b981, #059669)',
-          borderRadius: '40%',
-          opacity: '0.1',
-          transform: 'rotate(-30deg)',
-          filter: 'blur(15px)'
-        }} />
-        
-        <div style={{
-          position: 'relative',
-          zIndex: 1,
-          maxWidth: '700px',
-          margin: '0 auto'
+        <h1 style={{
+          fontSize: '48px',
+          fontWeight: '600',
+          margin: '0 0 16px 0',
+          letterSpacing: '-1.5px',
+          lineHeight: '1.1'
         }}>
-          <div style={{
-            width: '120px',
-            height: '120px',
-            background: 'linear-gradient(135deg, #f8fafc, #e2e8f0)',
-            borderRadius: '28px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto 2.5rem auto',
-            fontSize: '48px',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-          }}>
-          </div>
-          
-          <h1 style={{
-            fontSize: '56px',
-            fontWeight: '900',
-            background: 'linear-gradient(135deg, #f8fafc, #cbd5e1)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            margin: '0 0 1.5rem 0',
-            letterSpacing: '-0.02em',
-            textShadow: 'none'
-          }}>
-            프리미엄 플랜
-          </h1>
-          
-          <p style={{
-            fontSize: '22px',
-            color: '#94a3b8',
-            margin: '0',
-            lineHeight: '1.7',
-            fontWeight: '400',
-            maxWidth: '500px',
-            marginLeft: 'auto',
-            marginRight: 'auto'
-          }}>
-            수능 준비를 위한 완전한 프리미엄 경험
-          </p>
-        </div>
+          Choose your plan
+        </h1>
+        
+        <p style={{
+          fontSize: '18px',
+          color: 'rgba(255, 255, 255, 0.6)',
+          margin: '0 auto',
+          maxWidth: '480px',
+          lineHeight: '1.5'
+        }}>
+          Get unlimited access to all premium features
+        </p>
       </div>
 
+      {/* Main Content */}
       <div style={{
-        padding: '4rem 2rem 2rem 2rem',
-        background: '#f8fafc',
-        minHeight: 'calc(100vh - 300px)'
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 24px 80px'
       }}>
         {/* Login Notice */}
         {!isLoggedIn && (
           <div style={{
+            maxWidth: '480px',
+            margin: '0 auto 48px',
+            padding: '16px 20px',
+            backgroundColor: 'rgba(250, 166, 26, 0.1)',
+            border: '1px solid rgba(250, 166, 26, 0.2)',
+            borderRadius: '12px',
             display: 'flex',
-            justifyContent: 'center',
-            marginBottom: '3rem'
+            gap: '12px',
+            alignItems: 'flex-start'
           }}>
-            <div style={{
-              maxWidth: '600px',
-              width: '100%',
-              background: 'white',
-              border: '1px solid #e2e8f0',
-              borderRadius: '20px',
-              padding: '2rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1.5rem',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
-            }}>
-              <div style={{
-                width: '56px',
-                height: '56px',
-                background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                borderRadius: '16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-                boxShadow: '0 8px 16px rgba(245, 158, 11, 0.3)'
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0, marginTop: '2px' }}>
+              <path d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM10 5C10.5523 5 11 5.44772 11 6V10C11 10.5523 10.5523 11 10 11C9.44772 11 9 10.5523 9 10V6C9 5.44772 9.44772 5 10 5ZM10 15C9.44772 15 9 14.5523 9 14C9 13.4477 9.44772 13 10 13C10.5523 13 11 13.4477 11 14C11 14.5523 10.5523 15 10 15Z" fill="#faa61a"/>
+            </svg>
+            
+            <div style={{ flex: 1 }}>
+              <p style={{
+                margin: 0,
+                fontSize: '14px',
+                color: 'rgba(255, 255, 255, 0.9)',
+                lineHeight: '1.5'
               }}>
-                <svg 
-                  width="24" 
-                  height="24" 
-                  fill="white" 
-                  viewBox="0 0 20 20"
-                >
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-              </div>
-              
-              <div>
-                <h3 style={{
-                  fontSize: '18px',
-                  fontWeight: '700',
-                  color: '#1e293b',
-                  margin: '0 0 0.5rem 0'
+                Please{' '}
+                <a href="/login" style={{
+                  color: '#faa61a',
+                  textDecoration: 'none',
+                  borderBottom: '1px solid #faa61a'
                 }}>
-                  로그인이 필요합니다
-                </h3>
-                <p style={{
-                  fontSize: '15px',
-                  color: '#64748b',
-                  margin: '0',
-                  fontWeight: '400'
-                }}>
-                  프리미엄 플랜을 구독하려면{' '}
-                  <a 
-                    href="/login" 
-                    style={{
-                      color: '#f59e0b',
-                      textDecoration: 'none',
-                      fontWeight: '600',
-                      borderBottom: '2px solid #f59e0b'
-                    }}
-                  >
-                    로그인
-                  </a>{' '}
-                  하세요.
-                </p>
-              </div>
+                  sign in
+                </a>
+                {' '}to subscribe to a plan
+              </p>
             </div>
           </div>
         )}
 
         {/* Plans Grid */}
         <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: '0 1rem'
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '24px',
+          marginBottom: '48px'
         }}>
+          {/* Free Plan */}
           <div style={{
-            maxWidth: '600px',
-            width: '100%'
+            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '16px',
+            padding: '32px',
+            position: 'relative',
+            transition: 'all 0.2s ease'
           }}>
-            {plans.map((plan) => (
-              <div
-                key={plan.id}
-                style={{
-                  position: 'relative',
-                  backgroundColor: 'white',
-                  borderRadius: '32px',
-                  boxShadow: '0 32px 64px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08)',
-                  border: plan.current 
-                    ? '2px solid #10b981' 
-                    : '1px solid rgba(226, 232, 240, 0.8)',
-                  overflow: 'hidden',
-                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                  margin: '0 auto',
-                  background: 'linear-gradient(135deg, #ffffff 0%, #fafbff 100%)'
-                }}
-                onMouseEnter={(e) => {
-                  if (!plan.current) {
-                    e.target.style.transform = 'translateY(-12px) scale(1.02)';
-                    e.target.style.boxShadow = '0 40px 80px rgba(0, 0, 0, 0.16), 0 8px 32px rgba(0, 0, 0, 0.12)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = 'translateY(0) scale(1)';
-                  e.target.style.boxShadow = '0 32px 64px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08)';
-                }}
-              >
-                {/* Popular Badge */}
-                {plan.popular && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '-16px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    background: 'linear-gradient(135deg, #1e293b, #0f172a)',
-                    color: 'white',
-                    padding: '12px 24px',
-                    borderRadius: '24px',
-                    fontSize: '13px',
-                    fontWeight: '700',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    boxShadow: '0 12px 32px rgba(30, 41, 59, 0.4)',
-                    zIndex: 10,
-                    border: '2px solid white'
-                  }}>
-                  </div>
-                )}
-
-                {/* Current Badge */}
-                {plan.current && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '24px',
-                    right: '24px',
-                    background: 'linear-gradient(135deg, #10b981, #059669)',
-                    color: 'white',
-                    padding: '8px 16px',
-                    borderRadius: '20px',
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    boxShadow: '0 8px 20px rgba(16, 185, 129, 0.3)'
-                  }}>
-                    ✓ 현재 이용중
-                  </div>
-                )}
-
-                <div style={{
-                  padding: '3.5rem 3rem 3rem 3rem'
-                }}>
-                  {/* Plan Header */}
-                  <div style={{
-                    textAlign: 'center',
-                    marginBottom: '3rem',
-                    paddingBottom: '2.5rem',
-                    borderBottom: '1px solid #f1f5f9'
-                  }}>
-                    <div style={{
-                      width: '96px',
-                      height: '96px',
-                      background: 'linear-gradient(135deg, #1e293b, #334155)',
-                      borderRadius: '32px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      margin: '0 auto 2rem auto',
-                      fontSize: '36px',
-                      boxShadow: '0 16px 40px rgba(30, 41, 59, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)'
-                    }}>
-                    </div>
-                    
-                    <h3 style={{
-                      fontSize: '32px',
-                      fontWeight: '900',
-                      color: '#0f172a',
-                      margin: '0 0 1rem 0',
-                      letterSpacing: '-0.02em'
-                    }}>
-                      {plan.name}
-                    </h3>
-                    
-                    <p style={{
-                      fontSize: '18px',
-                      color: '#64748b',
-                      margin: '0 0 2.5rem 0',
-                      lineHeight: '1.6',
-                      maxWidth: '400px',
-                      marginLeft: 'auto',
-                      marginRight: 'auto'
-                    }}>
-                      {plan.description}
-                    </p>
-                    
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'baseline',
-                      justifyContent: 'center',
-                      gap: '0.5rem',
-                      marginBottom: '1rem'
-                    }}>
-                      <span style={{
-                        fontSize: '56px',
-                        fontWeight: '900',
-                        background: 'linear-gradient(135deg, #1e293b, #64748b)',
-                        backgroundClip: 'text',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        lineHeight: '1'
-                      }}>
-                        {formatPrice(plan.price)}
-                      </span>
-                      {plan.period && (
-                        <span style={{
-                          fontSize: '20px',
-                          color: '#64748b',
-                          fontWeight: '600'
-                        }}>
-                          /{plan.period}
-                        </span>
-                      )}
-                    </div>
-                    
-                    <p style={{
-                      fontSize: '14px',
-                      color: '#94a3b8',
-                      margin: '0',
-                      fontWeight: '500'
-                    }}>
-                      VAT 포함 • 언제든지 취소 가능
-                    </p>
-                  </div>
-
-                  {/* Features */}
-                  <div style={{
-                    marginBottom: '3rem'
-                  }}>
-                    <h4 style={{
-                      fontSize: '22px',
-                      fontWeight: '700',
-                      color: '#1e293b',
-                      margin: '0 0 2rem 0',
-                      textAlign: 'center'
-                    }}>
-                    </h4>
-                    
-                    <div style={{
-                      display: 'grid',
-                      gap: '1.25rem'
-                    }}>
-                      {plan.features.map((feature, index) => (
-                        <div key={index} style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '1rem',
-                          padding: '1rem 1.25rem',
-                          backgroundColor: 'rgba(248, 250, 252, 0.8)',
-                          borderRadius: '16px',
-                          border: '1px solid rgba(226, 232, 240, 0.6)',
-                          transition: 'all 0.2s ease',
-                          cursor: 'default'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.backgroundColor = 'rgba(241, 245, 249, 1)';
-                          e.target.style.borderColor = 'rgba(203, 213, 225, 0.8)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.backgroundColor = 'rgba(248, 250, 252, 0.8)';
-                          e.target.style.borderColor = 'rgba(226, 232, 240, 0.6)';
-                        }}
-                        >
-                          <div style={{
-                            width: '28px',
-                            height: '28px',
-                            background: 'linear-gradient(135deg, #10b981, #059669)',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
-                          }}>
-                            <svg 
-                              width="16" 
-                              height="16" 
-                              fill="white" 
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                            </svg>
-                          </div>
-                          <span style={{
-                            fontSize: '16px',
-                            color: '#374151',
-                            fontWeight: '600',
-                            lineHeight: '1.4'
-                          }}>
-                            {feature}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Action Button */}
-                  <button
-                    onClick={() => handleUpgrade(plan)}
-                    disabled={loading[plan.id] || plan.current || !isLoggedIn}
-                    style={{
-                      width: '100%',
-                      padding: '1.25rem 2rem',
-                      fontSize: '18px',
-                      fontWeight: '700',
-                      borderRadius: '20px',
-                      border: 'none',
-                      cursor: (loading[plan.id] || plan.current || !isLoggedIn) ? 'not-allowed' : 'pointer',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      background: plan.current 
-                        ? 'linear-gradient(135deg, #10b981, #059669)'
-                        : 'linear-gradient(135deg, #1e293b, #0f172a)',
-                      color: 'white',
-                      opacity: (loading[plan.id] || !isLoggedIn) && !plan.current ? 0.6 : 1,
-                      boxShadow: plan.current 
-                        ? '0 12px 28px rgba(16, 185, 129, 0.3)'
-                        : '0 12px 28px rgba(30, 41, 59, 0.4)',
-                      marginBottom: '2rem',
-                      position: 'relative',
-                      overflow: 'hidden'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!plan.current && !loading[plan.id] && isLoggedIn) {
-                        e.target.style.transform = 'translateY(-3px)';
-                        e.target.style.boxShadow = '0 16px 36px rgba(30, 41, 59, 0.5)';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = plan.current 
-                        ? '0 12px 28px rgba(16, 185, 129, 0.3)'
-                        : '0 12px 28px rgba(30, 41, 59, 0.4)';
-                    }}
-                  >
-                    {/* Button shine effect */}
-                    <div style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: '-100%',
-                      width: '100%',
-                      height: '100%',
-                      background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
-                      transition: 'left 0.6s ease'
-                    }} />
-                    
-                    {loading[plan.id] ? (
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.75rem'
-                      }}>
-                        <div style={{
-                          width: '22px',
-                          height: '22px',
-                          border: '2px solid transparent',
-                          borderTop: '2px solid currentColor',
-                          borderRadius: '50%',
-                          animation: 'spin 1s linear infinite'
-                        }} />
-                        <span>처리 중...</span>
-                      </div>
-                    ) : plan.current ? (
-                      '✓ 현재 이용 중인 플랜'
-                    ) : !isLoggedIn ? (
-                      '먼저 로그인해 주세요'
-                    ) : (
-                      `지금 ${plan.buttonText}`
-                    )}
-                  </button>
-
-                  {/* Payment Info */}
-                  <div style={{
-                    textAlign: 'center',
-                    padding: '1rem',
-                    backgroundColor: '#f8fafc',
-                    borderRadius: '12px',
-                    border: '1px solid #e2e8f0'
-                  }}>
-                    <p style={{
-                      fontSize: '13px',
-                      color: '#64748b',
-                      margin: '0',
-                      lineHeight: '1.5'
-                    }}>
-                      🔒 <strong>Stripe 보안 결제</strong><br/>
-                      언제든지 취소 가능 • 30일 환불 보장
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Cancel Subscription Section - Only for paying users */}
-        {isPaidUser && subscription?.status === 'active' && subscription?.plan === 'tier1' && (
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            padding: '0 2rem',
-            marginTop: '3rem'
-          }}>
-            <div style={{
-              maxWidth: '500px',
-              width: '100%',
-              backgroundColor: '#fefefe',
-              border: '1px solid #f1f5f9',
-              borderRadius: '20px',
-              padding: '2rem',
-              textAlign: 'center'
-            }}>
-              <div style={{
-                width: '48px',
-                height: '48px',
-                backgroundColor: '#fef2f2',
-                borderRadius: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1.5rem auto',
-                fontSize: '20px'
-              }}>
-                ❌
-              </div>
-              
+            <div style={{ marginBottom: '24px' }}>
               <h3 style={{
                 fontSize: '20px',
                 fontWeight: '600',
-                color: '#1e293b',
-                margin: '0 0 1rem 0'
+                margin: '0 0 8px 0'
               }}>
-                구독을 취소하고 싶으신가요?
+                Free
               </h3>
-              
               <p style={{
                 fontSize: '14px',
-                color: '#64748b',
-                margin: '0 0 2rem 0',
-                lineHeight: '1.6'
+                color: 'rgba(255, 255, 255, 0.5)',
+                margin: '0 0 24px 0'
               }}>
-                언제든지 월간 구독을 취소할 수 있습니다. 유료 기능에 대한 액세스를 즉시 잃게 됩니다.
+                Basic features to get started
               </p>
               
+              <div style={{
+                fontSize: '36px',
+                fontWeight: '600',
+                marginBottom: '4px'
+              }}>
+                ₩0
+                <span style={{
+                  fontSize: '16px',
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  fontWeight: '400',
+                  marginLeft: '8px'
+                }}>
+                  /month
+                </span>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: '32px' }}>
+              <ul style={{
+                margin: 0,
+                padding: 0,
+                listStyle: 'none'
+              }}>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '8px 0',
+                  fontSize: '14px',
+                  color: 'rgba(255, 255, 255, 0.7)'
+                }}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  3 daily searches
+                </li>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '8px 0',
+                  fontSize: '14px',
+                  color: 'rgba(255, 255, 255, 0.7)'
+                }}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Limited video access
+                </li>
+                <li style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '8px 0',
+                  fontSize: '14px',
+                  color: 'rgba(255, 255, 255, 0.7)'
+                }}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Basic features
+                </li>
+              </ul>
+            </div>
+
+            <button
+              disabled
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: 'rgba(255, 255, 255, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: '500',
+                cursor: 'not-allowed'
+              }}
+            >
+              Current plan
+            </button>
+          </div>
+
+          {/* Premium Plan */}
+          {plans.map((plan) => (
+            <div
+              key={plan.id}
+              style={{
+                backgroundColor: 'rgba(88, 101, 242, 0.05)',
+                border: '2px solid rgba(88, 101, 242, 0.3)',
+                borderRadius: '16px',
+                padding: '32px',
+                position: 'relative',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              {/* Popular Badge */}
+              <div style={{
+                position: 'absolute',
+                top: '-12px',
+                left: '32px',
+                backgroundColor: '#5865f2',
+                color: 'white',
+                padding: '4px 12px',
+                borderRadius: '12px',
+                fontSize: '12px',
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>
+                Recommended
+              </div>
+
+              {plan.current && (
+                <div style={{
+                  position: 'absolute',
+                  top: '16px',
+                  right: '16px',
+                  backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                  color: '#10b981',
+                  padding: '4px 8px',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  fontWeight: '600'
+                }}>
+                  Active
+                </div>
+              )}
+
+              <div style={{ marginBottom: '24px' }}>
+                <h3 style={{
+                  fontSize: '20px',
+                  fontWeight: '600',
+                  margin: '0 0 8px 0'
+                }}>
+                  {plan.name}
+                </h3>
+                <p style={{
+                  fontSize: '14px',
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  margin: '0 0 24px 0'
+                }}>
+                  {plan.description}
+                </p>
+                
+                <div style={{
+                  fontSize: '36px',
+                  fontWeight: '600',
+                  marginBottom: '4px'
+                }}>
+                  {formatPrice(plan.price)}
+                  <span style={{
+                    fontSize: '16px',
+                    color: 'rgba(255, 255, 255, 0.5)',
+                    fontWeight: '400',
+                    marginLeft: '8px'
+                  }}>
+                    /{plan.period}
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '32px' }}>
+                <ul style={{
+                  margin: 0,
+                  padding: 0,
+                  listStyle: 'none'
+                }}>
+                  {plan.features.map((feature, index) => (
+                    <li key={index} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '8px 0',
+                      fontSize: '14px',
+                      color: 'rgba(255, 255, 255, 0.9)'
+                    }}>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M13.5 4.5L6 12L2.5 8.5" stroke="#5865f2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
               <button
-                onClick={handleCancelSubscription}
-                disabled={cancelLoading}
+                onClick={() => handleUpgrade(plan)}
+                disabled={loading[plan.id] || plan.current || !isLoggedIn}
                 style={{
-                  padding: '0.75rem 1.5rem',
+                  width: '100%',
+                  padding: '12px 16px',
+                  backgroundColor: plan.current ? 'rgba(16, 185, 129, 0.1)' : '#5865f2',
+                  color: plan.current ? '#10b981' : 'white',
+                  border: plan.current ? '1px solid rgba(16, 185, 129, 0.2)' : 'none',
+                  borderRadius: '8px',
                   fontSize: '14px',
                   fontWeight: '500',
-                  borderRadius: '12px',
-                  border: '1px solid #ef4444',
-                  backgroundColor: cancelLoading ? '#f3f4f6' : 'white',
-                  color: cancelLoading ? '#9ca3af' : '#ef4444',
-                  cursor: cancelLoading ? 'not-allowed' : 'pointer',
+                  cursor: (loading[plan.id] || plan.current || !isLoggedIn) ? 'not-allowed' : 'pointer',
+                  opacity: (loading[plan.id] || !isLoggedIn) && !plan.current ? 0.5 : 1,
                   transition: 'all 0.2s ease'
                 }}
                 onMouseEnter={(e) => {
-                  if (!cancelLoading) {
-                    e.target.style.backgroundColor = '#ef4444';
-                    e.target.style.color = 'white';
+                  if (!plan.current && !loading[plan.id] && isLoggedIn) {
+                    e.target.style.backgroundColor = '#4752c4';
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (!cancelLoading) {
-                    e.target.style.backgroundColor = 'white';
-                    e.target.style.color = '#ef4444';
+                  if (!plan.current && !loading[plan.id] && isLoggedIn) {
+                    e.target.style.backgroundColor = '#5865f2';
                   }
                 }}
               >
-                {cancelLoading ? (
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem'
-                  }}>
+                {loading[plan.id] ? (
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                     <div style={{
-                      width: '16px',
-                      height: '16px',
+                      width: '14px',
+                      height: '14px',
                       border: '2px solid transparent',
                       borderTop: '2px solid currentColor',
                       borderRadius: '50%',
                       animation: 'spin 1s linear infinite'
                     }} />
-                    <span>취소 중...</span>
-                  </div>
+                    Processing...
+                  </span>
+                ) : plan.current ? (
+                  'Current plan'
+                ) : !isLoggedIn ? (
+                  'Sign in to subscribe'
                 ) : (
-                  '구독 취소'
+                  plan.buttonText
                 )}
               </button>
+
+              <p style={{
+                fontSize: '11px',
+                color: 'rgba(255, 255, 255, 0.3)',
+                textAlign: 'center',
+                marginTop: '12px',
+                margin: '12px 0 0 0'
+              }}>
+                Secure payment via Stripe • Cancel anytime
+              </p>
             </div>
+          ))}
+        </div>
+
+        {/* FAQ Section */}
+        <div style={{
+          maxWidth: '640px',
+          margin: '80px auto 0',
+          padding: '40px 0',
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)'
+        }}>
+          <h2 style={{
+            fontSize: '24px',
+            fontWeight: '600',
+            margin: '0 0 32px 0',
+            textAlign: 'center'
+          }}>
+            Frequently asked questions
+          </h2>
+
+          <div style={{ display: 'grid', gap: '24px' }}>
+            <div>
+              <h3 style={{
+                fontSize: '16px',
+                fontWeight: '500',
+                margin: '0 0 8px 0',
+                color: 'rgba(255, 255, 255, 0.9)'
+              }}>
+                Can I cancel anytime?
+              </h3>
+              <p style={{
+                fontSize: '14px',
+                color: 'rgba(255, 255, 255, 0.5)',
+                margin: 0,
+                lineHeight: '1.6'
+              }}>
+                Yes, you can cancel your subscription at any time. Your access will continue until the end of your billing period.
+              </p>
+            </div>
+
+            <div>
+              <h3 style={{
+                fontSize: '16px',
+                fontWeight: '500',
+                margin: '0 0 8px 0',
+                color: 'rgba(255, 255, 255, 0.9)'
+              }}>
+                What payment methods do you accept?
+              </h3>
+              <p style={{
+                fontSize: '14px',
+                color: 'rgba(255, 255, 255, 0.5)',
+                margin: 0,
+                lineHeight: '1.6'
+              }}>
+                We accept all major credit cards, debit cards, and digital wallets through our secure payment processor, Stripe.
+              </p>
+            </div>
+
+            <div>
+              <h3 style={{
+                fontSize: '16px',
+                fontWeight: '500',
+                margin: '0 0 8px 0',
+                color: 'rgba(255, 255, 255, 0.9)'
+              }}>
+                Is there a refund policy?
+              </h3>
+              <p style={{
+                fontSize: '14px',
+                color: 'rgba(255, 255, 255, 0.5)',
+                margin: 0,
+                lineHeight: '1.6'
+              }}>
+                We offer a 30-day money-back guarantee. If you're not satisfied, contact support for a full refund.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Cancel Subscription Section */}
+        {isPaidUser && subscription?.status === 'active' && subscription?.plan === 'tier1' && (
+          <div style={{
+            maxWidth: '480px',
+            margin: '48px auto 0',
+            padding: '24px',
+            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '12px',
+            textAlign: 'center'
+          }}>
+            <h3 style={{
+              fontSize: '16px',
+              fontWeight: '500',
+              margin: '0 0 8px 0'
+            }}>
+              Need to cancel?
+            </h3>
+            
+            <p style={{
+              fontSize: '14px',
+              color: 'rgba(255, 255, 255, 0.5)',
+              margin: '0 0 20px 0'
+            }}>
+              You can cancel your subscription at any time.
+            </p>
+            
+            <button
+              onClick={handleCancelSubscription}
+              disabled={cancelLoading}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: 'transparent',
+                color: '#ef4444',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                borderRadius: '6px',
+                fontSize: '14px',
+                fontWeight: '500',
+                cursor: cancelLoading ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                if (!cancelLoading) {
+                  e.target.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                  e.target.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!cancelLoading) {
+                  e.target.style.backgroundColor = 'transparent';
+                  e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                }
+              }}
+            >
+              {cancelLoading ? 'Cancelling...' : 'Cancel subscription'}
+            </button>
           </div>
         )}
       </div>
+
+      {/* CSS for animations */}
+      <style jsx>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
