@@ -329,11 +329,11 @@ const VocabularyPinterest = () => {
 
   return (
     <div className="vocabulary-pinterest">
-      {/* Filters - Hidden for now */}
-      <div className="search-filters" style={{ display: 'none' }}>
+      {/* Search and Actions */}
+      <div className="search-filters">
 
-        {/* Subject Area Tabs */}
-        <div className="subject-tabs">
+        {/* Subject Area Tabs - Hidden for now */}
+        <div className="subject-tabs" style={{ display: 'none' }}>
           {subjectAreas.map(subject => (
             <button
               key={subject.id}

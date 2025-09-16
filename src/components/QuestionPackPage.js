@@ -962,7 +962,7 @@ const getQuestionPreview = (question) => {
               color: '#111827',
               margin: '0 0 8px 0'
             }}>
-              Create Question Pack
+              내 문제지 제작
             </h1>
             <div style={{
               display: 'flex',
@@ -1039,7 +1039,7 @@ const getQuestionPreview = (question) => {
                     color: '#111827',
                     margin: '0 0 8px 0'
                   }}>
-                    Pack Setup
+                    문제지 만들기
                   </h2>
                   <span style={{
                     color: '#0369a1',
@@ -1059,7 +1059,7 @@ const getQuestionPreview = (question) => {
                     color: COLORS.darkGray,
                     marginBottom: '8px'
                   }}>
-                    Pack Name
+                    팩 이름
                   </label>
                   <input
                     type="text"
@@ -1088,7 +1088,7 @@ const getQuestionPreview = (question) => {
                     color: COLORS.darkGray,
                     marginBottom: '12px'
                   }}>
-                    Subject
+                    주제
                   </label>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -1199,7 +1199,7 @@ const getQuestionPreview = (question) => {
                       color: COLORS.darkGray,
                       marginBottom: '12px'
                     }}>
-                      Question Filters
+                      질문 필터
                     </label>
 
                     {/* Filter Category Tabs */}
@@ -1298,7 +1298,7 @@ const getQuestionPreview = (question) => {
                     color: COLORS.darkGray,
                     marginBottom: '12px'
                   }}>
-                    Number of Questions
+                    질문 수
                   </label>
                   
                   <div style={{
@@ -1368,7 +1368,7 @@ const getQuestionPreview = (question) => {
                       transition: 'all 0.2s ease'
                     }}
                   >
-                    Next: Select Questions →
+                    다음: 질문 선택 →
                   </button>
                 </div>
               </>
@@ -1384,7 +1384,7 @@ const getQuestionPreview = (question) => {
                     color: '#111827',
                     margin: '0 0 8px 0'
                   }}>
-                    Select Questions
+                    질문 선택
                   </h2>
                   <span style={{
                     color: '#0369a1',
@@ -1621,7 +1621,7 @@ const getQuestionPreview = (question) => {
                       opacity: selectedQuestions.length === packData.totalQuestions ? 1 : 0.6
                     }}
                   >
-                    Next: Customize Design → ({selectedQuestions.length}/{packData.totalQuestions})
+                    다음: 맞춤형 디자인 → ({selectedQuestions.length}/{packData.totalQuestions})
                   </button>
                 </div>
               </>
@@ -2051,7 +2051,7 @@ const getQuestionPreview = (question) => {
                 color: '#111827',
                 margin: '0 0 8px 0'
               }}>
-                Your Question Packs
+                내 문제지
               </h3>
               <div style={{
                 fontSize: '13px',
@@ -2064,7 +2064,7 @@ const getQuestionPreview = (question) => {
                 color: '#9ca3af',
                 marginTop: '4px'
               }}>
-                by examrizzsearch.com
+                by plew.co.kr
               </div>
             </div>
 
