@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import './Hit.css'; // Your existing CSS
 import VideoPopup from './VideoPopup';
 import { createPortal } from 'react-dom';
+import { convertFirebaseStorageUrl } from '../utils/urlUtils';
 
 // PDF Popup Component with matching design
 const PDFPopup = ({ isOpen, pdfUrl, questionNumber, onClose }) => {
@@ -11,16 +12,7 @@ const PDFPopup = ({ isOpen, pdfUrl, questionNumber, onClose }) => {
   
   // Convert Firebase Storage URLs if needed
   const getProcessedPdfUrl = (url) => {
-    if (!url) return '';
-    if (url.startsWith('gs://')) {
-      const gsMatch = url.match(/^gs:\/\/([^/]+)\/(.+)$/);
-      if (gsMatch) {
-        const bucket = gsMatch[1];
-        const path = gsMatch[2];
-        return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media`;
-      }
-    }
-    return url;
+    return convertFirebaseStorageUrl(url);
   };
 
   const processedPdfUrl = getProcessedPdfUrl(pdfUrl);
@@ -343,16 +335,7 @@ const MathsHit = ({ hit }) => {
 
   // Convert Firebase Storage URLs
   const getImageUrl = (url) => {
-    if (!url) return '';
-    if (url.startsWith('gs://')) {
-      const gsMatch = url.match(/^gs:\/\/([^/]+)\/(.+)$/);
-      if (gsMatch) {
-        const bucket = gsMatch[1];
-        const path = gsMatch[2];
-        return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media`;
-      }
-    }
-    return url;
+    return convertFirebaseStorageUrl(url);
   };
 
   const processedImageUrl = getImageUrl(imageUrl);

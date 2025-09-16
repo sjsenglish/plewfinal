@@ -7,6 +7,7 @@ import { usePaywall } from '../hooks/usePaywall';
 import { checkVideoAccess, incrementVideoUsage } from '../services/videoUsageService';
 import VideoLimitModal from './VideoLimitModal';
 import { useQuizContext } from '../App';
+import { convertFirebaseStorageUrl, getQuestionImageUrl as getQuestionImageUrlFromUtils } from '../utils/urlUtils';
 import './QuizReview.css';
 
 // Color palette matching ProfilePage
@@ -24,32 +25,12 @@ const COLORS = {
 
 // Helper function to convert Firebase Storage URLs to direct URLs
 const getImageUrl = (url) => {
-  if (!url) {
-    console.log('getImageUrl: No URL provided');
-    return '';
-  }
-  
-  console.log('getImageUrl: Processing URL:', url);
-  
-  // If it's a Firebase Storage gs:// URL, convert it
-  if (url.startsWith('gs://')) {
-    const gsMatch = url.match(/^gs:\/\/([^/]+)\/(.+)$/);
-    if (gsMatch) {
-      const bucket = gsMatch[1];
-      const path = gsMatch[2];
-      const convertedUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media`;
-      console.log('getImageUrl: Converted gs:// URL to:', convertedUrl);
-      return convertedUrl;
-    }
-  }
-  
-  console.log('getImageUrl: Returning URL as-is:', url);
-  return url;
+  return convertFirebaseStorageUrl(url);
 };
 
-// EXACT MATCH to PackViewer image detection
+// EXACT MATCH to PackViewer image detection - now uses centralized utility
 const getQuestionImageUrl = (question) => {
-  return question?.image_url || question?.imageFile || question?.image_file || question?.imageUrl;
+  return getQuestionImageUrlFromUtils(question);
 };
 
 const getMathsImageUrl = (question) => {

@@ -6,6 +6,7 @@ import VideoLimitModal from './VideoLimitModal';
 import { checkVideoAccess, incrementVideoUsage } from '../services/videoUsageService';
 import { getAuth } from 'firebase/auth';
 import { usePaywall } from '../hooks/usePaywall';
+import { convertFirebaseStorageUrl } from '../utils/urlUtils';
 
 const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
   const [showAnswer, setShowAnswer] = useState(false);
@@ -65,20 +66,7 @@ const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
 
   // Convert Firebase Storage URLs to direct URLs if needed
   const getImageUrl = (url) => {
-    if (!url) return '';
-    
-    // If it's a Firebase Storage gs:// URL, convert it
-    if (url.startsWith('gs://')) {
-      // Extract bucket and path from gs://bucket/path format
-      const gsMatch = url.match(/^gs:\/\/([^/]+)\/(.+)$/);
-      if (gsMatch) {
-        const bucket = gsMatch[1];
-        const path = gsMatch[2];
-        return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media`;
-      }
-    }
-    
-    return url;
+    return convertFirebaseStorageUrl(url);
   };
 
   const processedImageUrl = getImageUrl(imageUrl);
