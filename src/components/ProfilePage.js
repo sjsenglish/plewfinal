@@ -607,7 +607,7 @@ export const ProfilePage = () => {
               color: activeTab === 'packs' ? 'white' : COLORS.gray
             }}
           >
-            My Question Packs ({userPacks.length})
+            내 문제지 ({userPacks.length})
           </button>
           <button
             onClick={() => setActiveTab('results')}
@@ -623,7 +623,7 @@ export const ProfilePage = () => {
               color: activeTab === 'results' ? 'white' : COLORS.gray
             }}
           >
-            Quiz Results ({quizAttempts.length})
+            퀴즈 결과 ({quizAttempts.length})
           </button>
         </div>
 
@@ -663,7 +663,7 @@ export const ProfilePage = () => {
                   cursor: 'pointer'
                 }}
               >
-                Create New Pack
+                문제지 제작
               </button>
             </div>
 

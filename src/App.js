@@ -138,20 +138,20 @@ if (!process.env.REACT_APP_OPENAI_API_KEY) {
   console.warn('⚠️ Missing OpenAI API key. Vocabulary features will have limited functionality.');
 }
 
-// Updated SUBJECTS - Korean-English, Vocabulary, and Community
+// Updated SUBJECTS - Vocabulary, Korean-English (middle), and Community
 const SUBJECTS = {
+  vocabulary: {
+    theme: 'vocabulary-theme',
+    bannerText: '시험에 나오는 단어들을 기출 문제로 검색하고 공부해 보세요',
+    displayName: '단어은행',
+    searchType: 'firebase'
+  },
   'korean-english': {
     index: 'korean-english-question-pairs',
     theme: 'korean-english-theme',
     bannerText: '다양한 내게 맞는 문제들을 찾아 리딩 레벨을 올려 가 보세요',
     displayName: '문제은행',
     searchType: 'algolia'
-  },
-  vocabulary: {
-    theme: 'vocabulary-theme',
-    bannerText: '시험에 나오는 단어들을 기출 문제로 검색하고 공부해 보세요',
-    displayName: '단어은행',
-    searchType: 'firebase'
   },
   community: {
     index: 'plewcommunity',
@@ -763,8 +763,8 @@ const buildAlgoliaFilters = (filters) => {
 };
 
 function App() {
-  // Start with TSA as default subject
-  const [currentSubject, setCurrentSubject] = useState('vocabulary');
+  // Start with Korean-English (Question Bank) as default subject
+  const [currentSubject, setCurrentSubject] = useState('korean-english');
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [bannerText, setBannerText] = useState('');
@@ -814,20 +814,20 @@ function App() {
 
   const subjectConfig = useMemo(() => {
     try {
-      const config = SUBJECTS && SUBJECTS[currentSubject] ? SUBJECTS[currentSubject] : SUBJECTS['vocabulary'];
+      const config = SUBJECTS && SUBJECTS[currentSubject] ? SUBJECTS[currentSubject] : SUBJECTS['korean-english'];
       return config || {
-        theme: 'vocabulary-theme',
+        theme: 'korean-english-theme',
         bannerText: 'welcome to PLEW',
         displayName: 'App',
-        searchType: 'firebase'
+        searchType: 'algolia'
       };
     } catch (error) {
       console.error('Error getting subject config:', error);
       return {
-        theme: 'vocabulary-theme',
+        theme: 'korean-english-theme',
         bannerText: 'welcome to PLEW',
         displayName: 'App',
-        searchType: 'firebase'
+        searchType: 'algolia'
       };
     }
   }, [currentSubject]);
@@ -1019,7 +1019,7 @@ function App() {
   }
 
   try {
-    const theme = (subjectConfig && subjectConfig.theme) ? subjectConfig.theme : 'vocabulary-theme';
+    const theme = (subjectConfig && subjectConfig.theme) ? subjectConfig.theme : 'korean-english-theme';
     
     return (
       <StripeProvider>
