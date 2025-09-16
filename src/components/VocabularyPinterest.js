@@ -393,7 +393,29 @@ const VocabularyPinterest = () => {
                 cursor: showQuiz ? 'not-allowed' : 'pointer'
               }}
             >
-              {showQuiz ? '🧠 Quiz Running...' : '🧠 Quiz This Subject'}
+              {showQuiz ? (
+                <>
+                  <img 
+                    src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftrophy.svg?alt=media&token=ac0b5d6a-9b79-4cb4-afd2-0fa07f70d443"
+                    alt="Trophy"
+                    width="20"
+                    height="20"
+                    style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}
+                  />
+                  테스트 진행 중...
+                </>
+              ) : (
+                <>
+                  <img 
+                    src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftrophy.svg?alt=media&token=ac0b5d6a-9b79-4cb4-afd2-0fa07f70d443"
+                    alt="Trophy"
+                    width="20"
+                    height="20"
+                    style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }}
+                  />
+                  어휘 문맥 테스트
+                </>
+              )}
             </button>
           )}
         </div>
