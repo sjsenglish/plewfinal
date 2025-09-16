@@ -133,10 +133,18 @@ const Navbar = ({ onSubjectChange }) => {
         <div className="navbar-left">
           <div className="navbar-logo">
             <Link to="/" className="navbar-brand-link">
-              <span className="navbar-brand-text">
-                옥스포드영어
+              <div className="navbar-brand-text">
+                <img 
+                  src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de"
+                  alt="PLEW"
+                  style={{
+                    height: '32px',
+                    width: 'auto',
+                    objectFit: 'contain'
+                  }}
+                />
                 <span className="navbar-beta-label">베타</span>
-              </span>
+              </div>
             </Link>
           </div>
         </div>
