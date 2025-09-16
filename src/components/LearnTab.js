@@ -405,6 +405,11 @@ const LearnTab = () => {
   const [currentQuizPack, setCurrentQuizPack] = useState(null);
   const [currentQuizQuestions, setCurrentQuizQuestions] = useState([]);
   
+  // Quiz completion states
+  const [showQuizCompletion, setShowQuizCompletion] = useState(false);
+  const [quizResults, setQuizResults] = useState(null);
+  const [showQuizReview, setShowQuizReview] = useState(false);
+  
   // Video modal states
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
@@ -648,16 +653,44 @@ const LearnTab = () => {
   };
 
   // Handle quiz completion
-  const handleQuizComplete = () => {
+  const handleQuizComplete = (results = null) => {
     setShowInteractiveQuiz(false);
-    setCurrentQuizPack(null);
-    setCurrentQuizQuestions([]);
+    
+    if (results) {
+      // Quiz was completed with results
+      setQuizResults(results);
+      setShowQuizCompletion(true);
+    } else {
+      // Quiz was closed/cancelled
+      setCurrentQuizPack(null);
+      setCurrentQuizQuestions([]);
+    }
   };
 
   // Handle video modal close
   const handleVideoClose = () => {
     setShowVideoModal(false);
     setCurrentVideo(null);
+  };
+
+  // Handle quiz completion screen actions
+  const handleQuizCompletionClose = () => {
+    setShowQuizCompletion(false);
+    setQuizResults(null);
+    setCurrentQuizPack(null);
+    setCurrentQuizQuestions([]);
+  };
+
+  const handleShowQuizReview = () => {
+    setShowQuizCompletion(false);
+    setShowQuizReview(true);
+  };
+
+  const handleQuizReviewClose = () => {
+    setShowQuizReview(false);
+    setQuizResults(null);
+    setCurrentQuizPack(null);
+    setCurrentQuizQuestions([]);
   };
 
   // Loading state
@@ -1126,6 +1159,286 @@ const LearnTab = () => {
                   </span>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quiz Completion Modal */}
+      {showQuizCompletion && quizResults && currentQuizPack && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999
+        }}>
+          <div style={{
+            backgroundColor: COLORS.white,
+            borderRadius: '20px',
+            padding: '40px',
+            maxWidth: '500px',
+            width: '90vw',
+            textAlign: 'center',
+            position: 'relative',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)'
+          }}>
+            {/* Close button */}
+            <button
+              onClick={handleQuizCompletionClose}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                background: 'none',
+                border: 'none',
+                fontSize: '24px',
+                cursor: 'pointer',
+                color: COLORS.gray,
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = COLORS.light;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+              }}
+            >
+              ✕
+            </button>
+
+            {/* Completion icon */}
+            <div style={{
+              fontSize: '64px',
+              marginBottom: '20px'
+            }}>
+              {quizResults.percentage >= 80 ? '🎉' : quizResults.percentage >= 60 ? '👍' : '💪'}
+            </div>
+
+            {/* Title */}
+            <h2 style={{
+              fontSize: '28px',
+              fontWeight: '700',
+              color: COLORS.darkGray,
+              margin: '0 0 16px 0'
+            }}>
+              Quiz Complete!
+            </h2>
+
+            {/* Pack name */}
+            <p style={{
+              fontSize: '16px',
+              color: COLORS.gray,
+              margin: '0 0 24px 0'
+            }}>
+              {safeRender(currentQuizPack.packName)}
+            </p>
+
+            {/* Score display */}
+            <div style={{
+              backgroundColor: quizResults.percentage >= 80 ? COLORS.success + '20' : 
+                             quizResults.percentage >= 60 ? COLORS.warning + '20' : COLORS.error + '20',
+              borderRadius: '16px',
+              padding: '24px',
+              marginBottom: '32px'
+            }}>
+              <div style={{
+                fontSize: '48px',
+                fontWeight: '700',
+                color: quizResults.percentage >= 80 ? COLORS.success : 
+                       quizResults.percentage >= 60 ? COLORS.warning : COLORS.error,
+                margin: '0 0 8px 0'
+              }}>
+                {String(quizResults.percentage)}%
+              </div>
+              <div style={{
+                fontSize: '18px',
+                color: COLORS.darkGray,
+                fontWeight: '600'
+              }}>
+                {String(quizResults.score)} / {String(quizResults.totalQuestions)} correct
+              </div>
+              {quizResults.timeElapsed && (
+                <div style={{
+                  fontSize: '14px',
+                  color: COLORS.gray,
+                  marginTop: '8px'
+                }}>
+                  Time: {Math.floor(quizResults.timeElapsed / 60)}:{String(quizResults.timeElapsed % 60).padStart(2, '0')}
+                </div>
+              )}
+            </div>
+
+            {/* Performance message */}
+            <p style={{
+              fontSize: '16px',
+              color: COLORS.gray,
+              margin: '0 0 32px 0',
+              lineHeight: '1.5'
+            }}>
+              {quizResults.percentage >= 80 ? 
+                'Excellent work! You have a strong understanding of this material.' :
+                quizResults.percentage >= 60 ?
+                'Good job! You\'re making progress. Review the questions you missed to improve further.' :
+                'Keep practicing! Review the material and try again to improve your understanding.'
+              }
+            </p>
+
+            {/* Action buttons */}
+            <div style={{
+              display: 'flex',
+              gap: '12px',
+              justifyContent: 'center'
+            }}>
+              <button
+                onClick={handleShowQuizReview}
+                style={{
+                  backgroundColor: COLORS.primary,
+                  color: COLORS.white,
+                  border: 'none',
+                  padding: '12px 24px',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#00b4b8';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = COLORS.primary;
+                }}
+              >
+                📝 Review Answers
+              </button>
+              
+              <button
+                onClick={handleQuizCompletionClose}
+                style={{
+                  backgroundColor: COLORS.light,
+                  color: COLORS.darkGray,
+                  border: `1px solid ${COLORS.border}`,
+                  padding: '12px 24px',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = COLORS.border;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = COLORS.light;
+                }}
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quiz Review Modal */}
+      {showQuizReview && quizResults && currentQuizQuestions && currentQuizPack && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '20px'
+        }}>
+          <div style={{
+            backgroundColor: COLORS.white,
+            borderRadius: '16px',
+            padding: '24px',
+            maxWidth: '900px',
+            width: '100%',
+            maxHeight: '90vh',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            {/* Review header */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '24px',
+              paddingBottom: '16px',
+              borderBottom: `2px solid ${COLORS.border}`
+            }}>
+              <div>
+                <h2 style={{
+                  fontSize: '24px',
+                  fontWeight: '600',
+                  color: COLORS.darkGray,
+                  margin: '0 0 4px 0'
+                }}>
+                  Quiz Review
+                </h2>
+                <p style={{
+                  fontSize: '14px',
+                  color: COLORS.gray,
+                  margin: '0'
+                }}>
+                  {safeRender(currentQuizPack.packName)} • {String(quizResults.score)}/{String(quizResults.totalQuestions)} correct ({String(quizResults.percentage)}%)
+                </p>
+              </div>
+              
+              <button
+                onClick={handleQuizReviewClose}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  color: COLORS.gray,
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = COLORS.light;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = 'transparent';
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Use InteractiveQuiz in review mode */}
+            <div style={{ flex: 1, overflow: 'hidden' }}>
+              <InteractiveQuiz
+                packData={currentQuizPack}
+                questions={currentQuizQuestions}
+                onClose={handleQuizReviewClose}
+                onComplete={handleQuizReviewClose}
+                reviewMode={true}
+                existingAttempt={quizResults}
+              />
             </div>
           </div>
         </div>
