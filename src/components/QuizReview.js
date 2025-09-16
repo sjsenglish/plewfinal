@@ -276,7 +276,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                             {/* Then show the actual QUESTION */}
                             {question?.question && (
                               <div className="question-main">
-                                <strong>Question:</strong> {question.question}
+                                <strong>Question:</strong> {String(question.question || '')}
                               </div>
                             )}
                             
@@ -398,7 +398,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                   color: '#111827',
                                   fontFamily: 'system-ui, -apple-system, sans-serif'
                                 }}>
-                                  {question.questionText || question.korean}
+                                  {String(question.questionText || question.korean || '')}
                                 </div>
                               </div>
                             )}
@@ -408,7 +408,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                               <div className="question-instruction">
                                 <strong>Question:</strong>
                                 <div style={{ marginTop: '8px', lineHeight: '1.6' }}>
-                                  {question.actualQuestion || question.english || question.question}
+                                  {String(question.actualQuestion || question.english || question.question || '')}
                                 </div>
                               </div>
                             )}

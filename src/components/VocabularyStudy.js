@@ -415,9 +415,9 @@ const WordCard = ({ word, isSelected, onToggleSelect, onRemove, onQuiz }) => {
       {/* Card Header */}
       <div className="card-header">
         <div className="word-title">
-          <h3 className="word-text">{word.word}</h3>
+          <h3 className="word-text">{String(word.word || '')}</h3>
           {word.pronunciation && (
-            <span className="pronunciation">/{word.pronunciation}/</span>
+            <span className="pronunciation">/{String(word.pronunciation || '')}/</span>
           )}
         </div>
         <button onClick={onRemove} className="remove-btn" title="Remove word">
@@ -436,15 +436,15 @@ const WordCard = ({ word, isSelected, onToggleSelect, onRemove, onQuiz }) => {
       {/* Subject Area Tags */}
       {word.subjectArea && (
         <div className="subject-tags">
-          <span className="subject-tag">{word.subjectArea}</span>
+          <span className="subject-tag">{String(word.subjectArea || '')}</span>
         </div>
       )}
 
       {/* Definition */}
       <div className="definition-section">
-        <p className="definition-en">{word.definition}</p>
+        <p className="definition-en">{String(word.definition || '')}</p>
         {word.koreanTranslation && (
-          <p className="definition-ko">{word.koreanTranslation}</p>
+          <p className="definition-ko">{String(word.koreanTranslation || '')}</p>
         )}
       </div>
 

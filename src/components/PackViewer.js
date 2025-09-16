@@ -635,7 +635,7 @@ const PackViewer = () => {
                             color: COLORS.darkGray,
                             lineHeight: '1.6'
                           }}>
-                            {question.question}
+                            {String(question.question || '')}
                           </div>
                         )}
 
@@ -962,7 +962,7 @@ const PackViewer = () => {
                               fontFamily: 'system-ui, -apple-system, sans-serif',
                               lineHeight: '1.4'
                             }}>
-                              {question.questionText || question.korean}
+                              {String(question.questionText || question.korean || '')}
                             </div>
                           </div>
                         )}
@@ -982,7 +982,7 @@ const PackViewer = () => {
                             <div style={{ marginBottom: '8px', fontWeight: '500' }}>
                               Question:
                             </div>
-                            {question.actualQuestion || question.question}
+                            {String(question.actualQuestion || question.question || '')}
                           </div>
                         )}
 

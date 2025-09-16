@@ -786,7 +786,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 border: '1px solid #e2e8f0',
                                 textAlign: 'left'
                               }}>
-                                {koreanText}
+                                {String(koreanText || '')}
                               </div>
                             </div>
                           ) : null;
@@ -815,7 +815,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 lineHeight: '1.6',
                                 margin: '0'
                               }}>
-                                {englishText}
+                                {String(englishText || '')}
                               </p>
                             </div>
                           ) : null;
@@ -2120,7 +2120,7 @@ if (!isDemoMode && user) {
                     fontFamily: 'system-ui, -apple-system, sans-serif',
                     lineHeight: '1.4'
                   }}>
-                    {koreanText}
+                    {String(koreanText || '')}
                   </div>
                 </div>
               ) : null;
@@ -2154,7 +2154,7 @@ if (!isDemoMode && user) {
                     borderRadius: '8px',
                     border: '1px solid #e2e8f0'
                   }}>
-                    {englishText}
+                    {String(englishText || '')}
                   </div>
                 </div>
               ) : null;

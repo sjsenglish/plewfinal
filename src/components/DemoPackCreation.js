@@ -57,7 +57,7 @@ const DemoPackCreation = ({ onComplete, questions, packData }) => {
                   </div>
                   
                   <div className="question-preview">
-                    <strong>Question:</strong> {getQuestionPreview(question).substring(0, 100)}...
+                    <strong>Question:</strong> {String(getQuestionPreview(question) || '').substring(0, 100)}...
                   </div>
                   
                   <div className="question-tags">

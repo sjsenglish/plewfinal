@@ -338,18 +338,18 @@ const VocabularyQuiz = ({ words, onClose, onComplete }) => {
                       </span>
                     </div>
                     <div className="answer-details">
-                      <div className="question-text">{answer.questionText}</div>
+                      <div className="question-text">{String(answer.questionText || '')}</div>
                       <div className="answer-comparison">
                         <div className="answer-row">
                           <span className="label">Your answer:</span>
                           <span className={`value ${answer.isCorrect ? 'correct' : 'incorrect'}`}>
-                            {answer.selectedAnswer || 'No answer'}
+                            {String(answer.selectedAnswer || 'No answer')}
                           </span>
                         </div>
                         {!answer.isCorrect && (
                           <div className="answer-row">
                             <span className="label">Correct answer:</span>
-                            <span className="value correct">{answer.correctAnswer}</span>
+                            <span className="value correct">{String(answer.correctAnswer || '')}</span>
                           </div>
                         )}
                       </div>

@@ -199,7 +199,7 @@ const PDFPreview = ({ packData, selectedQuestions }) => {
                 marginBottom: '8px',
                 fontFamily: 'Malgun Gothic, Noto Sans KR, serif'
               }}>
-                <strong>Korean:</strong> {question.questionText || question.korean}
+                <strong>Korean:</strong> {String(question.questionText || question.korean || '')}
               </div>
             )}
 
@@ -211,7 +211,7 @@ const PDFPreview = ({ packData, selectedQuestions }) => {
                 color: '#111827',
                 marginBottom: '8px'
               }}>
-                <strong>English:</strong> {question.actualQuestion || question.english}
+                <strong>English:</strong> {String(question.actualQuestion || question.english || '')}
               </div>
             )}
 
@@ -520,10 +520,23 @@ const colorOptions = [
 
 // Get question preview for Korean-English
 const getQuestionPreview = (question) => {
-  const korean = question.questionText || question.korean || question.korean_text || '';
-  const english = question.actualQuestion || question.english || question.english_text || '';
+  let korean = question.questionText || question.korean || question.korean_text || '';
+  let english = question.actualQuestion || question.english || question.english_text || '';
   const questionType = question.question_type || '';
   const subjectArea = question.subject_area || '';
+  
+  // Handle object values
+  if (typeof korean === 'object' && korean !== null) {
+    korean = korean.sentence || korean.text || korean.value || '';
+  }
+  if (typeof english === 'object' && english !== null) {
+    english = english.sentence || english.text || english.value || '';
+  }
+  
+  // Convert to strings
+  korean = String(korean || '');
+  english = String(english || '');
+  const questionStr = String(question.question || '');
   
   // Create a meaningful preview
   if (korean && english) {
@@ -532,8 +545,8 @@ const getQuestionPreview = (question) => {
     return `Korean: ${korean.substring(0, 40)}...`;
   } else if (english) {
     return `English: ${english.substring(0, 40)}...`;
-  } else if (question.question) {
-    return question.question.substring(0, 50) + (question.question.length > 50 ? '...' : '');
+  } else if (questionStr) {
+    return questionStr.substring(0, 50) + (questionStr.length > 50 ? '...' : '');
   } else {
     return `${subjectArea || 'Korean-English'} ${questionType || 'Question'}`;
   }

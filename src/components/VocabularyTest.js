@@ -335,9 +335,9 @@ const VocabularyTest = ({ words, testType, onComplete, onClose }) => {
             <h3 className="question-title">{currentQuestion.question}</h3>
             {currentQuestion.word && (
               <div className="question-word">
-                <span className="word-highlight">{currentQuestion.word}</span>
+                <span className="word-highlight">{String(currentQuestion.word || '')}</span>
                 {currentQuestion.definition && (
-                  <span className="word-definition">({currentQuestion.definition})</span>
+                  <span className="word-definition">({String(currentQuestion.definition || '')})</span>
                 )}
               </div>
             )}

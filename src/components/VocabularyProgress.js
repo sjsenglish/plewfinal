@@ -251,7 +251,7 @@ const VocabularyProgress = ({ userProgress, onClose }) => {
             {mockProgressData.weakWords.map((wordData, index) => (
               <div key={index} className="word-item needs-practice">
                 <div className="word-info">
-                  <div className="word-name">{wordData.word}</div>
+                  <div className="word-name">{String(wordData.word || '')}</div>
                   <div className="word-stats">
                     <span>Success rate: {wordData.successRate}%</span>
                     <span>{wordData.attempts} attempts</span>
@@ -282,7 +282,7 @@ const VocabularyProgress = ({ userProgress, onClose }) => {
             {mockProgressData.strongWords.map((wordData, index) => (
               <div key={index} className="word-item mastered">
                 <div className="word-info">
-                  <div className="word-name">{wordData.word}</div>
+                  <div className="word-name">{String(wordData.word || '')}</div>
                   <div className="word-stats">
                     <span>Success rate: {wordData.successRate}%</span>
                     <span>{wordData.attempts} attempts</span>

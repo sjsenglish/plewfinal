@@ -152,9 +152,9 @@ const KoreanEnglishHit = ({ hit }) => {
             <div className="examples-list">
               {examples.map((example, index) => (
                 <div key={index} className="example-item">
-                  {example.korean && <p className="example-korean">{example.korean}</p>}
-                  {example.english && <p className="example-english">{example.english}</p>}
-                  {typeof example === 'string' && <p>{example}</p>}
+                  {example.korean && <p className="example-korean">{String(example.korean)}</p>}
+                  {example.english && <p className="example-english">{String(example.english)}</p>}
+                  {typeof example === 'string' && <p>{String(example)}</p>}
                 </div>
               ))}
             </div>
