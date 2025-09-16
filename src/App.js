@@ -474,9 +474,16 @@ const buildAlgoliaFilters = (filters) => {
 
           <div className="brand-section">
             <div className="brand-title-container">
-              <h1 className="modern-brand-title">
-                옥스포드 영어 - PLEW
-              </h1>
+              <img 
+                src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de"
+                alt="PLEW"
+                className="modern-brand-title"
+                style={{
+                  height: '80px',
+                  width: 'auto',
+                  objectFit: 'contain'
+                }}
+              />
             </div>
             <div className="brand-glow"></div>
           </div>
