@@ -128,6 +128,8 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .quiz-setup,
@@ -142,6 +144,7 @@
   margin-bottom: 24px;
   padding-bottom: 16px;
   border-bottom: 1px solid #e2e8f0;
+  width: 100%;
 }
 
 .question-type {
@@ -163,14 +166,18 @@
   color: #1a202c;
   line-height: 1.6;
   margin: 0;
+  width: 100%;
+  text-align: left;
 }
 
 /* Answer Options */
 .answers-section {
   flex: 1;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  align-content: start;
+  width: 100%;
+  align-items: stretch;
 }
 
 .answer-option {
@@ -184,6 +191,8 @@
   transition: all 0.2s;
   gap: 12px;
   min-height: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .answer-option:hover:not(:disabled) {
@@ -219,6 +228,7 @@
   line-height: 1.6;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  text-align: left;
 }
 
 /* Selected States */
@@ -251,6 +261,8 @@
   background: #f7fafc;
   border-radius: 8px;
   border-left: 4px solid #4299e1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .result-message {
