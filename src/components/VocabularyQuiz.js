@@ -129,12 +129,7 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
 
   // Load words on component mount or use provided words
   useEffect(() => {
-    console.log('VocabularyQuiz useEffect - propWords:', propWords?.length, 'words available');
-    
     if (propWords && propWords.length > 0) {
-      console.log('Using words from parent component:', propWords.length, 'words');
-      console.log('Sample word from parent:', propWords[0]);
-      
       // Use words provided from parent component
       const formattedWords = propWords.map(word => ({
         id: word.id || word.word,
@@ -146,19 +141,14 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
         frequency: word.frequency || 0
       }));
       
-      console.log('Formatted words for quiz:', formattedWords.length);
-      console.log('Sample formatted word:', formattedWords[0]);
-      
       setWords(formattedWords);
-      setLoading(false); // Make sure loading is false
+      setLoading(false);
       
       // Auto-start quiz with provided words - use formattedWords directly
       setTimeout(() => {
-        console.log('Auto-starting quiz with', formattedWords.length, 'words');
         generateQuizWithWords(formattedWords, Math.min(formattedWords.length, 10));
       }, 100);
     } else {
-      console.log('No propWords provided, loading from Firebase');
       // Only load from Firebase if no words are provided
       if (!propWords) {
         loadVocabularyWords();
@@ -189,10 +179,7 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
 
   // Generate quiz with specific words array (used when words are passed from parent)
   const generateQuizWithWords = (wordsArray, questionCount = 10) => {
-    console.log('generateQuizWithWords called with:', wordsArray.length, 'words');
-    
     if (wordsArray.length < 4) {
-      console.log('Not enough words for quiz. Need at least 4, have:', wordsArray.length);
       alert(`Not enough words loaded. Need at least 4 words, only ${wordsArray.length} available.`);
       return;
     }
@@ -205,8 +192,6 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
       word.contexts.some(context => context && context.trim() && context.length > 10)
     );
     
-    console.log(`Found ${wordsWithContexts.length} words with valid contexts out of ${wordsArray.length} total words`);
-    
     let selectedWords;
     if (wordsWithContexts.length >= 4) {
       // Use words with contexts
@@ -214,11 +199,8 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
       selectedWords = shuffledWords.slice(0, Math.min(questionCount, shuffledWords.length));
     } else {
       // Use all available words, fallback will handle missing contexts
-      console.log('Not enough words with contexts, using all available words');
       selectedWords = wordsArray.sort(() => Math.random() - 0.5).slice(0, Math.min(questionCount, wordsArray.length));
     }
-    
-    console.log('Selected words for quiz:', selectedWords.map(w => w.word));
     
     setQuizWords(selectedWords);
     setCurrentQuestion(0);
@@ -233,9 +215,6 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
 
   // Generate random quiz questions (used when loading from Firebase)
   const generateQuiz = (questionCount = 10) => {
-    console.log('generateQuiz called with questionCount:', questionCount);
-    console.log('Current words state:', words.length, 'available words');
-    
     generateQuizWithWords(words, questionCount);
   };
 
@@ -243,8 +222,6 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
   const generateQuestionOptions = (currentWord, allWords) => {
     let options = [];
     let correctAnswer = '';
-
-    console.log('Generating question for word:', currentWord);
 
     // Context-based question only
     if (currentWord.contexts && Array.isArray(currentWord.contexts) && currentWord.contexts.length > 0) {
@@ -265,17 +242,11 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
         
         // Store the context for display
         currentWord.questionContext = safeRender(randomContext);
-        console.log('Generated context question with context:', randomContext);
-      } else {
-        console.log('No valid contexts found for word:', currentWord.word);
       }
-    } else {
-      console.log('Word has no contexts array:', currentWord.word);
     }
 
     // If we couldn't generate options, create a fallback
     if (options.length === 0) {
-      console.log('Creating fallback question for:', currentWord.word);
       correctAnswer = currentWord.word;
       
       // Create a generic context
@@ -293,7 +264,6 @@ const VocabularyQuiz = ({ words: propWords, onClose, onComplete }) => {
     // Shuffle options
     options = options.sort(() => Math.random() - 0.5);
     setCurrentOptions(options);
-    console.log('Final options:', options);
   };
 
   // Handle answer selection

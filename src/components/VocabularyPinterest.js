@@ -251,13 +251,27 @@ const VocabularyPinterest = () => {
 
   // Start quiz for subject area
   const startSubjectQuiz = () => {
-    if (words.length === 0) return;
+    console.log('Quiz button clicked! Words available:', words.length);
+    
+    if (words.length === 0) {
+      console.log('No words available for quiz');
+      return;
+    }
+    
+    // Prevent multiple quiz instances
+    if (showQuiz) {
+      console.log('Quiz already open, ignoring click');
+      return;
+    }
     
     // Get 10 random words from current subject
     const shuffled = [...words].sort(() => 0.5 - Math.random());
     const quizWords = shuffled.slice(0, 10);
+    
+    console.log('Setting quiz words:', quizWords.length);
     setQuizWords(quizWords);
     setShowQuiz(true);
+    console.log('Quiz modal should now be visible');
   };
 
 
@@ -362,8 +376,16 @@ const VocabularyPinterest = () => {
             </button>
           )}
           {words.length > 0 && (
-            <button onClick={startSubjectQuiz} className="action-btn quiz-btn">
-              🧠 Quiz This Subject
+            <button 
+              onClick={startSubjectQuiz} 
+              className="action-btn quiz-btn"
+              disabled={showQuiz}
+              style={{
+                opacity: showQuiz ? 0.6 : 1,
+                cursor: showQuiz ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {showQuiz ? '🧠 Quiz Running...' : '🧠 Quiz This Subject'}
             </button>
           )}
         </div>
