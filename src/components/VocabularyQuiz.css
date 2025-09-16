@@ -33,6 +33,12 @@
   max-width: 800px;
 }
 
+/* Ensure main quiz container uses full width */
+.quiz-container:not(.setup-container):not(.results-container) {
+  width: 100%;
+  max-width: 800px;
+}
+
 /* Header */
 .quiz-header {
   background: #2d3748;
@@ -130,6 +136,7 @@
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
+  min-height: 0; /* Allow flex child to shrink */
 }
 
 .quiz-setup,
@@ -145,6 +152,7 @@
   padding-bottom: 16px;
   border-bottom: 1px solid #e2e8f0;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .question-type {
