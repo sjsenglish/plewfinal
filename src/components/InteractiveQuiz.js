@@ -480,30 +480,38 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                       {/* TSA Question Content */}
                       {packData.subject === 'tsa' && (
                         <>
-                          {/* Passage */}
-                          {question?.question_content && (
-                            <div style={{ marginBottom: '16px' }}>
-                              <h4 style={{
-                                fontSize: '14px',
-                                fontWeight: '600',
-                                color: COLORS.darkGray,
-                                margin: '0 0 8px 0'
-                              }}>
-                                Passage
-                              </h4>
-                              <p style={{
-                                fontSize: '14px',
-                                color: '#374151',
-                                lineHeight: '1.6',
-                                margin: '0'
-                              }}>
-                                {question.question_content}
-                              </p>
-                            </div>
-                          )}
+                          {/* Check if question has an actual image (not default or empty) */}
+                          {(() => {
+                            const imageField = question?.image_url || question?.imageFile || question?.image_file || '';
+                            const hasActualImage = imageField && imageField !== '' && imageField !== 'default_image.jpg';
+                            const shouldShowQuestionContent = !hasActualImage;
+                            
+                            return (
+                              <>
+                                {/* Passage - only show if no actual image */}
+                                {shouldShowQuestionContent && question?.question_content && (
+                                  <div style={{ marginBottom: '16px' }}>
+                                    <h4 style={{
+                                      fontSize: '14px',
+                                      fontWeight: '600',
+                                      color: COLORS.darkGray,
+                                      margin: '0 0 8px 0'
+                                    }}>
+                                      Passage
+                                    </h4>
+                                    <p style={{
+                                      fontSize: '14px',
+                                      color: '#374151',
+                                      lineHeight: '1.6',
+                                      margin: '0'
+                                    }}>
+                                      {question.question_content}
+                                    </p>
+                                  </div>
+                                )}
 
-                          {/* Image */}
-                          {getQuestionImageUrl(question) && (
+                                {/* Image */}
+                                {getQuestionImageUrl(question) && (
                             <div style={{ marginBottom: '16px' }}>
                               <img
                                 src={getImageUrl(getQuestionImageUrl(question))}
@@ -531,8 +539,8 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                             </div>
                           )}
                           
-                          {/* Question */}
-                          {question?.question && (
+                          {/* Question - only show if no actual image */}
+                          {shouldShowQuestionContent && question?.question && (
                             <div style={{ marginBottom: '16px' }}>
                               <h4 style={{
                                 fontSize: '14px',
@@ -552,6 +560,9 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                               </p>
                             </div>
                           )}
+                              </>
+                            );
+                          })()}
                           
                           {/* Options */}
                           {question?.options && question.options.length > 0 && (

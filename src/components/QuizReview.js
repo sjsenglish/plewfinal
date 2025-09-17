@@ -228,45 +228,56 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                         {/* TSA Question Content */}
                         {packData?.subject === 'tsa' && (
                           <>
-                            {/* Show the PASSAGE first (question_content) */}
-                            {question?.question_content && (
-                              <div className="question-passage">
-                                <strong>Passage:</strong>
-                                <div style={{ marginTop: '8px', lineHeight: '1.6' }}>
-                                  {question.question_content}
-                                </div>
-                              </div>
-                            )}
+                            {/* Check if question has an actual image (not default or empty) */}
+                            {(() => {
+                              const imageField = question?.image_url || question?.imageFile || question?.image_file || '';
+                              const hasActualImage = imageField && imageField !== '' && imageField !== 'default_image.jpg';
+                              const shouldShowQuestionContent = !hasActualImage;
+                              
+                              return (
+                                <>
+                                  {/* Show the PASSAGE first (question_content) - only if no actual image */}
+                                  {shouldShowQuestionContent && question?.question_content && (
+                                    <div className="question-passage">
+                                      <strong>Passage:</strong>
+                                      <div style={{ marginTop: '8px', lineHeight: '1.6' }}>
+                                        {question.question_content}
+                                      </div>
+                                    </div>
+                                  )}
 
-                            {/* Image Display */}
-                            {(question?.image_url || question?.imageFile || question?.image_file) && (
-                              <div className="question-image">
-                                <img
-                                  src={getQuestionImageUrl(question)}
-                                  alt={`Question ${index + 1}`}
-                                  loading="lazy"
-                                  style={{ maxWidth: '100%', height: 'auto', margin: '10px 0', borderRadius: '8px' }}
-                                  onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.style.display = 'none';
-                                    const errorMsg = document.createElement('div');
-                                    errorMsg.className = 'image-error';
-                                    errorMsg.textContent = 'Image temporarily unavailable';
-                                    errorMsg.style.color = '#666';
-                                    errorMsg.style.padding = '10px';
-                                    errorMsg.style.fontStyle = 'italic';
-                                    e.target.parentNode.appendChild(errorMsg);
-                                  }}
-                                />
-                              </div>
-                            )}
-                            
-                            {/* Then show the actual QUESTION */}
-                            {question?.question && (
-                              <div className="question-main">
-                                <strong>Question:</strong> {String(question.question || '')}
-                              </div>
-                            )}
+                                  {/* Image Display */}
+                                  {imageField && imageField !== 'default_image.jpg' && (
+                                    <div className="question-image">
+                                      <img
+                                        src={getQuestionImageUrl(question)}
+                                        alt={`Question ${index + 1}`}
+                                        loading="lazy"
+                                        style={{ maxWidth: '100%', height: 'auto', margin: '10px 0', borderRadius: '8px' }}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.style.display = 'none';
+                                          const errorMsg = document.createElement('div');
+                                          errorMsg.className = 'image-error';
+                                          errorMsg.textContent = 'Image temporarily unavailable';
+                                          errorMsg.style.color = '#666';
+                                          errorMsg.style.padding = '10px';
+                                          errorMsg.style.fontStyle = 'italic';
+                                          e.target.parentNode.appendChild(errorMsg);
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                  
+                                  {/* Then show the actual QUESTION - only if no actual image */}
+                                  {shouldShowQuestionContent && question?.question && (
+                                    <div className="question-main">
+                                      <strong>Question:</strong> {String(question.question || '')}
+                                    </div>
+                                  )}
+                                </>
+                              );
+                            })()}
                             
                             {/* Show answer options */}
                             {question?.options && question.options.length > 0 && (

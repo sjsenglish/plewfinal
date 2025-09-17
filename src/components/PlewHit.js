@@ -74,6 +74,10 @@ const PlewHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
 
   // Generate image URL or use placeholder - convert Firebase Storage URLs
   const imageUrl = imageFile && imageFile !== 'default_image.jpg' ? convertFirebaseStorageUrl(imageFile) : null;
+  
+  // Hide question text if there's an actual image (not default or empty)
+  const hasActualImage = imageFile && imageFile !== '' && imageFile !== 'default_image.jpg';
+  const shouldShowQuestionText = !hasActualImage && questionText;
 
   return (
     <div className="plew-hit">
@@ -90,8 +94,8 @@ const PlewHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
       </div>
 
       <div className="plew-hit-content">
-        {/* Question text */}
-        {questionText && (
+        {/* Question text - only show if no actual image */}
+        {shouldShowQuestionText && (
           <div className="plew-hit-passage">
             <p>{questionText}</p>
           </div>

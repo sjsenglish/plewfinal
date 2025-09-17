@@ -273,6 +273,10 @@ const MathsHit = ({ hit }) => {
   const rawImageUrl = hit.imageUrl || hit.imageFile || hit.image_url || hit.image_file || '';
   const imageUrl = convertFirebaseStorageUrl(rawImageUrl);
   const pdfAnswerUrl = hit.markscheme_url || ''; // PDF URL stored in markscheme_url field
+  
+  // Hide question text if there's an actual image (not default or empty)
+  const hasActualImage = rawImageUrl && rawImageUrl !== '' && rawImageUrl !== 'default_image.jpg';
+  const shouldShowQuestionText = !hasActualImage && questionText;
 
   // Get video URLs for each part - more robust detection
   const getVideoUrlsForParts = () => {
@@ -434,7 +438,7 @@ const MathsHit = ({ hit }) => {
             <div className="placeholder-icon">📋</div>
             <div className="placeholder-text">Question {questionNumber}</div>
             <div className="placeholder-subtext">Image not available</div>
-            {questionText && (
+            {shouldShowQuestionText && (
               <div className="fallback-question-text">
                 {questionText.length > 200 ? questionText.substring(0, 200) + '...' : questionText}
               </div>

@@ -10,7 +10,7 @@
   margin-bottom: 2rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease; /* only transition box-shadow, not transform */
   position: relative;
   overflow: hidden;
   max-width: 900px;
@@ -43,12 +43,12 @@
   background: linear-gradient(90deg, #3f72af, #2d4059);
 }
 
-/* Hover effects */
+/* Hover effects - removed transform to prevent pop-out */
 .tsa-hit:hover,
 .plew-hit:hover,
 .maths-hit:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  /* transform removed - no pop-out effect */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 /* Modern Header Section */

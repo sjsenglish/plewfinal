@@ -10,7 +10,7 @@
   margin-bottom: 2rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease; /* only transition box-shadow, not transform */
   position: relative;
   overflow: hidden;
   max-width: 900px;
@@ -43,12 +43,12 @@
   background: linear-gradient(90deg, #3f72af, #2d4059);
 }
 
-/* Hover effects */
+/* Hover effects - removed transform to prevent pop-out */
 .tsa-hit:hover,
 .plew-hit:hover,
 .maths-hit:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  /* transform removed - no pop-out effect */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 /* Modern Header Section */
@@ -229,12 +229,12 @@
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  transition: transform 0.3s ease;
+  /* transition removed - no scale animation */
 }
 
 .tsa-hit-image img:hover,
 .plew-hit-image img:hover {
-  transform: scale(1.02);
+  /* transform removed - no scale effect */
 }
 
 /* Options styling */
@@ -258,7 +258,7 @@
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   border-radius: 12px;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  transition: background 0.3s ease; /* only transition background, not transform */
   font-weight: 500;
   color: #4a5568;
   position: relative;
@@ -268,7 +268,7 @@
 .tsa-hit-options li:hover,
 .plew-hit-options li:hover {
   background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
-  transform: translateX(4px);
+  /* transform removed - no slide effect */
 }
 
 .tsa-hit-options li.correct-option,
@@ -313,7 +313,7 @@
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease; /* only transition box-shadow, not transform */
   text-decoration: none;
   border: none;
   position: relative;
@@ -357,8 +357,8 @@
 .plew-hit-button:hover,
 .video-button:hover,
 .answer-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  /* transform removed - no pop-out effect */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
 }
 
 /* Add icons to buttons */
