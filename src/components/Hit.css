@@ -229,12 +229,12 @@
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  transition: transform 0.3s ease;
+  /* transition removed - no transform animation */
 }
 
 .tsa-hit-image img:hover,
 .plew-hit-image img:hover {
-  transform: scale(1.02);
+  /* transform removed - no scale effect */
 }
 
 /* Options styling */
@@ -258,7 +258,7 @@
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   border-radius: 12px;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  transition: background 0.3s ease; /* only background transition */
   font-weight: 500;
   color: #4a5568;
   position: relative;
@@ -313,7 +313,7 @@
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease; /* only box-shadow transition */
   text-decoration: none;
   border: none;
   position: relative;
@@ -411,6 +411,16 @@
   color: #155724;
   font-weight: 600;
   line-height: 1.5;
+  font-size: 1.3rem; /* Increased from default */
+}
+
+/* Answer highlight specific styling */
+.answer-highlight {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #155724;
+  display: inline-block;
+  padding: 0.25rem 0;
 }
 
 /* Maths-specific styles */
@@ -576,7 +586,7 @@
   border-radius: 12px;
   padding: 1.5rem;
   border: 2px solid #e9ecef;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease; /* no transform transition */
 }
 
 .primary-question:hover {
@@ -589,14 +599,14 @@
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  /* transition removed - no transform animation */
   cursor: pointer;
   background: white;
   padding: 1rem;
 }
 
 .question-image-primary:hover {
-  transform: scale(1.02);
+  /* transform removed - no scale effect */
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
@@ -699,7 +709,7 @@
   margin: 1.5rem 0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid #e9ecef;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease; /* no transform transition */
   position: relative;
   overflow: hidden;
 }
@@ -835,7 +845,7 @@
   border-radius: 25px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease; /* no transform transition */
   font-size: 0.9rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   min-width: 180px; /* Ensure consistent width */
@@ -913,6 +923,7 @@
   background: white;
   border-radius: 8px;
   border-left: 4px solid #28a745;
+  font-size: 1.3rem; /* Increased answer font size */
 }
 
 .answer-label, .explanation-label {
@@ -960,7 +971,7 @@
   font-size: 0.8rem;
   font-weight: 500;
   box-shadow: 0 2px 6px rgba(108, 117, 125, 0.3);
-  transition: transform 0.2s ease;
+  /* transition removed - no transform animation */
 }
 
 .topic-tag:hover {
