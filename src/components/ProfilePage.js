@@ -14,11 +14,13 @@ const searchClient = algoliasearch(
   process.env.REACT_APP_ALGOLIA_SEARCH_KEY
 );
 
-// Color palette matching QuestionPackPage
+// Color palette matching PremiumDashboard purple theme
 const COLORS = {
   lightPurple: '#ccccff',
   teal: '#00ced1', 
   lightTeal: '#d8f0ed',
+  purple: '#5c4ba5',
+  darkPurple: '#221468',
   white: '#ffffff',
   gray: '#6b7280',
   darkGray: '#374151'
@@ -446,7 +448,7 @@ export const ProfilePage = () => {
     return (
       <div style={{
         minHeight: '100vh',
-        background: `linear-gradient(135deg, ${COLORS.lightTeal} 0%, ${COLORS.lightPurple} 100%)`,
+        background: `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`,
         padding: '0'
       }}>
         {/* Main Content */}
@@ -477,7 +479,7 @@ export const ProfilePage = () => {
               Please log in to view your profile.
             </p>
             <a href="/login" style={{
-              backgroundColor: COLORS.teal,
+              backgroundColor: COLORS.purple,
               color: 'white',
               padding: '12px 24px',
               borderRadius: '8px',
@@ -496,7 +498,7 @@ export const ProfilePage = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: `linear-gradient(135deg, ${COLORS.lightTeal} 0%, ${COLORS.lightPurple} 100%)`,
+      background: `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`,
       padding: '0'
     }}>
       {/* Review Quiz Modal */}
@@ -603,7 +605,7 @@ export const ProfilePage = () => {
               fontWeight: '500',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
-              backgroundColor: activeTab === 'packs' ? COLORS.teal : 'rgba(255, 255, 255, 0.7)',
+              backgroundColor: activeTab === 'packs' ? COLORS.purple : 'rgba(255, 255, 255, 0.7)',
               color: activeTab === 'packs' ? 'white' : COLORS.gray
             }}
           >
@@ -619,7 +621,7 @@ export const ProfilePage = () => {
               fontWeight: '500',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
-              backgroundColor: activeTab === 'results' ? COLORS.teal : 'rgba(255, 255, 255, 0.7)',
+              backgroundColor: activeTab === 'results' ? COLORS.purple : 'rgba(255, 255, 255, 0.7)',
               color: activeTab === 'results' ? 'white' : COLORS.gray
             }}
           >
@@ -653,7 +655,7 @@ export const ProfilePage = () => {
               <button
                 onClick={() => navigate('/question-pack')}
                 style={{
-                  backgroundColor: COLORS.teal,
+                  backgroundColor: COLORS.purple,
                   color: 'white',
                   padding: '8px 16px',
                   borderRadius: '8px',
@@ -680,7 +682,7 @@ export const ProfilePage = () => {
                   width: '32px',
                   height: '32px',
                   border: '3px solid #e5e7eb',
-                  borderTop: `3px solid ${COLORS.teal}`,
+                  borderTop: `3px solid ${COLORS.purple}`,
                   borderRadius: '50%',
                   animation: 'spin 1s linear infinite',
                   marginBottom: '16px'
@@ -723,7 +725,7 @@ export const ProfilePage = () => {
                 <button
                   onClick={() => navigate('/question-pack')}
                   style={{
-                    backgroundColor: COLORS.teal,
+                    backgroundColor: COLORS.purple,
                     color: 'white',
                     padding: '12px 24px',
                     borderRadius: '8px',
@@ -838,7 +840,7 @@ export const ProfilePage = () => {
                         <button
                           onClick={() => handlePractice(pack)}
                           style={{
-                            backgroundColor: COLORS.teal,
+                            backgroundColor: COLORS.purple,
                             color: 'white',
                             border: 'none',
                             padding: '6px 12px',
@@ -908,7 +910,7 @@ export const ProfilePage = () => {
                   width: '32px',
                   height: '32px',
                   border: '3px solid #e5e7eb',
-                  borderTop: `3px solid ${COLORS.teal}`,
+                  borderTop: `3px solid ${COLORS.purple}`,
                   borderRadius: '50%',
                   animation: 'spin 1s linear infinite',
                   marginBottom: '16px'
@@ -948,7 +950,7 @@ export const ProfilePage = () => {
                 <button
                   onClick={() => setActiveTab('packs')}
                   style={{
-                    backgroundColor: COLORS.teal,
+                    backgroundColor: COLORS.purple,
                     color: 'white',
                     padding: '12px 24px',
                     borderRadius: '8px',
@@ -976,7 +978,7 @@ export const ProfilePage = () => {
                     border: '1px solid #e2e8f0'
                   }}>
                     <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: '24px', fontWeight: '600', color: COLORS.teal }}>
+                      <div style={{ fontSize: '24px', fontWeight: '600', color: COLORS.purple }}>
                         {userStats.totalAttempts}
                       </div>
                       <div style={{ fontSize: '13px', color: COLORS.gray }}>Total Attempts</div>
@@ -1062,7 +1064,7 @@ export const ProfilePage = () => {
                         <button
                           onClick={() => handleReviewQuiz(attempt)}
                           style={{
-                            backgroundColor: COLORS.teal,
+                            backgroundColor: COLORS.purple,
                             color: 'white',
                             border: 'none',
                             padding: '6px 12px',
