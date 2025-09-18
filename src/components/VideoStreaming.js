@@ -223,9 +223,6 @@ const VideoStreaming = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="video-info">
-                    <h3 className="video-title">{video.title}</h3>
-                  </div>
                 </div>
               ))}
             </div>
