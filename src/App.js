@@ -142,23 +142,26 @@ if (!process.env.REACT_APP_OPENAI_API_KEY) {
 const SUBJECTS = {
   vocabulary: {
     theme: 'vocabulary-theme',
-    bannerText: '시험에 나오는 단어들을 기출 문제로 검색하고 공부해 보세요',
+    bannerText: '기출 문제로 검색하고 의미와 사용법과 빈도 확인하는 단어 공부법입니다',
     displayName: '단어은행',
-    searchType: 'firebase'
+    searchType: 'firebase',
+    logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de'
   },
   'korean-english': {
     index: 'korean-english-question-pairs',
     theme: 'korean-english-theme',
-    bannerText: '다양한 내게 맞는 문제들을 찾아 리딩 레벨을 올려 가 보세요',
+    bannerText: '옥스포드 영어 팀에서 다양한 오리지널 문제들과 쌍둥이 문제들을 계속 업데이트 합니다',
     displayName: '문제은행',
-    searchType: 'algolia'
+    searchType: 'algolia',
+    logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de'
   },
   community: {
     index: 'plewcommunity',
     theme: 'community-theme',
     bannerText: '학생들이 질의하고 응답 받을 수 있는 소통의 공간입니다',
     displayName: '커뮤니티',
-    searchType: 'pinecone'
+    searchType: 'pinecone',
+    logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logos-toogle2.svg?alt=media&token=a97ec472-1fa3-4b09-b8c4-aff39193b5fa'
   }
 };
 
@@ -475,7 +478,7 @@ const buildAlgoliaFilters = (filters) => {
           <div className="brand-section">
             <div className="brand-title-container">
               <img 
-                src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de"
+                src={subjectConfig?.logoUrl || "https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de"}
                 alt="PLEW"
                 className="modern-brand-title"
                 style={{
