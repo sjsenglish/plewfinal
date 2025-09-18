@@ -5,14 +5,14 @@ import './VideoStreaming.css';
 const SAMPLE_VIDEOS = {
   hero: {
     id: 'hero-video',
-    title: 'Featured Study Series',
-    description: 'Master your Korean-English vocabulary with our comprehensive video lessons designed to boost your learning efficiency.',
+    title: '',
+    description: '.',
     videoUrl: 'https://www.youtube.com/embed/PtnI54sUc84?start=2&autoplay=1&mute=1&controls=1&loop=1&playlist=PtnI54sUc84',
     poster: 'https://peach.blender.org/wp-content/uploads/title_anouncement.jpg'
   },
   categories: [
     {
-      title: '인트로',
+      title: 'PLEW',
       videos: [
         {
           id: 'v1',
@@ -29,72 +29,37 @@ const SAMPLE_VIDEOS = {
         {
           id: 'v3',
           title: 'Speaking Practice Sessions',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
+          videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson3final.mp4',
+          poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/03.jpg'
         },
         {
           id: 'v4',
           title: 'Cultural Context Learning',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
+          videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+4.mp4',
+          poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/04.jpg'
         },
         {
           id: 'v5',
           title: 'Pronunciation Guide',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
+          videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+5.mp4',
+          poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/05.jpg'
         }
       ]
     },
     {
-      title: '파트 2',
+      title: 'PLEW',
       videos: [
         {
           id: 'v6',
           title: 'TOPIK Preparation',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
-        },
-        {
-          id: 'v7',
-          title: 'Business Korean',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
+          videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+6_SS.mp4',
+          poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/06.jpg'
         },
         {
           id: 'v8',
           title: 'Daily Conversation',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
-        },
-        {
-          id: 'v9',
-          title: 'Writing Skills',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
-        }
-      ]
-    },
-    {
-      title: '파트 3',
-      videos: [
-        {
-          id: 'v10',
-          title: 'K-Drama Vocabulary',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
-        },
-        {
-          id: 'v11',
-          title: 'Travel Korean',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
-        },
-        {
-          id: 'v12',
-          title: 'Food & Dining',
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
+          videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+8_SS.mp4',
+          poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/08.jpg'
         }
       ]
     }
