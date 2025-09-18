@@ -177,7 +177,7 @@ const Navbar = ({ onSubjectChange }) => {
               className="navbar-glass-button"
             >
               <span></span>
-              프로필
+              나만의 학습공간
             </Link>
           </div>
 

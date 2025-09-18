@@ -954,7 +954,7 @@ const LearnTab = () => {
           color: COLORS.darkGray,
           margin: '0 0 8px 0'
         }}>
-          Learn & Practice
+          학습 도우미
         </h1>
         <p style={{
           fontSize: '16px',
@@ -964,7 +964,7 @@ const LearnTab = () => {
           marginLeft: 'auto',
           marginRight: 'auto'
         }}>
-          Choose your difficulty level and start learning with question packs and video courses
+          레벨 선택. 이제 생성된 문제지와 비디오로 학습하고 필요하면 반복 학습해 주세요.
         </p>
       </div>
 
@@ -1021,7 +1021,7 @@ const LearnTab = () => {
           alignItems: 'center',
           gap: '8px'
         }}>
-          📝 Question Packs
+          문제지
           <span style={{
             fontSize: '14px',
             color: COLORS.gray,
@@ -1087,7 +1087,7 @@ const LearnTab = () => {
           alignItems: 'center',
           gap: '8px'
         }}>
-          🎥 Video Courses
+          비디오
           <span style={{
             fontSize: '14px',
             color: COLORS.gray,
@@ -1270,7 +1270,7 @@ const LearnTab = () => {
                   color: COLORS.gray,
                   fontSize: '16px'
                 }}>
-                  <div style={{ fontSize: '48px', marginBottom: '16px' }}>📹</div>
+                  <div style={{ fontSize: '48px', marginBottom: '16px' }}></div>
                   Video URL not available
                 </div>
               )}
@@ -1375,7 +1375,7 @@ const LearnTab = () => {
               fontSize: '64px',
               marginBottom: '20px'
             }}>
-              {quizResults.percentage >= 80 ? '🎉' : quizResults.percentage >= 60 ? '👍' : '💪'}
+              {quizResults.percentage >= 80 ? '' : quizResults.percentage >= 60 ? '' : ''}
             </div>
 
             {/* Title */}

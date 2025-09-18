@@ -23,8 +23,8 @@ const SAMPLE_VIDEOS = {
         {
           id: 'v2',
           title: 'Advanced Vocabulary Building',
-          videoUrl: 'https://www.youtube.com/embed/PtnI54sUc84?start=2&autoplay=1&mute=1&controls=1',
-          poster: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Big_Buck_Bunny_thumbnail_vlc.png/1200px-Big_Buck_Bunny_thumbnail_vlc.png'
+          videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+2.mp4',
+          poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/02.jpg'
         },
         {
           id: 'v3',
