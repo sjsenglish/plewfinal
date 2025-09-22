@@ -9,15 +9,15 @@ const { initializeApp } = require('firebase/app');
 const { getFirestore, collection, doc, writeBatch, getDocs, deleteDoc } = require('firebase/firestore');
 const fs = require('fs');
 
-// Firebase config (matching app's environment variables)
+// Firebase config for plewfinal project
 const firebaseConfig = {
-  apiKey: "AIzaSyDfdQEVrl60mM8Ugam78Cllt9oqlEaKnmc",
-  authDomain: "plewcsat1.firebaseapp.com",
-  projectId: "plewcsat1",
-  storageBucket: "plewcsat1.firebasestorage.app",
-  messagingSenderId: "466175960528",
-  appId: "1:466175960528:web:1bcef94c8a5546015f85d5",
-  measurementId: "G-ZGPQFTW223"
+  apiKey: "AIzaSyDu5HDNNp5CH_mGdXnbxO1lP0oGK2KoM2A",
+  authDomain: "plewfinal.firebaseapp.com",
+  projectId: "plewfinal",
+  storageBucket: "plewfinal.firebasestorage.app",
+  messagingSenderId: "1094652012866",
+  appId: "1:1094652012866:web:dea8b7b22a96ed51cef5b3",
+  measurementId: "G-SGCCB8JSKZ"
 };
 
 class VocabularyUploader {
