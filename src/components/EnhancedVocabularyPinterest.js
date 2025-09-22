@@ -51,7 +51,7 @@ const EnhancedVocabularyPinterest = () => {
       setAllWords(vocabularyData);
       console.log(`✅ Loaded ${vocabularyData.length} vocabulary words from Firebase`);
     } catch (error) {
-      console.error('Error loading vocabulary data from Firebase:', error);
+      console.error('❌ Error loading vocabulary data from Firebase:', error);
       // Fallback to empty array
       setAllWords([]);
     } finally {
