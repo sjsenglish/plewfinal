@@ -156,84 +156,100 @@ const VideoStreaming = () => {
           }}></div>
         </div>
         
-        {/* Stylish Message Overlay */}
+        {/* Netflix-style Message Overlay */}
         <div style={{
           position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          textAlign: 'center',
+          bottom: '15%',
+          left: '60px',
           zIndex: 10,
-          width: '90%',
-          maxWidth: '900px'
+          maxWidth: '550px'
         }}>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.05)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '24px',
-            padding: '48px 40px',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+          <h1 style={{
+            fontSize: '56px',
+            fontWeight: '800',
+            marginBottom: '20px',
+            textShadow: '2px 4px 8px rgba(0, 0, 0, 0.7)',
+            letterSpacing: '-1.5px',
+            lineHeight: '1.1'
           }}>
-            <h1 style={{
-              fontSize: '48px',
-              fontWeight: '800',
-              marginBottom: '24px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            옥스포드 테크닉<br/>
+            <span style={{
+              background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
               WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              letterSpacing: '-1px'
+              WebkitTextFillColor: 'transparent'
+            }}>PLEW</span>
+          </h1>
+          
+          <p style={{
+            fontSize: '20px',
+            lineHeight: '1.5',
+            color: 'rgba(255, 255, 255, 0.95)',
+            marginBottom: '16px',
+            fontWeight: '400',
+            textShadow: '1px 2px 4px rgba(0, 0, 0, 0.6)'
+          }}>
+            쉽고 심플하게 해설해 주는 강의 시리즈
+          </p>
+          
+          <p style={{
+            fontSize: '16px',
+            lineHeight: '1.6',
+            color: 'rgba(255, 255, 255, 0.8)',
+            marginBottom: '28px',
+            fontWeight: '300',
+            textShadow: '1px 2px 4px rgba(0, 0, 0, 0.6)',
+            maxWidth: '450px'
+          }}>
+            시리즈를 완성한 후에는 문제 은행에서 다양한 오리지널 문제들을 연습해 보세요.
+            방법을 알면 독해가 어렵지 않아요.
+          </p>
+          
+          <div style={{
+            display: 'flex',
+            gap: '12px',
+            alignItems: 'center',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 16px',
+              background: 'rgba(255, 255, 255, 0.15)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '20px',
+              fontSize: '14px',
+              color: 'rgba(255, 255, 255, 0.9)'
             }}>
-              옥스포드 테크닉 PLEW
-            </h1>
-            <p style={{
-              fontSize: '22px',
-              lineHeight: '1.7',
-              color: 'rgba(255, 255, 255, 0.9)',
-              marginBottom: '20px',
-              fontWeight: '300'
+              <span style={{ color: '#4ade80' }}>●</span>
+              7개 레슨
+            </div>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 16px',
+              background: 'rgba(255, 255, 255, 0.15)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '20px',
+              fontSize: '14px',
+              color: 'rgba(255, 255, 255, 0.9)'
             }}>
-              쉽고 심플하게 해설해 주는 강의 시리즈입니다.
-            </p>
-            <p style={{
-              fontSize: '18px',
-              lineHeight: '1.6',
-              color: 'rgba(255, 255, 255, 0.7)',
-              marginBottom: '32px',
-              fontWeight: '300'
+              HD 화질
+            </div>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 16px',
+              background: 'rgba(255, 255, 255, 0.15)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '20px',
+              fontSize: '14px',
+              color: 'rgba(255, 255, 255, 0.9)'
             }}>
-              시리즈를 완성한 후에는 문제 은행에서 다양한 오리지널 문제들을 연습해 보세요.<br/>
-              방법을 알면 독해가 어렵지 않아요.
-            </p>
-            <button 
-              onClick={() => {
-                const firstVideo = SAMPLE_VIDEOS.categories[0].videos[0];
-                playVideo(firstVideo);
-              }}
-              style={{
-                padding: '14px 40px',
-                fontSize: '17px',
-                fontWeight: '600',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                border: 'none',
-                borderRadius: '12px',
-                color: 'white',
-                cursor: 'pointer',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
-                letterSpacing: '0.5px'
-              }}
-              onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.5)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
-              }}
-            >
-              강의 시작하기 →
-            </button>
+              한국어
+            </div>
           </div>
         </div>
       </section>
