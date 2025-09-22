@@ -28,7 +28,7 @@ const SubscriptionPlansPage = () => {
   const plans = [
     {
       id: 'tier1',
-      name: 'Premium',
+      name: 'Full access멤버십.',
       price: 20000,
       period: 'month',
       priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',

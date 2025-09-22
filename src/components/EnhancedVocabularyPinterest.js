@@ -20,38 +20,38 @@ const EnhancedVocabularyPinterest = () => {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  // Load vocabulary data from JSON file
+  // Load vocabulary data from Firebase
   const loadVocabularyData = useCallback(async () => {
     setLoading(true);
     try {
-      console.log('📚 Loading enhanced vocabulary data...');
-      const response = await fetch('/vocabulary-data.json');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const vocabularyData = await response.json();
+      console.log('📚 Loading vocabulary data from Firebase...');
+      const vocabularyRef = collection(db, 'vocabulary_words');
+      const querySnapshot = await getDocs(vocabularyRef);
       
-      // Process and enhance the data
-      const processedWords = vocabularyData.map((word, index) => ({
-        id: word.word,
-        word: word.word,
-        frequency: word.frequency || 1,
-        difficulty: word.difficulty || 5,
-        definition: word.definition || '',
-        contexts: Array.isArray(word.contexts) ? word.contexts : [],
-        subjects: Array.isArray(word.subjects) ? word.subjects : ['general'],
-        questions: Array.isArray(word.questions) ? word.questions : [],
-        years: Array.isArray(word.years) ? word.years : [],
-        examples: Array.isArray(word.examples) ? word.examples : word.contexts?.slice(0, 3) || [],
-        height: Math.floor(Math.random() * 200) + 250, // For masonry layout
-        createdAt: word.createdAt,
-        updatedAt: word.updatedAt
-      }));
+      const vocabularyData = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        vocabularyData.push({
+          id: doc.id,
+          word: data.word,
+          frequency: data.frequency || 1,
+          difficulty: data.difficulty || 5,
+          definition: data.definition || '',
+          contexts: Array.isArray(data.contexts) ? data.contexts : [],
+          subjects: Array.isArray(data.subjects) ? data.subjects : ['general'],
+          questions: Array.isArray(data.questions) ? data.questions : [],
+          years: Array.isArray(data.years) ? data.years : [],
+          examples: Array.isArray(data.examples) ? data.examples : data.contexts?.slice(0, 3) || [],
+          height: Math.floor(Math.random() * 200) + 250, // For masonry layout
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt
+        });
+      });
 
-      setAllWords(processedWords);
-      console.log(`✅ Loaded ${processedWords.length} vocabulary words`);
+      setAllWords(vocabularyData);
+      console.log(`✅ Loaded ${vocabularyData.length} vocabulary words from Firebase`);
     } catch (error) {
-      console.error('Error loading vocabulary data:', error);
+      console.error('Error loading vocabulary data from Firebase:', error);
       // Fallback to empty array
       setAllWords([]);
     } finally {
