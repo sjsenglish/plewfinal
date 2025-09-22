@@ -11,6 +11,14 @@
   display: none;
 }
 
+/* Desktop: Filters always visible */
+@media (min-width: 769px) {
+  .filters-content {
+    display: block !important;
+    opacity: 1 !important;
+  }
+}
+
 .filters-toggle-btn {
   width: 100%;
   display: flex;
@@ -52,14 +60,15 @@
 }
 
 .filters-content {
-  display: none;
+  display: block;
   padding: 1rem 0;
+  opacity: 1;
+  transition: all 0.3s ease;
 }
 
 .filters-content.expanded {
   display: block;
   opacity: 1;
-  transition: all 0.3s ease;
 }
 
 /* Filter sections */

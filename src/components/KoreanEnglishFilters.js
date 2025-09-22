@@ -4,7 +4,8 @@ import './KoreanEnglishFilters.css';
 const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
   const [activeCategory, setActiveCategory] = useState('source');
   const [selectedFilters, setSelectedFilters] = useState(currentFilters || {});
-  const [isExpanded, setIsExpanded] = useState(false);
+  // Start expanded on desktop (window width > 768px), collapsed on mobile
+  const [isExpanded, setIsExpanded] = useState(typeof window !== 'undefined' && window.innerWidth > 768);
   const [isAdvancedExpanded, setIsAdvancedExpanded] = useState(false);
 
   // Filter definitions organized by Core (always visible) and Advanced (collapsible)
