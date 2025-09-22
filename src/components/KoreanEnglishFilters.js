@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import './KoreanEnglishFilters.css';
 
 const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
-  const [activeCategory, setActiveCategory] = useState('level');
+  const [activeCategory, setActiveCategory] = useState('source');
   const [selectedFilters, setSelectedFilters] = useState(currentFilters || {});
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Filter definitions for Korean-English question pairs
-  // PLACEHOLDER FILTERS - Update these based on your actual data structure
   const FILTER_CATEGORIES = {
+    source: {
+      label: '문제 유형',
+      options: [
+        { id: 'past-paper', label: '기출 (Past Papers)', value: 'source:past-paper' },
+        { id: 'similar', label: '유사 (Similar Questions)', value: 'source:similar' },
+      ]
+    },
     level: {
       label: 'Level',
       options: [
