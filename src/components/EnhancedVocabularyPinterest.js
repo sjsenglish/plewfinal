@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { getAuth } from 'firebase/auth';
 import { db } from '../firebase';
 import { collection, doc, setDoc, deleteDoc, getDocs, query, where } from 'firebase/firestore';
+import Fuse from 'fuse.js';
 import WordDetailModal from './WordDetailModal';
 import './VocabularyPinterest.css';
 
@@ -79,18 +80,61 @@ const EnhancedVocabularyPinterest = () => {
     }
   }, [user]);
 
+  // Initialize Fuse.js for fuzzy search
+  const fuse = useMemo(() => {
+    if (!allWords.length) return null;
+    
+    const fuseOptions = {
+      keys: [
+        { name: 'word', weight: 3.0 },      // Exact word match is most important
+        { name: 'definition', weight: 1.5 }, // Definition match is important
+        { name: 'contexts', weight: 1.0 }    // Context match is helpful
+      ],
+      threshold: 0.3,         // Lower = more strict matching (0.3 allows for some typos)
+      includeScore: true,
+      shouldSort: true,
+      minMatchCharLength: 2,
+      ignoreLocation: true,   // Don't prioritize matches at beginning
+      findAllMatches: true,
+      useExtendedSearch: true
+    };
+    
+    return new Fuse(allWords, fuseOptions);
+  }, [allWords]);
+
   // Filter and search words
   const filteredWords = useMemo(() => {
     let filtered = [...allWords];
     
-    // Apply search filter
-    if (searchTerm.trim()) {
+    // Apply search filter using Fuse.js for fuzzy matching
+    if (searchTerm.trim() && fuse) {
       const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(word => 
-        word.word.toLowerCase().includes(searchLower) ||
-        word.definition.toLowerCase().includes(searchLower) ||
-        word.contexts.some(context => context.toLowerCase().includes(searchLower))
+      
+      // First, check for exact matches
+      const exactMatches = allWords.filter(word => 
+        word.word.toLowerCase() === searchLower
       );
+      
+      if (exactMatches.length > 0) {
+        // If we have exact matches, prioritize them
+        filtered = exactMatches;
+      } else {
+        // Use Fuse.js for fuzzy search
+        // Support advanced search operators
+        let searchQuery = searchTerm;
+        
+        // If it's a simple search (no operators), search all fields
+        if (!searchTerm.includes('=') && !searchTerm.includes('^') && !searchTerm.includes('!')) {
+          searchQuery = `${searchTerm} | '${searchTerm}`;
+        }
+        
+        const searchResults = fuse.search(searchQuery);
+        
+        // Extract the items from search results and sort by score
+        filtered = searchResults
+          .filter(result => result.score < 0.6) // Only include good matches
+          .map(result => result.item);
+      }
     }
     
     // Apply difficulty filter
@@ -106,24 +150,26 @@ const EnhancedVocabularyPinterest = () => {
       );
     }
     
-    // Apply sorting
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'frequency':
-          return b.frequency - a.frequency;
-        case 'alphabetical':
-          return a.word.localeCompare(b.word);
-        case 'difficulty':
-          return b.difficulty - a.difficulty;
-        case 'length':
-          return b.word.length - a.word.length;
-        default:
-          return b.frequency - a.frequency;
-      }
-    });
+    // Apply sorting (only if not searching, as search results are already sorted by relevance)
+    if (!searchTerm.trim()) {
+      filtered.sort((a, b) => {
+        switch (sortBy) {
+          case 'frequency':
+            return b.frequency - a.frequency;
+          case 'alphabetical':
+            return a.word.localeCompare(b.word);
+          case 'difficulty':
+            return b.difficulty - a.difficulty;
+          case 'length':
+            return b.word.length - a.word.length;
+          default:
+            return b.frequency - a.frequency;
+        }
+      });
+    }
     
     return filtered;
-  }, [allWords, searchTerm, selectedDifficulty, selectedSubject, sortBy]);
+  }, [allWords, searchTerm, selectedDifficulty, selectedSubject, sortBy, fuse]);
 
   // Paginate filtered words
   const paginatedWords = useMemo(() => {
@@ -200,7 +246,7 @@ const EnhancedVocabularyPinterest = () => {
         <div className="search-section">
           <input
             type="text"
-            placeholder="단어 검색..."
+            placeholder="Search words (typos allowed)..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -208,6 +254,9 @@ const EnhancedVocabularyPinterest = () => {
           <div className="search-stats">
             {filteredWords.length.toLocaleString()} words found
             {searchTerm && ` for "${searchTerm}"`}
+            {searchTerm && filteredWords.length === 0 && (
+              <span className="search-hint"> - Try a different spelling</span>
+            )}
           </div>
         </div>
 

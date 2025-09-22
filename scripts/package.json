@@ -9,10 +9,13 @@
     "test-extract": "node test-extractor.js"
   },
   "dependencies": {
+    "@pinecone-database/pinecone": "^6.1.2",
     "algoliasearch": "^5.25.0",
     "dotenv": "^17.2.1",
     "firebase-admin": "^13.4.0",
-    "node-fetch": "^3.3.2"
+    "fuse.js": "^7.1.0",
+    "node-fetch": "^3.3.2",
+    "openai": "^5.22.0"
   },
   "engines": {
     "node": ">=16.0.0"
