@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './KoreanEnglishFilters.css';
 
 const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
@@ -13,6 +13,13 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       options: [
         { id: 'past-paper', label: '기출 (Past Papers)', value: 'source:past-paper' },
         { id: 'similar', label: '유사 (Similar Questions)', value: 'source:similar' },
+      ]
+    },
+    similarLevel: {
+      label: '유사 문제 레벨',
+      options: [
+        { id: 'advanced', label: 'Advanced', value: 'similarLevel:advanced' },
+        { id: 'baby', label: 'Baby', value: 'similarLevel:baby' },
       ]
     },
     level: {
@@ -126,6 +133,53 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
   // Count active filters
   const activeFilterCount = Object.keys(selectedFilters).length;
 
+  // Get available categories based on current selections
+  const getAvailableCategories = () => {
+    const categories = { ...FILTER_CATEGORIES };
+    
+    // Only show similarLevel if 'similar' is selected in source
+    if (selectedFilters.source !== 'similar') {
+      delete categories.similarLevel;
+    }
+    
+    return categories;
+  };
+
+  const availableCategories = getAvailableCategories();
+
+  // Effect to handle when activeCategory becomes unavailable
+  useEffect(() => {
+    if (!availableCategories[activeCategory]) {
+      // If current active category is not available, switch to the first available one
+      const firstAvailableCategory = Object.keys(availableCategories)[0];
+      if (firstAvailableCategory) {
+        setActiveCategory(firstAvailableCategory);
+      }
+    }
+  }, [activeCategory, availableCategories]);
+
+  // Also clear similarLevel filter when source changes away from 'similar'
+  useEffect(() => {
+    if (selectedFilters.source !== 'similar' && selectedFilters.similarLevel) {
+      const newFilters = { ...selectedFilters };
+      delete newFilters.similarLevel;
+      setSelectedFilters(newFilters);
+      
+      // Convert to format expected by App.js
+      const algoliaFilters = {};
+      Object.entries(newFilters).forEach(([cat, id]) => {
+        if (id) {
+          const option = FILTER_CATEGORIES[cat]?.options.find(opt => opt.id === id);
+          if (option) {
+            algoliaFilters[cat] = option.value;
+          }
+        }
+      });
+      
+      onFiltersChange(algoliaFilters);
+    }
+  }, [selectedFilters.source]);
+
   return (
     <div className="korean-english-filters">
       {/* Mobile toggle */}
@@ -146,7 +200,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       <div className={`filters-content ${isExpanded ? 'expanded' : ''}`}>
         {/* Category tabs */}
         <div className="filter-categories">
-          {Object.entries(FILTER_CATEGORIES).map(([categoryKey, category]) => (
+          {Object.entries(availableCategories).map(([categoryKey, category]) => (
             <button
               key={categoryKey}
               className={`category-tab ${activeCategory === categoryKey ? 'active' : ''}`}
@@ -187,7 +241,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
 
         {/* Filter options */}
         <div className="filter-options">
-          {FILTER_CATEGORIES[activeCategory]?.options.map((option) => (
+          {availableCategories[activeCategory]?.options.map((option) => (
             <button
               key={option.id}
               className={`filter-option ${selectedFilters[activeCategory] === option.id ? 'selected' : ''}`}
