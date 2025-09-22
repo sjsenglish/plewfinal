@@ -1,0 +1,4085 @@
+{
+  "summary": {
+    "totalRecordsProcessed": 340,
+    "recordsChanged": 162,
+    "comprehensionFixed": 120,
+    "passageTypeChanged": 42,
+    "vocabularyUpdated": 340
+  },
+  "changes": {
+    "comprehensionFixed": [
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "psychology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "geography"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "psychology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "biology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "biology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "chemistry"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 18,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "current_affairs"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "current_affairs"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "technology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "politics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "music"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 18,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "psychology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "psychology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "biology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 18,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "current_affairs"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "current_affairs"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "current_affairs"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "biology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "biology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "economics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 18,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "philosophy"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "philosophy"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "current_affairs"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 18,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "economics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "economics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 18,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "literature"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "psychology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 18,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "music"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "music"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "music"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "chemistry"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "chemistry"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "psychology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "art"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "economics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 18,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "music"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "music"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "music"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "physics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "physics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "physics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "art"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "biology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 18,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "physics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "physics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "physics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "psychology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "psychology"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "economics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 18,
+        "before": {
+          "passageType": "argumentative",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 45,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 44,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 43,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 42,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "chemistry"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 41,
+        "before": {
+          "passageType": "analytical",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "chemistry"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 28,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "social_sciences",
+          "secondarySubjectArea": "economics"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 27,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "history"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 26,
+        "before": {
+          "passageType": "discursive",
+          "primarySubjectArea": "natural_sciences",
+          "secondarySubjectArea": "chemistry"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      },
+      {
+        "questionNumber": 19,
+        "before": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "humanities",
+          "secondarySubjectArea": "general"
+        },
+        "after": {
+          "passageType": "comprehension",
+          "primarySubjectArea": "literature_arts",
+          "secondarySubjectArea": "fiction"
+        }
+      }
+    ],
+    "passageTypeChanged": [
+      {
+        "questionNumber": 35,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 31,
+        "before": "comprehension",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 20,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 31,
+        "before": "argumentative",
+        "after": "analytical",
+        "confidence": 0.8,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 0,
+          "analytical": 2
+        }
+      },
+      {
+        "questionNumber": 30,
+        "before": "analytical",
+        "after": "argumentative",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 40,
+        "before": "discursive",
+        "after": "argumentative",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 1,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 31,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 20,
+        "before": "comprehension",
+        "after": "argumentative",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 0,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 37,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 29,
+        "before": "comprehension",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 23,
+        "before": "argumentative",
+        "after": "analytical",
+        "confidence": 0.8,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 0,
+          "analytical": 2
+        }
+      },
+      {
+        "questionNumber": 22,
+        "before": "comprehension",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 35,
+        "before": "comprehension",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 34,
+        "before": "analytical",
+        "after": "argumentative",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 1,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 25,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 25,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 23,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 39,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 39,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 36,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 36,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 35,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 33,
+        "before": "comprehension",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 21,
+        "before": "comprehension",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 29,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 21,
+        "before": "comprehension",
+        "after": "argumentative",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 35,
+        "before": "comprehension",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 34,
+        "before": "analytical",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 30,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 21,
+        "before": "comprehension",
+        "after": "argumentative",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 0,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 40,
+        "before": "discursive",
+        "after": "argumentative",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 36,
+        "before": "discursive",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 31,
+        "before": "comprehension",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 35,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 31,
+        "before": "comprehension",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 39,
+        "before": "comprehension",
+        "after": "argumentative",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 35,
+        "before": "argumentative",
+        "after": "discursive",
+        "confidence": 0.8,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 2,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 34,
+        "before": "discursive",
+        "after": "analytical",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 33,
+        "before": "discursive",
+        "after": "argumentative",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 32,
+        "before": "comprehension",
+        "after": "discursive",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 1,
+          "analytical": 0
+        }
+      },
+      {
+        "questionNumber": 24,
+        "before": "analytical",
+        "after": "argumentative",
+        "confidence": 0.6,
+        "scores": {
+          "argumentative": 1,
+          "discursive": 0,
+          "analytical": 1
+        }
+      },
+      {
+        "questionNumber": 23,
+        "before": "analytical",
+        "after": "comprehension",
+        "confidence": 0.3,
+        "scores": {
+          "argumentative": 0,
+          "discursive": 0,
+          "analytical": 0
+        }
+      }
+    ],
+    "vocabularyUpdated": [
+      {
+        "questionNumber": 45,
+        "before": 5780,
+        "after": 5170,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5780,
+        "after": 5170,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5780,
+        "after": 5170,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5480,
+        "after": 5245,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5480,
+        "after": 5245,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5562,
+        "after": 5700,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5570,
+        "after": 5670,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5768,
+        "after": 5380,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5530,
+        "after": 5437,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5300,
+        "after": 5338,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5574,
+        "after": 5359,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5316,
+        "after": 5242,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5480,
+        "after": 5477,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5312,
+        "after": 5171,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5342,
+        "after": 5420,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5582,
+        "after": 5325,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5324,
+        "after": 5451,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5184,
+        "after": 5180,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5176,
+        "after": 5170,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5292,
+        "after": 5189,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5384,
+        "after": 5115,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5484,
+        "after": 5178,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5508,
+        "after": 5531,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5302,
+        "after": 5504,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5492,
+        "after": 5444,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5266,
+        "after": 5228,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5232,
+        "after": 5198,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5880,
+        "after": 5245,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5880,
+        "after": 5245,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5880,
+        "after": 5245,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5660,
+        "after": 5303,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5660,
+        "after": 5303,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5304,
+        "after": 5277,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5512,
+        "after": 5383,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5328,
+        "after": 5352,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5354,
+        "after": 5200,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5528,
+        "after": 5418,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5310,
+        "after": 5303,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5358,
+        "after": 5310,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5522,
+        "after": 5216,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5510,
+        "after": 5344,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5312,
+        "after": 5371,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5524,
+        "after": 5376,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5524,
+        "after": 5548,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5198,
+        "after": 5171,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5216,
+        "after": 5168,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5256,
+        "after": 5294,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5520,
+        "after": 5152,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5362,
+        "after": 5449,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5486,
+        "after": 5407,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5548,
+        "after": 5304,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5314,
+        "after": 5183,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5288,
+        "after": 5212,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5238,
+        "after": 5142,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5226,
+        "after": 5269,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5666,
+        "after": 5150,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5666,
+        "after": 5150,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5666,
+        "after": 5150,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5656,
+        "after": 5396,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5656,
+        "after": 5396,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5782,
+        "after": 5487,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5566,
+        "after": 5409,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5600,
+        "after": 5511,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5346,
+        "after": 5428,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5342,
+        "after": 5214,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5534,
+        "after": 5386,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5736,
+        "after": 5337,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5560,
+        "after": 5250,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5286,
+        "after": 5197,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5546,
+        "after": 5240,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5382,
+        "after": 5211,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5536,
+        "after": 5514,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5206,
+        "after": 5169,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5222,
+        "after": 5217,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5258,
+        "after": 5347,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5530,
+        "after": 5152,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5374,
+        "after": 5435,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5296,
+        "after": 5406,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5312,
+        "after": 5222,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5530,
+        "after": 5215,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5268,
+        "after": 5417,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5258,
+        "after": 5212,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5222,
+        "after": 5159,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5698,
+        "after": 5187,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5698,
+        "after": 5187,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5698,
+        "after": 5187,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5712,
+        "after": 5399,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5712,
+        "after": 5399,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5308,
+        "after": 5602,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5548,
+        "after": 5188,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5310,
+        "after": 5474,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5540,
+        "after": 5639,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5532,
+        "after": 5244,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5276,
+        "after": 5512,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5552,
+        "after": 5485,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5518,
+        "after": 5438,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5524,
+        "after": 5375,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5482,
+        "after": 5216,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5740,
+        "after": 5420,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5348,
+        "after": 5285,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5234,
+        "after": 5175,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5222,
+        "after": 5170,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5262,
+        "after": 5191,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5524,
+        "after": 5148,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5524,
+        "after": 5148,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5318,
+        "after": 5238,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5314,
+        "after": 5676,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5498,
+        "after": 5345,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5350,
+        "after": 5433,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5528,
+        "after": 5229,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5436,
+        "after": 5207,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5220,
+        "after": 5187,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5694,
+        "after": 5144,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5694,
+        "after": 5144,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5694,
+        "after": 5144,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5870,
+        "after": 5376,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5870,
+        "after": 5376,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5360,
+        "after": 5410,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5536,
+        "after": 5433,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5794,
+        "after": 5389,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5320,
+        "after": 5370,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5336,
+        "after": 5182,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5346,
+        "after": 5470,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5514,
+        "after": 5419,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5312,
+        "after": 5493,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5492,
+        "after": 5527,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5266,
+        "after": 5576,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5348,
+        "after": 5542,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5338,
+        "after": 5702,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5178,
+        "after": 5234,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5178,
+        "after": 5153,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5178,
+        "after": 5153,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5278,
+        "after": 5239,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5288,
+        "after": 5149,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5288,
+        "after": 5149,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5350,
+        "after": 5265,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5262,
+        "after": 5357,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5530,
+        "after": 5332,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5328,
+        "after": 5191,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5284,
+        "after": 5185,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5264,
+        "after": 5146,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5210,
+        "after": 5165,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5736,
+        "after": 5143,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5736,
+        "after": 5143,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5736,
+        "after": 5143,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5670,
+        "after": 5360,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5670,
+        "after": 5360,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5550,
+        "after": 5292,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5550,
+        "after": 5292,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5536,
+        "after": 5284,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5536,
+        "after": 5284,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5706,
+        "after": 5453,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5706,
+        "after": 5453,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5576,
+        "after": 5774,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5576,
+        "after": 5774,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5564,
+        "after": 5222,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5564,
+        "after": 5222,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5560,
+        "after": 5235,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5304,
+        "after": 5403,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5332,
+        "after": 5297,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5448,
+        "after": 5335,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5474,
+        "after": 5629,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5550,
+        "after": 5571,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5536,
+        "after": 5433,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5170,
+        "after": 5188,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5170,
+        "after": 5188,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5202,
+        "after": 5288,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5202,
+        "after": 5288,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5280,
+        "after": 5197,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5262,
+        "after": 5154,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5514,
+        "after": 5860,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5560,
+        "after": 5316,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5308,
+        "after": 5191,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5328,
+        "after": 5398,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5488,
+        "after": 5316,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5454,
+        "after": 5198,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5240,
+        "after": 5192,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5702,
+        "after": 5147,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5702,
+        "after": 5147,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5702,
+        "after": 5147,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5718,
+        "after": 5346,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5718,
+        "after": 5346,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5508,
+        "after": 5546,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5306,
+        "after": 5205,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5302,
+        "after": 5172,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5550,
+        "after": 5419,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5336,
+        "after": 5404,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5306,
+        "after": 5396,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5322,
+        "after": 5434,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5298,
+        "after": 5377,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5330,
+        "after": 5372,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5300,
+        "after": 5331,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5476,
+        "after": 5403,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5324,
+        "after": 5361,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5190,
+        "after": 5153,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5176,
+        "after": 5185,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5278,
+        "after": 5205,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5430,
+        "after": 5205,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5292,
+        "after": 5530,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5556,
+        "after": 5313,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5482,
+        "after": 5571,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5354,
+        "after": 5471,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5296,
+        "after": 5424,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5448,
+        "after": 5186,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5208,
+        "after": 5200,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5816,
+        "after": 5142,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5816,
+        "after": 5142,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5816,
+        "after": 5142,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5716,
+        "after": 5200,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5716,
+        "after": 5200,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5550,
+        "after": 5435,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5312,
+        "after": 5464,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5284,
+        "after": 5398,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5308,
+        "after": 5436,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5298,
+        "after": 5470,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5544,
+        "after": 5589,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5548,
+        "after": 5285,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5496,
+        "after": 5262,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5324,
+        "after": 5147,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5510,
+        "after": 5190,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5326,
+        "after": 5229,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5544,
+        "after": 5251,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5500,
+        "after": 5257,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5240,
+        "after": 5180,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5206,
+        "after": 5179,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5300,
+        "after": 5193,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5250,
+        "after": 5150,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5552,
+        "after": 5382,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5316,
+        "after": 5187,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5336,
+        "after": 5303,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5280,
+        "after": 5211,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5242,
+        "after": 5191,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5224,
+        "after": 5156,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5716,
+        "after": 5148,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5716,
+        "after": 5148,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5716,
+        "after": 5148,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5694,
+        "after": 5399,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5694,
+        "after": 5399,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5516,
+        "after": 5468,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5554,
+        "after": 5178,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5314,
+        "after": 5345,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5378,
+        "after": 5158,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5326,
+        "after": 5245,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5302,
+        "after": 5392,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5548,
+        "after": 5525,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5300,
+        "after": 5282,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5240,
+        "after": 5403,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5292,
+        "after": 5527,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5330,
+        "after": 5166,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5544,
+        "after": 5457,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5528,
+        "after": 5211,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5212,
+        "after": 5150,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5198,
+        "after": 5175,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5296,
+        "after": 5160,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5344,
+        "after": 5134,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5498,
+        "after": 5496,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5314,
+        "after": 5585,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5534,
+        "after": 5455,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5262,
+        "after": 5226,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5272,
+        "after": 5151,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5236,
+        "after": 5170,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5718,
+        "after": 5196,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5718,
+        "after": 5196,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5718,
+        "after": 5196,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5498,
+        "after": 5354,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5498,
+        "after": 5354,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5270,
+        "after": 5296,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5312,
+        "after": 5479,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5358,
+        "after": 5253,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5320,
+        "after": 5143,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5550,
+        "after": 5423,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5312,
+        "after": 5299,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5336,
+        "after": 5193,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5306,
+        "after": 5445,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5514,
+        "after": 5378,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5314,
+        "after": 5363,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5524,
+        "after": 5299,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5350,
+        "after": 5339,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5306,
+        "after": 5305,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5218,
+        "after": 5205,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5204,
+        "after": 5225,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5308,
+        "after": 5147,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5304,
+        "after": 5166,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5522,
+        "after": 5238,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5268,
+        "after": 5313,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5484,
+        "after": 5581,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5266,
+        "after": 5354,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5236,
+        "after": 5163,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5244,
+        "after": 5155,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5624,
+        "after": 5291,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5624,
+        "after": 5291,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5624,
+        "after": 5291,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5516,
+        "after": 5274,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5516,
+        "after": 5274,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5496,
+        "after": 5248,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5524,
+        "after": 5232,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5508,
+        "after": 5390,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5258,
+        "after": 5161,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5318,
+        "after": 5275,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5504,
+        "after": 5331,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5308,
+        "after": 5345,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5324,
+        "after": 5341,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5300,
+        "after": 5224,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5338,
+        "after": 5537,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5366,
+        "after": 5210,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5300,
+        "after": 5211,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5538,
+        "after": 5327,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5226,
+        "after": 5168,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5192,
+        "after": 5204,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5220,
+        "after": 5227,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5482,
+        "after": 5199,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 22,
+        "before": 5494,
+        "after": 5291,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 21,
+        "before": 5256,
+        "after": 5324,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 20,
+        "before": 5234,
+        "after": 5247,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5242,
+        "after": 5222,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 18,
+        "before": 5210,
+        "after": 5257,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 45,
+        "before": 5538,
+        "after": 5145,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 44,
+        "before": 5538,
+        "after": 5145,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 43,
+        "before": 5538,
+        "after": 5145,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 42,
+        "before": 5446,
+        "after": 5236,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 41,
+        "before": 5446,
+        "after": 5236,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 40,
+        "before": 5264,
+        "after": 5153,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 39,
+        "before": 5270,
+        "after": 5133,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 38,
+        "before": 5266,
+        "after": 5143,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 37,
+        "before": 5300,
+        "after": 5143,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 36,
+        "before": 5264,
+        "after": 5161,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 35,
+        "before": 5508,
+        "after": 5291,
+        "passageType": "analytical"
+      },
+      {
+        "questionNumber": 34,
+        "before": 5252,
+        "after": 5404,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 33,
+        "before": 5248,
+        "after": 5290,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 32,
+        "before": 5246,
+        "after": 5213,
+        "passageType": "discursive"
+      },
+      {
+        "questionNumber": 31,
+        "before": 5228,
+        "after": 5169,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 30,
+        "before": 5230,
+        "after": 5177,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 29,
+        "before": 5196,
+        "after": 5172,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 28,
+        "before": 5286,
+        "after": 5185,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 27,
+        "before": 5244,
+        "after": 5251,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 26,
+        "before": 5240,
+        "after": 5209,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 25,
+        "before": 5282,
+        "after": 5261,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 24,
+        "before": 5268,
+        "after": 5279,
+        "passageType": "argumentative"
+      },
+      {
+        "questionNumber": 23,
+        "before": 5226,
+        "after": 5252,
+        "passageType": "comprehension"
+      },
+      {
+        "questionNumber": 19,
+        "before": 5254,
+        "after": 5146,
+        "passageType": "comprehension"
+      }
+    ]
+  },
+  "vocabBrackets": {
+    "basic": 5200,
+    "intermediate_max": 5346,
+    "advanced_min": 5346
+  },
+  "timestamp": "2025-09-22T22:06:47.801Z"
+}

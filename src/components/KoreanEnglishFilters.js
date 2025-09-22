@@ -89,10 +89,9 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
     vocabularyLevel: {
       label: 'Vocabulary Level',
       options: [
-        { id: 'basic', label: 'Basic (5000-6000)', value: 'vocabularyDemand:[5000 TO 6000]' },
-        { id: 'intermediate', label: 'Intermediate (6000-7000)', value: 'vocabularyDemand:[6000 TO 7000]' },
-        { id: 'advanced', label: 'Advanced (7000-8000)', value: 'vocabularyDemand:[7000 TO 8000]' },
-        { id: 'expert', label: 'Expert (8000+)', value: 'vocabularyDemand:[8000 TO 10000]' },
+        { id: 'basic', label: 'Basic (Under 5200)', value: 'vocabularyDemand:[* TO 5199]' },
+        { id: 'intermediate', label: 'Intermediate (5200-5500)', value: 'vocabularyDemand:[5200 TO 5500]' },
+        { id: 'advanced', label: 'Advanced (5500+)', value: 'vocabularyDemand:[5500 TO *]' },
       ]
     },
     textSource: {
