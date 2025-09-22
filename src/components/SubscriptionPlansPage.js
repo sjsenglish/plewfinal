@@ -35,12 +35,13 @@ const SubscriptionPlansPage = () => {
       paymentLink: 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01',
       description: 'Everything you need for exam preparation',
       features: [
-        '무제한 문제 검색',
-        '무제한 비디오 검색',
-        '무제한 문제지 제작',
-        '타이머 실전 문제 연습',
-        '커뮤니티 지원',
-        '학습 도우미 지원',
+        '옥스포드 영어에서 독점 제작하는 프리미엄 독해 문제들을 무제한 검색할 수 있습니다.',
+        '강의 시리즈와 문제 풀이 비디오들을 무제한 검색할 수 있습니다.',
+        '다양한 필터를 이용해 필요한 문제지를 무제한 제작할 수 있습니다.',
+        '단어 학습과 리딩의 연계를 통해 효율적인 단어 학습이 가능한 이노베이션 단어 은행을  제공합니다.',
+        '실전 대비 타이머 시험을 이용할 수 있습니다. ',
+        '학생들 간, 학생과  관리자 간 소통과 필요한 정보, 다양한 영어 관련 콘텐츠를 제공하는 커뮤니티를 운영하고 있습니다.',
+        '자율적 학습에 익숙하지 않은 학생들은 학습 도우미를 활용할 수 있습니다.',
       ],
       buttonText: 'Start with Premium',
       popular: true,
@@ -492,7 +493,7 @@ const SubscriptionPlansPage = () => {
             margin: '0 0 32px 0',
             textAlign: 'center'
           }}>
-            Frequently asked questions
+            자주 묻는 질문
           </h2>
 
           <div style={{ display: 'grid', gap: '24px' }}>
@@ -503,7 +504,7 @@ const SubscriptionPlansPage = () => {
                 margin: '0 0 8px 0',
                 color: 'rgba(255, 255, 255, 0.9)'
               }}>
-                Can I cancel anytime?
+                멤버십 취소 가능할까?
               </h3>
               <p style={{
                 fontSize: '14px',
@@ -511,7 +512,7 @@ const SubscriptionPlansPage = () => {
                 margin: 0,
                 lineHeight: '1.6'
               }}>
-                Yes, you can cancel your subscription at any time. Your access will continue until the end of your billing period.
+                네, 언제든 취소할 수 있습니다. 취소 후에도 결제 기간까지 사이트 이용 가능합니다. 
               </p>
             </div>
 
@@ -522,7 +523,7 @@ const SubscriptionPlansPage = () => {
                 margin: '0 0 8px 0',
                 color: 'rgba(255, 255, 255, 0.9)'
               }}>
-                What payment methods do you accept?
+                결제 방법은? 
               </h3>
               <p style={{
                 fontSize: '14px',
@@ -530,7 +531,7 @@ const SubscriptionPlansPage = () => {
                 margin: 0,
                 lineHeight: '1.6'
               }}>
-                We accept all major credit cards, debit cards, and digital wallets through our secure payment processor, Stripe.
+                안전한 결제 대행사인 Stripe을 통해 주요 신용카드, 직불카드, 디지털 지갑을 받습니다.
               </p>
             </div>
 
@@ -541,7 +542,7 @@ const SubscriptionPlansPage = () => {
                 margin: '0 0 8px 0',
                 color: 'rgba(255, 255, 255, 0.9)'
               }}>
-                Is there a refund policy?
+                환불 정책은? 
               </h3>
               <p style={{
                 fontSize: '14px',
@@ -549,7 +550,7 @@ const SubscriptionPlansPage = () => {
                 margin: 0,
                 lineHeight: '1.6'
               }}>
-                We offer a 30-day money-back guarantee. If you're not satisfied, contact support for a full refund.
+                만족하지 않으실 경우 고객지원팀에 연락하시면 30일 환불 보장 해드립니다.
               </p>
             </div>
           </div>

@@ -1639,14 +1639,14 @@ const getQuestionPreview = (question) => {
                     color: '#111827',
                     margin: '0 0 8px 0'
                   }}>
-                    Design
+                    디자인 하기 
                   </h2>
                   <span style={{
                     color: '#0369a1',
                     fontSize: '12px',
                     fontWeight: '500'
                   }}>
-                    Step 3 of 3
+                    3단계 중 세번째
                   </span>
                 </div>
 
@@ -1659,7 +1659,7 @@ const getQuestionPreview = (question) => {
                     color: COLORS.darkGray,
                     marginBottom: '12px'
                   }}>
-                    Pack Color
+                    문제지 색상
                   </label>
                   <div style={{
                     display: 'grid',
@@ -1708,7 +1708,7 @@ const getQuestionPreview = (question) => {
                     color: COLORS.darkGray,
                     marginBottom: '12px'
                   }}>
-                    Font Size: {packData.styling.fontSize}pt
+                    글씨 크기: {packData.styling.fontSize}pt
                   </label>
                   <div style={{
                     display: 'flex',
@@ -1746,7 +1746,7 @@ const getQuestionPreview = (question) => {
                     color: COLORS.darkGray,
                     marginBottom: '12px'
                   }}>
-                    Additional Options
+                    추가 옵션
                   </label>
                   
                   <div style={{
@@ -1759,7 +1759,7 @@ const getQuestionPreview = (question) => {
                       alignItems: 'center',
                       gap: '12px',
                       cursor: 'pointer'
-                    }}>
+                    }}> 
                       <input
                         type="checkbox"
                         checked={packData.styling.includeAnswers}
@@ -1777,7 +1777,7 @@ const getQuestionPreview = (question) => {
                         fontSize: '14px',
                         color: '#374151'
                       }}>
-                        Include answer key
+                        정답지 포함
                       </span>
                     </label>
 
@@ -1806,7 +1806,7 @@ const getQuestionPreview = (question) => {
                         fontSize: '14px',
                         color: '#374151'
                       }}>
-                        Separate answer sheet
+                        별도 답지
                       </span>
                     </label>
 
@@ -1833,7 +1833,7 @@ const getQuestionPreview = (question) => {
                         fontSize: '14px',
                         color: '#374151'
                       }}>
-                        Show current date
+                        날짜 표시
                       </span>
                     </label>
                   </div>
@@ -1859,7 +1859,7 @@ const getQuestionPreview = (question) => {
                       cursor: 'pointer'
                     }}
                   >
-                    ← Back
+                    ← 돌아 가기
                   </button>
 
                   {/* Hide PDF button for Korean-English questions */}
@@ -1935,7 +1935,7 @@ const getQuestionPreview = (question) => {
                         Creating...
                       </>
                     ) : (
-                      <>✓ Create Pack</>
+                      <>✓ 문제지 생성</>
                     )}
                   </button>
                 </div>
@@ -1954,7 +1954,7 @@ const getQuestionPreview = (question) => {
                       margin: '0 0 8px 0',
                       fontSize: '14px'
                     }}>
-                      🎉 Pack created successfully!
+                      🎉 문제지가 생성 되었습니다.
                     </p>
                     <p style={{
                       fontSize: '12px',
@@ -1980,7 +1980,7 @@ const getQuestionPreview = (question) => {
                           fontWeight: '500'
                         }}
                       >
-                        📖 View Pack
+                        문제지 보기
                       </a>
                       {/* Hide PDF button for Korean-English questions */}
                       {packData.subject !== 'korean-english' && (
@@ -2013,7 +2013,7 @@ const getQuestionPreview = (question) => {
                           fontWeight: '500'
                         }}
                       >
-                        📊 My Packs
+                        내 문제지 팩
                       </a>
                     </div>
                   </div>

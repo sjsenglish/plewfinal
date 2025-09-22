@@ -142,7 +142,7 @@ if (!process.env.REACT_APP_OPENAI_API_KEY) {
 const SUBJECTS = {
   vocabulary: {
     theme: 'vocabulary-theme',
-    bannerText: '기출 문제로 검색하고 의미와 사용법과 빈도 확인하는 단어 공부법입니다',
+    bannerText: '단어의 의미와 사용법과 빈도를 기출 문제에서 확인하는 리딩 연계 단어 은행입니다',
     displayName: '단어은행',
     searchType: 'firebase',
     logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de'
@@ -150,15 +150,15 @@ const SUBJECTS = {
   'korean-english': {
     index: 'korean-english-question-pairs',
     theme: 'korean-english-theme',
-    bannerText: '옥스포드 영어 팀에서 다양한 오리지널 문제들과 쌍둥이 문제들을 계속 업데이트 합니다',
+    bannerText: ' 옥스포드 영어팀에서 다양한 레벨의 오리지널 문제들과 쌍둥이 문제들을 계속 업데이트 합니다',
     displayName: '문제은행',
     searchType: 'algolia',
-    logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de'
+    logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logos-toogle3.svg?alt=media&token=aba5119f-787d-4dd9-a88d-eac1de951a32'
   },
   community: {
     index: 'plewcommunity',
     theme: 'community-theme',
-    bannerText: '학생들이 질의하고 응답 받을 수 있는 소통의 공간입니다',
+    bannerText: '학생들이 질의하고 응답 받을 수 있는 소통의 공간에서 다양한 영어 콘텐츠도 만나 볼 수 있습니다',
     displayName: '커뮤니티',
     searchType: 'pinecone',
     logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logos-toogle2.svg?alt=media&token=a97ec472-1fa3-4b09-b8c4-aff39193b5fa'

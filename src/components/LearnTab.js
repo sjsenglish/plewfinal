@@ -280,7 +280,7 @@ const PackCard = ({ pack, onPractice, onReview, quizAttempts, user }) => {
               e.target.style.backgroundColor = COLORS.light;
             }}
           >
-            🔄 Retry
+            재시도
           </button>
         </div>
       ) : (
@@ -952,8 +952,21 @@ const LearnTab = () => {
           fontSize: '32px',
           fontWeight: '700',
           color: COLORS.darkGray,
-          margin: '0 0 8px 0'
+          margin: '0 0 8px 0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '12px'
         }}>
+          <img 
+            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-books-pencil.svg?alt=media&token=1ca7c953-1f5d-43df-af64-0558f17fe93a"
+            alt="Study Helper Icon"
+            style={{
+              width: '40px',
+              height: '40px',
+              objectFit: 'contain'
+            }}
+          />
           학습 도우미
         </h1>
         <p style={{
@@ -964,7 +977,7 @@ const LearnTab = () => {
           marginLeft: 'auto',
           marginRight: 'auto'
         }}>
-          레벨 선택. 이제 생성된 문제지와 비디오로 학습하고 필요하면 반복 학습해 주세요.
+          내 레벨을 선택하면 학습 자료들을 볼 수 있어요. 
         </p>
       </div>
 
@@ -1021,6 +1034,15 @@ const LearnTab = () => {
           alignItems: 'center',
           gap: '8px'
         }}>
+          <img 
+            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-with-books.svg?alt=media&token=b654042b-993e-484e-b465-b78793756e26"
+            alt="Question Pack Icon"
+            style={{
+              width: '28px',
+              height: '28px',
+              objectFit: 'contain'
+            }}
+          />
           문제지
           <span style={{
             fontSize: '14px',
@@ -1063,7 +1085,7 @@ const LearnTab = () => {
               color: COLORS.darkGray,
               margin: '0 0 8px 0'
             }}>
-              No Question Packs Available
+              문제지 팩이 없음
             </h3>
             <p style={{
               fontSize: '14px',
@@ -1087,6 +1109,15 @@ const LearnTab = () => {
           alignItems: 'center',
           gap: '8px'
         }}>
+          <img 
+            src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-donut.svg?alt=media&token=d1bbc1db-aa0e-4adc-84ef-11a0bede2fe4"
+            alt="Video Icon"
+            style={{
+              width: '28px',
+              height: '28px',
+              objectFit: 'contain'
+            }}
+          />
           비디오
           <span style={{
             fontSize: '14px',
@@ -1126,7 +1157,7 @@ const LearnTab = () => {
               color: COLORS.darkGray,
               margin: '0 0 8px 0'
             }}>
-              No Videos Available
+              비디오 없음
             </h3>
             <p style={{
               fontSize: '14px',
@@ -1385,7 +1416,7 @@ const LearnTab = () => {
               color: COLORS.darkGray,
               margin: '0 0 16px 0'
             }}>
-              Quiz Complete!
+              시험 완료
             </h2>
 
             {/* Pack name */}
@@ -1419,7 +1450,7 @@ const LearnTab = () => {
                 color: COLORS.darkGray,
                 fontWeight: '600'
               }}>
-                {String(quizResults.score)} / {String(quizResults.totalQuestions)} correct
+                {String(quizResults.score)} / {String(quizResults.totalQuestions)} 정답률
               </div>
               {quizResults.timeElapsed && (
                 <div style={{
@@ -1443,7 +1474,7 @@ const LearnTab = () => {
                 'Excellent work! You have a strong understanding of this material.' :
                 quizResults.percentage >= 60 ?
                 'Good job! You\'re making progress. Review the questions you missed to improve further.' :
-                'Keep practicing! Review the material and try again to improve your understanding.'
+                '꾸준한 연습과 복습으로 실력을 늘려 보세요. '
               }
             </p>
 
@@ -1473,7 +1504,7 @@ const LearnTab = () => {
                   e.target.style.backgroundColor = COLORS.primary;
                 }}
               >
-                📝 Review Answers
+                복습
               </button>
               
               <button
@@ -1552,7 +1583,7 @@ const LearnTab = () => {
                   color: COLORS.gray,
                   margin: '0'
                 }}>
-                  {safeRender(currentQuizPack.packName)} • {String(quizResults.score)}/{String(quizResults.totalQuestions)} correct ({String(quizResults.percentage)}%)
+                  {safeRender(currentQuizPack.packName)} • {String(quizResults.score)}/{String(quizResults.totalQuestions)} 정답률 ({String(quizResults.percentage)}%)
                 </p>
               </div>
               

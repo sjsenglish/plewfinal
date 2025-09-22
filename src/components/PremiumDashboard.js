@@ -313,11 +313,11 @@ const renderOverview = () => (
   const getFeatureDescription = (sectionId) => {
     switch (sectionId) {
       case 'learn':
-        return '매 주 내게 맞춤형으로 문제지, 단어, 비디오 학습 자료가 대시보드에 표시 되어 학습 관리를 도와 줍니다.';
+        return '학습 도움을 원하는 학생들에게 맞춤형 학습 자료들이 매 주 대시보드에 표시됩니다.';
       case 'profile':
-        return '내가 공부한 학습 자료를 보관하고 복습 및 타이머 실전문제 연습까지 할 수 있어요.';
+        return '내 학습 자료 보관과 복습 그리고 타이머 실전 문제까지 할 수 있는 나의 자율 학습 공간입니다.';
       case 'question-packs':
-        return '내가 선택한 문제지를 무한 제작할 수 있어요';
+        return '내 필요에 따라 맞춤형 문제지들을 무한 제작 할 수 있습니다.';
       default:
         return '';
     }

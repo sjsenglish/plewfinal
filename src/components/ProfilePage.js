@@ -650,7 +650,7 @@ export const ProfilePage = () => {
                 color: '#111827',
                 margin: '0'
               }}>
-                마이 문제은행
+                내 학습 자료
               </h2>
               <button
                 onClick={() => navigate('/question-pack')}
@@ -720,7 +720,7 @@ export const ProfilePage = () => {
                   margin: '0 0 20px 0',
                   fontSize: '14px'
                 }}>
-                  Create your first question pack to get started with personalized practice sessions
+                  이제 첫번째 문제지를 생성하고 나만의 맞춤 학습을 시작해보세요.
                 </p>
                 <button
                   onClick={() => navigate('/question-pack')}
@@ -813,7 +813,7 @@ export const ProfilePage = () => {
                             cursor: 'pointer'
                           }}
                         >
-                          View Pack
+                          문제지 보기
                         </button>
 
                         {/* Hide PDF button for Korean-English questions */}
@@ -850,7 +850,7 @@ export const ProfilePage = () => {
                             cursor: 'pointer'
                           }}
                         >
-                          Practice
+                          연습하기
                         </button>
 
                         {latestAttempt && (
@@ -867,7 +867,7 @@ export const ProfilePage = () => {
                               cursor: 'pointer'
                             }}
                           >
-                            Review Quiz
+                            복습
                           </button>
                         )}
                       </div>
@@ -960,7 +960,7 @@ export const ProfilePage = () => {
                     cursor: 'pointer'
                   }}
                 >
-                  View My Packs
+                  문제지 보기
                 </button>
               </div>
             ) : (
@@ -1051,7 +1051,7 @@ export const ProfilePage = () => {
                             fontSize: '13px',
                             color: '#9ca3af'
                           }}>
-                            Completed: {formatDate(attempt.completedAt)} • Time: {formatTime(attempt.timeElapsed)}
+                            Completed: {formatDate(attempt.completedAt)} • 시간: {formatTime(attempt.timeElapsed)}
                           </div>
                         </div>
                       </div>
@@ -1074,7 +1074,7 @@ export const ProfilePage = () => {
                             cursor: 'pointer'
                           }}
                         >
-                          Review Answers
+                          정답 확인
                         </button>
 
                         <button
