@@ -156,11 +156,11 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
   // Get video button text
   const getVideoButtonText = () => {
     if (checkingVideoAccess) return 'Checking...';
-    if (!user) return 'Log in to Watch';
-    if (isPaidUser) return 'Watch Solution';
-    if (videoUsage && videoUsage.remaining === 0) return 'Daily Limit Reached';
-    if (videoUsage) return `Watch Solution (${videoUsage.remaining} left)`;
-    return 'Watch Solution';
+    if (!user) return '로그인';
+    if (isPaidUser) return '해설 보기';
+    if (videoUsage && videoUsage.remaining === 0) return '일일 한도 도달';
+    if (videoUsage) return `해설 보기 (${videoUsage.remaining} left)`;
+    return '해설 보기';
   };
 
   // Get video button disabled state
@@ -239,7 +239,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                 color: '#111827',
                 margin: '0 0 4px 0'
               }}>
-                Quiz Review
+                시험 복습
               </h2>
               <p style={{
                 fontSize: '13px',
@@ -311,14 +311,14 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                   <div style={{ fontSize: '18px', fontWeight: '600', color: COLORS.success }}>
                     {results.score}
                   </div>
-                  <div style={{ fontSize: '12px', color: COLORS.gray }}>Correct</div>
+                  <div style={{ fontSize: '12px', color: COLORS.gray }}>정답</div>
                 </div>
 
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: '18px', fontWeight: '600', color: COLORS.error }}>
                     {results.totalQuestions - results.score}
                   </div>
-                  <div style={{ fontSize: '12px', color: COLORS.gray }}>Incorrect</div>
+                  <div style={{ fontSize: '12px', color: COLORS.gray }}>오답</div>
                 </div>
 
                 {results.timeElapsed && (
@@ -326,7 +326,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                     <div style={{ fontSize: '18px', fontWeight: '600', color: COLORS.teal }}>
                       {formatTime(results.timeElapsed)}
                     </div>
-                    <div style={{ fontSize: '12px', color: COLORS.gray }}>Time</div>
+                    <div style={{ fontSize: '12px', color: COLORS.gray }}>시간</div>
                   </div>
                 )}
               </div>
@@ -345,7 +345,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
               color: '#111827',
               margin: '0 0 16px 0'
             }}>
-              Question Breakdown
+              문제
             </h3>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -375,7 +375,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                           fontWeight: '500',
                           color: COLORS.gray
                         }}>
-                          Question {index + 1}
+                          문제 {index + 1}
                         </span>
                         <div style={{
                           padding: '3px 10px',
@@ -385,7 +385,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                           backgroundColor: result.isCorrect ? COLORS.success + '20' : COLORS.error + '20',
                           color: result.isCorrect ? COLORS.success : COLORS.error
                         }}>
-                          {result.isCorrect ? '✓ Correct' : '✗ Incorrect'}
+                          {result.isCorrect ? '✓ 정답' : '✗ 오답'}
                         </div>
                       </div>
                       
@@ -548,7 +548,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 color: COLORS.darkGray,
                                 margin: '0 0 8px 0'
                               }}>
-                                Question
+                                문베
                               </h4>
                               <p style={{
                                 fontSize: '14px',
@@ -573,7 +573,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 color: COLORS.darkGray,
                                 margin: '0 0 12px 0'
                               }}>
-                                Options
+                                선지
                               </h4>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {question.options.map((option, optIndex) => {
@@ -797,7 +797,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 color: COLORS.darkGray,
                                 margin: '0 0 8px 0'
                               }}>
-                                Korean Text
+                                지문
                               </h4>
                               <div style={{
                                 fontSize: '15px',
@@ -832,7 +832,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 color: COLORS.darkGray,
                                 margin: '0 0 8px 0'
                               }}>
-                                Question
+                                문제
                               </h4>
                               <p style={{
                                 fontSize: '14px',
@@ -855,7 +855,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                                 color: COLORS.darkGray,
                                 margin: '0 0 12px 0'
                               }}>
-                                Options
+                                선지
                               </h4>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {(question.answerOptions || question.options).map((option, optIndex) => {
@@ -1260,12 +1260,12 @@ const getQuestionPreview = (question) => {
     }
     return 'Korean-English Question';
   }
-  return 'Question';
+  return '문제';
 };
 
 const submitQuiz = async () => {
   if (!isDemoMode && !user) {
-    alert('Please log in to save quiz results');
+    alert('프로필을 보려면 로그인 하세요.');
     return;
   }
 
@@ -1531,7 +1531,7 @@ if (!isDemoMode && user) {
               fontWeight: '500',
               color: COLORS.gray
             }}>
-              Question {currentQuestionIndex + 1} of {questions.length}
+              문제 {currentQuestionIndex + 1} of {questions.length}
             </span>
             <span style={{
               fontSize: '14px',
@@ -1662,7 +1662,7 @@ if (!isDemoMode && user) {
                   fontWeight: '600',
                   color: currentResult.isCorrect ? COLORS.success : COLORS.error
                 }}>
-                  {currentResult.isCorrect ? '✓ Correct' : '✗ Incorrect'}
+                  {currentResult.isCorrect ? '✓ 정답' : '✗ 오답'}
                 </span>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: packData.subject === 'tsa' ? '1fr 1fr' : '1fr', gap: '16px' }}>
@@ -1759,7 +1759,7 @@ if (!isDemoMode && user) {
                     color: '#111827',
                     margin: '0 0 16px 0'
                   }}>
-                    Question
+                    문제
                   </h3>
                   <p style={{
                     fontSize: '16px',
@@ -1780,7 +1780,7 @@ if (!isDemoMode && user) {
                     color: '#111827',
                     margin: '0 0 16px 0'
                   }}>
-                    Options
+                    선지
                   </h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {currentQuestion.options.map((option, index) => {
@@ -1895,7 +1895,7 @@ if (!isDemoMode && user) {
                   color: '#111827',
                   margin: '0'
                 }}>
-                  Question {currentQuestionIndex + 1}
+                  문제 {currentQuestionIndex + 1}
                 </h3>
                 {currentQuestion.marks && (
                   <p style={{
@@ -2136,7 +2136,7 @@ if (!isDemoMode && user) {
                     marginBottom: '8px',
                     fontWeight: '500'
                   }}>
-                    Korean Text:
+                    지문:
                   </div>
                   <div style={{
                     fontSize: '15px',
@@ -2168,7 +2168,7 @@ if (!isDemoMode && user) {
                     color: '#111827',
                     margin: '0 0 12px 0'
                   }}>
-                    Question
+                    문제
                   </h3>
                   <div style={{
                     fontSize: '15px',
@@ -2194,7 +2194,8 @@ if (!isDemoMode && user) {
                     color: '#111827',
                     margin: '0 0 16px 0'
                   }}>
-                    Choose the best answer:
+                    정답을 찾아 보세요
+:
                   </h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {(currentQuestion.answerOptions || currentQuestion.options).map((option, index) => {
@@ -2339,7 +2340,7 @@ if (!isDemoMode && user) {
                 color: COLORS.teal,
                 fontWeight: '500'
               }}>
-                📖 Review Mode
+                📖 복습하기 
               </div>
             )}
           </div>
@@ -2375,7 +2376,7 @@ if (!isDemoMode && user) {
                   Submitting...
                 </>
               ) : (
-                'Submit Quiz'
+                '정답 보기'
               )}
             </button>
           ) : (
@@ -2393,7 +2394,7 @@ if (!isDemoMode && user) {
                 cursor: currentQuestionIndex === questions.length - 1 ? 'not-allowed' : 'pointer'
               }}
             >
-              Next →
+              다음 →
             </button>
           )}
         </div>

@@ -265,7 +265,7 @@ export const ProfilePage = () => {
       
       if (questions.length === 0) {
         console.error('No questions received from fetchQuestionsForPack');
-        alert('Failed to load questions for PDF generation. Please try refreshing the page and try again.');
+        alert('복습할 수 있는 문제들을 불러오지 못했습니다.');
         return;
       }
 
@@ -347,7 +347,7 @@ export const ProfilePage = () => {
       const questions = await fetchQuestionsForPack(pack);
       
       if (questions.length === 0) {
-        alert('Failed to load questions for practice');
+        alert('복습할 수 있는 문제들을 불러오지 못했습니다.');
         return;
       }
 
@@ -363,7 +363,7 @@ export const ProfilePage = () => {
 
     } catch (error) {
       console.error('Error loading questions for practice:', error);
-      alert('Failed to load questions for practice. Please try again.');
+      alert('복습할 수 있는 문제들을 불러오지 못했습니다.');
     }
   };
 
@@ -378,7 +378,7 @@ export const ProfilePage = () => {
       const questions = await fetchQuestionsForPack(pack);
       
       if (questions.length === 0) {
-        alert('Failed to load questions for review');
+        alert('복습할 수 있는 문제들을 불러오지 못했습니다.');
         return;
       }
 
@@ -389,7 +389,7 @@ export const ProfilePage = () => {
       });
     } catch (error) {
       console.error('Error loading questions for review:', error);
-      alert('Failed to load questions for review. Please try again.');
+      alert('복습할 수 있는 문제들을 불러오지 못했습니다.');
     }
   };
 
@@ -476,7 +476,7 @@ export const ProfilePage = () => {
               color: COLORS.gray,
               marginBottom: '24px'
             }}>
-              Please log in to view your profile.
+              프로필을 보려면 로그인 하세요.
             </p>
             <a href="/login" style={{
               backgroundColor: COLORS.purple,
@@ -487,7 +487,7 @@ export const ProfilePage = () => {
               fontSize: '14px',
               fontWeight: '500'
             }}>
-              Log In
+              로그인
             </a>
           </div>
         </div>
@@ -735,7 +735,7 @@ export const ProfilePage = () => {
                     cursor: 'pointer'
                   }}
                 >
-                  Create Your First Pack
+                  첫번째 문제지 생성하기
                 </button>
               </div>
             ) : (
@@ -781,7 +781,7 @@ export const ProfilePage = () => {
                                 color: getScoreColor(latestAttempt.percentage),
                                 fontWeight: '500'
                               }}>
-                                Latest: {latestAttempt.percentage}%
+                                최근 점수: {latestAttempt.percentage}%
                               </span>
                             )}
                           </div>
@@ -790,7 +790,7 @@ export const ProfilePage = () => {
                             fontSize: '13px',
                             color: '#9ca3af'
                           }}>
-                            Created: {formatDate(pack.createdAt)} • Status: {pack.status || 'completed'}
+                            생성 날짜: {formatDate(pack.createdAt)} • 상태: {pack.status || 'completed'}
                           </div>
                         </div>
                       </div>
@@ -981,28 +981,28 @@ export const ProfilePage = () => {
                       <div style={{ fontSize: '24px', fontWeight: '600', color: COLORS.purple }}>
                         {userStats.totalAttempts}
                       </div>
-                      <div style={{ fontSize: '13px', color: COLORS.gray }}>Total Attempts</div>
+                      <div style={{ fontSize: '13px', color: COLORS.gray }}>시도 횟수</div>
                     </div>
 
                     <div style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '24px', fontWeight: '600', color: '#10b981' }}>
                         {userStats.averageScore}%
                       </div>
-                      <div style={{ fontSize: '13px', color: COLORS.gray }}>Average Score</div>
+                      <div style={{ fontSize: '13px', color: COLORS.gray }}>평균 점수</div>
                     </div>
 
                     <div style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '24px', fontWeight: '600', color: '#3b82f6' }}>
                         {userStats.bestScore}%
                       </div>
-                      <div style={{ fontSize: '13px', color: COLORS.gray }}>Best Score</div>
+                      <div style={{ fontSize: '13px', color: COLORS.gray }}>최고 점수</div>
                     </div>
 
                     <div style={{ textAlign: 'center' }}>
                       <div style={{ fontSize: '24px', fontWeight: '600', color: '#f59e0b' }}>
                         {userStats.totalPacks}
                       </div>
-                      <div style={{ fontSize: '13px', color: COLORS.gray }}>Total Packs</div>
+                      <div style={{ fontSize: '13px', color: COLORS.gray }}>전체 시험지 팩</div>
                     </div>
                   </div>
                 )}

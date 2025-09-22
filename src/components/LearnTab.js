@@ -1471,9 +1471,9 @@ const LearnTab = () => {
               lineHeight: '1.5'
             }}>
               {quizResults.percentage >= 80 ? 
-                'Excellent work! You have a strong understanding of this material.' :
+                '아주 좋은 입니다. 학습 내용을 잘 이해하고 있습니다.' :
                 quizResults.percentage >= 60 ?
-                'Good job! You\'re making progress. Review the questions you missed to improve further.' :
+                '실력이 계속 향상되고 있으니 문제들을 복습하고 실력을 더 다져 보세요.' :
                 '꾸준한 연습과 복습으로 실력을 늘려 보세요. '
               }
             </p>

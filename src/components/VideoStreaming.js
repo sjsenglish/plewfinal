@@ -12,52 +12,47 @@ const SAMPLE_VIDEOS = {
   },
   categories: [
     {
-      title: 'PLEW',
+      title: 'PLEW 강의 시리즈',
       videos: [
         {
           id: 'v1',
-          title: 'Korean Grammar Fundamentals',
+          title: 'Lesson 1',
           videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+1Final.mp4',
           poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson1Thumbnail.jpg'
         },
         {
           id: 'v2',
-          title: 'Advanced Vocabulary Building',
+          title: 'Lesson 2',
           videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+2.mp4',
           poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/02.jpg'
         },
         {
           id: 'v3',
-          title: 'Speaking Practice Sessions',
+          title: 'Lesson 3',
           videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson3final.mp4',
           poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/03.jpg'
         },
         {
           id: 'v4',
-          title: 'Cultural Context Learning',
+          title: 'Lesson 4',
           videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+4.mp4',
           poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/04.jpg'
         },
         {
           id: 'v5',
-          title: 'Pronunciation Guide',
+          title: 'Lesson 5',
           videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+5.mp4',
           poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/05.jpg'
-        }
-      ]
-    },
-    {
-      title: 'PLEW',
-      videos: [
+        },
         {
           id: 'v6',
-          title: 'TOPIK Preparation',
+          title: 'Lesson 6',
           videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+6_SS.mp4',
           poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/06.jpg'
         },
         {
           id: 'v8',
-          title: 'Daily Conversation',
+          title: 'Lesson 8',
           videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+8_SS.mp4',
           poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/08.jpg'
         }
@@ -75,19 +70,10 @@ const VideoStreaming = () => {
   const carouselRefs = useRef({});
 
   useEffect(() => {
-    // YouTube iframe auto-plays with autoplay=1 parameter
-    // No need to manually call play() on iframe elements
-
     // Add keyboard event listeners
     const handleKeyPress = (e) => {
       if (e.key === 'Escape' && isFullscreen) {
         closeFullscreen();
-      }
-      if (e.key === 'ArrowLeft') {
-        // Handle left arrow for carousel navigation
-      }
-      if (e.key === 'ArrowRight') {
-        // Handle right arrow for carousel navigation
       }
     };
 
@@ -105,13 +91,12 @@ const VideoStreaming = () => {
     setIsFullscreen(false);
     setCurrentVideo(null);
     setIsPlaying(false);
-    // YouTube iframes don't have pause() method - they're controlled via URL parameters
   };
 
   const scrollCarousel = (categoryIndex, direction) => {
     const carousel = carouselRefs.current[categoryIndex];
     if (carousel) {
-      const scrollAmount = 320; // Width of one card plus gap
+      const scrollAmount = 340; // Width of one card plus gap
       carousel.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -120,50 +105,210 @@ const VideoStreaming = () => {
   };
 
   return (
-    <div className="video-streaming">
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-video-container">
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%)',
+      color: 'white',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    }}>
+      {/* Hero Section with Message Overlay */}
+      <section style={{
+        position: 'relative',
+        height: '85vh',
+        overflow: 'hidden',
+        marginBottom: '60px'
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflow: 'hidden'
+        }}>
           <iframe
             ref={heroVideoRef}
-            className="hero-video"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: '100vw',
+              height: '100vh',
+              transform: 'translate(-50%, -50%)',
+              objectFit: 'cover',
+              border: 'none',
+              minWidth: '100%',
+              minHeight: '100%'
+            }}
             src={SAMPLE_VIDEOS.hero.videoUrl}
             title={SAMPLE_VIDEOS.hero.title}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
-          <div className="hero-overlay"></div>
-          <div className="hero-content">
-            <h1 className="hero-title">{SAMPLE_VIDEOS.hero.title}</h1>
-            <p className="hero-description">{SAMPLE_VIDEOS.hero.description}</p>
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%)'
+          }}></div>
+        </div>
+        
+        {/* Stylish Message Overlay */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          textAlign: 'center',
+          zIndex: 10,
+          width: '90%',
+          maxWidth: '900px'
+        }}>
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '24px',
+            padding: '48px 40px',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+          }}>
+            <h1 style={{
+              fontSize: '48px',
+              fontWeight: '800',
+              marginBottom: '24px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              letterSpacing: '-1px'
+            }}>
+              옥스포드 테크닉 PLEW
+            </h1>
+            <p style={{
+              fontSize: '22px',
+              lineHeight: '1.7',
+              color: 'rgba(255, 255, 255, 0.9)',
+              marginBottom: '20px',
+              fontWeight: '300'
+            }}>
+              쉽고 심플하게 해설해 주는 강의 시리즈입니다.
+            </p>
+            <p style={{
+              fontSize: '18px',
+              lineHeight: '1.6',
+              color: 'rgba(255, 255, 255, 0.7)',
+              marginBottom: '32px',
+              fontWeight: '300'
+            }}>
+              시리즈를 완성한 후에는 문제 은행에서 다양한 오리지널 문제들을 연습해 보세요.<br/>
+              방법을 알면 독해가 어렵지 않아요.
+            </p>
             <button 
-              className="hero-play-btn"
-              onClick={() => playVideo(SAMPLE_VIDEOS.hero)}
+              onClick={() => {
+                const firstVideo = SAMPLE_VIDEOS.categories[0].videos[0];
+                playVideo(firstVideo);
+              }}
+              style={{
+                padding: '14px 40px',
+                fontSize: '17px',
+                fontWeight: '600',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                border: 'none',
+                borderRadius: '12px',
+                color: 'white',
+                cursor: 'pointer',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+                letterSpacing: '0.5px'
+              }}
+              onMouseOver={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.5)';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
+              }}
             >
-              <span className="play-icon">▶</span>
-              Play
+              강의 시작하기 →
             </button>
           </div>
         </div>
       </section>
 
-      {/* Video Carousels */}
-      <section className="video-carousels">
+      {/* Video Grid Section */}
+      <section style={{
+        padding: '0 40px 80px'
+      }}>
         {SAMPLE_VIDEOS.categories.map((category, categoryIndex) => (
-          <div key={categoryIndex} className="video-category">
-            <div className="category-header">
-              <h2 className="category-title">{category.title}</h2>
-              <div className="carousel-controls">
+          <div key={categoryIndex} style={{ maxWidth: '1400px', margin: '0 auto' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '32px'
+            }}>
+              <h2 style={{
+                fontSize: '32px',
+                fontWeight: '700',
+                color: 'white',
+                letterSpacing: '-0.5px'
+              }}>
+                {category.title}
+              </h2>
+              <div style={{
+                display: 'flex',
+                gap: '12px'
+              }}>
                 <button 
-                  className="carousel-arrow left"
                   onClick={() => scrollCarousel(categoryIndex, 'left')}
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '50%',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    color: 'white',
+                    fontSize: '24px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  }}
                 >
                   ‹
                 </button>
                 <button 
-                  className="carousel-arrow right"
                   onClick={() => scrollCarousel(categoryIndex, 'right')}
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '50%',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    color: 'white',
+                    fontSize: '24px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+                  }}
                 >
                   ›
                 </button>
@@ -171,22 +316,108 @@ const VideoStreaming = () => {
             </div>
             
             <div 
-              className="video-carousel"
               ref={el => carouselRefs.current[categoryIndex] = el}
+              style={{
+                display: 'flex',
+                gap: '24px',
+                overflowX: 'auto',
+                scrollBehavior: 'smooth',
+                paddingBottom: '20px',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                WebkitScrollbar: { display: 'none' }
+              }}
             >
               {category.videos.map((video) => (
                 <div 
                   key={video.id} 
-                  className="video-card"
                   onClick={() => playVideo(video)}
+                  style={{
+                    minWidth: '320px',
+                    cursor: 'pointer',
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                    e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.5)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
                 >
-                  <div className="video-thumbnail">
-                    <img src={video.poster} alt={video.title} />
-                    <div className="video-overlay">
-                      <div className="play-button">
-                        <span className="play-icon">▶</span>
+                  <div style={{
+                    position: 'relative',
+                    paddingTop: '56.25%',
+                    overflow: 'hidden',
+                    background: '#1a1a1a'
+                  }}>
+                    <img 
+                      src={video.poster} 
+                      alt={video.title}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      opacity: 0,
+                      transition: 'opacity 0.3s ease'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.opacity = '1';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.opacity = '0';
+                    }}
+                    >
+                      <div style={{
+                        width: '72px',
+                        height: '72px',
+                        borderRadius: '50%',
+                        background: 'rgba(255, 255, 255, 0.9)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                      }}>
+                        <span style={{
+                          color: '#1a1a1a',
+                          fontSize: '24px',
+                          marginLeft: '4px'
+                        }}>▶</span>
                       </div>
                     </div>
+                  </div>
+                  <div style={{
+                    padding: '16px 20px',
+                    background: 'rgba(255, 255, 255, 0.03)'
+                  }}>
+                    <h3 style={{
+                      fontSize: '18px',
+                      fontWeight: '600',
+                      color: 'white',
+                      margin: 0
+                    }}>
+                      {video.title}
+                    </h3>
                   </div>
                 </div>
               ))}
@@ -197,20 +428,82 @@ const VideoStreaming = () => {
 
       {/* Fullscreen Video Player */}
       {isFullscreen && currentVideo && (
-        <div className="fullscreen-overlay">
-          <div className="fullscreen-player">
-            <button className="close-button" onClick={closeFullscreen}>
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.95)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <div style={{
+            position: 'relative',
+            width: '90vw',
+            maxWidth: '1200px',
+            height: '80vh'
+          }}>
+            <button 
+              onClick={closeFullscreen}
+              style={{
+                position: 'absolute',
+                top: '-50px',
+                right: '0',
+                width: '48px',
+                height: '48px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: 'white',
+                fontSize: '28px',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 10
+              }}
+              onMouseOver={(e) => {
+                e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = 'rgba(255, 255, 255, 0.1)';
+              }}
+            >
               ×
             </button>
-            <iframe
-              ref={fullscreenVideoRef}
-              className="fullscreen-video"
-              src={currentVideo.videoUrl}
-              title={currentVideo.title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
+            {currentVideo.videoUrl.includes('youtube.com') ? (
+              <iframe
+                ref={fullscreenVideoRef}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  borderRadius: '12px'
+                }}
+                src={currentVideo.videoUrl}
+                title={currentVideo.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            ) : (
+              <video
+                ref={fullscreenVideoRef}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '12px',
+                  objectFit: 'contain'
+                }}
+                src={currentVideo.videoUrl}
+                controls
+                autoPlay
+              />
+            )}
           </div>
         </div>
       )}
