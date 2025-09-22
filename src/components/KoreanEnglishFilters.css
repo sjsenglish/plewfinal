@@ -52,9 +52,67 @@
 }
 
 .filters-content {
+  display: none;
+  padding: 1rem 0;
+}
+
+.filters-content.expanded {
   display: block;
   opacity: 1;
   transition: all 0.3s ease;
+}
+
+/* Filter sections */
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-section-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  font-family: 'Futura', 'Futura PT', sans-serif;
+}
+
+.filter-section-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-section-toggle:hover {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+}
+
+.filter-section-toggle .toggle-icon {
+  font-size: 0.9rem;
+  color: #6b7280;
+  transition: transform 0.2s ease;
+}
+
+.filter-section-toggle .toggle-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.core-filters {
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 1rem;
+}
+
+.advanced-filters {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  background: #f8fafc;
 }
 
 .filter-categories {

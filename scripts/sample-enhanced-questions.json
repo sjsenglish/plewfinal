@@ -1,0 +1,1765 @@
+[
+  {
+    "questionNumber": 45,
+    "year": "2025",
+    "questionText": "(A)\n\"Do you remember when Sean used to tell me that I was the best dad in the world?\" Ethan asked his wife, Grace. \"Yes, I do. I always envied your relationship with Sean,\" she replied. Ethan then shared how things had changed since (a) his son started middle school. Grace had noticed Ethan often pushing Sean to study harder. \"Maybe he isn't that into school right now. How about going hiking, just the two of you?\" she suggested. He agreed, and realizing that both his and Sean's hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, \"Sean, let's go hiking this Saturday, just the two of us.\" Though Sean thanked (b) him for the suggestion, he said he had to go to the library. Grace stepped in, \"You know, the weather this weekend will be the best of the year. Why not enjoy it?\" After a moment's hesitation, (c) he agreed.\n\n(C)\n\"When did you bring the jackets in?\" the clerk at the laundry asked. \"Maybe two weeks ago,\" Ethan replied. Then, Grace quickly reminded (d) him, \"Honey, we actually left them here a month ago.\" The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, \"I am sorry, but please collect your items earlier next time. Our storage is too full.\" Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn't walk, Ethan carried his son down on his back. He felt Sean's heartbeat, something he hadn't felt since Sean was a baby. Suddenly, Sean said, \"Dad, I'm sorry. At some point, I started to become afraid of disappointing (e) you. But you are still the best dad.\" Energized, he felt no weight on his back and replied, \"You are the best son, no matter what.\"",
+    "actualQuestion": "윗글에 관한 내용으로 적절하지 않은 것은?",
+    "answerOptions": [
+      "① Grace는 Ethan과 Sean의 관계를 부러워했다고 말했다.",
+      "② Grace는 Ethan에게 Sean과 둘이서 하이킹할 것을 권했다.",
+      "③ Sean의 선글라스가 서랍장 안에 있었다.",
+      "④ Ethan은 혼자서 세탁소에 하이킹 재킷을 찾으러 갔다.",
+      "⑤ Sean은 하이킹하는 도중 돌에 걸려 넘어졌다."
+    ],
+    "correctAnswer": "④ Ethan은 혼자서 세탁소에 하이킹 재킷을 찾으러 갔다.",
+    "imageFile": "https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/plew2025%2FScreenshot%202025-09-22%20at%2018.04.23.png?alt=media&token=86ce721a-a3d2-40cd-97b0-dc30a4602f9e",
+    "videoSolutionLink": "",
+    "questionType": "Factual Comprehension",
+    "theoryArea": "Family Relationships",
+    "objectID": "4a5b06e7f5a06_dashboard_generated_id",
+    "_highlightResult": {
+      "questionNumber": {
+        "value": "45",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "year": {
+        "value": "2025",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionText": {
+        "value": "(A)\n\"Do you remember when Sean used to tell me that I was the best dad in the world?\" Ethan asked his wife, Grace. \"Yes, I do. I always envied your relationship with Sean,\" she replied. Ethan then shared how things had changed since (a) his son started middle school. Grace had noticed Ethan often pushing Sean to study harder. \"Maybe he isn't that into school right now. How about going hiking, just the two of you?\" she suggested. He agreed, and realizing that both his and Sean's hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, \"Sean, let's go hiking this Saturday, just the two of us.\" Though Sean thanked (b) him for the suggestion, he said he had to go to the library. Grace stepped in, \"You know, the weather this weekend will be the best of the year. Why not enjoy it?\" After a moment's hesitation, (c) he agreed.\n\n(C)\n\"When did you bring the jackets in?\" the clerk at the laundry asked. \"Maybe two weeks ago,\" Ethan replied. Then, Grace quickly reminded (d) him, \"Honey, we actually left them here a month ago.\" The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, \"I am sorry, but please collect your items earlier next time. Our storage is too full.\" Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn't walk, Ethan carried his son down on his back. He felt Sean's heartbeat, something he hadn't felt since Sean was a baby. Suddenly, Sean said, \"Dad, I'm sorry. At some point, I started to become afraid of disappointing (e) you. But you are still the best dad.\" Energized, he felt no weight on his back and replied, \"You are the best son, no matter what.\"",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "actualQuestion": {
+        "value": "윗글에 관한 내용으로 적절하지 않은 것은?",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "answerOptions": [
+        {
+          "value": "① Grace는 Ethan과 Sean의 관계를 부러워했다고 말했다.",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "② Grace는 Ethan에게 Sean과 둘이서 하이킹할 것을 권했다.",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "③ Sean의 선글라스가 서랍장 안에 있었다.",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "④ Ethan은 혼자서 세탁소에 하이킹 재킷을 찾으러 갔다.",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "⑤ Sean은 하이킹하는 도중 돌에 걸려 넘어졌다.",
+          "matchLevel": "none",
+          "matchedWords": []
+        }
+      ],
+      "correctAnswer": {
+        "value": "④ Ethan은 혼자서 세탁소에 하이킹 재킷을 찾으러 갔다.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionType": {
+        "value": "Factual Comprehension",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "theoryArea": {
+        "value": "Family Relationships",
+        "matchLevel": "none",
+        "matchedWords": []
+      }
+    },
+    "source": "past-paper",
+    "primarySubjectArea": "social_sciences",
+    "secondarySubjectArea": "psychology",
+    "passageType": "comprehension",
+    "questionSkill": "factual_comprehension",
+    "difficultyLevel": "medium",
+    "expectedCorrectRate": 0.8,
+    "vocabularyDemand": 5780,
+    "textSource": "academic_journal",
+    "_confidence": {
+      "source": 0.95,
+      "subject": 0.3,
+      "passage": 0.8,
+      "textSource": 0.6
+    },
+    "_classification_details": {
+      "subject": {
+        "natural_sciences": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "social_sciences": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literature_arts": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "humanities": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "passage": {
+        "argumentative": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "discursive": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "analytical": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "comprehension": {
+          "score": 2,
+          "matchedKeywords": [
+            "he said",
+            "she replied"
+          ]
+        }
+      },
+      "textSource": {
+        "academic_journal": {
+          "score": 1,
+          "matchedKeywords": [
+            "study"
+          ]
+        },
+        "university_textbook": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "popular_media": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "news_article": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "scientific_publication": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literary_work": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "difficulty": {
+        "level": "medium",
+        "expectedCorrectRate": 0.8,
+        "vocabularyDemand": 5780,
+        "difficultyScore": 0.4
+      }
+    }
+  },
+  {
+    "questionNumber": 44,
+    "year": "2025",
+    "questionText": "(A)\n\"Do you remember when Sean used to tell me that I was the best dad in the world?\" Ethan asked his wife, Grace. \"Yes, I do. I always envied your relationship with Sean,\" she replied. Ethan then shared how things had changed since (a) his son started middle school. Grace had noticed Ethan often pushing Sean to study harder. \"Maybe he isn't that into school right now. How about going hiking, just the two of you?\" she suggested. He agreed, and realizing that both his and Sean's hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, \"Sean, let's go hiking this Saturday, just the two of us.\" Though Sean thanked (b) him for the suggestion, he said he had to go to the library. Grace stepped in, \"You know, the weather this weekend will be the best of the year. Why not enjoy it?\" After a moment's hesitation, (c) he agreed.\n\n(C)\n\"When did you bring the jackets in?\" the clerk at the laundry asked. \"Maybe two weeks ago,\" Ethan replied. Then, Grace quickly reminded (d) him, \"Honey, we actually left them here a month ago.\" The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, \"I am sorry, but please collect your items earlier next time. Our storage is too full.\" Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn't walk, Ethan carried his son down on his back. He felt Sean's heartbeat, something he hadn't felt since Sean was a baby. Suddenly, Sean said, \"Dad, I'm sorry. At some point, I started to become afraid of disappointing (e) you. But you are still the best dad.\" Energized, he felt no weight on his back and replied, \"You are the best son, no matter what.\"",
+    "actualQuestion": "밑줄 친 (a)～(e) 중에서 가리키는 대상이 나머지 넷과 다른 것은?",
+    "answerOptions": [
+      "① (a)",
+      "② (b)",
+      "③ (c)",
+      "④ (d)",
+      "⑤ (e)"
+    ],
+    "correctAnswer": "③ (c)",
+    "imageFile": "https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/plew2025%2FScreenshot%202025-09-22%20at%2018.04.23.png?alt=media&token=86ce721a-a3d2-40cd-97b0-dc30a4602f9e",
+    "videoSolutionLink": "",
+    "questionType": "Reference",
+    "theoryArea": "Reading Comprehension",
+    "objectID": "7344423a62bea_dashboard_generated_id",
+    "_highlightResult": {
+      "questionNumber": {
+        "value": "44",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "year": {
+        "value": "2025",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionText": {
+        "value": "(A)\n\"Do you remember when Sean used to tell me that I was the best dad in the world?\" Ethan asked his wife, Grace. \"Yes, I do. I always envied your relationship with Sean,\" she replied. Ethan then shared how things had changed since (a) his son started middle school. Grace had noticed Ethan often pushing Sean to study harder. \"Maybe he isn't that into school right now. How about going hiking, just the two of you?\" she suggested. He agreed, and realizing that both his and Sean's hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, \"Sean, let's go hiking this Saturday, just the two of us.\" Though Sean thanked (b) him for the suggestion, he said he had to go to the library. Grace stepped in, \"You know, the weather this weekend will be the best of the year. Why not enjoy it?\" After a moment's hesitation, (c) he agreed.\n\n(C)\n\"When did you bring the jackets in?\" the clerk at the laundry asked. \"Maybe two weeks ago,\" Ethan replied. Then, Grace quickly reminded (d) him, \"Honey, we actually left them here a month ago.\" The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, \"I am sorry, but please collect your items earlier next time. Our storage is too full.\" Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn't walk, Ethan carried his son down on his back. He felt Sean's heartbeat, something he hadn't felt since Sean was a baby. Suddenly, Sean said, \"Dad, I'm sorry. At some point, I started to become afraid of disappointing (e) you. But you are still the best dad.\" Energized, he felt no weight on his back and replied, \"You are the best son, no matter what.\"",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "actualQuestion": {
+        "value": "밑줄 친 (a)～(e) 중에서 가리키는 대상이 나머지 넷과 다른 것은?",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "answerOptions": [
+        {
+          "value": "① (a)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "② (b)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "③ (c)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "④ (d)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "⑤ (e)",
+          "matchLevel": "none",
+          "matchedWords": []
+        }
+      ],
+      "correctAnswer": {
+        "value": "③ (c)",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionType": {
+        "value": "Reference",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "theoryArea": {
+        "value": "Reading Comprehension",
+        "matchLevel": "none",
+        "matchedWords": []
+      }
+    },
+    "source": "past-paper",
+    "primarySubjectArea": "humanities",
+    "secondarySubjectArea": "geography",
+    "passageType": "comprehension",
+    "questionSkill": "reference_understanding",
+    "difficultyLevel": "medium",
+    "expectedCorrectRate": 0.7,
+    "vocabularyDemand": 5780,
+    "textSource": "academic_journal",
+    "_confidence": {
+      "source": 0.95,
+      "subject": 0.3,
+      "passage": 0.8,
+      "textSource": 0.6
+    },
+    "_classification_details": {
+      "subject": {
+        "natural_sciences": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "social_sciences": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literature_arts": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "humanities": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "passage": {
+        "argumentative": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "discursive": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "analytical": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "comprehension": {
+          "score": 2,
+          "matchedKeywords": [
+            "he said",
+            "she replied"
+          ]
+        }
+      },
+      "textSource": {
+        "academic_journal": {
+          "score": 1,
+          "matchedKeywords": [
+            "study"
+          ]
+        },
+        "university_textbook": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "popular_media": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "news_article": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "scientific_publication": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literary_work": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "difficulty": {
+        "level": "medium",
+        "expectedCorrectRate": 0.7,
+        "vocabularyDemand": 5780,
+        "difficultyScore": 0.5
+      }
+    }
+  },
+  {
+    "questionNumber": 43,
+    "year": "2025",
+    "questionText": "(A)\n\"Do you remember when Sean used to tell me that I was the best dad in the world?\" Ethan asked his wife, Grace. \"Yes, I do. I always envied your relationship with Sean,\" she replied. Ethan then shared how things had changed since (a) his son started middle school. Grace had noticed Ethan often pushing Sean to study harder. \"Maybe he isn't that into school right now. How about going hiking, just the two of you?\" she suggested. He agreed, and realizing that both his and Sean's hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, \"Sean, let's go hiking this Saturday, just the two of us.\" Though Sean thanked (b) him for the suggestion, he said he had to go to the library. Grace stepped in, \"You know, the weather this weekend will be the best of the year. Why not enjoy it?\" After a moment's hesitation, (c) he agreed.\n\n(C)\n\"When did you bring the jackets in?\" the clerk at the laundry asked. \"Maybe two weeks ago,\" Ethan replied. Then, Grace quickly reminded (d) him, \"Honey, we actually left them here a month ago.\" The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, \"I am sorry, but please collect your items earlier next time. Our storage is too full.\" Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn't walk, Ethan carried his son down on his back. He felt Sean's heartbeat, something he hadn't felt since Sean was a baby. Suddenly, Sean said, \"Dad, I'm sorry. At some point, I started to become afraid of disappointing (e) you. But you are still the best dad.\" Energized, he felt no weight on his back and replied, \"You are the best son, no matter what.\"",
+    "actualQuestion": "주어진 글 (A)에 이어질 내용을 순서에 맞게 배열한 것으로 가장 적절한 것은?",
+    "answerOptions": [
+      "① (B)-(D)-(C)",
+      "② (C)-(B)-(D)",
+      "③ (C)-(D)-(B)",
+      "④ (D)-(B)-(C)",
+      "⑤ (D)-(C)-(B)"
+    ],
+    "correctAnswer": "① (B)-(D)-(C)",
+    "imageFile": "https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/plew2025%2FScreenshot%202025-09-22%20at%2018.04.23.png?alt=media&token=86ce721a-a3d2-40cd-97b0-dc30a4602f9e",
+    "videoSolutionLink": "",
+    "questionType": "Paragraph Order",
+    "theoryArea": "Family Relationships",
+    "objectID": "76318ab9cac26_dashboard_generated_id",
+    "_highlightResult": {
+      "questionNumber": {
+        "value": "43",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "year": {
+        "value": "2025",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionText": {
+        "value": "(A)\n\"Do you remember when Sean used to tell me that I was the best dad in the world?\" Ethan asked his wife, Grace. \"Yes, I do. I always envied your relationship with Sean,\" she replied. Ethan then shared how things had changed since (a) his son started middle school. Grace had noticed Ethan often pushing Sean to study harder. \"Maybe he isn't that into school right now. How about going hiking, just the two of you?\" she suggested. He agreed, and realizing that both his and Sean's hiking jackets were still at the laundry, he asked his wife to go and pick them up with him.\n\n(B)\nEthan and Grace came back home with the jackets and checked if Sean had everything else he needed for hiking. Luckily, in his drawers they found his hat, shoes, sunglasses, and hiking sticks. When Sean returned from school, Ethan softly said, \"Sean, let's go hiking this Saturday, just the two of us.\" Though Sean thanked (b) him for the suggestion, he said he had to go to the library. Grace stepped in, \"You know, the weather this weekend will be the best of the year. Why not enjoy it?\" After a moment's hesitation, (c) he agreed.\n\n(C)\n\"When did you bring the jackets in?\" the clerk at the laundry asked. \"Maybe two weeks ago,\" Ethan replied. Then, Grace quickly reminded (d) him, \"Honey, we actually left them here a month ago.\" The clerk went into the storage area to look for the clothes. Finally, he returned with the jackets and handed them to Ethan. The clerk politely said, \"I am sorry, but please collect your items earlier next time. Our storage is too full.\" Ethan felt embarrassed for the late collection and apologized.\n\n(D)\nThe weather was perfect. Ethan and Sean set off hiking along the valley by Aicken Mountain. They walked in silence until Sean fell over a rock and twisted his ankle. Realizing he couldn't walk, Ethan carried his son down on his back. He felt Sean's heartbeat, something he hadn't felt since Sean was a baby. Suddenly, Sean said, \"Dad, I'm sorry. At some point, I started to become afraid of disappointing (e) you. But you are still the best dad.\" Energized, he felt no weight on his back and replied, \"You are the best son, no matter what.\"",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "actualQuestion": {
+        "value": "주어진 글 (A)에 이어질 내용을 순서에 맞게 배열한 것으로 가장 적절한 것은?",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "answerOptions": [
+        {
+          "value": "① (B)-(D)-(C)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "② (C)-(B)-(D)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "③ (C)-(D)-(B)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "④ (D)-(B)-(C)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "⑤ (D)-(C)-(B)",
+          "matchLevel": "none",
+          "matchedWords": []
+        }
+      ],
+      "correctAnswer": {
+        "value": "① (B)-(D)-(C)",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionType": {
+        "value": "Paragraph Order",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "theoryArea": {
+        "value": "Family Relationships",
+        "matchLevel": "none",
+        "matchedWords": []
+      }
+    },
+    "source": "past-paper",
+    "primarySubjectArea": "social_sciences",
+    "secondarySubjectArea": "psychology",
+    "passageType": "comprehension",
+    "questionSkill": "paragraph_ordering",
+    "difficultyLevel": "high",
+    "expectedCorrectRate": 0.5,
+    "vocabularyDemand": 5780,
+    "textSource": "academic_journal",
+    "_confidence": {
+      "source": 0.95,
+      "subject": 0.3,
+      "passage": 0.8,
+      "textSource": 0.6
+    },
+    "_classification_details": {
+      "subject": {
+        "natural_sciences": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "social_sciences": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literature_arts": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "humanities": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "passage": {
+        "argumentative": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "discursive": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "analytical": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "comprehension": {
+          "score": 2,
+          "matchedKeywords": [
+            "he said",
+            "she replied"
+          ]
+        }
+      },
+      "textSource": {
+        "academic_journal": {
+          "score": 1,
+          "matchedKeywords": [
+            "study"
+          ]
+        },
+        "university_textbook": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "popular_media": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "news_article": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "scientific_publication": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literary_work": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "difficulty": {
+        "level": "high",
+        "expectedCorrectRate": 0.5,
+        "vocabularyDemand": 5780,
+        "difficultyScore": 0.7
+      }
+    }
+  },
+  {
+    "questionNumber": 42,
+    "year": "2025",
+    "questionText": "Imagine grabbing a piece of paper between your thumb and index finger. Maybe you already are, as you turn this page. We use this type of forceful, pad-to-pad precision gripping without thinking about it, and literally in a snap. Yet it was a breakthrough in human evolution. Other primates exhibit some kinds of precision grips in the handling and use of objects, but not with the kind of (a) efficient opposition that our hand anatomy allows. In a single hand, humans can easily hold and manipulate objects, even small and delicate ones, while adjusting our fingers to their shape and reorienting them with (b) displacements of our fingertip pads. Our relatively long, powerful thumb and other anatomical attributes, including our flat nails (which nearly all primates possess), make this (c) possible. Just picture trying ― and failing ― to dog-ear this page with pointy, curved claws.\n\nWith a unique combination of traits, the human hand shaped our history. No question, stone tools couldn't have become a keystone of human technology and subsistence (d) without hands that could do the job, along with a nervous system that could regulate and coordinate the necessary signals. Anybody who's ever attempted to make a spear tip or arrowhead from a rock knows that it (e) excludes strong grips, constant rotation and repositioning, and forceful, careful strikes with another hard object. And even with a fair amount of know-how, it can be a bloody business.",
+    "actualQuestion": "밑줄 친 (a)～(e) 중에서 문맥상 낱말의 쓰임이 적절하지 않은 것은?",
+    "answerOptions": [
+      "① (a)",
+      "② (b)",
+      "③ (c)",
+      "④ (d)",
+      "⑤ (e)"
+    ],
+    "correctAnswer": "⑤ (e)",
+    "imageFile": "https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/plew2025%2F2025_42.png?alt=media&token=3cd3ce46-735b-4cb9-9892-0cac9a64205b",
+    "videoSolutionLink": "",
+    "questionType": "Vocabulary in Context",
+    "theoryArea": "Human Evolution",
+    "objectID": "4167ef03ac5eb_dashboard_generated_id",
+    "_highlightResult": {
+      "questionNumber": {
+        "value": "42",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "year": {
+        "value": "2025",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionText": {
+        "value": "Imagine grabbing a piece of paper between your thumb and index finger. Maybe you already are, as you turn this page. We use this type of forceful, pad-to-pad precision gripping without thinking about it, and literally in a snap. Yet it was a breakthrough in human evolution. Other primates exhibit some kinds of precision grips in the handling and use of objects, but not with the kind of (a) efficient opposition that our hand anatomy allows. In a single hand, humans can easily hold and manipulate objects, even small and delicate ones, while adjusting our fingers to their shape and reorienting them with (b) displacements of our fingertip pads. Our relatively long, powerful thumb and other anatomical attributes, including our flat nails (which nearly all primates possess), make this (c) possible. Just picture trying ― and failing ― to dog-ear this page with pointy, curved claws.\n\nWith a unique combination of traits, the human hand shaped our history. No question, stone tools couldn't have become a keystone of human technology and subsistence (d) without hands that could do the job, along with a nervous system that could regulate and coordinate the necessary signals. Anybody who's ever attempted to make a spear tip or arrowhead from a rock knows that it (e) excludes strong grips, constant rotation and repositioning, and forceful, careful strikes with another hard object. And even with a fair amount of know-how, it can be a bloody business.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "actualQuestion": {
+        "value": "밑줄 친 (a)～(e) 중에서 문맥상 낱말의 쓰임이 적절하지 않은 것은?",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "answerOptions": [
+        {
+          "value": "① (a)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "② (b)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "③ (c)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "④ (d)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "⑤ (e)",
+          "matchLevel": "none",
+          "matchedWords": []
+        }
+      ],
+      "correctAnswer": {
+        "value": "⑤ (e)",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionType": {
+        "value": "Vocabulary in Context",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "theoryArea": {
+        "value": "Human Evolution",
+        "matchLevel": "none",
+        "matchedWords": []
+      }
+    },
+    "source": "past-paper",
+    "primarySubjectArea": "natural_sciences",
+    "secondarySubjectArea": "biology",
+    "passageType": "argumentative",
+    "questionSkill": "vocabulary_context",
+    "difficultyLevel": "very_high",
+    "expectedCorrectRate": 0.4,
+    "vocabularyDemand": 5480,
+    "textSource": "university_textbook",
+    "_confidence": {
+      "source": 0.95,
+      "subject": 0.6,
+      "passage": 0.6,
+      "textSource": 0.4
+    },
+    "_classification_details": {
+      "subject": {
+        "natural_sciences": {
+          "score": 2,
+          "matchedKeywords": [
+            "evolution",
+            "force"
+          ]
+        },
+        "social_sciences": {
+          "score": 1,
+          "matchedKeywords": [
+            "business"
+          ]
+        },
+        "literature_arts": {
+          "score": 1,
+          "matchedKeywords": [
+            "story"
+          ]
+        },
+        "humanities": {
+          "score": 1,
+          "matchedKeywords": [
+            "history"
+          ]
+        }
+      },
+      "passage": {
+        "argumentative": {
+          "score": 1,
+          "matchedKeywords": [
+            "position"
+          ]
+        },
+        "discursive": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "analytical": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "comprehension": {
+          "score": 1,
+          "matchedKeywords": [
+            "story"
+          ]
+        }
+      },
+      "textSource": {
+        "academic_journal": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "university_textbook": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "popular_media": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "news_article": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "scientific_publication": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literary_work": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "difficulty": {
+        "level": "very_high",
+        "expectedCorrectRate": 0.4,
+        "vocabularyDemand": 5480,
+        "difficultyScore": 0.8
+      }
+    }
+  },
+  {
+    "questionNumber": 41,
+    "year": "2025",
+    "questionText": "Imagine grabbing a piece of paper between your thumb and index finger. Maybe you already are, as you turn this page. We use this type of forceful, pad-to-pad precision gripping without thinking about it, and literally in a snap. Yet it was a breakthrough in human evolution. Other primates exhibit some kinds of precision grips in the handling and use of objects, but not with the kind of (a) efficient opposition that our hand anatomy allows. In a single hand, humans can easily hold and manipulate objects, even small and delicate ones, while adjusting our fingers to their shape and reorienting them with (b) displacements of our fingertip pads. Our relatively long, powerful thumb and other anatomical attributes, including our flat nails (which nearly all primates possess), make this (c) possible. Just picture trying ― and failing ― to dog-ear this page with pointy, curved claws.\n\nWith a unique combination of traits, the human hand shaped our history. No question, stone tools couldn't have become a keystone of human technology and subsistence (d) without hands that could do the job, along with a nervous system that could regulate and coordinate the necessary signals. Anybody who's ever attempted to make a spear tip or arrowhead from a rock knows that it (e) excludes strong grips, constant rotation and repositioning, and forceful, careful strikes with another hard object. And even with a fair amount of know-how, it can be a bloody business.",
+    "actualQuestion": "윗글의 제목으로 가장 적절한 것은?",
+    "answerOptions": [
+      "① Anatomical Distance Between Humans and Other Primates",
+      "② Human Hands: A Decisive Leap in the Evolutionary Path",
+      "③ Our Hands: An Unexpected Outcome of Evolution",
+      "④ Human Grip: The Dilemma of Human Survival",
+      "⑤ Hidden Power of the Daily Use of Tools"
+    ],
+    "correctAnswer": "② Human Hands: A Decisive Leap in the Evolutionary Path",
+    "imageFile": "https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/plew2025%2F2025_42.png?alt=media&token=3cd3ce46-735b-4cb9-9892-0cac9a64205b",
+    "videoSolutionLink": "",
+    "questionType": "Title Selection",
+    "theoryArea": "Human Evolution",
+    "objectID": "1b1072b27acc08_dashboard_generated_id",
+    "_highlightResult": {
+      "questionNumber": {
+        "value": "41",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "year": {
+        "value": "2025",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionText": {
+        "value": "Imagine grabbing a piece of paper between your thumb and index finger. Maybe you already are, as you turn this page. We use this type of forceful, pad-to-pad precision gripping without thinking about it, and literally in a snap. Yet it was a breakthrough in human evolution. Other primates exhibit some kinds of precision grips in the handling and use of objects, but not with the kind of (a) efficient opposition that our hand anatomy allows. In a single hand, humans can easily hold and manipulate objects, even small and delicate ones, while adjusting our fingers to their shape and reorienting them with (b) displacements of our fingertip pads. Our relatively long, powerful thumb and other anatomical attributes, including our flat nails (which nearly all primates possess), make this (c) possible. Just picture trying ― and failing ― to dog-ear this page with pointy, curved claws.\n\nWith a unique combination of traits, the human hand shaped our history. No question, stone tools couldn't have become a keystone of human technology and subsistence (d) without hands that could do the job, along with a nervous system that could regulate and coordinate the necessary signals. Anybody who's ever attempted to make a spear tip or arrowhead from a rock knows that it (e) excludes strong grips, constant rotation and repositioning, and forceful, careful strikes with another hard object. And even with a fair amount of know-how, it can be a bloody business.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "actualQuestion": {
+        "value": "윗글의 제목으로 가장 적절한 것은?",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "answerOptions": [
+        {
+          "value": "① Anatomical Distance Between Humans and Other Primates",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "② Human Hands: A Decisive Leap in the Evolutionary Path",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "③ Our Hands: An Unexpected Outcome of Evolution",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "④ Human Grip: The Dilemma of Human Survival",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "⑤ Hidden Power of the Daily Use of Tools",
+          "matchLevel": "none",
+          "matchedWords": []
+        }
+      ],
+      "correctAnswer": {
+        "value": "② Human Hands: A Decisive Leap in the Evolutionary Path",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionType": {
+        "value": "Title Selection",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "theoryArea": {
+        "value": "Human Evolution",
+        "matchLevel": "none",
+        "matchedWords": []
+      }
+    },
+    "source": "past-paper",
+    "primarySubjectArea": "natural_sciences",
+    "secondarySubjectArea": "biology",
+    "passageType": "argumentative",
+    "questionSkill": "title_selection",
+    "difficultyLevel": "high",
+    "expectedCorrectRate": 0.6,
+    "vocabularyDemand": 5480,
+    "textSource": "university_textbook",
+    "_confidence": {
+      "source": 0.95,
+      "subject": 0.6,
+      "passage": 0.6,
+      "textSource": 0.4
+    },
+    "_classification_details": {
+      "subject": {
+        "natural_sciences": {
+          "score": 2,
+          "matchedKeywords": [
+            "evolution",
+            "force"
+          ]
+        },
+        "social_sciences": {
+          "score": 1,
+          "matchedKeywords": [
+            "business"
+          ]
+        },
+        "literature_arts": {
+          "score": 1,
+          "matchedKeywords": [
+            "story"
+          ]
+        },
+        "humanities": {
+          "score": 1,
+          "matchedKeywords": [
+            "history"
+          ]
+        }
+      },
+      "passage": {
+        "argumentative": {
+          "score": 1,
+          "matchedKeywords": [
+            "position"
+          ]
+        },
+        "discursive": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "analytical": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "comprehension": {
+          "score": 1,
+          "matchedKeywords": [
+            "story"
+          ]
+        }
+      },
+      "textSource": {
+        "academic_journal": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "university_textbook": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "popular_media": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "news_article": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "scientific_publication": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literary_work": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "difficulty": {
+        "level": "high",
+        "expectedCorrectRate": 0.6,
+        "vocabularyDemand": 5480,
+        "difficultyScore": 0.6
+      }
+    }
+  },
+  {
+    "questionNumber": 40,
+    "year": "2025",
+    "questionText": "People often assume that synthetic food ingredients are more harmful than natural ones, but this is not always the case. Typically, synthetic ingredients can be made in a precisely controlled fashion and have well-defined compositions and properties, allowing careful evaluation of their potential toxicity. On the other hand, natural ingredients often vary appreciably in their composition and properties depending on their origin, the time of year they were harvested, the climate they experienced throughout their lifetime, the soil quality, and how they were isolated and stored. These variations can make testing their safety extremely difficult ― one is never sure about the potential toxicity of minor components that may vary from time to time. In some cases, a natural food component has been consumed for hundreds or thousands of years without causing any obvious health problems and can, therefore, be assumed to be safe. However, one must still be very careful.\n\n[The ______________ of the production process for synthetic food ingredients and the variability of natural food ingredients may ______________ people's commonly held assumption that the natural ingredients are more secure.]",
+    "actualQuestion": "다음 글의 내용을 한 문장으로 요약하고자 한다. 빈칸 (A), (B)에 들어갈 말로 가장 적절한 것은?",
+    "answerOptions": [
+      "① controllability ... challenge",
+      "② predictability ... support",
+      "③ manageability ... intensify",
+      "④ affordability ... reverse",
+      "⑤ accessibility ... question"
+    ],
+    "correctAnswer": "① controllability ... challenge",
+    "imageFile": "https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/plew2025%2F2025_40.png?alt=media&token=543e0be5-fcf7-410f-811d-688a15153fde",
+    "videoSolutionLink": "https://www.youtube.com/watch?v=GF15x1J7a-8&t=1s",
+    "questionType": "Summary Completion",
+    "theoryArea": "Food Science",
+    "objectID": "1d4262e9ee1447_dashboard_generated_id",
+    "_highlightResult": {
+      "questionNumber": {
+        "value": "40",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "year": {
+        "value": "2025",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionText": {
+        "value": "People often assume that synthetic food ingredients are more harmful than natural ones, but this is not always the case. Typically, synthetic ingredients can be made in a precisely controlled fashion and have well-defined compositions and properties, allowing careful evaluation of their potential toxicity. On the other hand, natural ingredients often vary appreciably in their composition and properties depending on their origin, the time of year they were harvested, the climate they experienced throughout their lifetime, the soil quality, and how they were isolated and stored. These variations can make testing their safety extremely difficult ― one is never sure about the potential toxicity of minor components that may vary from time to time. In some cases, a natural food component has been consumed for hundreds or thousands of years without causing any obvious health problems and can, therefore, be assumed to be safe. However, one must still be very careful.\n\n[The ______________ of the production process for synthetic food ingredients and the variability of natural food ingredients may ______________ people's commonly held assumption that the natural ingredients are more secure.]",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "actualQuestion": {
+        "value": "다음 글의 내용을 한 문장으로 요약하고자 한다. 빈칸 (A), (B)에 들어갈 말로 가장 적절한 것은?",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "answerOptions": [
+        {
+          "value": "① controllability ... challenge",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "② predictability ... support",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "③ manageability ... intensify",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "④ affordability ... reverse",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "⑤ accessibility ... question",
+          "matchLevel": "none",
+          "matchedWords": []
+        }
+      ],
+      "correctAnswer": {
+        "value": "① controllability ... challenge",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionType": {
+        "value": "Summary Completion",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "theoryArea": {
+        "value": "Food Science",
+        "matchLevel": "none",
+        "matchedWords": []
+      }
+    },
+    "source": "past-paper",
+    "primarySubjectArea": "natural_sciences",
+    "secondarySubjectArea": "environmental_science",
+    "passageType": "argumentative",
+    "questionSkill": "other",
+    "difficultyLevel": "high",
+    "expectedCorrectRate": 0.5,
+    "vocabularyDemand": 5562,
+    "textSource": "university_textbook",
+    "_confidence": {
+      "source": 0.95,
+      "subject": 0.6,
+      "passage": 0.8,
+      "textSource": 0.4
+    },
+    "_classification_details": {
+      "subject": {
+        "natural_sciences": {
+          "score": 1,
+          "matchedKeywords": [
+            "climate"
+          ]
+        },
+        "social_sciences": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literature_arts": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "humanities": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "passage": {
+        "argumentative": {
+          "score": 2,
+          "matchedKeywords": [
+            "position",
+            "therefore"
+          ]
+        },
+        "discursive": {
+          "score": 2,
+          "matchedKeywords": [
+            "however",
+            "on the other hand"
+          ]
+        },
+        "analytical": {
+          "score": 1,
+          "matchedKeywords": [
+            "process"
+          ]
+        },
+        "comprehension": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "textSource": {
+        "academic_journal": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "university_textbook": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "popular_media": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "news_article": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "scientific_publication": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literary_work": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "difficulty": {
+        "level": "high",
+        "expectedCorrectRate": 0.5,
+        "vocabularyDemand": 5562,
+        "difficultyScore": 0.7
+      }
+    }
+  },
+  {
+    "questionNumber": 39,
+    "year": "2025",
+    "questionText": "By their very nature, the concepts of maintenance and repair are predominantly examined from a process-oriented perspective. ( ① ) The focus in related scholarly discourse often revolves around the lifespan or lifecycle of objects and technologies. ( ② ) In this context, maintenance and repair are considered practices that have the potential to prolong the existence of objects, ensuring their sustained utilization over an extended period. ( ③ ) Krebs and Weber critically engage with anthropomorphic metaphors that imply a biography of things, appropriately highlighting that conventional understanding of the lifecycle of a technology, from its acquisition to its disposal from the household, provides an incomplete definition. ( ④ ) Additionally, objects may enter recycling or second-hand cycles, leading to a dynamic afterlife marked by diverse applications. ( ⑤ ) As such, the life of an object exhibits a far more complicated and adaptive path than a simplistic linear progression.\n\nIn reality, objects do not conform to a linear lifecycle model; instead, they undergo breakdowns, await repairs, are stored away, or find themselves relegated to the basement, only to be rediscovered and repurposed later.",
+    "actualQuestion": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "answerOptions": [
+      "① ",
+      "② ",
+      "③ ",
+      "④ ",
+      "⑤ "
+    ],
+    "correctAnswer": "③ ",
+    "imageFile": "gs://plewcsat1.firebasestorage.app/plew2025/2025_39.png",
+    "videoSolutionLink": "https://www.youtube.com/watch?v=GF15x1J7a-8&t=1s",
+    "questionType": "Sentence Placement",
+    "theoryArea": "Product Lifecycle",
+    "objectID": "6884f269ddbf5_dashboard_generated_id",
+    "_highlightResult": {
+      "questionNumber": {
+        "value": "39",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "year": {
+        "value": "2025",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionText": {
+        "value": "By their very nature, the concepts of maintenance and repair are predominantly examined from a process-oriented perspective. ( ① ) The focus in related scholarly discourse often revolves around the lifespan or lifecycle of objects and technologies. ( ② ) In this context, maintenance and repair are considered practices that have the potential to prolong the existence of objects, ensuring their sustained utilization over an extended period. ( ③ ) Krebs and Weber critically engage with anthropomorphic metaphors that imply a biography of things, appropriately highlighting that conventional understanding of the lifecycle of a technology, from its acquisition to its disposal from the household, provides an incomplete definition. ( ④ ) Additionally, objects may enter recycling or second-hand cycles, leading to a dynamic afterlife marked by diverse applications. ( ⑤ ) As such, the life of an object exhibits a far more complicated and adaptive path than a simplistic linear progression.\n\nIn reality, objects do not conform to a linear lifecycle model; instead, they undergo breakdowns, await repairs, are stored away, or find themselves relegated to the basement, only to be rediscovered and repurposed later.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "actualQuestion": {
+        "value": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "answerOptions": [
+        {
+          "value": "① ",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "② ",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "③ ",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "④ ",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "⑤ ",
+          "matchLevel": "none",
+          "matchedWords": []
+        }
+      ],
+      "correctAnswer": {
+        "value": "③ ",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionType": {
+        "value": "Sentence Placement",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "theoryArea": {
+        "value": "Product Lifecycle",
+        "matchLevel": "none",
+        "matchedWords": []
+      }
+    },
+    "source": "past-paper",
+    "primarySubjectArea": "humanities",
+    "secondarySubjectArea": "philosophy",
+    "passageType": "analytical",
+    "questionSkill": "other",
+    "difficultyLevel": "high",
+    "expectedCorrectRate": 0.5,
+    "vocabularyDemand": 5570,
+    "textSource": "academic_journal",
+    "_confidence": {
+      "source": 0.95,
+      "subject": 0.3,
+      "passage": 0.8,
+      "textSource": 0.6
+    },
+    "_classification_details": {
+      "subject": {
+        "natural_sciences": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "social_sciences": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literature_arts": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "humanities": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "passage": {
+        "argumentative": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "discursive": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "analytical": {
+          "score": 3,
+          "matchedKeywords": [
+            "process",
+            "examine",
+            "breakdown"
+          ]
+        },
+        "comprehension": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "textSource": {
+        "academic_journal": {
+          "score": 1,
+          "matchedKeywords": [
+            "scholarly"
+          ]
+        },
+        "university_textbook": {
+          "score": 1,
+          "matchedKeywords": [
+            "course"
+          ]
+        },
+        "popular_media": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "news_article": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "scientific_publication": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literary_work": {
+          "score": 1,
+          "matchedKeywords": [
+            "metaphor"
+          ]
+        }
+      },
+      "difficulty": {
+        "level": "high",
+        "expectedCorrectRate": 0.5,
+        "vocabularyDemand": 5570,
+        "difficultyScore": 0.7
+      }
+    }
+  },
+  {
+    "questionNumber": 38,
+    "year": "2025",
+    "questionText": "Trade secret law aims to promote innovation, although it accomplishes this objective in a very different manner than patent protection. ( ① ) Notwithstanding the advantages of obtaining a patent, many innovators prefer to protect their innovation through secrecy. ( ② ) They may believe that the cost and delay of seeking a patent are too great or that secrecy better protects their investment and increases their profit. ( ③ ) They might also believe that the invention can best be utilized over a longer period of time than a patent would allow. ( ④ ) Once the idea is released, it will be \"free as the air\" under the background norms of a free market economy. ( ⑤ ) Such a predicament would lead any inventor seeking to rely upon secrecy to spend an inordinate amount of resources building high and impassable fences around their research facilities and greatly limiting the number of people with access to the proprietary information.\n\nWithout any special legal protection for trade secrets, however, the secretive inventor risks that an employee or contractor will disclose the proprietary information.",
+    "actualQuestion": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "answerOptions": [
+      "① ",
+      "② ",
+      "③ ",
+      "④ ",
+      "⑤ "
+    ],
+    "correctAnswer": "④ ",
+    "imageFile": "gs://plewcsat1.firebasestorage.app/plew2025/2025_38.png",
+    "videoSolutionLink": "https://www.youtube.com/watch?v=GF15x1J7a-8&t=1s",
+    "questionType": "Sentence Placement",
+    "theoryArea": "Intellectual Property",
+    "objectID": "128c4fb54a9696_dashboard_generated_id",
+    "_highlightResult": {
+      "questionNumber": {
+        "value": "38",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "year": {
+        "value": "2025",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionText": {
+        "value": "Trade secret law aims to promote innovation, although it accomplishes this objective in a very different manner than patent protection. ( ① ) Notwithstanding the advantages of obtaining a patent, many innovators prefer to protect their innovation through secrecy. ( ② ) They may believe that the cost and delay of seeking a patent are too great or that secrecy better protects their investment and increases their profit. ( ③ ) They might also believe that the invention can best be utilized over a longer period of time than a patent would allow. ( ④ ) Once the idea is released, it will be \"free as the air\" under the background norms of a free market economy. ( ⑤ ) Such a predicament would lead any inventor seeking to rely upon secrecy to spend an inordinate amount of resources building high and impassable fences around their research facilities and greatly limiting the number of people with access to the proprietary information.\n\nWithout any special legal protection for trade secrets, however, the secretive inventor risks that an employee or contractor will disclose the proprietary information.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "actualQuestion": {
+        "value": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "answerOptions": [
+        {
+          "value": "① ",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "② ",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "③ ",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "④ ",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "⑤ ",
+          "matchLevel": "none",
+          "matchedWords": []
+        }
+      ],
+      "correctAnswer": {
+        "value": "④ ",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionType": {
+        "value": "Sentence Placement",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "theoryArea": {
+        "value": "Intellectual Property",
+        "matchLevel": "none",
+        "matchedWords": []
+      }
+    },
+    "source": "past-paper",
+    "primarySubjectArea": "social_sciences",
+    "secondarySubjectArea": "economics",
+    "passageType": "discursive",
+    "questionSkill": "other",
+    "difficultyLevel": "very_high",
+    "expectedCorrectRate": 0.4,
+    "vocabularyDemand": 5768,
+    "textSource": "scientific_publication",
+    "_confidence": {
+      "source": 0.95,
+      "subject": 0.6,
+      "passage": 0.6,
+      "textSource": 0.6
+    },
+    "_classification_details": {
+      "subject": {
+        "natural_sciences": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "social_sciences": {
+          "score": 1,
+          "matchedKeywords": [
+            "market"
+          ]
+        },
+        "literature_arts": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "humanities": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "passage": {
+        "argumentative": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "discursive": {
+          "score": 1,
+          "matchedKeywords": [
+            "however"
+          ]
+        },
+        "analytical": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "comprehension": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "textSource": {
+        "academic_journal": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "university_textbook": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "popular_media": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "news_article": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "scientific_publication": {
+          "score": 1,
+          "matchedKeywords": [
+            "research"
+          ]
+        },
+        "literary_work": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "difficulty": {
+        "level": "very_high",
+        "expectedCorrectRate": 0.4,
+        "vocabularyDemand": 5768,
+        "difficultyScore": 0.8
+      }
+    }
+  },
+  {
+    "questionNumber": 37,
+    "year": "2025",
+    "questionText": "Watch the birds in your backyard. If one bird startles and flies off, others will follow, not waiting around to assess whether the threat is real. They have been infected by emotional contagion.\n\n(A) Marc wondered whether the birds in line were more fearful because they didn't know what their flockmates were doing. Emotional contagion would have been impossible for individual grosbeaks in the linear array except with their nearest neighbors.\n\n(B) In a long-term research project that Marc did with some of his students on patterns of antipredatory scanning by western evening grosbeaks, they found that birds in a circle showed more coordination in scanning than did birds who were feeding in a line.\n\n(C) The birds in a line, who could only see their nearest neighbor, not only were less coordinated when scanning, but also were more nervous, changing their body and head positions significantly more than grosbeaks in a circle, where it was possible for each grosbeak to see every other grosbeak.",
+    "actualQuestion": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것을 고르시오.",
+    "answerOptions": [
+      "① (A)-(C)-(B)",
+      "② (B)-(A)-(C)",
+      "③ (B)-(C)-(A)",
+      "④ (C)-(A)-(B)",
+      "⑤ (C)-(B)-(A)"
+    ],
+    "correctAnswer": "② (B)-(A)-(C)",
+    "imageFile": "gs://plewcsat1.firebasestorage.app/plew2025/2025_37.png",
+    "videoSolutionLink": "https://www.youtube.com/watch?v=GF15x1J7a-8&t=1s",
+    "questionType": "Paragraph Order",
+    "theoryArea": "Animal Behavior",
+    "objectID": "184d79f347df80_dashboard_generated_id",
+    "_highlightResult": {
+      "questionNumber": {
+        "value": "37",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "year": {
+        "value": "2025",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionText": {
+        "value": "Watch the birds in your backyard. If one bird startles and flies off, others will follow, not waiting around to assess whether the threat is real. They have been infected by emotional contagion.\n\n(A) Marc wondered whether the birds in line were more fearful because they didn't know what their flockmates were doing. Emotional contagion would have been impossible for individual grosbeaks in the linear array except with their nearest neighbors.\n\n(B) In a long-term research project that Marc did with some of his students on patterns of antipredatory scanning by western evening grosbeaks, they found that birds in a circle showed more coordination in scanning than did birds who were feeding in a line.\n\n(C) The birds in a line, who could only see their nearest neighbor, not only were less coordinated when scanning, but also were more nervous, changing their body and head positions significantly more than grosbeaks in a circle, where it was possible for each grosbeak to see every other grosbeak.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "actualQuestion": {
+        "value": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것을 고르시오.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "answerOptions": [
+        {
+          "value": "① (A)-(C)-(B)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "② (B)-(A)-(C)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "③ (B)-(C)-(A)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "④ (C)-(A)-(B)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "⑤ (C)-(B)-(A)",
+          "matchLevel": "none",
+          "matchedWords": []
+        }
+      ],
+      "correctAnswer": {
+        "value": "② (B)-(A)-(C)",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionType": {
+        "value": "Paragraph Order",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "theoryArea": {
+        "value": "Animal Behavior",
+        "matchLevel": "none",
+        "matchedWords": []
+      }
+    },
+    "source": "past-paper",
+    "primarySubjectArea": "natural_sciences",
+    "secondarySubjectArea": "physics",
+    "passageType": "argumentative",
+    "questionSkill": "paragraph_ordering",
+    "difficultyLevel": "high",
+    "expectedCorrectRate": 0.4,
+    "vocabularyDemand": 5530,
+    "textSource": "scientific_publication",
+    "_confidence": {
+      "source": 0.95,
+      "subject": 0.6,
+      "passage": 0.6,
+      "textSource": 0.6
+    },
+    "_classification_details": {
+      "subject": {
+        "natural_sciences": {
+          "score": 1,
+          "matchedKeywords": [
+            "motion"
+          ]
+        },
+        "social_sciences": {
+          "score": 1,
+          "matchedKeywords": [
+            "behavior"
+          ]
+        },
+        "literature_arts": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "humanities": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "passage": {
+        "argumentative": {
+          "score": 1,
+          "matchedKeywords": [
+            "position"
+          ]
+        },
+        "discursive": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "analytical": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "comprehension": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "textSource": {
+        "academic_journal": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "university_textbook": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "popular_media": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "news_article": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "scientific_publication": {
+          "score": 1,
+          "matchedKeywords": [
+            "research"
+          ]
+        },
+        "literary_work": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "difficulty": {
+        "level": "high",
+        "expectedCorrectRate": 0.4,
+        "vocabularyDemand": 5530,
+        "difficultyScore": 0.8
+      }
+    }
+  },
+  {
+    "questionNumber": 36,
+    "year": "2025",
+    "questionText": "The potential for market enforcement is greater when contracting parties have developed reputational capital that can be devalued when contracts are violated.\n\n(A) Similarly, a landowner can undermaintain fences, ditches, and irrigation systems. Accurate assessments of farmer and landowner behavior will be made over time, and those farmers and landowners who attempt to gain at each other's expense will find that others may refuse to deal with them in the future.\n\n(B) Over time landowners indirectly monitor farmers by observing the reported output, the general quality of the soil, and any unusual or extreme behavior. Farmer and landowner reputations act as a bond. In any growing season a farmer can reduce effort, overuse soil, or underreport the crop.\n\n(C) Farmers and landowners develop reputations for honesty, fairness, producing high yields, and consistently demonstrating that they are good at what they do. In small, close-knit farming communities, reputations are well known.",
+    "actualQuestion": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것을 고르시오.",
+    "answerOptions": [
+      "① (A)-(C)-(B)",
+      "② (B)-(A)-(C)",
+      "③ (B)-(C)-(A)",
+      "④ (C)-(A)-(B)",
+      "⑤ (C)-(B)-(A)"
+    ],
+    "correctAnswer": "⑤ (C)-(B)-(A)",
+    "imageFile": "gs://plewcsat1.firebasestorage.app/plew2025/2025_36.png",
+    "videoSolutionLink": "https://www.youtube.com/watch?v=GF15x1J7a-8&t=1s",
+    "questionType": "Paragraph Order",
+    "theoryArea": "Economics",
+    "objectID": "10675af5432b69_dashboard_generated_id",
+    "_highlightResult": {
+      "questionNumber": {
+        "value": "36",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "year": {
+        "value": "2025",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionText": {
+        "value": "The potential for market enforcement is greater when contracting parties have developed reputational capital that can be devalued when contracts are violated.\n\n(A) Similarly, a landowner can undermaintain fences, ditches, and irrigation systems. Accurate assessments of farmer and landowner behavior will be made over time, and those farmers and landowners who attempt to gain at each other's expense will find that others may refuse to deal with them in the future.\n\n(B) Over time landowners indirectly monitor farmers by observing the reported output, the general quality of the soil, and any unusual or extreme behavior. Farmer and landowner reputations act as a bond. In any growing season a farmer can reduce effort, overuse soil, or underreport the crop.\n\n(C) Farmers and landowners develop reputations for honesty, fairness, producing high yields, and consistently demonstrating that they are good at what they do. In small, close-knit farming communities, reputations are well known.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "actualQuestion": {
+        "value": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것을 고르시오.",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "answerOptions": [
+        {
+          "value": "① (A)-(C)-(B)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "② (B)-(A)-(C)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "③ (B)-(C)-(A)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "④ (C)-(A)-(B)",
+          "matchLevel": "none",
+          "matchedWords": []
+        },
+        {
+          "value": "⑤ (C)-(B)-(A)",
+          "matchLevel": "none",
+          "matchedWords": []
+        }
+      ],
+      "correctAnswer": {
+        "value": "⑤ (C)-(B)-(A)",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "questionType": {
+        "value": "Paragraph Order",
+        "matchLevel": "none",
+        "matchedWords": []
+      },
+      "theoryArea": {
+        "value": "Economics",
+        "matchLevel": "none",
+        "matchedWords": []
+      }
+    },
+    "source": "past-paper",
+    "primarySubjectArea": "social_sciences",
+    "secondarySubjectArea": "economics",
+    "passageType": "comprehension",
+    "questionSkill": "paragraph_ordering",
+    "difficultyLevel": "high",
+    "expectedCorrectRate": 0.5,
+    "vocabularyDemand": 5300,
+    "textSource": "news_article",
+    "_confidence": {
+      "source": 0.95,
+      "subject": 0.8,
+      "passage": 0.4,
+      "textSource": 0.6
+    },
+    "_classification_details": {
+      "subject": {
+        "natural_sciences": {
+          "score": 1,
+          "matchedKeywords": [
+            "force"
+          ]
+        },
+        "social_sciences": {
+          "score": 3,
+          "matchedKeywords": [
+            "behavior",
+            "economic",
+            "market"
+          ]
+        },
+        "literature_arts": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "humanities": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "passage": {
+        "argumentative": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "discursive": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "analytical": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "comprehension": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "textSource": {
+        "academic_journal": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "university_textbook": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "popular_media": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "news_article": {
+          "score": 1,
+          "matchedKeywords": [
+            "reported"
+          ]
+        },
+        "scientific_publication": {
+          "score": 0,
+          "matchedKeywords": []
+        },
+        "literary_work": {
+          "score": 0,
+          "matchedKeywords": []
+        }
+      },
+      "difficulty": {
+        "level": "high",
+        "expectedCorrectRate": 0.5,
+        "vocabularyDemand": 5300,
+        "difficultyScore": 0.7
+      }
+    }
+  }
+]

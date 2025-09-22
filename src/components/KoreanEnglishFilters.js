@@ -5,14 +5,15 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
   const [activeCategory, setActiveCategory] = useState('source');
   const [selectedFilters, setSelectedFilters] = useState(currentFilters || {});
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isAdvancedExpanded, setIsAdvancedExpanded] = useState(false);
 
-  // Filter definitions for Korean-English question pairs
-  const FILTER_CATEGORIES = {
+  // Filter definitions organized by Core (always visible) and Advanced (collapsible)
+  const CORE_FILTERS = {
     source: {
       label: '문제 유형',
       options: [
-        { id: 'past-paper', label: '기출 (Past Papers)', value: 'source:past-paper' },
-        { id: 'similar', label: '유사 (Similar Questions)', value: 'source:similar' },
+        { id: 'past-paper', label: '기출', value: 'source:past-paper' },
+        { id: 'similar', label: '유사', value: 'source:similar' },
       ]
     },
     similarLevel: {
@@ -22,57 +23,86 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
         { id: 'baby', label: 'Baby', value: 'similarLevel:baby' },
       ]
     },
-    level: {
-      label: 'Level',
+    subjectArea: {
+      label: 'Subject Area',
       options: [
-        { id: 'beginner', label: 'Beginner', value: 'level:beginner' },
-        { id: 'intermediate', label: 'Intermediate', value: 'level:intermediate' },
-        { id: 'advanced', label: 'Advanced', value: 'level:advanced' },
-        { id: 'native', label: 'Native', value: 'level:native' },
+        { id: 'natural-sciences', label: 'Natural Sciences', value: 'primarySubjectArea:natural_sciences' },
+        { id: 'social-sciences', label: 'Social Sciences', value: 'primarySubjectArea:social_sciences' },
+        { id: 'literature-arts', label: 'Literature & Arts', value: 'primarySubjectArea:literature_arts' },
+        { id: 'humanities', label: 'Humanities', value: 'primarySubjectArea:humanities' },
       ]
     },
-    category: {
-      label: 'Category',
+    questionSkill: {
+      label: 'Question Skill',
       options: [
-        { id: 'grammar', label: 'Grammar', value: 'category:grammar' },
-        { id: 'vocabulary', label: 'Vocabulary', value: 'category:vocabulary' },
-        { id: 'conversation', label: 'Conversation', value: 'category:conversation' },
-        { id: 'reading', label: 'Reading', value: 'category:reading' },
-        { id: 'listening', label: 'Listening', value: 'category:listening' },
-        { id: 'writing', label: 'Writing', value: 'category:writing' },
-        { id: 'culture', label: 'Culture', value: 'category:culture' },
-      ]
-    },
-    topic: {
-      label: 'Topic',
-      options: [
-        { id: 'daily-life', label: 'Daily Life', value: 'topic:"daily life"' },
-        { id: 'business', label: 'Business', value: 'topic:business' },
-        { id: 'travel', label: 'Travel', value: 'topic:travel' },
-        { id: 'food', label: 'Food & Dining', value: 'topic:food' },
-        { id: 'education', label: 'Education', value: 'topic:education' },
-        { id: 'technology', label: 'Technology', value: 'topic:technology' },
-        { id: 'entertainment', label: 'Entertainment', value: 'topic:entertainment' },
-        { id: 'health', label: 'Health', value: 'topic:health' },
+        { id: 'title-selection', label: 'Title Selection', value: 'questionSkill:title_selection' },
+        { id: 'main-idea', label: 'Main Idea', value: 'questionSkill:main_idea' },
+        { id: 'factual-comprehension', label: 'Factual Comprehension', value: 'questionSkill:factual_comprehension' },
+        { id: 'reference-understanding', label: 'Reference Understanding', value: 'questionSkill:reference_understanding' },
+        { id: 'vocabulary-context', label: 'Vocabulary in Context', value: 'questionSkill:vocabulary_context' },
+        { id: 'inference', label: 'Inference', value: 'questionSkill:inference' },
+        { id: 'paragraph-ordering', label: 'Paragraph Ordering', value: 'questionSkill:paragraph_ordering' },
+        { id: 'tone-attitude', label: 'Tone & Attitude', value: 'questionSkill:tone_attitude' },
+        { id: 'logical-structure', label: 'Logical Structure', value: 'questionSkill:logical_structure' },
       ]
     },
     difficulty: {
       label: 'Difficulty',
       options: [
-        { id: 'easy', label: 'Easy', value: 'difficulty:easy' },
-        { id: 'medium', label: 'Medium', value: 'difficulty:medium' },
-        { id: 'hard', label: 'Hard', value: 'difficulty:hard' },
-        { id: 'very-hard', label: 'Very Hard', value: 'difficulty:"very hard"' },
+        { id: 'low', label: 'Low', value: 'difficultyLevel:low' },
+        { id: 'medium', label: 'Medium', value: 'difficultyLevel:medium' },
+        { id: 'high', label: 'High', value: 'difficultyLevel:high' },
+        { id: 'very-high', label: 'Very High', value: 'difficultyLevel:very_high' },
+      ]
+    }
+  };
+
+  const ADVANCED_FILTERS = {
+    specificTopic: {
+      label: 'Specific Topic',
+      options: [
+        { id: 'biology', label: 'Biology', value: 'secondarySubjectArea:biology' },
+        { id: 'chemistry', label: 'Chemistry', value: 'secondarySubjectArea:chemistry' },
+        { id: 'physics', label: 'Physics', value: 'secondarySubjectArea:physics' },
+        { id: 'psychology', label: 'Psychology', value: 'secondarySubjectArea:psychology' },
+        { id: 'economics', label: 'Economics', value: 'secondarySubjectArea:economics' },
+        { id: 'politics', label: 'Politics', value: 'secondarySubjectArea:politics' },
+        { id: 'history', label: 'History', value: 'secondarySubjectArea:history' },
+        { id: 'philosophy', label: 'Philosophy', value: 'secondarySubjectArea:philosophy' },
+        { id: 'geography', label: 'Geography', value: 'secondarySubjectArea:geography' },
+        { id: 'literature', label: 'Literature', value: 'secondarySubjectArea:literature' },
+        { id: 'art', label: 'Art', value: 'secondarySubjectArea:art' },
+        { id: 'music', label: 'Music', value: 'secondarySubjectArea:music' },
+        { id: 'technology', label: 'Technology', value: 'secondarySubjectArea:technology' },
       ]
     },
-    type: {
-      label: 'Question Type',
+    passageType: {
+      label: 'Passage Type',
       options: [
-        { id: 'translation', label: 'Translation', value: 'type:translation' },
-        { id: 'fill-blank', label: 'Fill in the Blank', value: 'type:"fill in the blank"' },
-        { id: 'multiple-choice', label: 'Multiple Choice', value: 'type:"multiple choice"' },
-        { id: 'sentence-construction', label: 'Sentence Construction', value: 'type:"sentence construction"' },
-        { id: 'comprehension', label: 'Comprehension', value: 'type:comprehension' },
+        { id: 'argumentative', label: 'Argumentative', value: 'passageType:argumentative' },
+        { id: 'discursive', label: 'Discursive', value: 'passageType:discursive' },
+        { id: 'analytical', label: 'Analytical', value: 'passageType:analytical' },
+        { id: 'comprehension', label: 'Comprehension', value: 'passageType:comprehension' },
+      ]
+    },
+    vocabularyLevel: {
+      label: 'Vocabulary Level',
+      options: [
+        { id: 'basic', label: 'Basic (5000-6000)', value: 'vocabularyDemand:[5000 TO 6000]' },
+        { id: 'intermediate', label: 'Intermediate (6000-7000)', value: 'vocabularyDemand:[6000 TO 7000]' },
+        { id: 'advanced', label: 'Advanced (7000-8000)', value: 'vocabularyDemand:[7000 TO 8000]' },
+        { id: 'expert', label: 'Expert (8000+)', value: 'vocabularyDemand:[8000 TO 10000]' },
+      ]
+    },
+    textSource: {
+      label: 'Text Source',
+      options: [
+        { id: 'academic-journal', label: 'Academic Journal', value: 'textSource:academic_journal' },
+        { id: 'university-textbook', label: 'University Textbook', value: 'textSource:university_textbook' },
+        { id: 'popular-media', label: 'Popular Media', value: 'textSource:popular_media' },
+        { id: 'news-article', label: 'News Article', value: 'textSource:news_article' },
+        { id: 'scientific-publication', label: 'Scientific Publication', value: 'textSource:scientific_publication' },
+        { id: 'literary-work', label: 'Literary Work', value: 'textSource:literary_work' },
       ]
     }
   };
@@ -90,7 +120,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
     const algoliaFilters = {};
     Object.entries(newFilters).forEach(([cat, id]) => {
       if (id) {
-        const option = FILTER_CATEGORIES[cat]?.options.find(opt => opt.id === id);
+        const option = availableCategories[cat]?.options.find(opt => opt.id === id);
         if (option) {
           algoliaFilters[cat] = option.value;
         }
@@ -114,7 +144,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
     const algoliaFilters = {};
     Object.entries(newFilters).forEach(([cat, id]) => {
       if (id) {
-        const option = FILTER_CATEGORIES[cat]?.options.find(opt => opt.id === id);
+        const option = availableCategories[cat]?.options.find(opt => opt.id === id);
         if (option) {
           algoliaFilters[cat] = option.value;
         }
@@ -133,9 +163,9 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
   // Count active filters
   const activeFilterCount = Object.keys(selectedFilters).length;
 
-  // Get available categories based on current selections
-  const getAvailableCategories = () => {
-    const categories = { ...FILTER_CATEGORIES };
+  // Get available core categories based on current selections
+  const getAvailableCoreCategories = () => {
+    const categories = { ...CORE_FILTERS };
     
     // Only show similarLevel if 'similar' is selected in source
     if (selectedFilters.source !== 'similar') {
@@ -145,7 +175,13 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
     return categories;
   };
 
-  const availableCategories = getAvailableCategories();
+  // Get all filter categories (core + advanced)
+  const getAllFilterCategories = () => {
+    return { ...getAvailableCoreCategories(), ...ADVANCED_FILTERS };
+  };
+
+  const availableCoreCategories = getAvailableCoreCategories();
+  const availableCategories = getAllFilterCategories();
 
   // Effect to handle when activeCategory becomes unavailable
   useEffect(() => {
@@ -169,7 +205,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       const algoliaFilters = {};
       Object.entries(newFilters).forEach(([cat, id]) => {
         if (id) {
-          const option = FILTER_CATEGORIES[cat]?.options.find(opt => opt.id === id);
+          const option = availableCategories[cat]?.options.find(opt => opt.id === id);
           if (option) {
             algoliaFilters[cat] = option.value;
           }
@@ -178,7 +214,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       
       onFiltersChange(algoliaFilters);
     }
-  }, [selectedFilters.source]);
+  }, [selectedFilters.source, availableCategories, onFiltersChange]);
 
   return (
     <div className="korean-english-filters">
@@ -198,18 +234,47 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
 
       {/* Filter content */}
       <div className={`filters-content ${isExpanded ? 'expanded' : ''}`}>
-        {/* Category tabs */}
-        <div className="filter-categories">
-          {Object.entries(availableCategories).map(([categoryKey, category]) => (
-            <button
-              key={categoryKey}
-              className={`category-tab ${activeCategory === categoryKey ? 'active' : ''}`}
-              onClick={() => setActiveCategory(categoryKey)}
-            >
-              {category.label}
-              {selectedFilters[categoryKey] && <span className="active-indicator">•</span>}
-            </button>
-          ))}
+        {/* Core Filters - Always Visible */}
+        <div className="filter-section core-filters">
+          <h3 className="filter-section-title">Core Filters</h3>
+          <div className="filter-categories">
+            {Object.entries(availableCoreCategories).map(([categoryKey, category]) => (
+              <button
+                key={categoryKey}
+                className={`category-tab ${activeCategory === categoryKey ? 'active' : ''}`}
+                onClick={() => setActiveCategory(categoryKey)}
+              >
+                {category.label}
+                {selectedFilters[categoryKey] && <span className="active-indicator">•</span>}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Advanced Filters - Collapsible */}
+        <div className="filter-section advanced-filters">
+          <button 
+            className="filter-section-toggle"
+            onClick={() => setIsAdvancedExpanded(!isAdvancedExpanded)}
+          >
+            <h3 className="filter-section-title">Advanced Filters</h3>
+            <span className={`toggle-icon ${isAdvancedExpanded ? 'expanded' : ''}`}>▼</span>
+          </button>
+          
+          {isAdvancedExpanded && (
+            <div className="filter-categories">
+              {Object.entries(ADVANCED_FILTERS).map(([categoryKey, category]) => (
+                <button
+                  key={categoryKey}
+                  className={`category-tab ${activeCategory === categoryKey ? 'active' : ''}`}
+                  onClick={() => setActiveCategory(categoryKey)}
+                >
+                  {category.label}
+                  {selectedFilters[categoryKey] && <span className="active-indicator">•</span>}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Active filters summary */}
@@ -217,7 +282,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
           <div className="active-filters-summary">
             <div className="active-filters-list">
               {Object.entries(selectedFilters).map(([category, filterId]) => {
-                const categoryData = FILTER_CATEGORIES[category];
+                const categoryData = availableCategories[category];
                 const option = categoryData?.options.find(opt => opt.id === filterId);
                 
                 return option ? (
