@@ -116,30 +116,61 @@ class EnhancedVocabularyExtractor {
   calculateDifficulty(word, frequency) {
     let difficulty = 5; // Start with medium difficulty
     
-    // Length factor
-    if (word.length > 10) difficulty += 2;
+    // Length factor - longer words are typically more difficult
+    if (word.length > 12) difficulty += 3;
+    else if (word.length > 10) difficulty += 2;
     else if (word.length > 7) difficulty += 1;
     else if (word.length < 5) difficulty -= 1;
     
     // Frequency factor (inverse relationship)
-    if (frequency <= 2) difficulty += 2;
+    if (frequency === 1) difficulty += 3; // Very rare words get highest boost
+    else if (frequency <= 2) difficulty += 2;
     else if (frequency <= 5) difficulty += 1;
     else if (frequency >= 20) difficulty -= 2;
     else if (frequency >= 10) difficulty -= 1;
     
-    // Common prefixes/suffixes that indicate advanced words
+    // Advanced prefixes/suffixes that indicate academic/difficult words
     const advancedPatterns = [
       'tion', 'sion', 'ment', 'ence', 'ance', 'ology', 'ism', 'ize', 'ify',
       'dis', 'un', 'pre', 'post', 'anti', 'inter', 'trans', 'super', 'sub',
-      'micro', 'macro', 'pseudo', 'quasi', 'semi', 'multi', 'poly', 'mono'
+      'micro', 'macro', 'pseudo', 'quasi', 'semi', 'multi', 'poly', 'mono',
+      'hyper', 'ultra', 'meta', 'proto', 'para', 'neo', 'auto', 'homo', 'hetero'
     ];
     
     if (advancedPatterns.some(pattern => word.includes(pattern))) {
       difficulty += 1;
     }
     
+    // Scientific/academic roots that indicate high difficulty
+    const academicRoots = [
+      'anthropo', 'astro', 'bio', 'chrono', 'demo', 'geo', 'graph', 'hydro',
+      'meter', 'morph', 'path', 'phil', 'phobia', 'photo', 'psych', 'scope',
+      'tele', 'therm', 'crypto', 'neuro', 'cardio', 'gastro', 'dermato'
+    ];
+    
+    if (academicRoots.some(root => word.includes(root))) {
+      difficulty += 2; // Academic words get extra difficulty points
+    }
+    
+    // Rare letter combinations that indicate difficult words
+    const rarePatterns = ['x', 'z', 'qu', 'ph', 'gh', 'ough', 'augh'];
+    const rarePatternCount = rarePatterns.filter(pattern => word.includes(pattern)).length;
+    if (rarePatternCount > 0) {
+      difficulty += rarePatternCount;
+    }
+    
+    // Words ending in difficult suffixes
+    const difficultSuffixes = [
+      'ous', 'eous', 'ious', 'aceous', 'aneous', 'ary', 'ery', 'ory',
+      'ful', 'less', 'ward', 'wise', 'like', 'able', 'ible'
+    ];
+    
+    if (difficultSuffixes.some(suffix => word.endsWith(suffix))) {
+      difficulty += 0.5;
+    }
+    
     // Ensure difficulty is between 1 and 10
-    return Math.max(1, Math.min(10, difficulty));
+    return Math.max(1, Math.min(10, Math.round(difficulty)));
   }
 
   // Check if word is intermediate or advanced (not basic)
@@ -351,13 +382,18 @@ class EnhancedVocabularyExtractor {
     const vocabularyList = [];
     
     for (const [word, data] of this.wordFrequency.entries()) {
-      // Skip if frequency is too low (likely errors) or too high (too common)
-      if (data.count < 2 || data.count > 100) continue;
-      
       const difficulty = this.calculateDifficulty(word, data.count);
       
+      // Include rare words if they are difficult (difficulty >= 7)
+      const isRareButDifficult = data.count === 1 && difficulty >= 7;
+      
+      // Skip if frequency is too low (likely errors) unless it's a rare difficult word
+      // Skip if frequency is too high (too common)
+      if (!isRareButDifficult && (data.count < 2 || data.count > 100)) continue;
+      
       // Only include intermediate and advanced words (difficulty >= 4)
-      if (difficulty < 4) continue;
+      // OR rare difficult words (frequency = 1, difficulty >= 7)
+      if (difficulty < 4 && !isRareButDifficult) continue;
       
       vocabularyList.push({
         word: word,
