@@ -39,7 +39,7 @@ import LearnContentAdmin from './components/LearnContentAdmin';
 // import MathsSubmitQuestionForm from './components/MathsSubmitQuestionForm'; // HIDDEN
 // import MathsFilters from './components/MathsFilters'; // HIDDEN
 import KoreanEnglishFilters from './components/KoreanEnglishFilters';
-import VocabularyPinterest from './components/VocabularyPinterest';
+import VocabularyPinterest from './components/EnhancedVocabularyPinterest';
 import VideoStreaming from './components/VideoStreaming';
 import DemoMode from './components/DemoMode';
 // import StudyBuddyApp from './components/StudyBuddyApp'; // HIDDEN - Ask Bo and Application Builder
