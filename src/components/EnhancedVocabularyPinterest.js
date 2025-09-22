@@ -157,6 +157,43 @@ const EnhancedVocabularyPinterest = () => {
 
   const totalPages = Math.ceil(filteredWords.length / wordsPerPage);
 
+  // Function to get unique example sentences (max 4)
+  const getUniqueExamples = (contexts, maxCount = 4) => {
+    if (!contexts || !Array.isArray(contexts)) return [];
+    
+    // Remove duplicates and empty strings, then limit to maxCount
+    const uniqueContexts = [...new Set(contexts.filter(context => context && context.trim()))]
+      .slice(0, maxCount);
+    
+    return uniqueContexts;
+  };
+
+  // Function to highlight the target word in example sentences
+  const highlightWordInSentence = (sentence, targetWord) => {
+    if (!sentence || !targetWord) return sentence;
+    
+    // Create a regex that matches the word and its variations (case insensitive)
+    const wordVariations = [
+      targetWord,
+      targetWord + 's',
+      targetWord + 'es',
+      targetWord + 'ed',
+      targetWord + 'ing',
+      targetWord + 'er',
+      targetWord + 'est',
+      targetWord + 'ly'
+    ];
+    
+    // Also handle words that might end with common suffixes
+    const baseWord = targetWord.replace(/(s|es|ed|ing|er|est|ly)$/, '');
+    if (baseWord !== targetWord) {
+      wordVariations.push(baseWord);
+    }
+    
+    const pattern = new RegExp(`\\b(${wordVariations.join('|')})\\b`, 'gi');
+    
+    return sentence.replace(pattern, '<mark class="word-highlight">$1</mark>');
+  };
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -286,10 +323,14 @@ const EnhancedVocabularyPinterest = () => {
 
                   {word.contexts && word.contexts.length > 0 && (
                     <div className="vocab-examples">
-                      {word.contexts.slice(0, 3).map((context, index) => (
-                        <div key={index} className="example-sentence">
-                          {context}
-                        </div>
+                      {getUniqueExamples(word.contexts, 4).map((context, index) => (
+                        <div 
+                          key={index} 
+                          className="example-sentence"
+                          dangerouslySetInnerHTML={{
+                            __html: highlightWordInSentence(context, word.word)
+                          }}
+                        />
                       ))}
                     </div>
                   )}
