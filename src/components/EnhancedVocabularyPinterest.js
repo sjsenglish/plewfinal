@@ -3,6 +3,7 @@ import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import Fuse from 'fuse.js';
 import WordDetailModal from './WordDetailModal';
+import SimpleVocabularyTest from './SimpleVocabularyTest';
 import './VocabularyPinterest.css';
 
 const EnhancedVocabularyPinterest = () => {
@@ -15,6 +16,7 @@ const EnhancedVocabularyPinterest = () => {
   const [selectedWord, setSelectedWord] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [wordsPerPage] = useState(50);
+  const [showTest, setShowTest] = useState(false);
   
   // Remove auth since we no longer need save functionality
 
@@ -220,13 +222,22 @@ const EnhancedVocabularyPinterest = () => {
       {/* Search and Filter Controls */}
       <div className="vocab-controls">
         <div className="search-section">
-          <input
-            type="text"
-            placeholder="Search words (typos allowed)..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
+          <div className="search-input-container">
+            <input
+              type="text"
+              placeholder="Search words (typos allowed)..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <button 
+              className="test-button"
+              onClick={() => setShowTest(true)}
+              title="Take vocabulary test"
+            >
+              📝 Test
+            </button>
+          </div>
           <div className="search-stats">
             {filteredWords.length.toLocaleString()} words found
             {searchTerm && ` for "${searchTerm}"`}
@@ -371,6 +382,13 @@ const EnhancedVocabularyPinterest = () => {
         <WordDetailModal
           word={selectedWord}
           onClose={() => setSelectedWord(null)}
+        />
+      )}
+
+      {/* Vocabulary Test */}
+      {showTest && (
+        <SimpleVocabularyTest
+          onClose={() => setShowTest(false)}
         />
       )}
     </div>

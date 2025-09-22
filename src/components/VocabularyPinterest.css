@@ -58,8 +58,15 @@
   margin-bottom: 1.5rem;
 }
 
+.search-input-container {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .search-input {
-  width: 100%;
+  flex: 1;
   max-width: 600px;
   padding: 1rem 1.5rem;
   font-size: 1.1rem;
@@ -67,6 +74,27 @@
   border-radius: 50px;
   transition: all 0.3s ease;
   background: white;
+}
+
+.test-button {
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Futura', sans-serif;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+.test-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, #059669, #047857);
 }
 
 .search-input:focus {
