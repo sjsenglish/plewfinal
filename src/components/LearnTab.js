@@ -962,8 +962,8 @@ const LearnTab = () => {
             src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-books-pencil.svg?alt=media&token=1ca7c953-1f5d-43df-af64-0558f17fe93a"
             alt="Study Helper Icon"
             style={{
-              width: '50px',
-              height: '50px',
+              width: '150px',
+              height: '150px',
               objectFit: 'contain'
             }}
           />
@@ -1038,8 +1038,8 @@ const LearnTab = () => {
             src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-with-books.svg?alt=media&token=b654042b-993e-484e-b465-b78793756e26"
             alt="Question Pack Icon"
             style={{
-              width: '36px',
-              height: '36px',
+              width: '108px',
+              height: '108px',
               objectFit: 'contain'
             }}
           />
@@ -1113,8 +1113,8 @@ const LearnTab = () => {
             src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-donut.svg?alt=media&token=d1bbc1db-aa0e-4adc-84ef-11a0bede2fe4"
             alt="Video Icon"
             style={{
-              width: '36px',
-              height: '36px',
+              width: '108px',
+              height: '108px',
               objectFit: 'contain'
             }}
           />
