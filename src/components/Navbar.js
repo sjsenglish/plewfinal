@@ -168,7 +168,7 @@ const Navbar = ({ onSubjectChange }) => {
               className="navbar-glass-button"
             >
               <span></span>
-              원스톱 옥스포드 PLEW 강의 시리즈
+              원스톱 PLEW 강의
             </Link>
 
             {/* Premium Dashboard - Always visible, authentication handled by routes */}

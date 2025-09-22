@@ -14,6 +14,8 @@ const SimpleVocabularyTest = ({ onClose }) => {
   const [testStarted, setTestStarted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [testCompleted, setTestCompleted] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [completionTime, setCompletionTime] = useState(null);
 
   // Load vocabulary data from Firebase
   const loadVocabularyData = useCallback(async () => {
@@ -112,9 +114,16 @@ const SimpleVocabularyTest = ({ onClose }) => {
     };
   };
 
+  const completeTest = useCallback(() => {
+    setTestCompleted(true);
+    if (startTime) {
+      setCompletionTime(Date.now() - startTime);
+    }
+  }, [startTime]);
+
   const handleTimeUp = useCallback(() => {
     completeTest();
-  }, []);
+  }, [completeTest]);
 
   // Timer effect
   useEffect(() => {
@@ -142,6 +151,7 @@ const SimpleVocabularyTest = ({ onClose }) => {
 
   const startTest = () => {
     setTestStarted(true);
+    setStartTime(Date.now());
   };
 
   const handleAnswerSelect = (answer) => {
@@ -173,10 +183,6 @@ const SimpleVocabularyTest = ({ onClose }) => {
     }
   };
 
-  const completeTest = () => {
-    setTestCompleted(true);
-  };
-
   const restartTest = () => {
     setCurrentQuestion(0);
     setSelectedAnswer(null);
@@ -185,6 +191,8 @@ const SimpleVocabularyTest = ({ onClose }) => {
     setTimeLeft(300);
     setTestStarted(false);
     setTestCompleted(false);
+    setStartTime(null);
+    setCompletionTime(null);
     generateTest();
   };
 
@@ -192,6 +200,20 @@ const SimpleVocabularyTest = ({ onClose }) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const formatCompletionTime = (milliseconds) => {
+    if (!milliseconds) return '0 seconds';
+    
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    
+    if (minutes > 0) {
+      return `${minutes} minute${minutes !== 1 ? 's' : ''} ${seconds} second${seconds !== 1 ? 's' : ''}`;
+    } else {
+      return `${seconds} second${seconds !== 1 ? 's' : ''}`;
+    }
   };
 
   const getScore = () => {
@@ -270,6 +292,9 @@ const SimpleVocabularyTest = ({ onClose }) => {
               <div className="score-main">
                 <span className="score-number">{score.correct}/{score.total}</span>
                 <span className="score-percentage">{score.percentage}%</span>
+              </div>
+              <div className="completion-time">
+                Completed in {formatCompletionTime(completionTime)}
               </div>
             </div>
             

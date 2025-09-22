@@ -404,6 +404,13 @@
   gap: 1rem;
 }
 
+.completion-time {
+  margin-top: 1rem;
+  font-size: 1rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
 .score-number {
   font-size: 3rem;
   font-weight: 700;
