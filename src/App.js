@@ -153,7 +153,7 @@ const SUBJECTS = {
     bannerText: ' 옥스포드 영어팀에서 다양한 레벨의 오리지널 문제들과 쌍둥이 문제들을 계속 업데이트 합니다',
     displayName: '문제은행',
     searchType: 'algolia',
-    logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logos-toogle3.svg?alt=media&token=aba5119f-787d-4dd9-a88d-eac1de951a32'
+    logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logos-toggle2.svg?alt=media&token=f0fc8a2c-2bd5-47e4-bf77-698cf19e6f69'
   },
   community: {
     index: 'plewcommunity',
@@ -482,7 +482,7 @@ const buildAlgoliaFilters = (filters) => {
                 alt="PLEW"
                 className="modern-brand-title"
                 style={{
-                  height: '80px',
+                  height: '160px',
                   width: 'auto',
                   objectFit: 'contain'
                 }}
