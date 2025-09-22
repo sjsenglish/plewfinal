@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { getAuth } from 'firebase/auth';
 import { db } from '../firebase';
-import { collection, doc, setDoc, deleteDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import Fuse from 'fuse.js';
 import WordDetailModal from './WordDetailModal';
 import './VocabularyPinterest.css';
@@ -14,12 +13,10 @@ const EnhancedVocabularyPinterest = () => {
   const [sortBy, setSortBy] = useState('frequency');
   const [loading, setLoading] = useState(true);
   const [selectedWord, setSelectedWord] = useState(null);
-  const [savedWords, setSavedWords] = useState(new Set());
   const [currentPage, setCurrentPage] = useState(1);
   const [wordsPerPage] = useState(50);
   
-  const auth = getAuth();
-  const user = auth.currentUser;
+  // Remove auth since we no longer need save functionality
 
   // Load vocabulary data from Firebase
   const loadVocabularyData = useCallback(async () => {
@@ -43,7 +40,7 @@ const EnhancedVocabularyPinterest = () => {
           questions: Array.isArray(data.questions) ? data.questions : [],
           years: Array.isArray(data.years) ? data.years : [],
           examples: Array.isArray(data.examples) ? data.examples : data.contexts?.slice(0, 3) || [],
-          height: Math.floor(Math.random() * 200) + 250, // For masonry layout
+          // Dynamic height based on content
           createdAt: data.createdAt,
           updatedAt: data.updatedAt
         });
@@ -60,25 +57,6 @@ const EnhancedVocabularyPinterest = () => {
     }
   }, []);
 
-  // Load saved words for current user
-  const loadSavedWords = useCallback(async () => {
-    if (!user) return;
-
-    try {
-      const q = query(
-        collection(db, 'savedVocabulary'),
-        where('userId', '==', user.uid)
-      );
-      const querySnapshot = await getDocs(q);
-      const saved = new Set();
-      querySnapshot.forEach((doc) => {
-        saved.add(doc.data().word);
-      });
-      setSavedWords(saved);
-    } catch (error) {
-      console.error('Error loading saved words:', error);
-    }
-  }, [user]);
 
   // Initialize Fuse.js for fuzzy search
   const fuse = useMemo(() => {
@@ -179,42 +157,6 @@ const EnhancedVocabularyPinterest = () => {
 
   const totalPages = Math.ceil(filteredWords.length / wordsPerPage);
 
-  // Save/unsave word
-  const toggleSaveWord = async (word) => {
-    if (!user) {
-      alert('로그인이 필요합니다');
-      return;
-    }
-
-    try {
-      const docRef = doc(db, 'savedVocabulary', `${user.uid}_${word.word}`);
-      
-      if (savedWords.has(word.word)) {
-        await deleteDoc(docRef);
-        setSavedWords(prev => {
-          const newSet = new Set(prev);
-          newSet.delete(word.word);
-          return newSet;
-        });
-      } else {
-        const wordData = {
-          userId: user.uid,
-          word: word.word || '',
-          definition: word.definition || '',
-          difficulty: word.difficulty || 5,
-          subjectArea: word.subjects?.[0] || 'general',
-          savedAt: new Date()
-        };
-
-        if (word.examples && word.examples.length > 0) wordData.examples = word.examples;
-
-        await setDoc(docRef, wordData);
-        setSavedWords(prev => new Set([...prev, word.word]));
-      }
-    } catch (error) {
-      console.error('Error saving word:', error);
-    }
-  };
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -226,9 +168,6 @@ const EnhancedVocabularyPinterest = () => {
     loadVocabularyData();
   }, [loadVocabularyData]);
 
-  useEffect(() => {
-    loadSavedWords();
-  }, [loadSavedWords]);
 
   // Get unique subjects for filter
   const uniqueSubjects = useMemo(() => {
@@ -326,7 +265,6 @@ const EnhancedVocabularyPinterest = () => {
               <div
                 key={word.id}
                 className="vocab-card"
-                style={{ height: `${word.height}px` }}
                 onClick={() => setSelectedWord(word)}
               >
                 <div className="vocab-card-content">
@@ -334,10 +272,10 @@ const EnhancedVocabularyPinterest = () => {
                     <h3 className="vocab-word">{word.word}</h3>
                     <div className="vocab-meta">
                       <span className={`difficulty-badge difficulty-${word.difficulty}`}>
-                        {word.difficulty}
+                        Level {word.difficulty}
                       </span>
-                      <span className="frequency-badge">
-                        {word.frequency}회
+                      <span className={`csat-frequency ${word.frequency > 2 ? 'high-frequency' : ''}`}>
+                        CSAT ×{word.frequency}
                       </span>
                     </div>
                   </div>
@@ -346,32 +284,15 @@ const EnhancedVocabularyPinterest = () => {
                     <p className="vocab-definition">{word.definition}</p>
                   )}
 
-                  {word.contexts.length > 0 && (
-                    <div className="vocab-context">
-                      <p>"{word.contexts[0].substring(0, 100)}..."</p>
-                    </div>
-                  )}
-
-                  <div className="vocab-footer">
-                    <div className="vocab-subjects">
-                      {word.subjects.slice(0, 2).map(subject => (
-                        <span key={subject} className="subject-tag">
-                          {subject}
-                        </span>
+                  {word.contexts && word.contexts.length > 0 && (
+                    <div className="vocab-examples">
+                      {word.contexts.slice(0, 3).map((context, index) => (
+                        <div key={index} className="example-sentence">
+                          {context}
+                        </div>
                       ))}
                     </div>
-                    
-                    <button
-                      className={`save-btn ${savedWords.has(word.word) ? 'saved' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleSaveWord(word);
-                      }}
-                      title={savedWords.has(word.word) ? '저장됨' : '저장하기'}
-                    >
-                      {savedWords.has(word.word) ? '💾' : '💾'}
-                    </button>
-                  </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -409,8 +330,6 @@ const EnhancedVocabularyPinterest = () => {
         <WordDetailModal
           word={selectedWord}
           onClose={() => setSelectedWord(null)}
-          onSave={toggleSaveWord}
-          isSaved={savedWords.has(selectedWord.word)}
         />
       )}
     </div>
