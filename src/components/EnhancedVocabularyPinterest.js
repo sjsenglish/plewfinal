@@ -9,9 +9,6 @@ import './VocabularyPinterest.css';
 const EnhancedVocabularyPinterest = () => {
   const [allWords, setAllWords] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
-  const [selectedSubject, setSelectedSubject] = useState('all');
-  const [sortBy, setSortBy] = useState('frequency');
   const [loading, setLoading] = useState(true);
   const [selectedWord, setSelectedWord] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -117,39 +114,13 @@ const EnhancedVocabularyPinterest = () => {
       }
     }
     
-    // Apply difficulty filter
-    if (selectedDifficulty !== 'all') {
-      const difficultyNum = parseInt(selectedDifficulty);
-      filtered = filtered.filter(word => word.difficulty === difficultyNum);
-    }
-    
-    // Apply subject filter
-    if (selectedSubject !== 'all') {
-      filtered = filtered.filter(word => 
-        word.subjects.includes(selectedSubject)
-      );
-    }
-    
-    // Apply sorting (only if not searching, as search results are already sorted by relevance)
+    // Apply default sorting (only if not searching, as search results are already sorted by relevance)
     if (!searchTerm.trim()) {
-      filtered.sort((a, b) => {
-        switch (sortBy) {
-          case 'frequency':
-            return b.frequency - a.frequency;
-          case 'alphabetical':
-            return a.word.localeCompare(b.word);
-          case 'difficulty':
-            return b.difficulty - a.difficulty;
-          case 'length':
-            return b.word.length - a.word.length;
-          default:
-            return b.frequency - a.frequency;
-        }
-      });
+      filtered.sort((a, b) => b.frequency - a.frequency);
     }
     
     return filtered;
-  }, [allWords, searchTerm, selectedDifficulty, selectedSubject, sortBy, fuse]);
+  }, [allWords, searchTerm, fuse]);
 
   // Paginate filtered words
   const paginatedWords = useMemo(() => {
@@ -197,10 +168,10 @@ const EnhancedVocabularyPinterest = () => {
     return sentence.replace(pattern, '<mark class="word-highlight">$1</mark>');
   };
 
-  // Reset pagination when filters change
+  // Reset pagination when search changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, selectedDifficulty, selectedSubject, sortBy]);
+  }, [searchTerm]);
 
   // Load data on component mount
   useEffect(() => {
@@ -208,14 +179,6 @@ const EnhancedVocabularyPinterest = () => {
   }, [loadVocabularyData]);
 
 
-  // Get unique subjects for filter
-  const uniqueSubjects = useMemo(() => {
-    const subjects = new Set();
-    allWords.forEach(word => {
-      word.subjects.forEach(subject => subjects.add(subject));
-    });
-    return Array.from(subjects).sort();
-  }, [allWords]);
 
   return (
     <div className="vocabulary-pinterest">
@@ -247,46 +210,6 @@ const EnhancedVocabularyPinterest = () => {
           </div>
         </div>
 
-        <div className="filter-section">
-          <select
-            value={selectedDifficulty}
-            onChange={(e) => setSelectedDifficulty(e.target.value)}
-            className="filter-select"
-          >
-            <option value="all">모든 난이도</option>
-            <option value="4">중급 (4)</option>
-            <option value="5">중급+ (5)</option>
-            <option value="6">중상급 (6)</option>
-            <option value="7">상급 (7)</option>
-            <option value="8">상급+ (8)</option>
-            <option value="9">고급 (9)</option>
-            <option value="10">최고급 (10)</option>
-          </select>
-
-          <select
-            value={selectedSubject}
-            onChange={(e) => setSelectedSubject(e.target.value)}
-            className="filter-select"
-          >
-            <option value="all">모든 주제</option>
-            {uniqueSubjects.map(subject => (
-              <option key={subject} value={subject}>
-                {subject.charAt(0).toUpperCase() + subject.slice(1)}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="filter-select"
-          >
-            <option value="frequency">빈도순</option>
-            <option value="alphabetical">알파벳순</option>
-            <option value="difficulty">난이도순</option>
-            <option value="length">길이순</option>
-          </select>
-        </div>
       </div>
 
       {/* Loading State */}

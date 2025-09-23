@@ -6,12 +6,10 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
   const [selectedFilters, setSelectedFilters] = useState(currentFilters || {});
   // Start expanded on desktop (window width > 768px), collapsed on mobile
   const [isExpanded, setIsExpanded] = useState(typeof window !== 'undefined' && window.innerWidth > 768);
-  const [isAdvancedExpanded, setIsAdvancedExpanded] = useState(false);
 
-  // Filter definitions organized by Core (always visible) and Advanced (collapsible)
-  const CORE_FILTERS = {
+  // All filters in one unified set
+  const ALL_FILTERS = {
     source: {
-      label: '문제 타입',
       options: [
         { id: 'past-paper', label: '기출', value: 'source:past-paper' },
         { id: 'similar', label: '유사', value: 'source:similar' },
@@ -20,7 +18,6 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       ]
     },
     subjectArea: {
-      label: '주제 영역',
       options: [
         { id: 'natural-sciences', label: '자연 과학', value: 'primarySubjectArea:natural_sciences' },
         { id: 'social-sciences', label: '사회 과학', value: 'primarySubjectArea:social_sciences' },
@@ -29,7 +26,6 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       ]
     },
     questionSkill: {
-      label: '지문 출처',
       options: [
         { id: 'main-idea', label: '주제', value: 'questionSkill:main_idea' },
         { id: 'vocabulary-context', label: '빈칸', value: 'questionSkill:vocabulary_context' },
@@ -40,12 +36,8 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
         { id: 'tone-attitude', label: '어조', value: 'questionSkill:tone_attitude' },
         { id: 'factual-comprehension', label: '사실 확인', value: 'questionSkill:factual_comprehension' },
       ]
-    }
-  };
-
-  const ADVANCED_FILTERS = {
+    },
     difficulty: {
-      label: '난이도', 
       options: [
         { id: 'low', label: '쉬움', value: 'difficultyLevel:low' },
         { id: 'medium', label: '보통', value: 'difficultyLevel:medium' },
@@ -53,7 +45,6 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       ]
     },
     passageType: {
-      label: '지문 구조',
       options: [
         { id: 'argumentative', label: '논쟁', value: 'passageType:argumentative' },
         { id: 'discursive', label: '담화', value: 'passageType:discursive' },
@@ -62,7 +53,6 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       ]
     },
     vocabularyLevel: {
-      label: '단어 수준',
       options: [
         { id: 'basic', label: '기초(5200개 이하)', value: 'vocabularyDemand:[* TO 5199]' },
         { id: 'intermediate', label: '중간(5200-5500 개)', value: 'vocabularyDemand:[5200 TO 5500]' },
@@ -127,18 +117,8 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
   // Count active filters
   const activeFilterCount = Object.keys(selectedFilters).length;
 
-  // Get available core categories
-  const getAvailableCoreCategories = () => {
-    return { ...CORE_FILTERS };
-  };
-
-  // Get all filter categories (core + advanced)
-  const getAllFilterCategories = () => {
-    return { ...getAvailableCoreCategories(), ...ADVANCED_FILTERS };
-  };
-
-  const availableCoreCategories = getAvailableCoreCategories();
-  const availableCategories = getAllFilterCategories();
+  // Get all filter categories
+  const availableCategories = ALL_FILTERS;
 
   // Effect to handle when activeCategory becomes unavailable
   useEffect(() => {
@@ -171,47 +151,19 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
 
       {/* Filter content */}
       <div className={`filters-content ${isExpanded ? 'expanded' : ''}`}>
-        {/* Core Filters - Always Visible */}
-        <div className="filter-section core-filters">
-          <h3 className="filter-section-title">Core Filters</h3>
+        {/* All Filters */}
+        <div className="filter-section">
           <div className="filter-categories">
-            {Object.entries(availableCoreCategories).map(([categoryKey, category]) => (
+            {Object.entries(availableCategories).map(([categoryKey, category]) => (
               <button
                 key={categoryKey}
                 className={`category-tab ${activeCategory === categoryKey ? 'active' : ''}`}
                 onClick={() => setActiveCategory(categoryKey)}
               >
-                {category.label}
                 {selectedFilters[categoryKey] && <span className="active-indicator">•</span>}
               </button>
             ))}
           </div>
-        </div>
-
-        {/* Advanced Filters - Collapsible */}
-        <div className="filter-section advanced-filters">
-          <button 
-            className="filter-section-toggle"
-            onClick={() => setIsAdvancedExpanded(!isAdvancedExpanded)}
-          >
-            <h3 className="filter-section-title">Advanced Filters</h3>
-            <span className={`toggle-icon ${isAdvancedExpanded ? 'expanded' : ''}`}>▼</span>
-          </button>
-          
-          {isAdvancedExpanded && (
-            <div className="filter-categories">
-              {Object.entries(ADVANCED_FILTERS).map(([categoryKey, category]) => (
-                <button
-                  key={categoryKey}
-                  className={`category-tab ${activeCategory === categoryKey ? 'active' : ''}`}
-                  onClick={() => setActiveCategory(categoryKey)}
-                >
-                  {category.label}
-                  {selectedFilters[categoryKey] && <span className="active-indicator">•</span>}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Active filters summary */}
@@ -224,7 +176,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
                 
                 return option ? (
                   <span key={`${category}-${filterId}`} className="active-filter-tag">
-                    {categoryData.label}: {option.label}
+                    {option.label}
                     <button 
                       className="remove-filter"
                       onClick={() => clearFilter(category)}
