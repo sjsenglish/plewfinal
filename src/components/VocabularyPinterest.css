@@ -189,19 +189,19 @@
   }
 }
 
-/* Enhanced Vocabulary Grid - 3 columns for better spacing */
+/* Enhanced Vocabulary Grid - 2 columns for wider cards */
 .vocab-grid {
   max-width: 1800px;
   margin: 0 auto;
   padding: 0 2rem;
-  columns: 3;
+  columns: 2;
   column-gap: 2rem;
   column-fill: balance;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   .vocab-grid {
-    columns: 2;
+    columns: 1;
     column-gap: 1.5rem;
   }
 }
@@ -830,13 +830,13 @@
 
 /* Responsive Design */
 .masonry-grid {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .masonry-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
   

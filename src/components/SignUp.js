@@ -39,7 +39,7 @@ const SignUp = () => {
 
     // Validate password match
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('비밀번호가 일치하지 않습니다.');
       return;
     }
 
@@ -104,13 +104,13 @@ try {
     } catch (error) {
       console.error('Sign up error:', error);
       if (error.code === 'auth/email-already-in-use') {
-        setError('Oops! An account with this email already exists. Please try logging in instead.');
+        setError('이 이메일로 이미 계정이 등록되어 있습니다. 로그인해 주세요.');
       } else if (error.code === 'auth/weak-password') {
-        setError('Oops! Password should be at least 6 characters long.');
+        setError('비밀번호는 최소 6자 이상이어야 합니다.');
       } else if (error.code === 'auth/invalid-email') {
-        setError('Oops! Please enter a valid email address.');
+        setError('올바른 이메일 주소를 입력해 주세요.');
       } else {
-        setError('Oops! Something went wrong during signup. Please try again.');
+        setError('회원가입 중 문제가 발생했습니다. 다시 시도해 주세요.');
       }
       setLoading(false);
     }
@@ -163,7 +163,7 @@ try {
       window.location.href = '/';
     } catch (error) {
       console.error('Google sign up error:', error);
-      setError(error.message || 'An error occurred during Google signup');
+      setError(error.message || '구글 회원가입 중 오류가 발생했습니다');
       setLoading(false);
     }
   };
@@ -194,7 +194,7 @@ try {
           margin: '0 0 32px 0',
           textAlign: 'center'
         }}>
-          Create Account
+          계정 만들기
         </h2>
 
         {error && (
@@ -221,13 +221,13 @@ try {
               color: '#111827',
               marginBottom: '8px'
             }}>
-              Full Name
+              이름
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your full name"
+              placeholder="이름을 입력하세요"
               required
               style={{
                 width: '100%',
@@ -259,13 +259,13 @@ try {
               color: '#111827',
               marginBottom: '8px'
             }}>
-              Email Address
+              이메일 주소
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address"
+              placeholder="이메일 주소를 입력하세요"
               required
               style={{
                 width: '100%',
@@ -429,7 +429,7 @@ try {
                 Creating Account...
               </>
             ) : (
-              'Create Account'
+              '계정 만들기'
             )}
           </button>
         </form>
@@ -499,7 +499,7 @@ try {
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
-          Continue with Google
+          구글로 계속하기
         </button>
 
         <div style={{
@@ -509,7 +509,7 @@ try {
           lineHeight: '1.6'
         }}>
           <p style={{ marginBottom: '8px' }}>
-            Already have an account?{' '}
+            이미 계정이 있으신가요?{' '}
             <Link 
               to="/login"
               style={{
@@ -518,7 +518,7 @@ try {
                 fontWeight: '600'
               }}
             >
-              Sign In
+              로그인
             </Link>
           </p>
           
@@ -530,7 +530,7 @@ try {
                 textDecoration: 'none'
               }}
             >
-              ← Back to Home
+              ← 홈으로 돌아가기
             </Link>
           </p>
         </div>

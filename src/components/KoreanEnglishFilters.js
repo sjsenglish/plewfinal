@@ -11,7 +11,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
   // Filter definitions organized by Core (always visible) and Advanced (collapsible)
   const CORE_FILTERS = {
     source: {
-      label: '문제 유형',
+      label: '문제 타입',
       options: [
         { id: 'past-paper', label: '기출', value: 'source:past-paper' },
         { id: 'similar', label: '유사', value: 'source:similar' },
@@ -20,7 +20,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       ]
     },
     subjectArea: {
-      label: 'Subject Area',
+      label: '주제 영역',
       options: [
         { id: 'natural-sciences', label: '자연 과학', value: 'primarySubjectArea:natural_sciences' },
         { id: 'social-sciences', label: '사회 과학', value: 'primarySubjectArea:social_sciences' },
@@ -29,7 +29,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       ]
     },
     questionSkill: {
-      label: '문제 유형',
+      label: '지문 출처',
       options: [
         { id: 'main-idea', label: '주제', value: 'questionSkill:main_idea' },
         { id: 'vocabulary-context', label: '빈칸', value: 'questionSkill:vocabulary_context' },
@@ -45,16 +45,15 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
 
   const ADVANCED_FILTERS = {
     difficulty: {
-      label: 'Difficulty', 
+      label: '난이도', 
       options: [
-        { id: 'low', label: 'Low', value: 'difficultyLevel:low' },
-        { id: 'medium', label: 'Medium', value: 'difficultyLevel:medium' },
-        { id: 'high', label: 'High', value: 'difficultyLevel:high' },
-        { id: 'very-high', label: 'Very High', value: 'difficultyLevel:very_high' },
+        { id: 'low', label: '쉬움', value: 'difficultyLevel:low' },
+        { id: 'medium', label: '보통', value: 'difficultyLevel:medium' },
+        { id: 'high', label: '어려움 ', value: 'difficultyLevel:high' },
       ]
     },
     passageType: {
-      label: 'Passage Type',
+      label: '지문 구조',
       options: [
         { id: 'argumentative', label: '논쟁', value: 'passageType:argumentative' },
         { id: 'discursive', label: '담화', value: 'passageType:discursive' },
@@ -63,7 +62,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       ]
     },
     vocabularyLevel: {
-      label: 'Vocabulary Level',
+      label: '단어 수준',
       options: [
         { id: 'basic', label: '기초(5200개 이하)', value: 'vocabularyDemand:[* TO 5199]' },
         { id: 'intermediate', label: '중간(5200-5500 개)', value: 'vocabularyDemand:[5200 TO 5500]' },

@@ -44,17 +44,17 @@ const Login = () => {
       console.error('Login error:', error);
       
       if (error.code === 'auth/user-not-found') {
-        setError('Oops! No account found with this email address.');
+        setError('이 이메일 주소로 등록된 계정이 없습니다.');
       } else if (error.code === 'auth/wrong-password') {
-        setError('Oops! Incorrect password.');
+        setError('비밀번호가 올바르지 않습니다.');
       } else if (error.code === 'auth/invalid-credential') {
-        setError('Oops! Invalid email or password. Please check your credentials and try again.');
+        setError('이메일 또는 비밀번호가 올바르지 않습니다. 다시 확인해 주세요.');
       } else if (error.code === 'auth/invalid-email') {
-        setError('Oops! Invalid email address.');
+        setError('올바른 이메일 주소를 입력해 주세요.');
       } else if (error.code === 'auth/too-many-requests') {
-        setError('Too many failed login attempts. Please try again later.');
+        setError('로그인 시도가 너무 많습니다. 잠시 후 다시 시도해 주세요.');
       } else {
-        setError('Oops! Something went wrong. Please try again.');
+        setError('문제가 발생했습니다. 다시 시도해 주세요.');
       }
       
       setLoading(false);
@@ -71,7 +71,7 @@ const Login = () => {
       window.location.href = '/';
     } catch (error) {
       console.error('Google login error:', error);
-      setError('Google login failed: ' + error.message);
+      setError('구글 로그인 실패: ' + error.message);
       setLoading(false);
     }
   };
@@ -80,7 +80,7 @@ const Login = () => {
     e.preventDefault();
     
     if (!email) {
-      setError('Please enter your email address first');
+      setError('먼저 이메일 주소를 입력해 주세요');
       return;
     }
 
@@ -99,11 +99,11 @@ const Login = () => {
       console.error('Password reset error:', error);
       
       if (error.code === 'auth/user-not-found') {
-        setError('No account found with this email address.');
+        setError('이 이메일 주소로 등록된 계정이 없습니다.');
       } else if (error.code === 'auth/invalid-email') {
-        setError('Invalid email address.');
+        setError('올바른 이메일 주소를 입력해 주세요.');
       } else {
-        setError('Error sending reset email: ' + error.message);
+        setError('재설정 이메일 전송 오류: ' + error.message);
       }
     }
     
@@ -143,7 +143,7 @@ const Login = () => {
             color: '#111827',
             margin: '0 0 32px 0'
           }}>
-            Password Reset Email Sent
+            비밀번호 재설정 이메일 전송됨
           </h2>
           
           <div style={{ fontSize: '64px', marginBottom: '24px' }}>🔐</div>
@@ -154,7 +154,7 @@ const Login = () => {
             fontSize: '16px',
             lineHeight: '1.6'
           }}>
-            We've sent a password reset email to <strong>{email}</strong>
+            <strong>{email}</strong>로 비밀번호 재설정 이메일을 보냈습니다
           </p>
           
           <p style={{
@@ -163,7 +163,7 @@ const Login = () => {
             fontSize: '14px',
             lineHeight: '1.6'
           }}>
-            Please check your inbox and click the reset link to create a new password.
+            이메일을 확인하고 재설정 링크를 클릭하여 새 비밀번호를 만드세요.
           </p>
           
           <div style={{
@@ -188,7 +188,7 @@ const Login = () => {
               onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
               onMouseLeave={(e) => e.target.style.backgroundColor = COLORS.teal}
             >
-              Back to Login
+              로그인으로 돌아가기
             </button>
             
             <button
@@ -202,7 +202,7 @@ const Login = () => {
                 fontSize: '14px'
               }}
             >
-              Resend Reset Email
+              재설정 이메일 재전송
             </button>
           </div>
         </div>
@@ -235,7 +235,7 @@ const Login = () => {
           margin: '0 0 32px 0',
           textAlign: 'center'
         }}>
-          {showForgotPassword ? 'Reset Password' : 'Welcome Back'}
+          {showForgotPassword ? '비밀번호 재설정' : '환영합니다'}
         </h2>
 
         {error && (
@@ -264,13 +264,13 @@ const Login = () => {
                 color: '#111827',
                 marginBottom: '8px'
               }}>
-                Email Address
+                이메일 주소
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email address"
+                placeholder="이메일 주소를 입력하세요"
                 required
                 style={{
                   width: '100%',
@@ -337,7 +337,7 @@ const Login = () => {
                   Sending...
                 </>
               ) : (
-                'Send Reset Email'
+                '재설정 이메일 보내기'
               )}
             </button>
 
@@ -354,7 +354,7 @@ const Login = () => {
                   fontSize: '14px'
                 }}
               >
-                Back to Login
+                로그인으로 돌아가기
               </button>
             </div>
           </form>
@@ -370,7 +370,7 @@ const Login = () => {
                   color: '#111827',
                   marginBottom: '8px'
                 }}>
-                  Email Address
+                  이메일 주소
                 </label>
                 <input
                   type="email"
@@ -407,13 +407,13 @@ const Login = () => {
                   color: '#111827',
                   marginBottom: '8px'
                 }}>
-                  Password
+                  비밀번호
                 </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  placeholder="비밀번호를 입력하세요"
                   required
                   style={{
                     width: '100%',
@@ -480,7 +480,7 @@ const Login = () => {
                     Signing In...
                   </>
                 ) : (
-                  'Sign In'
+                  '로그인'
                 )}
               </button>
             </form>
@@ -550,7 +550,7 @@ const Login = () => {
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
               </svg>
-              Continue with Google
+              구글로 곈4속하기
             </button>
 
             <div style={{
@@ -560,7 +560,7 @@ const Login = () => {
               lineHeight: '1.6'
             }}>
               <p style={{ marginBottom: '8px' }}>
-                Don't have an account?{' '}
+                계정이 없으신가요?{' '}
                 <Link 
                   to="/signup"
                   style={{
@@ -569,7 +569,7 @@ const Login = () => {
                     fontWeight: '600'
                   }}
                 >
-                  Sign Up
+                  회원가입
                 </Link>
               </p>
               
@@ -586,7 +586,7 @@ const Login = () => {
                     fontSize: '14px'
                   }}
                 >
-                  Forgot Password?
+                  비밀번호를 잊으셨나요?
                 </button>
               </p>
               
@@ -598,7 +598,7 @@ const Login = () => {
                     textDecoration: 'none'
                   }}
                 >
-                  ← Back to Home
+                  ← 홈으로 돌아가기
                 </Link>
               </p>
             </div>
