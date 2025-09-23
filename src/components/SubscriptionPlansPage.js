@@ -28,9 +28,9 @@ const SubscriptionPlansPage = () => {
   const plans = [
     {
       id: 'tier1',
-      name: 'Full access멤버십.',
+      name: '프리미엄 멤버십',
       price: 20000,
-      period: 'month',
+      period: '월',
       priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',
       paymentLink: 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01',
       description: 'Everything you need for exam preparation',
@@ -143,7 +143,7 @@ const SubscriptionPlansPage = () => {
           letterSpacing: '-1.5px',
           lineHeight: '1.1'
         }}>
-          Choose your plan
+          원하는 플랜을 골라 보세요
         </h1>
         
         <p style={{
@@ -153,7 +153,7 @@ const SubscriptionPlansPage = () => {
           maxWidth: '480px',
           lineHeight: '1.5'
         }}>
-          Get unlimited access to all premium features
+          무제한 검색 기능을 사용할 수 있습니다.
         </p>
       </div>
 
@@ -223,14 +223,14 @@ const SubscriptionPlansPage = () => {
                 fontWeight: '600',
                 margin: '0 0 8px 0'
               }}>
-                Free
+                무료 멤버십
               </h3>
               <p style={{
                 fontSize: '14px',
                 color: 'rgba(255, 255, 255, 0.5)',
                 margin: '0 0 24px 0'
               }}>
-                Basic features to get started
+                무제한 검색 기능을 사용할 수 있습니다.
               </p>
               
               <div style={{
@@ -245,7 +245,7 @@ const SubscriptionPlansPage = () => {
                   fontWeight: '400',
                   marginLeft: '8px'
                 }}>
-                  /month
+                  /월
                 </span>
               </div>
             </div>
@@ -267,7 +267,7 @@ const SubscriptionPlansPage = () => {
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  3 daily searches
+                  무제한 검색 기능을 사용할 수 있습니다.
                 </li>
                 <li style={{
                   display: 'flex',
@@ -280,7 +280,6 @@ const SubscriptionPlansPage = () => {
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  Limited video access
                 </li>
                 <li style={{
                   display: 'flex',
@@ -293,7 +292,6 @@ const SubscriptionPlansPage = () => {
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  Basic features
                 </li>
               </ul>
             </div>
@@ -343,7 +341,7 @@ const SubscriptionPlansPage = () => {
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px'
               }}>
-                Recommended
+                추천
               </div>
 
               {plan.current && (

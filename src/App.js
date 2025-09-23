@@ -297,13 +297,13 @@ const SubjectToggle = ({ currentSubject, onSubjectChange }) => {
           <button
             key={key}
             className={`subject-toggle-button ${currentSubject === key ? 'active' : ''} ${
-              (key === 'maths' || key === 'community') ? 'has-indicator' : ''
+              key === 'maths' ? 'has-indicator' : ''
             }`}
             onClick={() => onSubjectChange(key)}
             title={subject.displayName}
           >
             {subject.displayName}
-            {(key === 'maths' || key === 'community') && (
+            {key === 'maths' && (
               <div className="daily-updates-indicator">
                 <div className="pulse-dot"></div>
                 <span className="update-text">daily updates</span>

@@ -5,9 +5,10 @@ import './VideoStreaming.css';
 const SAMPLE_VIDEOS = {
   hero: {
     id: 'hero-video',
-    title: '',
-    description: '.',
-    videoUrl: 'https://www.youtube.com/embed/PtnI54sUc84?start=2&autoplay=1&mute=1&controls=1&loop=1&playlist=PtnI54sUc84',
+    title: 'PLEW 강의 소개',
+    description: '옥스포드 테크닉으로 배우는 영어 독해',
+    videoUrl: 'https://www.youtube.com/embed/PtnI54sUc84?start=2&autoplay=1&controls=1',
+    backgroundUrl: 'https://www.youtube.com/embed/PtnI54sUc84?start=2&autoplay=1&mute=1&controls=0&loop=1&playlist=PtnI54sUc84',
     poster: 'https://peach.blender.org/wp-content/uploads/title_anouncement.jpg'
   },
   categories: [
@@ -17,7 +18,7 @@ const SAMPLE_VIDEOS = {
         {
           id: 'v1',
           title: 'Lesson 1',
-          videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+1Final.mp4',
+          videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson1_Cut2.mp4',
           poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson1Thumbnail.jpg'
         },
         {
@@ -53,7 +54,7 @@ const SAMPLE_VIDEOS = {
         {
           id: 'v8',
           title: 'Lesson 8',
-          videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson+8_SS.mp4',
+          videoUrl: 'https://plewvideos.s3.eu-north-1.amazonaws.com/Lesson8_Cut2.mp4',
           poster: 'https://plewvideos.s3.eu-north-1.amazonaws.com/08.jpg'
         }
       ]
@@ -124,7 +125,7 @@ const VideoStreaming = () => {
               minWidth: '100%',
               minHeight: '100%'
             }}
-            src={SAMPLE_VIDEOS.hero.videoUrl}
+            src={SAMPLE_VIDEOS.hero.backgroundUrl || SAMPLE_VIDEOS.hero.videoUrl}
             title={SAMPLE_VIDEOS.hero.title}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -171,7 +172,10 @@ const VideoStreaming = () => {
           </div>
 
           <div className="hero-cta">
-            <button className="cta-primary">
+            <button 
+              className="cta-primary"
+              onClick={() => playVideo(SAMPLE_VIDEOS.hero)}
+            >
               <span>▶</span>
               강의 시작하기
             </button>

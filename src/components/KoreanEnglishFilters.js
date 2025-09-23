@@ -15,94 +15,59 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       options: [
         { id: 'past-paper', label: '기출', value: 'source:past-paper' },
         { id: 'similar', label: '유사', value: 'source:similar' },
-      ]
-    },
-    similarLevel: {
-      label: '유사 문제 레벨',
-      options: [
-        { id: 'advanced', label: 'Advanced', value: 'similarLevel:advanced' },
-        { id: 'baby', label: 'Baby', value: 'similarLevel:baby' },
+        { id: 'similar-advanced', label: 'Advanced', value: 'source:similar AND similarLevel:advanced' },
+        { id: 'similar-baby', label: '베이비', value: 'source:similar AND similarLevel:baby' },
       ]
     },
     subjectArea: {
       label: 'Subject Area',
       options: [
-        { id: 'natural-sciences', label: 'Natural Sciences', value: 'primarySubjectArea:natural_sciences' },
-        { id: 'social-sciences', label: 'Social Sciences', value: 'primarySubjectArea:social_sciences' },
-        { id: 'literature-arts', label: 'Literature & Arts', value: 'primarySubjectArea:literature_arts' },
-        { id: 'humanities', label: 'Humanities', value: 'primarySubjectArea:humanities' },
+        { id: 'natural-sciences', label: '자연 과학', value: 'primarySubjectArea:natural_sciences' },
+        { id: 'social-sciences', label: '사회 과학', value: 'primarySubjectArea:social_sciences' },
+        { id: 'literature-arts', label: '문학/예술', value: 'primarySubjectArea:literature_arts' },
+        { id: 'humanities', label: '인문학', value: 'primarySubjectArea:humanities' },
       ]
     },
     questionSkill: {
-      label: 'Question Skill',
+      label: '문제 유형',
       options: [
-        { id: 'title-selection', label: 'Title Selection', value: 'questionSkill:title_selection' },
-        { id: 'main-idea', label: 'Main Idea', value: 'questionSkill:main_idea' },
-        { id: 'factual-comprehension', label: 'Factual Comprehension', value: 'questionSkill:factual_comprehension' },
-        { id: 'reference-understanding', label: 'Reference Understanding', value: 'questionSkill:reference_understanding' },
-        { id: 'vocabulary-context', label: 'Vocabulary in Context', value: 'questionSkill:vocabulary_context' },
-        { id: 'inference', label: 'Inference', value: 'questionSkill:inference' },
-        { id: 'paragraph-ordering', label: 'Paragraph Ordering', value: 'questionSkill:paragraph_ordering' },
-        { id: 'tone-attitude', label: 'Tone & Attitude', value: 'questionSkill:tone_attitude' },
-        { id: 'logical-structure', label: 'Logical Structure', value: 'questionSkill:logical_structure' },
+        { id: 'main-idea', label: '주제', value: 'questionSkill:main_idea' },
+        { id: 'vocabulary-context', label: '빈칸', value: 'questionSkill:vocabulary_context' },
+        { id: 'paragraph-ordering', label: '순서', value: 'questionSkill:paragraph_ordering' },
+        { id: 'logical-structure', label: '문장 삽입', value: 'questionSkill:logical_structure' },
+        { id: 'inference', label: '추론', value: 'questionSkill:inference' },
+        { id: 'title-selection', label: '제목', value: 'questionSkill:title_selection' },
+        { id: 'tone-attitude', label: '어조', value: 'questionSkill:tone_attitude' },
+        { id: 'factual-comprehension', label: '사실 확인', value: 'questionSkill:factual_comprehension' },
       ]
-    },
+    }
+  };
+
+  const ADVANCED_FILTERS = {
     difficulty: {
-      label: 'Difficulty',
+      label: 'Difficulty', 
       options: [
         { id: 'low', label: 'Low', value: 'difficultyLevel:low' },
         { id: 'medium', label: 'Medium', value: 'difficultyLevel:medium' },
         { id: 'high', label: 'High', value: 'difficultyLevel:high' },
         { id: 'very-high', label: 'Very High', value: 'difficultyLevel:very_high' },
       ]
-    }
-  };
-
-  const ADVANCED_FILTERS = {
-    specificTopic: {
-      label: 'Specific Topic',
-      options: [
-        { id: 'biology', label: 'Biology', value: 'secondarySubjectArea:biology' },
-        { id: 'chemistry', label: 'Chemistry', value: 'secondarySubjectArea:chemistry' },
-        { id: 'physics', label: 'Physics', value: 'secondarySubjectArea:physics' },
-        { id: 'psychology', label: 'Psychology', value: 'secondarySubjectArea:psychology' },
-        { id: 'economics', label: 'Economics', value: 'secondarySubjectArea:economics' },
-        { id: 'politics', label: 'Politics', value: 'secondarySubjectArea:politics' },
-        { id: 'history', label: 'History', value: 'secondarySubjectArea:history' },
-        { id: 'philosophy', label: 'Philosophy', value: 'secondarySubjectArea:philosophy' },
-        { id: 'geography', label: 'Geography', value: 'secondarySubjectArea:geography' },
-        { id: 'literature', label: 'Literature', value: 'secondarySubjectArea:literature' },
-        { id: 'art', label: 'Art', value: 'secondarySubjectArea:art' },
-        { id: 'music', label: 'Music', value: 'secondarySubjectArea:music' },
-        { id: 'technology', label: 'Technology', value: 'secondarySubjectArea:technology' },
-      ]
     },
     passageType: {
       label: 'Passage Type',
       options: [
-        { id: 'argumentative', label: 'Argumentative', value: 'passageType:argumentative' },
-        { id: 'discursive', label: 'Discursive', value: 'passageType:discursive' },
-        { id: 'analytical', label: 'Analytical', value: 'passageType:analytical' },
-        { id: 'comprehension', label: 'Comprehension', value: 'passageType:comprehension' },
+        { id: 'argumentative', label: '논쟁', value: 'passageType:argumentative' },
+        { id: 'discursive', label: '담화', value: 'passageType:discursive' },
+        { id: 'analytical', label: '분석', value: 'passageType:analytical' },
+        { id: 'comprehension', label: '문해', value: 'passageType:comprehension' },
       ]
     },
     vocabularyLevel: {
       label: 'Vocabulary Level',
       options: [
-        { id: 'basic', label: 'Basic (Under 5200)', value: 'vocabularyDemand:[* TO 5199]' },
-        { id: 'intermediate', label: 'Intermediate (5200-5500)', value: 'vocabularyDemand:[5200 TO 5500]' },
-        { id: 'advanced', label: 'Advanced (5500+)', value: 'vocabularyDemand:[5500 TO *]' },
-      ]
-    },
-    textSource: {
-      label: 'Text Source',
-      options: [
-        { id: 'academic-journal', label: 'Academic Journal', value: 'textSource:academic_journal' },
-        { id: 'university-textbook', label: 'University Textbook', value: 'textSource:university_textbook' },
-        { id: 'popular-media', label: 'Popular Media', value: 'textSource:popular_media' },
-        { id: 'news-article', label: 'News Article', value: 'textSource:news_article' },
-        { id: 'scientific-publication', label: 'Scientific Publication', value: 'textSource:scientific_publication' },
-        { id: 'literary-work', label: 'Literary Work', value: 'textSource:literary_work' },
+        { id: 'basic', label: '기초(5200개 이하)', value: 'vocabularyDemand:[* TO 5199]' },
+        { id: 'intermediate', label: '중간(5200-5500 개)', value: 'vocabularyDemand:[5200 TO 5500]' },
+        { id: 'advanced', label: '고급(5500개 이상)', value: 'vocabularyDemand:[5500 TO *]' },
       ]
     }
   };
@@ -163,16 +128,9 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
   // Count active filters
   const activeFilterCount = Object.keys(selectedFilters).length;
 
-  // Get available core categories based on current selections
+  // Get available core categories
   const getAvailableCoreCategories = () => {
-    const categories = { ...CORE_FILTERS };
-    
-    // Only show similarLevel if 'similar' is selected in source
-    if (selectedFilters.source !== 'similar') {
-      delete categories.similarLevel;
-    }
-    
-    return categories;
+    return { ...CORE_FILTERS };
   };
 
   // Get all filter categories (core + advanced)
@@ -194,27 +152,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
     }
   }, [activeCategory, availableCategories]);
 
-  // Also clear similarLevel filter when source changes away from 'similar'
-  useEffect(() => {
-    if (selectedFilters.source !== 'similar' && selectedFilters.similarLevel) {
-      const newFilters = { ...selectedFilters };
-      delete newFilters.similarLevel;
-      setSelectedFilters(newFilters);
-      
-      // Convert to format expected by App.js
-      const algoliaFilters = {};
-      Object.entries(newFilters).forEach(([cat, id]) => {
-        if (id) {
-          const option = availableCategories[cat]?.options.find(opt => opt.id === id);
-          if (option) {
-            algoliaFilters[cat] = option.value;
-          }
-        }
-      });
-      
-      onFiltersChange(algoliaFilters);
-    }
-  }, [selectedFilters.source, availableCategories, onFiltersChange]);
+  // No longer need to handle similarLevel separately since it's integrated into source options
 
   return (
     <div className="korean-english-filters">

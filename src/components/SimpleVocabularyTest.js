@@ -253,27 +253,27 @@ const SimpleVocabularyTest = ({ onClose }) => {
       <div className="simple-test-overlay">
         <div className="simple-test-container">
           <div className="test-intro">
-            <h2>Vocabulary Context Test</h2>
-            <p>Choose the correct context for each word. You'll see 5 words with 4 context options each.</p>
+            <h2>단어 문맥 테스트</h2>
+            <p>각 단어에 적합한 문맥을 골라 보세요. 5분 한정 시간에 5개 단어가 주어집니다.</p>
             
             <div className="test-info">
               <div className="info-item">
-                <span className="info-label">Questions:</span>
-                <span className="info-value">5</span>
+                <span className="info-label">질문:</span>
+                <span className="info-value">5개</span>
               </div>
               <div className="info-item">
-                <span className="info-label">Time Limit:</span>
-                <span className="info-value">5 minutes</span>
+                <span className="info-label">시간 제한:</span>
+                <span className="info-value">5분</span>
               </div>
               <div className="info-item">
-                <span className="info-label">Format:</span>
-                <span className="info-value">Multiple Choice</span>
+                <span className="info-label">형식:</span>
+                <span className="info-value">객관식</span>
               </div>
             </div>
             
             <div className="test-actions">
-              <button className="btn-secondary" onClick={onClose}>Cancel</button>
-              <button className="btn-primary" onClick={startTest}>Start Test</button>
+              <button className="btn-secondary" onClick={onClose}>취소하기</button>
+              <button className="btn-primary" onClick={startTest}>테스트 시작하기</button>
             </div>
           </div>
         </div>
@@ -311,7 +311,7 @@ const SimpleVocabularyTest = ({ onClose }) => {
             </div>
             
             <div className="test-actions">
-              <button className="btn-secondary" onClick={restartTest}>Try Again</button>
+              <button className="btn-secondary" onClick={restartTest}>다시 시도</button>
               <button className="btn-primary" onClick={onClose}>Close</button>
             </div>
           </div>
@@ -386,7 +386,7 @@ const SimpleVocabularyTest = ({ onClose }) => {
           {/* Show correct answer after submission */}
           {showResult && (
             <div className="result-explanation">
-              <h4>{selectedAnswer === currentQ.correctAnswer ? '✅ Correct!' : '❌ Incorrect'}</h4>
+              <h4>{selectedAnswer === currentQ.correctAnswer ? '정답' : '틀렸어요'}</h4>
               <p><strong>Correct context:</strong> {currentQ.correctContext}</p>
             </div>
           )}
@@ -400,14 +400,14 @@ const SimpleVocabularyTest = ({ onClose }) => {
               onClick={handleSubmitAnswer}
               disabled={!selectedAnswer}
             >
-              Submit Answer
+              제출
             </button>
           ) : (
             <button 
               className="btn-primary"
               onClick={handleNextQuestion}
             >
-              {currentQuestion < testWords.length - 1 ? 'Next Question' : 'Finish Test'}
+              {currentQuestion < testWords.length - 1 ? '다음' : '완성'}
             </button>
           )}
         </div>
