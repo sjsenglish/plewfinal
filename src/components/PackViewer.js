@@ -945,7 +945,7 @@ const PackViewer = () => {
                             backgroundColor: '#f8fafc',
                             borderRadius: '12px',
                             border: '1px solid #e2e8f0',
-                            textAlign: 'center'
+                            textAlign: 'left'
                           }}>
                             <div style={{
                               fontSize: '13px',
@@ -1030,9 +1030,29 @@ const PackViewer = () => {
                           }}>
                             <strong style={{ color: '#166534' }}>Correct Answer:</strong>{' '}
                             <span style={{ color: '#166534', fontWeight: '600' }}>
-                              {question.correctAnswer !== undefined && (question.answerOptions || question.options) ? (
-                                `${String.fromCharCode(65 + question.correctAnswer)} - ${(question.answerOptions || question.options)[question.correctAnswer]}`
-                              ) : (
+                              {question.correctAnswer !== undefined && (question.answerOptions || question.options) ? (() => {
+                                // Helper function to convert Korean numbering symbols to indices (matching InteractiveQuiz.js)
+                                const getKoreanAnswerIndex = (correctAnswer) => {
+                                  if (typeof correctAnswer === 'number') {
+                                    return correctAnswer;
+                                  }
+                                  if (typeof correctAnswer === 'string') {
+                                    const koreanNumberMap = { '①': 0, '②': 1, '③': 2, '④': 3, '⑤': 4 };
+                                    for (const [symbol, index] of Object.entries(koreanNumberMap)) {
+                                      if (correctAnswer.startsWith(symbol)) {
+                                        return index;
+                                      }
+                                    }
+                                  }
+                                  return null;
+                                };
+                                
+                                const correctIndex = getKoreanAnswerIndex(question.correctAnswer);
+                                if (correctIndex !== null && (question.answerOptions || question.options)[correctIndex]) {
+                                  return `${String.fromCharCode(65 + correctIndex)} - ${(question.answerOptions || question.options)[correctIndex]}`;
+                                }
+                                return question.correctAnswer;
+                              })() : (
                                 question.english || question.actualQuestion || 'Answer not available'
                               )}
                             </span>

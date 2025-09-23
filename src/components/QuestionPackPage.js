@@ -95,11 +95,12 @@ const SUBJECTS = {
       ],
     },
     categoryLabels: { 
-      year: 'Year',
-      subjectArea: 'Subject Area',
-      difficulty: 'Difficulty', 
-      questionType: 'Question Type',
-      level: 'Level'
+      source: '문제 타입',
+      subjectArea: '주제 영역',
+      questionSkill: '지문 출처',
+      difficulty: '난이도',
+      passageType: '지문 구조',
+      vocabularyLevel: '단어 수준'
     },
   },
 };
@@ -457,7 +458,7 @@ export const QuestionPackPage = () => {
 
   // Filter and question states
   const [activeFilters, setActiveFilters] = useState([]);
-  const [activeCategory, setActiveCategory] = useState('year');
+  const [activeCategory, setActiveCategory] = useState('source');
   const [availableQuestions, setAvailableQuestions] = useState(0);
   const [fetchedQuestions, setFetchedQuestions] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
@@ -895,7 +896,7 @@ const getQuestionPreview = (question) => {
   // Reset filters when changing subjects
   useEffect(() => {
     setActiveFilters([]);
-    setActiveCategory('year'); // Default to year for Korean-English
+    setActiveCategory('source'); // Default to source for Korean-English
   }, [packData.subject]);
 
   if (paywallLoading) {
