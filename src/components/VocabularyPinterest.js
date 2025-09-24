@@ -57,6 +57,8 @@ const VocabularyPinterest = () => {
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalWords, setTotalWords] = useState(0);
   const [filters] = useState({
     difficulty: 'all',
     frequency: 'all'
@@ -171,8 +173,10 @@ const VocabularyPinterest = () => {
 
       if (reset) {
         setWords(newWords);
+        setCurrentPage(1);
       } else {
         setWords(prev => [...prev, ...newWords]);
+        setCurrentPage(prev => prev + 1);
       }
 
       console.log(`📚 Loaded ${newWords.length} words from Firebase`);
@@ -301,6 +305,7 @@ const VocabularyPinterest = () => {
   useEffect(() => {
     setLastDoc(null);
     setHasMore(true);
+    setCurrentPage(1);
     loadWords(true);
   }, [selectedSubject, filters, searchTerm]);
 
@@ -438,12 +443,17 @@ const VocabularyPinterest = () => {
           ))}
         </div>
 
-        {/* Load More */}
-        {!loading && words.length > 0 && hasMore && (
-          <div className="load-more-container">
-            <button onClick={() => loadWords(false)} className="load-more-btn">
-              Load More Words
-            </button>
+        {/* Pagination Controls */}
+        {!loading && words.length > 0 && (
+          <div className="pagination-container">
+            <div className="pagination-info">
+              Page {currentPage} • {words.length} words shown
+            </div>
+            {hasMore && (
+              <button onClick={() => loadWords(false)} className="load-more-btn">
+                Load Next Page
+              </button>
+            )}
           </div>
         )}
 

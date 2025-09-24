@@ -788,6 +788,21 @@
   margin: 3rem 0;
 }
 
+.pagination-container {
+  text-align: center;
+  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
 .load-more-btn {
   padding: 1rem 2rem;
   background: linear-gradient(135deg, #6EA399, #17434D);

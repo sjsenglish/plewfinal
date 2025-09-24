@@ -615,7 +615,7 @@ const buildAlgoliaFilters = (filters) => {
             <div className="modern-search-wrapper">
               <div className="container">
                 {/* Add KoreanEnglishFilters component for Korean-English subject */}
-                {currentSubject === 'korean-english' && user && (
+                {currentSubject === 'korean-english' && (
                   <KoreanEnglishFilters 
                     onFiltersChange={handleKoreanEnglishFiltersChange}
                     currentFilters={koreanEnglishFilters}
@@ -626,7 +626,7 @@ const buildAlgoliaFilters = (filters) => {
                 <div className="results-container">
                   <div className="stats-container">{statsComponent}</div>
                   <div className="hits-container">
-                    {user && <Hits hitComponent={HitWrapper} />}
+                    <Hits hitComponent={HitWrapper} />
                   </div>
                 </div>
               </div>
