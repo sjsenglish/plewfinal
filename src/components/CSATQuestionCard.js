@@ -45,12 +45,8 @@ const CSATQuestionCard = ({ hit }) => {
     }
   };
 
-  // Toggle answer visibility with paywall check
-  const toggleAnswer = async () => {
-    const usageCheck = await checkUsage('question_interaction');
-    if (!usageCheck.allowed) {
-      return;
-    }
+  // Toggle answer visibility (no paywall restriction)
+  const toggleAnswer = () => {
     setShowAnswer(!showAnswer);
   };
 
@@ -113,17 +109,14 @@ const CSATQuestionCard = ({ hit }) => {
       {correctAnswer && (
         <div className="csat-answer-section">
           <button 
-            className={`csat-answer-button ${!isPaidUser ? 'csat-locked' : ''}`}
+            className="csat-answer-button"
             onClick={toggleAnswer}
           >
             <span className="csat-button-icon">
-              {!isPaidUser ? '🔒' : (showAnswer ? '👁️' : '👁️‍🗨️')}
+              {showAnswer ? '👁️' : '👁️‍🗨️'}
             </span>
             <span className="csat-button-text">
-              {!isPaidUser ? 
-                (isGuest ? 'Login to View Answer' : 'Subscribe to View Answer') : 
-                (showAnswer ? 'Hide Answer' : 'Show Answer')
-              }
+              {showAnswer ? 'Hide Answer' : 'Show Answer'}
             </span>
           </button>
           

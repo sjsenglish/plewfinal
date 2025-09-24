@@ -199,16 +199,7 @@
   box-shadow: 0 8px 25px rgba(0, 206, 209, 0.4);
 }
 
-.csat-answer-button.csat-locked {
-  opacity: 0.8;
-  cursor: not-allowed;
-  background: linear-gradient(135deg, #9ca3af, #6b7280);
-}
-
-.csat-answer-button.csat-locked:hover {
-  transform: none;
-  box-shadow: 0 6px 20px rgba(156, 163, 175, 0.3);
-}
+/* Removed locked state styles - answers are now freely accessible */
 
 .csat-button-icon {
   font-size: 1.2rem;
