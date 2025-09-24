@@ -595,19 +595,15 @@ const buildAlgoliaFilters = (filters) => {
                 return (
                   <Configure 
                     key={`filters-${currentSubject}-${Date.now()}`}
-                    filters={`${filters ? filters + ' AND ' : ''}year:2025`} 
-                    numericFilters={['questionNumberForRanking >= 20', 'questionNumberForRanking <= 35']}
-                    attributesToRetrieve={['*']}
-                    ranking={['asc(questionNumberForRanking)', 'typo', 'geo', 'words', 'filters', 'proximity', 'attribute', 'exact', 'custom']}
+                    filters={filters || ''} 
+                    hitsPerPage={10}
                   />
                 );
               } catch (error) {
                 console.warn('Error configuring Algolia filters:', error);
                 return <Configure 
-                  key={`filters-fallback-${currentSubject}`}
-                  filters="year:2025"
-                  numericFilters={['questionNumberForRanking >= 20', 'questionNumberForRanking <= 35']}
-                  ranking={['asc(questionNumberForRanking)', 'typo', 'geo', 'words', 'filters', 'proximity', 'attribute', 'exact', 'custom']}
+                  key={`filters-fallback-${currentSubject}`} 
+                  hitsPerPage={10}
                 />;
               }
             })()}
