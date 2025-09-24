@@ -595,12 +595,16 @@ const buildAlgoliaFilters = (filters) => {
                 return (
                   <Configure 
                     key={`filters-${currentSubject}-${Date.now()}`}
-                    filters={filters || ''} 
+                    filters={filters || ''}
+                    ranking={['desc(year)', 'typo', 'geo', 'words', 'filters', 'proximity', 'attribute', 'exact', 'custom']}
                   />
                 );
               } catch (error) {
                 console.warn('Error configuring Algolia filters:', error);
-                return <Configure key={`filters-fallback-${currentSubject}`} />;
+                return <Configure 
+                  key={`filters-fallback-${currentSubject}`}
+                  ranking={['desc(year)', 'typo', 'geo', 'words', 'filters', 'proximity', 'attribute', 'exact', 'custom']}
+                />;
               }
             })()}
             
