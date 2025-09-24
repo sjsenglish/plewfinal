@@ -204,9 +204,7 @@ const VocabularyStudy = () => {
   const startQuizWithSelected = async () => {
     const usageCheck = await checkUsage('vocabulary_test');
     if (!usageCheck.allowed) {
-      alert(usageCheck.reason === 'Sign up required' 
-        ? 'Please sign up or log in to take vocabulary tests' 
-        : 'Subscription required to take vocabulary tests');
+      // Do nothing - make buttons unclickable
       return;
     }
     
@@ -221,9 +219,7 @@ const VocabularyStudy = () => {
   const startQuizWithAll = async () => {
     const usageCheck = await checkUsage('vocabulary_test');
     if (!usageCheck.allowed) {
-      alert(usageCheck.reason === 'Sign up required' 
-        ? 'Please sign up or log in to take vocabulary tests' 
-        : 'Subscription required to take vocabulary tests');
+      // Do nothing - make buttons unclickable
       return;
     }
     
@@ -238,9 +234,7 @@ const VocabularyStudy = () => {
   const startDifficultWordsQuiz = async () => {
     const usageCheck = await checkUsage('vocabulary_test');
     if (!usageCheck.allowed) {
-      alert(usageCheck.reason === 'Sign up required' 
-        ? 'Please sign up or log in to take vocabulary tests' 
-        : 'Subscription required to take vocabulary tests');
+      // Do nothing - make buttons unclickable
       return;
     }
     
@@ -389,9 +383,6 @@ const VocabularyStudy = () => {
                 onQuiz={async () => {
                   const usageCheck = await checkUsage('vocabulary_test');
                   if (!usageCheck.allowed) {
-                    alert(usageCheck.reason === 'Sign up required' 
-                      ? 'Please sign up or log in to take vocabulary tests' 
-                      : 'Subscription required to take vocabulary tests');
                     return;
                   }
                   setQuizWords([word]);

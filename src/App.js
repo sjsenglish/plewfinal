@@ -1063,11 +1063,11 @@ function App() {
                   <Route path="/subscription-plans" element={<SubscriptionPlansPage />} />
                   <Route path="/quiz/:subject" element={<ProtectedRoute><QuizTaking /></ProtectedRoute>} />
                   <Route path="/quiz/:subject/results" element={<ProtectedRoute><QuizResults /></ProtectedRoute>} />
-                  <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-                  <Route path="/question-pack" element={<ProtectedRoute><QuestionPackPage /></ProtectedRoute>} />
-                  <Route path="/pack/:packId" element={<ProtectedRoute><PackViewer /></ProtectedRoute>} />
-                  <Route path="/premium/*" element={<ProtectedRoute><PremiumDashboard /></ProtectedRoute>} />
-                  <Route path="/practice/:packId" element={<ProtectedRoute><PracticeMode /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/question-pack" element={<QuestionPackPage />} />
+                  <Route path="/pack/:packId" element={<PackViewer />} />
+                  <Route path="/premium/*" element={<PremiumDashboard />} />
+                  <Route path="/practice/:packId" element={<PracticeMode />} />
                   <Route path="/premium/quiz/:subject" element={<ProtectedRoute><QuizTaking /></ProtectedRoute>} />
                   <Route path="/premium/quiz/:subject/results" element={<ProtectedRoute><QuizResults /></ProtectedRoute>} />
                   <Route path="/reset-password" element={<ProtectedRoute><PasswordResetConfirm /></ProtectedRoute>} />

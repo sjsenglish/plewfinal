@@ -88,10 +88,7 @@ const VideoStreaming = () => {
     const usageCheck = await checkUsage('video_playback');
     
     if (!usageCheck.allowed) {
-      // Show visual feedback that video is blocked
-      alert(usageCheck.reason === 'Sign up required' 
-        ? 'Please sign up or log in to watch videos' 
-        : 'Subscription required to watch videos');
+      // Do nothing - make videos unplayable
       return;
     }
     

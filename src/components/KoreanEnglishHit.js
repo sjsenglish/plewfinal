@@ -54,9 +54,7 @@ const KoreanEnglishHit = ({ hit }) => {
   const toggleAnswer = async () => {
     const usageCheck = await checkUsage('question_interaction');
     if (!usageCheck.allowed) {
-      alert(usageCheck.reason === 'Sign up required' 
-        ? 'Please sign up or log in to view answers' 
-        : 'Subscription required to view answers');
+      // Do nothing - make buttons unclickable
       return;
     }
     setShowAnswer(!showAnswer);
@@ -65,9 +63,7 @@ const KoreanEnglishHit = ({ hit }) => {
   const toggleExplanation = async () => {
     const usageCheck = await checkUsage('question_interaction');
     if (!usageCheck.allowed) {
-      alert(usageCheck.reason === 'Sign up required' 
-        ? 'Please sign up or log in to view explanations' 
-        : 'Subscription required to view explanations');
+      // Do nothing - make buttons unclickable
       return;
     }
     setShowExplanation(!showExplanation);

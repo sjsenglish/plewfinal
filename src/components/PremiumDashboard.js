@@ -68,14 +68,10 @@ const PremiumDashboard = () => {
   ];
 
   const handleSectionClick = async (sectionId, isPremiumSection) => {
-    if (isPremiumSection) {
-      const usageCheck = await checkUsage('dashboard_tabs');
-      if (!usageCheck.allowed) {
-        alert(usageCheck.reason === 'Sign up required' 
-          ? 'Please sign up or log in to access this feature' 
-          : 'Subscription required to access this feature');
-        return;
-      }
+    // Only allow clicking if user is paid or it's not a premium section
+    if (isPremiumSection && !isPaidUser) {
+      // Do nothing - make tabs unclickable
+      return;
     }
     setActiveSection(sectionId);
   };
