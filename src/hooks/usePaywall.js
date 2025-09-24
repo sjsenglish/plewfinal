@@ -132,7 +132,7 @@ export const usePaywall = () => {
     
     // Block other interactive features for non-subscribers
     const blockedFeatures = [
-      'video_playbook', 'dashboard_tabs', 'question_results', 'vocabulary_test', 
+      'video_playback', 'video_playbook', 'dashboard_tabs', 'question_results', 'vocabulary_test', 
       'community_submit', 'search_functionality', 'question_interaction'
     ];
     

@@ -182,34 +182,44 @@ const Navbar = ({ onSubjectChange }) => {
           </div>
 
           <div className="navbar-auth" style={{ marginLeft: '2rem' }}>
-            {/* User authentication and upgrade/plans button */}
+            {/* Subscription plans - Always visible */}
+            <Link
+              to="/subscription-plans"
+              className="navbar-upgrade-button-exact"
+              style={{ marginRight: user ? '0.75rem' : '0' }}
+            >
+              {loading || paywallLoading ? (
+                <>
+                  <span>⚡</span>
+                  구독하기
+                </>
+              ) : user ? (
+                !isPaidUser ? (
+                  <>
+                    <span>⚡</span>
+                    구독하기 
+                  </>
+                ) : (
+                  <>
+                    <span>✓</span>
+                    {planInfo.name}
+                  </>
+                )
+              ) : (
+                <>
+                  <span>⚡</span>
+                  구독하기
+                </>
+              )}
+            </Link>
+
+            {/* User authentication */}
             {loading || paywallLoading ? (
               <div className="nav-loading"></div>
             ) : user ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                {/* Show upgrade button for free users */}
-                {!isPaidUser ? (
-                  <Link
-                    to="/subscription-plans"
-                    className="navbar-upgrade-button-exact"
-                  >
-                    <span>⚡</span>
-                    구독하기 
-                  </Link>
-                ) : (
-                  <Link
-                    to="/subscription-plans"
-                    className="navbar-upgrade-button-exact"
-                  >
-                    <span>✓</span>
-                    {planInfo.name}
-                  </Link>
-                )}
-
-                <button onClick={handleSignOut} className="navbar-glass-button">
-                  로그아웃
-                </button>
-              </div>
+              <button onClick={handleSignOut} className="navbar-glass-button">
+                로그아웃
+              </button>
             ) : (
               <Link
                 to="/login"
