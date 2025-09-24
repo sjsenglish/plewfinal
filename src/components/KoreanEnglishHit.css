@@ -181,6 +181,46 @@
   color: #495057;
 }
 
+/* Answer Options Section */
+.answer-options-section {
+  background: linear-gradient(135deg, #ccccff, #ffffff);
+  border-left: 4px solid #6EA399;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(110, 163, 153, 0.2);
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.option-item {
+  background: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border-left: 3px solid #00CED1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.option-item:hover {
+  background: linear-gradient(135deg, rgba(110, 163, 153, 0.05), rgba(0, 206, 209, 0.05));
+  border-left-color: #6EA399;
+  transform: translateX(2px);
+}
+
+.option-text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #17434D;
+  font-weight: 500;
+}
+
 /* Hints and Examples Sections */
 .hints-section,
 .examples-section {

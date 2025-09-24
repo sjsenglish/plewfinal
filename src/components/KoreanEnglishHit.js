@@ -23,8 +23,9 @@ const KoreanEnglishHit = ({ hit }) => {
   console.log('Korean-English hit object:', hit);
 
   // Extract data from your Korean-English hit structure
-  // PLACEHOLDER FIELDS - Update these based on your actual data structure
-  const questionId = hit.objectID || hit.id || '';
+  const questionNumber = hit.questionNumber || '';
+  const year = hit.year || '';
+  const questionId = questionNumber && year ? `${questionNumber} (${year})` : (hit.objectID || hit.id || '');
   const koreanText = hit.questionText || hit.korean_text || hit.korean || '';
   const englishText = hit.actualQuestion || hit.english_text || hit.english || '';
   const questionText = hit.question || '';
@@ -149,7 +150,7 @@ const KoreanEnglishHit = ({ hit }) => {
       {/* Header with metadata */}
       <div className="korean-english-hit-header">
         <div className="question-header-left">
-          <h3 className="question-id">Question #{questionId}</h3>
+          <h3 className="question-id">Question {questionId}</h3>
           {level && <span className="level-badge">{level}</span>}
           {difficulty && <span className="difficulty-badge difficulty-{difficulty}">{difficulty}</span>}
         </div>
@@ -174,7 +175,7 @@ const KoreanEnglishHit = ({ hit }) => {
         {koreanText && (
           <div className="korean-section">
             <div className="section-header">
-              <h4 className="section-title">Korean</h4>
+              <h4 className="section-title">English Passage</h4>
               {koreanAudioUrl && (
                 <button 
                   className="audio-button"
@@ -198,7 +199,7 @@ const KoreanEnglishHit = ({ hit }) => {
         {englishText && (
           <div className="english-section">
             <div className="section-header">
-              <h4 className="section-title">English</h4>
+              <h4 className="section-title">Korean Question</h4>
               {englishAudioUrl && (
                 <button 
                   className="audio-button"
@@ -220,6 +221,20 @@ const KoreanEnglishHit = ({ hit }) => {
           <div className="question-section">
             <h4 className="section-title">Question</h4>
             <p className="question-text">{questionText}</p>
+          </div>
+        )}
+
+        {/* Answer Options Section */}
+        {answerOptions && answerOptions.length > 0 && (
+          <div className="answer-options-section">
+            <h4 className="section-title">Answer Options</h4>
+            <div className="options-list">
+              {answerOptions.map((option, index) => (
+                <div key={index} className="option-item">
+                  <p className="option-text">{option}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
