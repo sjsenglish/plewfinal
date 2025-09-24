@@ -139,21 +139,21 @@
   color: #17434D;
 }
 
-.audio-button {
-  background: linear-gradient(135deg, #6EA399, #17434D);
-  color: white;
-  border: none;
-  padding: 0.5rem 0.8rem;
-  border-radius: 20px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.korean-english-hit-container .audio-button {
+  background: linear-gradient(135deg, #6EA399, #17434D) !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.5rem 0.8rem !important;
+  border-radius: 20px !important;
+  font-size: 1.2rem !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
 }
 
-.audio-button:hover {
-  transform: scale(1.1);
-  background: linear-gradient(135deg, #00CED1, #17434D);
-  box-shadow: 0 4px 12px rgba(0, 206, 209, 0.4);
+.korean-english-hit-container .audio-button:hover {
+  transform: scale(1.1) !important;
+  background: linear-gradient(135deg, #00CED1, #17434D) !important;
+  box-shadow: 0 4px 12px rgba(0, 206, 209, 0.4) !important;
 }
 
 .main-text {
@@ -244,26 +244,26 @@
   margin-bottom: 1rem;
 }
 
-.toggle-button {
-  background: linear-gradient(135deg, #6EA399, #17434D);
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(110, 163, 153, 0.4);
+.korean-english-hit-container .toggle-button {
+  background: linear-gradient(135deg, #6EA399, #17434D) !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.8rem 1.5rem !important;
+  border-radius: 25px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  box-shadow: 0 4px 12px rgba(110, 163, 153, 0.4) !important;
 }
 
-.toggle-button:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, #00CED1, #17434D);
-  box-shadow: 0 6px 16px rgba(0, 206, 209, 0.4);
+.korean-english-hit-container .toggle-button:hover {
+  transform: translateY(-2px) !important;
+  background: linear-gradient(135deg, #00CED1, #17434D) !important;
+  box-shadow: 0 6px 16px rgba(0, 206, 209, 0.4) !important;
 }
 
 .answer-content,
@@ -417,18 +417,18 @@
 }
 
 /* Paywall styles for locked content */
-.toggle-button.locked {
-  opacity: 0.7;
-  cursor: not-allowed;
-  background: #f1f5f9;
-  color: #64748b;
-  border-color: #e2e8f0;
+.korean-english-hit-container .toggle-button.locked {
+  opacity: 0.7 !important;
+  cursor: not-allowed !important;
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border-color: #e2e8f0 !important;
 }
 
-.toggle-button.locked:hover {
-  background: #f8fafc;
-  transform: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.korean-english-hit-container .toggle-button.locked:hover {
+  background: #f8fafc !important;
+  transform: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Video solution section */
