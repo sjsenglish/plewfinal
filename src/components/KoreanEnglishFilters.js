@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './KoreanEnglishFilters.css';
 
 const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
-  const [activeCategory, setActiveCategory] = useState('year');
-  const [selectedFilters, setSelectedFilters] = useState(currentFilters || { year: '2025' });
+  const [activeCategory, setActiveCategory] = useState('source');
+  const [selectedFilters, setSelectedFilters] = useState(currentFilters || {});
   // Start expanded on desktop (window width > 768px), collapsed on mobile
   const [isExpanded, setIsExpanded] = useState(typeof window !== 'undefined' && window.innerWidth > 768);
 
@@ -146,14 +146,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
     }
   }, [activeCategory, availableCategories]);
 
-  // Apply initial 2025 filter on mount
-  useEffect(() => {
-    if (!currentFilters || Object.keys(currentFilters).length === 0) {
-      const initialFilters = { year: '2025' };
-      setSelectedFilters(initialFilters);
-      onFiltersChange({ year: 'year:2025' });
-    }
-  }, []);
+  // No default filters applied - let Algolia handle question ordering
 
   // No longer need to handle similarLevel separately since it's integrated into source options
 
