@@ -5,6 +5,8 @@ import './CSATQuestionCard.css';
 const CSATQuestionCard = ({ hit }) => {
   const { checkUsage, isPaidUser, isGuest } = usePaywall();
   const [showAnswer, setShowAnswer] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   // Early return if hit is undefined or null
   if (!hit) {
@@ -48,6 +50,19 @@ const CSATQuestionCard = ({ hit }) => {
   // Toggle answer visibility (no paywall restriction)
   const toggleAnswer = () => {
     setShowAnswer(!showAnswer);
+  };
+
+  // Handle option click
+  const handleOptionClick = (optionIndex, optionText) => {
+    setSelectedOption(optionIndex);
+    setShowFeedback(true);
+    setShowAnswer(true);
+  };
+
+  // Check if selected option is correct
+  const isCorrectOption = (optionText) => {
+    return correctAnswer.includes(optionText.substring(0, 1)) || // Check if correct answer starts with same symbol (①②③④⑤)
+           correctAnswer.toLowerCase().includes(optionText.toLowerCase().substring(2, 10)); // Check text match
   };
 
   return (
@@ -97,8 +112,21 @@ const CSATQuestionCard = ({ hit }) => {
           <h3 className="csat-section-title">Answer Options</h3>
           <div className="csat-options-list">
             {answerOptions.map((option, index) => (
-              <div key={index} className="csat-option-item">
+              <div 
+                key={index} 
+                className={`csat-option-item ${
+                  selectedOption === index ? 
+                    (isCorrectOption(option) ? 'csat-option-correct' : 'csat-option-incorrect') : 
+                    ''
+                }`}
+                onClick={() => handleOptionClick(index, option)}
+              >
                 <span className="csat-option-text">{option}</span>
+                {selectedOption === index && showFeedback && (
+                  <span className="csat-option-feedback">
+                    {isCorrectOption(option) ? '✅ Correct!' : '❌ Incorrect'}
+                  </span>
+                )}
               </div>
             ))}
           </div>
