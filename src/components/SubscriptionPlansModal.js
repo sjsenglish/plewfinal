@@ -98,17 +98,43 @@ const SubscriptionPlansModal = ({ onClose }) => {
   }
 
   return (
-    <div style={{ 
-      backgroundColor: '#0a0a0a',
-      color: '#ffffff',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-      maxWidth: '900px',
-      margin: '0 auto'
-    }}>
-      {/* Modal Header */}
+    <div 
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backdropFilter: 'blur(4px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        padding: '20px'
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <div style={{ 
+        backgroundColor: '#0a0a0a',
+        color: '#ffffff',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        maxWidth: '900px',
+        width: '100%',
+        maxHeight: '90vh',
+        overflowY: 'auto',
+        borderRadius: '16px',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)'
+      }}>
+      {/* Header - matching SubscriptionPlansPage */}
       <div style={{
-        padding: '2rem 2rem 1rem 2rem',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        padding: '48px 24px 36px',
+        textAlign: 'center',
         position: 'relative',
         background: 'radial-gradient(circle at 50% 0%, rgba(88, 101, 242, 0.08) 0%, transparent 50%)'
       }}>
@@ -117,16 +143,21 @@ const SubscriptionPlansModal = ({ onClose }) => {
           onClick={onClose}
           style={{
             position: 'absolute',
-            top: '1rem',
-            right: '1rem',
+            top: '16px',
+            right: '16px',
             background: 'none',
             border: 'none',
-            fontSize: '1.5rem',
+            fontSize: '24px',
             color: 'rgba(255, 255, 255, 0.5)',
             cursor: 'pointer',
-            padding: '0.5rem',
+            padding: '8px',
             borderRadius: '6px',
-            transition: 'all 0.2s ease'
+            transition: 'all 0.2s ease',
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
           onMouseEnter={(e) => {
             e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -140,59 +171,86 @@ const SubscriptionPlansModal = ({ onClose }) => {
           ✕
         </button>
 
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{ 
-            fontSize: '2rem', 
-            fontWeight: '600', 
-            marginBottom: '0.5rem',
-            color: '#ffffff',
-            letterSpacing: '-1px'
-          }}>
-            원하는 플랜을 골라 보세요
-          </h1>
-          <p style={{ 
-            fontSize: '1rem', 
-            color: 'rgba(255, 255, 255, 0.6)',
-            marginBottom: '1rem'
-          }}>
-            무제한 검색 기능을 사용할 수 있습니다.
-          </p>
-          
-          {isLoggedIn && (
-            <div style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              borderRadius: '8px',
-              padding: '0.75rem 1rem',
-              display: 'inline-block'
-            }}>
-              <div style={{ fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.5)', marginBottom: '0.25rem' }}>
-                현재 플랜
-              </div>
-              <div style={{ fontSize: '1rem', fontWeight: '600', color: '#ffffff' }}>
-                {planInfo.name}
-              </div>
-            </div>
-          )}
-        </div>
+        <h1 style={{
+          fontSize: '36px',
+          fontWeight: '600',
+          margin: '0 0 16px 0',
+          letterSpacing: '-1.5px',
+          lineHeight: '1.1'
+        }}>
+          원하는 플랜을 골라 보세요
+        </h1>
+        
+        <p style={{
+          fontSize: '18px',
+          color: 'rgba(255, 255, 255, 0.6)',
+          margin: '0 auto',
+          maxWidth: '480px',
+          lineHeight: '1.5'
+        }}>
+          무제한 검색 기능을 사용할 수 있습니다.
+        </p>
       </div>
 
-      {/* Plans Grid */}
-      <div style={{ 
-        padding: '2rem',
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-        gap: '1.5rem'
+      {/* Main Content */}
+      <div style={{
+        padding: '0 24px 48px'
       }}>
-        {/* Free Plan */}
+        {/* Login Notice */}
+        {!isLoggedIn && (
+          <div style={{
+            maxWidth: '480px',
+            margin: '0 auto 32px',
+            padding: '16px 20px',
+            backgroundColor: 'rgba(250, 166, 26, 0.1)',
+            border: '1px solid rgba(250, 166, 26, 0.2)',
+            borderRadius: '12px',
+            display: 'flex',
+            gap: '12px',
+            alignItems: 'flex-start'
+          }}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0, marginTop: '2px' }}>
+              <path d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM10 5C10.5523 5 11 5.44772 11 6V10C11 10.5523 10.5523 11 10 11C9.44772 11 9 10.5523 9 10V6C9 5.44772 9.44772 5 10 5ZM10 15C9.44772 15 9 14.5523 9 14C9 13.4477 9.44772 13 10 13C10.5523 13 11 13.4477 11 14C11 14.5523 10.5523 15 10 15Z" fill="#faa61a"/>
+            </svg>
+            
+            <div style={{ flex: 1 }}>
+              <p style={{
+                margin: 0,
+                fontSize: '14px',
+                color: 'rgba(255, 255, 255, 0.9)',
+                lineHeight: '1.5'
+              }}>
+                Please{' '}
+                <span style={{
+                  color: '#faa61a',
+                  textDecoration: 'none',
+                  borderBottom: '1px solid #faa61a',
+                  cursor: 'pointer'
+                }} onClick={onClose}>
+                  sign in
+                </span>
+                {' '}to subscribe to a plan
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Plans Grid */}
         <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          borderRadius: '16px',
-          padding: '2rem',
-          position: 'relative',
-          transition: 'all 0.2s ease'
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '24px',
+          marginBottom: '32px'
         }}>
+          {/* Free Plan */}
+          <div style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '16px',
+            padding: '32px',
+            position: 'relative',
+            transition: 'all 0.2s ease'
+          }}>
           <div style={{ marginBottom: '1.5rem' }}>
             <h3 style={{
               fontSize: '1.25rem',
@@ -288,7 +346,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
             style={{
               backgroundColor: 'rgba(88, 101, 242, 0.05)',
               borderRadius: '16px',
-              padding: '2rem',
+              padding: '32px',
               border: '2px solid rgba(88, 101, 242, 0.3)',
               position: 'relative',
               transition: 'all 0.2s ease'
@@ -454,28 +512,29 @@ const SubscriptionPlansModal = ({ onClose }) => {
               Secure payment via Stripe • Cancel anytime
             </p>
           </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      {/* Footer */}
-      <div style={{
-        padding: '1rem 2rem 2rem 2rem',
-        textAlign: 'center',
-        borderTop: '1px solid rgba(255, 255, 255, 0.08)'
-      }}>
-        <p style={{ 
-          fontSize: '0.875rem', 
-          color: 'rgba(255, 255, 255, 0.5)',
-          margin: 0
+        {/* Footer */}
+        <div style={{
+          textAlign: 'center',
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          paddingTop: '32px'
         }}>
-          문의사항이 있으시면 이메일로 연락하세요:{' '}
-          <a 
-            href="mailto:team@examrizzsearch.com"
-            style={{ color: '#5865f2', textDecoration: 'none' }}
-          >
-            team@examrizzsearch.com
-          </a>
-        </p>
+          <p style={{ 
+            fontSize: '14px', 
+            color: 'rgba(255, 255, 255, 0.5)',
+            margin: 0
+          }}>
+            문의사항이 있으시면 이메일로 연락하세요:{' '}
+            <a 
+              href="mailto:team@examrizzsearch.com"
+              style={{ color: '#5865f2', textDecoration: 'none' }}
+            >
+              team@examrizzsearch.com
+            </a>
+          </p>
+        </div>
       </div>
 
       {/* Custom CSS for animations */}
@@ -485,6 +544,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
           100% { transform: rotate(360deg); }
         }
       `}</style>
+      </div>
     </div>
   );
 };
