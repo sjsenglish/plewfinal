@@ -543,18 +543,6 @@ const buildAlgoliaFilters = (filters) => {
   </div>
 )}
           
-          {/* CTA for non-logged in users */}
-          {!user && (
-            <div className="modern-header-cta">
-              <a href="/signup" className="modern-signup-button">
-                <span>sign up for free</span>
-                <div className="button-glow"></div>
-              </a>
-              <div className="coming-soon-message">
-                <span>A Level subjects coming soon...</span>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </header>

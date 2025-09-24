@@ -67,6 +67,7 @@ const VocabularyPinterest = () => {
   const auth = getAuth();
   const user = auth.currentUser;
   const masonryRef = useRef(null);
+  const loadingRef = useRef(false);
 
 
   // Subject areas for browsing
@@ -85,9 +86,10 @@ const VocabularyPinterest = () => {
 
   // Load vocabulary words from Firebase
   const loadWords = useCallback(async (reset = false) => {
-    if (loading) return;
+    if (loading || loadingRef.current) return;
     
     setLoading(true);
+    loadingRef.current = true;
     try {
       let vocabularyQuery = collection(db, 'vocabulary');
       
@@ -185,8 +187,9 @@ const VocabularyPinterest = () => {
       console.error('Error loading vocabulary from Firebase:', error);
     } finally {
       setLoading(false);
+      loadingRef.current = false;
     }
-  }, [selectedSubject, filters, searchTerm, lastDoc, loading]);
+  }, [selectedSubject, filters, searchTerm]);
 
   // Load saved words for current user
   const loadSavedWords = useCallback(async () => {
