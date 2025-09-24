@@ -22,26 +22,26 @@ const SubscriptionPlansModal = ({ onClose }) => {
 
   const planInfo = getPlanInfo();
 
-  // Premium plan configuration
+  // Premium plan configuration - matching SubscriptionPlansPage
   const plans = [
     {
       id: 'tier1',
-      name: '프리미엄',
-      price: 29000,
+      name: '프리미엄 멤버십',
+      price: 20000,
       period: '월',
       priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',
       paymentLink: 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01',
+      description: 'Everything you need for exam preparation',
       features: [
-        '무제한 일일 검색',
-        '무제한 비디오 솔루션', 
-        '무제한 문제 팩',
-        '타이머 연습 모드',
-        '우선 커뮤니티 지원',
-        '주간 큐레이션 콘텐츠',
-        '고급 분석 대시보드',
-        '개인화된 학습 계획',
+        '옥스포드 영어에서 독점 제작하는 프리미엄 독해 문제들을 무제한 검색할 수 있습니다.',
+        '강의 시리즈와 문제 풀이 비디오들을 무제한 검색할 수 있습니다.',
+        '다양한 필터를 이용해 필요한 문제지를 무제한 제작할 수 있습니다.',
+        '단어 학습과 리딩의 연계를 통해 효율적인 단어 학습이 가능한 이노베이션 단어 은행을  제공합니다.',
+        '실전 대비 타이머 시험을 이용할 수 있습니다. ',
+        '학생들 간, 학생과  관리자 간 소통과 필요한 정보, 다양한 영어 관련 콘텐츠를 제공하는 커뮤니티를 운영하고 있습니다.',
+        '자율적 학습에 익숙하지 않은 학생들은 학습 도우미를 활용할 수 있습니다.',
       ],
-      buttonText: '프리미엄 선택',
+      buttonText: 'Start with Premium',
       popular: true,
       current: subscription?.plan === 'tier1'
     }
@@ -99,16 +99,18 @@ const SubscriptionPlansModal = ({ onClose }) => {
 
   return (
     <div style={{ 
-      backgroundColor: 'white',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+      backgroundColor: '#0a0a0a',
+      color: '#ffffff',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       maxWidth: '900px',
       margin: '0 auto'
     }}>
       {/* Modal Header */}
       <div style={{
         padding: '2rem 2rem 1rem 2rem',
-        borderBottom: '1px solid #e5e7eb',
-        position: 'relative'
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        position: 'relative',
+        background: 'radial-gradient(circle at 50% 0%, rgba(88, 101, 242, 0.08) 0%, transparent 50%)'
       }}>
         {/* Close button */}
         <button
@@ -120,19 +122,19 @@ const SubscriptionPlansModal = ({ onClose }) => {
             background: 'none',
             border: 'none',
             fontSize: '1.5rem',
-            color: '#9ca3af',
+            color: 'rgba(255, 255, 255, 0.5)',
             cursor: 'pointer',
             padding: '0.5rem',
             borderRadius: '6px',
             transition: 'all 0.2s ease'
           }}
           onMouseEnter={(e) => {
-            e.target.style.backgroundColor = '#f3f4f6';
-            e.target.style.color = '#6b7280';
+            e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            e.target.style.color = 'rgba(255, 255, 255, 0.8)';
           }}
           onMouseLeave={(e) => {
             e.target.style.backgroundColor = 'transparent';
-            e.target.style.color = '#9ca3af';
+            e.target.style.color = 'rgba(255, 255, 255, 0.5)';
           }}
         >
           ✕
@@ -141,32 +143,33 @@ const SubscriptionPlansModal = ({ onClose }) => {
         <div style={{ textAlign: 'center' }}>
           <h1 style={{ 
             fontSize: '2rem', 
-            fontWeight: '700', 
+            fontWeight: '600', 
             marginBottom: '0.5rem',
-            color: '#1f2937'
+            color: '#ffffff',
+            letterSpacing: '-1px'
           }}>
-            프리미엄 플랜
+            원하는 플랜을 골라 보세요
           </h1>
           <p style={{ 
             fontSize: '1rem', 
-            color: '#6b7280',
+            color: 'rgba(255, 255, 255, 0.6)',
             marginBottom: '1rem'
           }}>
-            수능 준비를 위한 완전한 프리미엄 경험
+            무제한 검색 기능을 사용할 수 있습니다.
           </p>
           
           {isLoggedIn && (
             <div style={{
-              backgroundColor: '#f8fafc',
-              border: '1px solid #e2e8f0',
+              backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
               borderRadius: '8px',
               padding: '0.75rem 1rem',
               display: 'inline-block'
             }}>
-              <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.25rem' }}>
+              <div style={{ fontSize: '0.875rem', color: 'rgba(255, 255, 255, 0.5)', marginBottom: '0.25rem' }}>
                 현재 플랜
               </div>
-              <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937' }}>
+              <div style={{ fontSize: '1rem', fontWeight: '600', color: '#ffffff' }}>
                 {planInfo.name}
               </div>
             </div>
@@ -181,33 +184,132 @@ const SubscriptionPlansModal = ({ onClose }) => {
         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
         gap: '1.5rem'
       }}>
+        {/* Free Plan */}
+        <div style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.03)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          borderRadius: '16px',
+          padding: '2rem',
+          position: 'relative',
+          transition: 'all 0.2s ease'
+        }}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <h3 style={{
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              margin: '0 0 0.5rem 0',
+              color: '#ffffff'
+            }}>
+              무료 멤버십
+            </h3>
+            <p style={{
+              fontSize: '0.875rem',
+              color: 'rgba(255, 255, 255, 0.5)',
+              margin: '0 0 1.5rem 0'
+            }}>
+              기본적인 검색 기능
+            </p>
+            
+            <div style={{
+              fontSize: '2.25rem',
+              fontWeight: '600',
+              marginBottom: '0.25rem',
+              color: '#ffffff'
+            }}>
+              ₩0
+              <span style={{
+                fontSize: '1rem',
+                color: 'rgba(255, 255, 255, 0.5)',
+                fontWeight: '400',
+                marginLeft: '0.5rem'
+              }}>
+                /월
+              </span>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '2rem' }}>
+            <ul style={{
+              margin: 0,
+              padding: 0,
+              listStyle: 'none'
+            }}>
+              <li style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                padding: '0.5rem 0',
+                fontSize: '0.875rem',
+                color: 'rgba(255, 255, 255, 0.7)'
+              }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                인터페이스 보기 가능
+              </li>
+              <li style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                padding: '0.5rem 0',
+                fontSize: '0.875rem',
+                color: 'rgba(255, 255, 255, 0.7)'
+              }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                필터 및 검색 UI 접근
+              </li>
+            </ul>
+          </div>
+
+          <button
+            disabled
+            style={{
+              width: '100%',
+              padding: '0.75rem 1rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              color: 'rgba(255, 255, 255, 0.3)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '8px',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              cursor: 'not-allowed'
+            }}
+          >
+            Current plan
+          </button>
+        </div>
+
+        {/* Premium Plans */}
         {plans.map((plan) => (
           <div
             key={plan.id}
             style={{
-              backgroundColor: 'white',
-              borderRadius: '12px',
-              padding: '1.5rem',
-              border: plan.popular ? '2px solid #6366f1' : plan.current ? '2px solid #10b981' : '1px solid #e5e7eb',
+              backgroundColor: 'rgba(88, 101, 242, 0.05)',
+              borderRadius: '16px',
+              padding: '2rem',
+              border: '2px solid rgba(88, 101, 242, 0.3)',
               position: 'relative',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.2s ease'
             }}
           >
             {/* Popular badge */}
             {plan.popular && (
               <div style={{
                 position: 'absolute',
-                top: '-10px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                backgroundColor: '#6366f1',
+                top: '-12px',
+                left: '2rem',
+                backgroundColor: '#5865f2',
                 color: 'white',
-                padding: '0.25rem 1rem',
+                padding: '0.25rem 0.75rem',
                 borderRadius: '12px',
                 fontSize: '0.75rem',
-                fontWeight: '600'
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
               }}>
-                인기
+                추천
               </div>
             )}
 
@@ -215,79 +317,75 @@ const SubscriptionPlansModal = ({ onClose }) => {
             {plan.current && (
               <div style={{
                 position: 'absolute',
-                top: '-10px',
+                top: '1rem',
                 right: '1rem',
-                backgroundColor: '#10b981',
-                color: 'white',
-                padding: '0.25rem 0.75rem',
-                borderRadius: '12px',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                color: '#10b981',
+                padding: '0.25rem 0.5rem',
+                borderRadius: '6px',
                 fontSize: '0.75rem',
                 fontWeight: '600'
               }}>
-                현재
+                Active
               </div>
             )}
 
             {/* Plan header */}
-            <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+            <div style={{ marginBottom: '1.5rem' }}>
               <h3 style={{ 
                 fontSize: '1.25rem', 
-                fontWeight: '700', 
-                color: '#1f2937',
+                fontWeight: '600', 
+                color: '#ffffff',
                 marginBottom: '0.5rem'
               }}>
                 {plan.name}
               </h3>
-              <div style={{ marginBottom: '1rem' }}>
-                <span style={{ 
-                  fontSize: '2.5rem', 
-                  fontWeight: '800', 
-                  color: plan.popular ? '#6366f1' : '#1f2937'
+              <p style={{
+                fontSize: '0.875rem',
+                color: 'rgba(255, 255, 255, 0.5)',
+                margin: '0 0 1.5rem 0'
+              }}>
+                {plan.description}
+              </p>
+              
+              <div style={{
+                fontSize: '2.25rem',
+                fontWeight: '600',
+                marginBottom: '0.25rem',
+                color: '#ffffff'
+              }}>
+                {formatPrice(plan.price)}
+                <span style={{
+                  fontSize: '1rem',
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  fontWeight: '400',
+                  marginLeft: '0.5rem'
                 }}>
-                  {formatPrice(plan.price)}
+                  /{plan.period}
                 </span>
-                {plan.period && (
-                  <div style={{ 
-                    fontSize: '0.875rem', 
-                    color: '#6b7280',
-                    marginTop: '0.25rem'
-                  }}>
-                    /{plan.period}
-                  </div>
-                )}
               </div>
             </div>
 
             {/* Features list */}
-            <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{ marginBottom: '2rem' }}>
               <ul style={{ 
                 listStyle: 'none', 
                 padding: 0, 
-                margin: 0,
-                display: 'grid',
-                gap: '0.5rem'
+                margin: 0
               }}>
                 {plan.features.map((feature, index) => (
                   <li key={index} style={{ 
                     display: 'flex', 
-                    alignItems: 'flex-start', 
-                    gap: '0.5rem'
+                    alignItems: 'center', 
+                    gap: '0.75rem',
+                    padding: '0.5rem 0',
+                    fontSize: '0.875rem',
+                    color: 'rgba(255, 255, 255, 0.9)'
                   }}>
-                    <span style={{ 
-                      color: '#10b981', 
-                      fontSize: '1rem',
-                      marginTop: '2px',
-                      flexShrink: 0
-                    }}>
-                      ✓
-                    </span>
-                    <span style={{ 
-                      fontSize: '0.875rem', 
-                      color: '#374151',
-                      lineHeight: '1.4'
-                    }}>
-                      {feature}
-                    </span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M13.5 4.5L6 12L2.5 8.5" stroke="#5865f2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    {feature}
                   </li>
                 ))}
               </ul>
@@ -300,21 +398,15 @@ const SubscriptionPlansModal = ({ onClose }) => {
               style={{
                 width: '100%',
                 padding: '0.75rem 1rem',
-                backgroundColor: plan.current 
-                  ? '#10b981' 
-                  : plan.popular 
-                    ? '#6366f1' 
-                    : '#1f2937',
-                color: 'white',
-                border: 'none',
+                backgroundColor: plan.current ? 'rgba(16, 185, 129, 0.1)' : '#5865f2',
+                color: plan.current ? '#10b981' : 'white',
+                border: plan.current ? '1px solid rgba(16, 185, 129, 0.2)' : 'none',
                 borderRadius: '8px',
                 fontSize: '0.875rem',
-                fontWeight: '600',
-                cursor: (loading[plan.id] || plan.current || !isLoggedIn) 
-                  ? 'not-allowed' 
-                  : 'pointer',
+                fontWeight: '500',
+                cursor: (loading[plan.id] || plan.current || !isLoggedIn) ? 'not-allowed' : 'pointer',
+                opacity: (loading[plan.id] || !isLoggedIn) && !plan.current ? 0.5 : 1,
                 transition: 'all 0.2s ease',
-                opacity: (loading[plan.id] || plan.current || !isLoggedIn) ? 0.6 : 1,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -322,59 +414,45 @@ const SubscriptionPlansModal = ({ onClose }) => {
               }}
               onMouseEnter={(e) => {
                 if (!plan.current && !loading[plan.id] && isLoggedIn) {
-                  if (plan.popular) {
-                    e.target.style.backgroundColor = '#5856eb';
-                  } else {
-                    e.target.style.backgroundColor = '#111827';
-                  }
+                  e.target.style.backgroundColor = '#4752c4';
                 }
               }}
               onMouseLeave={(e) => {
-                if (!plan.current && !loading[plan.id]) {
-                  if (plan.popular) {
-                    e.target.style.backgroundColor = '#6366f1';
-                  } else {
-                    e.target.style.backgroundColor = '#1f2937';
-                  }
+                if (!plan.current && !loading[plan.id] && isLoggedIn) {
+                  e.target.style.backgroundColor = '#5865f2';
                 }
               }}
             >
               {loading[plan.id] ? (
-                <>
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                   <div style={{
-                    width: '16px',
-                    height: '16px',
+                    width: '14px',
+                    height: '14px',
                     border: '2px solid transparent',
                     borderTop: '2px solid currentColor',
                     borderRadius: '50%',
                     animation: 'spin 1s linear infinite'
                   }} />
-                  처리 중...
-                </>
+                  Processing...
+                </span>
               ) : plan.current ? (
-                '✓ 현재 플랜'
+                'Current plan'
               ) : !isLoggedIn ? (
-                '로그인 필요'
+                'Sign in to subscribe'
               ) : (
                 plan.buttonText
               )}
             </button>
 
-            {/* Additional info */}
-            <div style={{ 
-              marginTop: '1rem',
-              textAlign: 'center'
+            <p style={{
+              fontSize: '0.6875rem',
+              color: 'rgba(255, 255, 255, 0.3)',
+              textAlign: 'center',
+              marginTop: '0.75rem',
+              margin: '0.75rem 0 0 0'
             }}>
-              <p style={{ 
-                fontSize: '0.75rem', 
-                color: '#9ca3af',
-                margin: 0,
-                lineHeight: '1.3'
-              }}>
-                Stripe 보안 결제<br/>
-                언제든지 취소 • 30일 환불 보장
-              </p>
-            </div>
+              Secure payment via Stripe • Cancel anytime
+            </p>
           </div>
         ))}
       </div>
@@ -383,17 +461,17 @@ const SubscriptionPlansModal = ({ onClose }) => {
       <div style={{
         padding: '1rem 2rem 2rem 2rem',
         textAlign: 'center',
-        borderTop: '1px solid #e5e7eb'
+        borderTop: '1px solid rgba(255, 255, 255, 0.08)'
       }}>
         <p style={{ 
           fontSize: '0.875rem', 
-          color: '#6b7280',
+          color: 'rgba(255, 255, 255, 0.5)',
           margin: 0
         }}>
           문의사항이 있으시면 이메일로 연락하세요:{' '}
           <a 
             href="mailto:team@examrizzsearch.com"
-            style={{ color: '#6366f1', textDecoration: 'none' }}
+            style={{ color: '#5865f2', textDecoration: 'none' }}
           >
             team@examrizzsearch.com
           </a>
