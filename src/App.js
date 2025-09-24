@@ -48,6 +48,7 @@ import FeatureFlagDebug from './components/FeatureFlagDebug';
 import DebugTest from './components/DebugTest';
 import AdminSetup from './components/AdminSetup';
 import AdminPackCreator from './components/AdminPackCreator';
+import WelcomePopup from './components/WelcomePopup';
 
 // Create Quiz Context to manage navbar visibility
 const QuizContext = createContext();
@@ -596,14 +597,14 @@ const buildAlgoliaFilters = (filters) => {
                   <Configure 
                     key={`filters-${currentSubject}-${Date.now()}`}
                     filters={filters || ''} 
-                    hitsPerPage={10}
+                    hitsPerPage={7}
                   />
                 );
               } catch (error) {
                 console.warn('Error configuring Algolia filters:', error);
                 return <Configure 
                   key={`filters-fallback-${currentSubject}`} 
-                  hitsPerPage={10}
+                  hitsPerPage={7}
                 />;
               }
             })()}
@@ -1079,6 +1080,7 @@ function App() {
                 </Routes>
               </ErrorBoundary>
               <FeatureFlagDebug user={user} />
+              <WelcomePopup />
               <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
             </div>
           </Router>
