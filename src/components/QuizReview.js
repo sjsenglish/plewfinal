@@ -8,7 +8,7 @@ import { convertFirebaseStorageUrl, getQuestionImageUrl } from '../utils/urlUtil
 
 // Helper function to convert Firebase Storage URLs to direct URLs - using centralized utility
 const getImageUrl = (url) => {
-  return convertFirebaseStorageUrl(url);
+  return url ? convertFirebaseStorageUrl(url) : '';
 };
 
 const QuizReview = ({ results, questions, onClose, packData }) => {

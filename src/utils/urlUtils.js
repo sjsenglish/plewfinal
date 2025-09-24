@@ -90,7 +90,7 @@ export const getQuestionImageUrl = (question) => {
                   question?.imageUrl ||
                   question?.image;
   
-  return convertFirebaseStorageUrl(imageUrl);
+  return imageUrl ? convertFirebaseStorageUrl(imageUrl) : '';
 };
 
 /**

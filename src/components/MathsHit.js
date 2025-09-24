@@ -12,7 +12,7 @@ const PDFPopup = ({ isOpen, pdfUrl, questionNumber, onClose }) => {
   
   // Convert Firebase Storage URLs if needed
   const getProcessedPdfUrl = (url) => {
-    return convertFirebaseStorageUrl(url);
+    return url ? convertFirebaseStorageUrl(url) : '';
   };
 
   const processedPdfUrl = getProcessedPdfUrl(pdfUrl);
@@ -271,7 +271,7 @@ const MathsHit = ({ hit }) => {
   
   // Handle image and PDF - convert Firebase Storage URLs
   const rawImageUrl = hit.imageUrl || hit.imageFile || hit.image_url || hit.image_file || '';
-  const imageUrl = convertFirebaseStorageUrl(rawImageUrl);
+  const imageUrl = rawImageUrl && rawImageUrl !== 'default_image.jpg' ? convertFirebaseStorageUrl(rawImageUrl) : null;
   const pdfAnswerUrl = hit.markscheme_url || ''; // PDF URL stored in markscheme_url field
   
   // Hide question text if there's an actual image (not default or empty)
@@ -340,7 +340,7 @@ const MathsHit = ({ hit }) => {
 
   // Convert Firebase Storage URLs
   const getImageUrl = (url) => {
-    return convertFirebaseStorageUrl(url);
+    return url ? convertFirebaseStorageUrl(url) : '';
   };
 
   const processedImageUrl = getImageUrl(imageUrl);

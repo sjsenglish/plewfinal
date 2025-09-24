@@ -39,7 +39,7 @@ const COLORS = {
 
 // Helper function to convert Firebase Storage URLs to direct URLs
 const getImageUrl = (url) => {
-  return convertFirebaseStorageUrl(url);
+  return url ? convertFirebaseStorageUrl(url) : '';
 };
 
 // EXACT MATCH to PackViewer image detection - now uses centralized utility

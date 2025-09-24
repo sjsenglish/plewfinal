@@ -67,7 +67,7 @@ const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
 
   // Convert Firebase Storage URLs to direct URLs if needed
   const getImageUrl = (url) => {
-    return convertFirebaseStorageUrl(url);
+    return url ? convertFirebaseStorageUrl(url) : '';
   };
 
   const processedImageUrl = getImageUrl(imageUrl);
