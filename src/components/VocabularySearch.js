@@ -11,7 +11,7 @@ const VocabularySearch = ({ bannerText }) => {
   const [error, setError] = useState(null);
   const [pagination, setPagination] = useState({
     total: 0,
-    limit: 10,
+    limit: 20,
     offset: 0,
     hasMore: false
   });

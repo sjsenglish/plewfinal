@@ -31,19 +31,15 @@ const PremiumDashboard = () => {
     usage,
     loading: paywallLoading,
     isPaidUser,
+    isGuest,
+    checkUsage,
     getPlanInfo
   } = usePaywall();
 
   const planInfo = getPlanInfo();
 
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!paywallLoading && !user) {
-      window.location.href = '/login';
-    }
-  }, [user, paywallLoading]);
-
-  if (paywallLoading || !user) {
+  // Only show loading state while paywall is loading
+  if (paywallLoading) {
     return (
       <div style={{ 
         minHeight: '100vh', 
@@ -71,10 +67,15 @@ const PremiumDashboard = () => {
     { id: 'question-packs', name: '마이 문제은행 ', icon: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbulb.svg?alt=media&token=1f21ae0e-764d-4b03-ba1d-f1423329c325', premium: true },
   ];
 
-  const handleSectionClick = (sectionId, isPremiumSection) => {
-    if (isPremiumSection && !isPaidUser) {
-      setShowUpgradeModal(true);
-      return;
+  const handleSectionClick = async (sectionId, isPremiumSection) => {
+    if (isPremiumSection) {
+      const usageCheck = await checkUsage('dashboard_tabs');
+      if (!usageCheck.allowed) {
+        alert(usageCheck.reason === 'Sign up required' 
+          ? 'Please sign up or log in to access this feature' 
+          : 'Subscription required to access this feature');
+        return;
+      }
     }
     setActiveSection(sectionId);
   };

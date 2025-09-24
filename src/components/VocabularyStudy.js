@@ -2,10 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getAuth } from 'firebase/auth';
 import { doc, collection, query, where, getDocs, orderBy, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { usePaywall } from '../hooks/usePaywall';
 import VocabularyQuiz from './VocabularyQuiz';
 import './VocabularyStudy.css';
 
 const VocabularyStudy = () => {
+  const { checkUsage, isPaidUser, isGuest } = usePaywall();
   const [savedWords, setSavedWords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedWords, setSelectedWords] = useState(new Set());
@@ -199,7 +201,15 @@ const VocabularyStudy = () => {
   };
 
   // Start quiz with selected words
-  const startQuizWithSelected = () => {
+  const startQuizWithSelected = async () => {
+    const usageCheck = await checkUsage('vocabulary_test');
+    if (!usageCheck.allowed) {
+      alert(usageCheck.reason === 'Sign up required' 
+        ? 'Please sign up or log in to take vocabulary tests' 
+        : 'Subscription required to take vocabulary tests');
+      return;
+    }
+    
     const words = savedWords.filter(w => selectedWords.has(w.id));
     if (words.length === 0) return;
     
@@ -208,7 +218,15 @@ const VocabularyStudy = () => {
   };
 
   // Start quiz with all words
-  const startQuizWithAll = () => {
+  const startQuizWithAll = async () => {
+    const usageCheck = await checkUsage('vocabulary_test');
+    if (!usageCheck.allowed) {
+      alert(usageCheck.reason === 'Sign up required' 
+        ? 'Please sign up or log in to take vocabulary tests' 
+        : 'Subscription required to take vocabulary tests');
+      return;
+    }
+    
     const filtered = getFilteredAndSortedWords();
     if (filtered.length === 0) return;
     
@@ -217,7 +235,15 @@ const VocabularyStudy = () => {
   };
 
   // Start practice for difficult words
-  const startDifficultWordsQuiz = () => {
+  const startDifficultWordsQuiz = async () => {
+    const usageCheck = await checkUsage('vocabulary_test');
+    if (!usageCheck.allowed) {
+      alert(usageCheck.reason === 'Sign up required' 
+        ? 'Please sign up or log in to take vocabulary tests' 
+        : 'Subscription required to take vocabulary tests');
+      return;
+    }
+    
     const difficultWords = savedWords.filter(w => 
       w.performance.accuracy < 70 && w.performance.attempts > 0
     );
@@ -328,16 +354,16 @@ const VocabularyStudy = () => {
 
             {/* Quick Actions */}
             <div className="quick-actions">
-              <button onClick={startQuizWithAll} className="action-btn primary">
-                🧠 Quiz All ({filteredWords.length})
+              <button onClick={startQuizWithAll} className={`action-btn primary ${!isPaidUser ? 'locked' : ''}`}>
+                {!isPaidUser ? '🔒 ' : '🧠 '}Quiz All ({filteredWords.length})
               </button>
-              <button onClick={startDifficultWordsQuiz} className="action-btn secondary">
-                🎯 Practice Difficult
+              <button onClick={startDifficultWordsQuiz} className={`action-btn secondary ${!isPaidUser ? 'locked' : ''}`}>
+                {!isPaidUser ? '🔒 ' : '🎯 '}Practice Difficult
               </button>
               {selectedWords.size > 0 && (
                 <>
-                  <button onClick={startQuizWithSelected} className="action-btn selected">
-                    ✓ Quiz Selected ({selectedWords.size})
+                  <button onClick={startQuizWithSelected} className={`action-btn selected ${!isPaidUser ? 'locked' : ''}`}>
+                    {!isPaidUser ? '🔒 ' : '✓ '}Quiz Selected ({selectedWords.size})
                   </button>
                   <button onClick={clearSelection} className="action-btn clear">
                     Clear Selection
@@ -357,9 +383,17 @@ const VocabularyStudy = () => {
                 key={word.id}
                 word={word}
                 isSelected={selectedWords.has(word.id)}
+                isPaidUser={isPaidUser}
                 onToggleSelect={() => toggleWordSelection(word.id)}
                 onRemove={() => removeWord(word.id)}
-                onQuiz={() => {
+                onQuiz={async () => {
+                  const usageCheck = await checkUsage('vocabulary_test');
+                  if (!usageCheck.allowed) {
+                    alert(usageCheck.reason === 'Sign up required' 
+                      ? 'Please sign up or log in to take vocabulary tests' 
+                      : 'Subscription required to take vocabulary tests');
+                    return;
+                  }
                   setQuizWords([word]);
                   setShowQuiz(true);
                 }}
@@ -393,7 +427,7 @@ const VocabularyStudy = () => {
 };
 
 // Individual Word Card Component - Matching VocabularyPinterest style
-const WordCard = ({ word, isSelected, onToggleSelect, onRemove, onQuiz }) => {
+const WordCard = ({ word, isSelected, isPaidUser, onToggleSelect, onRemove, onQuiz }) => {
   const getDifficultyColor = (difficulty) => {
     const level = typeof difficulty === 'number' ? difficulty : 3;
     if (level <= 2) return '#22c55e';
@@ -475,8 +509,8 @@ const WordCard = ({ word, isSelected, onToggleSelect, onRemove, onQuiz }) => {
 
       {/* Quiz Action - Only in Learn Tab */}
       <div className="card-actions">
-        <button onClick={onQuiz} className="action-btn quiz-btn">
-          🧠 Quiz This Word
+        <button onClick={onQuiz} className={`action-btn quiz-btn ${!isPaidUser ? 'locked' : ''}`}>
+          {!isPaidUser ? '🔒 ' : '🧠 '}Quiz This Word
         </button>
       </div>
     </div>

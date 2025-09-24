@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { usePaywall } from '../hooks/usePaywall';
 import './VideoStreaming.css';
 
 // Sample video data - replace with your actual video content
@@ -63,6 +64,7 @@ const SAMPLE_VIDEOS = {
 };
 
 const VideoStreaming = () => {
+  const { checkUsage, isPaidUser, isGuest } = usePaywall();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -82,7 +84,17 @@ const VideoStreaming = () => {
     return () => document.removeEventListener('keydown', handleKeyPress);
   }, [isFullscreen]);
 
-  const playVideo = (video) => {
+  const playVideo = async (video) => {
+    const usageCheck = await checkUsage('video_playback');
+    
+    if (!usageCheck.allowed) {
+      // Show visual feedback that video is blocked
+      alert(usageCheck.reason === 'Sign up required' 
+        ? 'Please sign up or log in to watch videos' 
+        : 'Subscription required to watch videos');
+      return;
+    }
+    
     setCurrentVideo(video);
     setIsFullscreen(true);
     setIsPlaying(true);
@@ -173,11 +185,14 @@ const VideoStreaming = () => {
 
           <div className="hero-cta">
             <button 
-              className="cta-primary"
+              className={`cta-primary ${!isPaidUser ? 'disabled' : ''}`}
               onClick={() => playVideo(SAMPLE_VIDEOS.hero)}
             >
-              <span>▶</span>
-              강의 시작하기
+              <span>{!isPaidUser ? '🔒' : '▶'}</span>
+              {!isPaidUser 
+                ? (isGuest ? '로그인 후 시청' : '구독 후 시청') 
+                : '강의 시작하기'
+              }
             </button>
           </div>
         </div>
@@ -215,7 +230,7 @@ const VideoStreaming = () => {
                 <div 
                   key={video.id} 
                   onClick={() => playVideo(video)}
-                  className="video-card"
+                  className={`video-card ${!isPaidUser ? 'video-locked' : ''}`}
                 >
                   <div className="video-thumbnail">
                     <img 
@@ -232,8 +247,13 @@ const VideoStreaming = () => {
                     />
                     <div className="video-overlay">
                       <div className="play-button">
-                        <span className="play-icon">▶</span>
+                        <span className="play-icon">{!isPaidUser ? '🔒' : '▶'}</span>
                       </div>
+                      {!isPaidUser && (
+                        <div className="subscription-notice">
+                          <span>{isGuest ? 'Sign up to watch' : 'Subscription required'}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="video-info">

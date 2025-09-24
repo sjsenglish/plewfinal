@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSearchBox } from 'react-instantsearch';
+import { usePaywall } from '../hooks/usePaywall';
 
 const CustomSearchBox = ({ 
   placeholder = "Search questions...", 
@@ -11,6 +12,7 @@ const CustomSearchBox = ({
   showClearButton = true,
   ...props 
 }) => {
+  const { checkUsage, isPaidUser, isGuest } = usePaywall();
   const { query, refine, clear, isSearchStalled } = useSearchBox(props);
   const [inputValue, setInputValue] = useState(query);
   const [isFocused, setIsFocused] = useState(false);
@@ -28,9 +30,23 @@ const CustomSearchBox = ({
     }
   }, [autoFocus]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const value = e.target.value;
     setInputValue(value);
+    
+    // Block search functionality for non-subscribers
+    if (value.trim()) {
+      const usageCheck = await checkUsage('search_functionality');
+      if (!usageCheck.allowed) {
+        // Show an alert and clear the input
+        alert(usageCheck.reason === 'Sign up required' 
+          ? 'Please sign up or log in to search questions' 
+          : 'Subscription required to search questions');
+        setInputValue('');
+        return;
+      }
+    }
+    
     refine(value);
   };
 
@@ -85,18 +101,21 @@ const CustomSearchBox = ({
         <input
           ref={inputRef}
           type="text"
-          className="custom-searchbox-input"
+          className={`custom-searchbox-input ${!isPaidUser ? 'locked' : ''}`}
           value={inputValue}
           onChange={handleInputChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
+          placeholder={!isPaidUser 
+            ? (isGuest ? '🔒 Sign up to search questions...' : '🔒 Subscription required to search...') 
+            : placeholder}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck="false"
           maxLength={512}
+          disabled={!isPaidUser}
         />
 
         {/* Loading indicator */}

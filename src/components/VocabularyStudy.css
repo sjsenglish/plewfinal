@@ -688,3 +688,20 @@
     font-size: 1.25rem;
   }
 }
+
+/* Paywall styles for locked content */
+.action-btn.locked,
+.quiz-btn.locked {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #f1f5f9;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+.action-btn.locked:hover,
+.quiz-btn.locked:hover {
+  background: #f8fafc;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

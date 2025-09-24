@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
+import { usePaywall } from '../hooks/usePaywall';
+import { checkVideoAccess, incrementVideoUsage, incrementGuestVideoUsage } from '../services/videoUsageService';
+import VideoLimitModal from './VideoLimitModal';
+import { getAuth } from 'firebase/auth';
 import './KoreanEnglishHit.css';
 
 const KoreanEnglishHit = ({ hit }) => {
+  const { checkUsage, isPaidUser, isGuest } = usePaywall();
   const [showAnswer, setShowAnswer] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [videoUsageInfo, setVideoUsageInfo] = useState(null);
+  
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   // Early return if hit is undefined or null
   if (!hit) {
@@ -36,16 +46,80 @@ const KoreanEnglishHit = ({ hit }) => {
   // Handle audio URLs if available
   const koreanAudioUrl = hit.korean_audio_url || '';
   const englishAudioUrl = hit.english_audio_url || '';
+  
+  // Handle video solution URL
+  const videoSolutionLink = hit.videoSolutionLink || hit.video_solution_link || '';
 
-  // Toggle functions
-  const toggleAnswer = () => setShowAnswer(!showAnswer);
-  const toggleExplanation = () => setShowExplanation(!showExplanation);
+  // Toggle functions with paywall check
+  const toggleAnswer = async () => {
+    const usageCheck = await checkUsage('question_interaction');
+    if (!usageCheck.allowed) {
+      alert(usageCheck.reason === 'Sign up required' 
+        ? 'Please sign up or log in to view answers' 
+        : 'Subscription required to view answers');
+      return;
+    }
+    setShowAnswer(!showAnswer);
+  };
+  
+  const toggleExplanation = async () => {
+    const usageCheck = await checkUsage('question_interaction');
+    if (!usageCheck.allowed) {
+      alert(usageCheck.reason === 'Sign up required' 
+        ? 'Please sign up or log in to view explanations' 
+        : 'Subscription required to view explanations');
+      return;
+    }
+    setShowExplanation(!showExplanation);
+  };
 
   // Play audio function
   const playAudio = (audioUrl) => {
     if (audioUrl) {
       const audio = new Audio(audioUrl);
       audio.play().catch(err => console.error('Audio playback failed:', err));
+    }
+  };
+
+  // Handle video solution watching
+  const watchVideoSolution = async () => {
+    if (!videoSolutionLink) return;
+    
+    try {
+      // Check if user can watch videos
+      const accessResult = await checkVideoAccess(user?.uid, isPaidUser);
+      
+      if (!accessResult.success) {
+        console.error('Error checking video access:', accessResult.error);
+        return;
+      }
+      
+      if (!accessResult.canWatch) {
+        // Show limit modal
+        setVideoUsageInfo(accessResult.usage);
+        setShowVideoModal(true);
+        return;
+      }
+      
+      // User can watch - increment usage counter
+      if (isPaidUser) {
+        // Paid users - increment Firebase counter if logged in
+        if (user?.uid) {
+          await incrementVideoUsage(user.uid);
+        }
+      } else {
+        // Free/guest users - increment localStorage counter
+        if (user?.uid) {
+          await incrementVideoUsage(user.uid);
+        } else {
+          incrementGuestVideoUsage();
+        }
+      }
+      
+      // Open video in new tab/window
+      window.open(videoSolutionLink, '_blank');
+    } catch (error) {
+      console.error('Error handling video solution:', error);
     }
   };
 
@@ -166,10 +240,10 @@ const KoreanEnglishHit = ({ hit }) => {
       {answer && (
         <div className="answer-section">
           <button 
-            className="toggle-button answer-toggle"
+            className={`toggle-button answer-toggle ${!isPaidUser ? 'locked' : ''}`}
             onClick={toggleAnswer}
           >
-            {showAnswer ? 'Hide Answer' : 'Show Answer'}
+            {!isPaidUser ? '🔒 ' : ''}{showAnswer ? 'Hide Answer' : 'Show Answer'}
           </button>
           
           {showAnswer && (
@@ -184,10 +258,10 @@ const KoreanEnglishHit = ({ hit }) => {
       {explanation && (
         <div className="explanation-section">
           <button 
-            className="toggle-button explanation-toggle"
+            className={`toggle-button explanation-toggle ${!isPaidUser ? 'locked' : ''}`}
             onClick={toggleExplanation}
           >
-            {showExplanation ? 'Hide Explanation' : 'Show Explanation'}
+            {!isPaidUser ? '🔒 ' : ''}{showExplanation ? 'Hide Explanation' : 'Show Explanation'}
           </button>
           
           {showExplanation && (
@@ -195,6 +269,20 @@ const KoreanEnglishHit = ({ hit }) => {
               <p className="explanation-text">{explanation}</p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Video Solution Section */}
+      {videoSolutionLink && (
+        <div className="video-solution-section">
+          <button 
+            className={`toggle-button video-solution-toggle ${!isPaidUser && isGuest ? 'limited' : (!isPaidUser ? 'locked' : '')}`}
+            onClick={watchVideoSolution}
+          >
+            {!isPaidUser && isGuest ? '📺 Watch Video Solution (Limited)' : 
+             !isPaidUser ? '🔒 Video Solution (Subscription Required)' : 
+             '📺 Watch Video Solution'}
+          </button>
         </div>
       )}
 
@@ -228,6 +316,13 @@ const KoreanEnglishHit = ({ hit }) => {
           <span className="button-text">Report</span>
         </button>
       </div>
+
+      {/* Video Limit Modal */}
+      <VideoLimitModal
+        isOpen={showVideoModal}
+        onClose={() => setShowVideoModal(false)}
+        usageInfo={videoUsageInfo}
+      />
     </div>
   );
 };

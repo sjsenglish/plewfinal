@@ -92,6 +92,11 @@ export const checkVideoAccess = async (userId, isPaidUser = false) => {
     };
   }
   
+  // Handle non-signed in users (guests) with localStorage
+  if (!userId) {
+    return checkGuestVideoAccess();
+  }
+  
   try {
     const usageResult = await getUserVideoUsage(userId);
     
@@ -156,5 +161,77 @@ export const getTimeUntilReset = () => {
     return `${hours}h ${minutes}m`;
   } else {
     return `${minutes}m`;
+  }
+};
+
+/**
+ * Check guest video access using localStorage
+ */
+const checkGuestVideoAccess = () => {
+  const today = getTodayDateString();
+  const storageKey = 'plew_guest_video_usage';
+  
+  try {
+    const stored = localStorage.getItem(storageKey);
+    let usage = { count: 0, lastResetDate: today };
+    
+    if (stored) {
+      usage = JSON.parse(stored);
+      
+      // Reset if it's a new day
+      if (usage.lastResetDate !== today) {
+        usage = { count: 0, lastResetDate: today };
+        localStorage.setItem(storageKey, JSON.stringify(usage));
+      }
+    } else {
+      localStorage.setItem(storageKey, JSON.stringify(usage));
+    }
+    
+    const dailyLimit = 1;
+    const canWatch = usage.count < dailyLimit;
+    
+    return {
+      success: true,
+      canWatch,
+      usage: {
+        count: usage.count,
+        limit: dailyLimit,
+        remaining: Math.max(0, dailyLimit - usage.count),
+        nextResetTime: getNextMidnight()
+      }
+    };
+  } catch (error) {
+    console.error('Error checking guest video access:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Increment guest video usage
+ */
+export const incrementGuestVideoUsage = () => {
+  const today = getTodayDateString();
+  const storageKey = 'plew_guest_video_usage';
+  
+  try {
+    const stored = localStorage.getItem(storageKey);
+    let usage = { count: 0, lastResetDate: today };
+    
+    if (stored) {
+      usage = JSON.parse(stored);
+      
+      // Reset if it's a new day
+      if (usage.lastResetDate !== today) {
+        usage = { count: 0, lastResetDate: today };
+      }
+    }
+    
+    usage.count += 1;
+    localStorage.setItem(storageKey, JSON.stringify(usage));
+    
+    return { success: true, data: usage };
+  } catch (error) {
+    console.error('Error incrementing guest video usage:', error);
+    return { success: false, error: error.message };
   }
 };

@@ -607,3 +607,48 @@
 .video-carousel::-webkit-scrollbar-thumb:hover {
   background: #f40612;
 }
+
+/* Paywall Styles */
+.video-locked {
+  opacity: 0.7;
+  position: relative;
+}
+
+.video-locked:hover {
+  opacity: 0.8;
+}
+
+.video-locked .video-thumbnail::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.subscription-notice {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.cta-primary.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.cta-primary.disabled:hover {
+  transform: none;
+  box-shadow: 0 6px 20px rgba(110, 163, 153, 0.4);
+}

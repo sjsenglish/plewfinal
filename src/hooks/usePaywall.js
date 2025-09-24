@@ -1,8 +1,9 @@
-// src/hooks/usePaywall.js - Updated without trial support
+// src/hooks/usePaywall.js - Freemium model implementation
 import { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import {
   cancelUserSubscription,
+  getUserSubscription
 } from '../services/subscriptionService';
 
 export const usePaywall = () => {
@@ -14,20 +15,67 @@ export const usePaywall = () => {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  // Load user subscription data - PAYWALL REMOVED: Everyone gets full access
+  // Load user subscription data - Freemium model
   const loadSubscriptionData = async () => {
-    // PAYWALL REMOVED: All users now get full access regardless of subscription status
-    setSubscription({ 
-      status: 'active', 
-      plan: 'pro',
-      paywall_removed: true,
-      fullAccess: true
-    });
-    setUsage({ 
-      questionsViewedToday: 0, 
-      questionPacksCreated: 0,
-      unlimitedAccess: true 
-    });
+    setLoading(true);
+    
+    if (!user) {
+      // Not logged in - can view interface but can't interact
+      setSubscription({ 
+        status: 'none', 
+        plan: 'guest',
+        fullAccess: false
+      });
+      setUsage({ 
+        questionsViewedToday: 0, 
+        questionPacksCreated: 0,
+        unlimitedAccess: false 
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Get actual subscription data for logged in users
+      const subscriptionData = await getUserSubscription(user.uid);
+      
+      if (subscriptionData && subscriptionData.status === 'active') {
+        setSubscription({
+          ...subscriptionData,
+          fullAccess: true
+        });
+        setUsage({ 
+          questionsViewedToday: 0, 
+          questionPacksCreated: 0,
+          unlimitedAccess: true 
+        });
+      } else {
+        // Logged in but no active subscription - can interact with limited features
+        setSubscription({ 
+          status: 'inactive', 
+          plan: 'free',
+          fullAccess: false
+        });
+        setUsage({ 
+          questionsViewedToday: 0, 
+          questionPacksCreated: 0,
+          unlimitedAccess: false 
+        });
+      }
+    } catch (error) {
+      console.error('Error loading subscription data:', error);
+      setSubscription({ 
+        status: 'inactive', 
+        plan: 'free',
+        fullAccess: false
+      });
+      setUsage({ 
+        questionsViewedToday: 0, 
+        questionPacksCreated: 0,
+        unlimitedAccess: false 
+      });
+    }
+    
     setLoading(false);
   };
 
@@ -35,16 +83,68 @@ export const usePaywall = () => {
     loadSubscriptionData();
   }, [user]);
 
-  // Check if user has access to a specific feature - PAYWALL REMOVED: Always true
+  // Check if user has access to a specific feature
   const checkFeatureAccess = (feature) => {
-    // All users now have access to all features - paywall removed
-    return true;
+    if (!subscription) return false;
+    
+    // Full access for paid subscribers
+    if (subscription.fullAccess) return true;
+    
+    // Define what guests (not logged in) can do
+    const guestFeatures = ['view_interface', 'see_filters', 'browse_pages'];
+    
+    // Define what free users (logged in but no subscription) can do
+    const freeFeatures = [...guestFeatures, 'basic_interaction'];
+    
+    if (subscription.plan === 'guest') {
+      return guestFeatures.includes(feature);
+    }
+    
+    if (subscription.plan === 'free') {
+      return freeFeatures.includes(feature);
+    }
+    
+    return false;
   };
 
-  // Check usage limits for free users - PAYWALL REMOVED: Always allowed
+  // Check usage limits for users
   const checkUsage = async (feature) => {
-    // All users now have unlimited usage - paywall removed
-    return { allowed: true, unlimited: true, reason: 'Full access enabled' };
+    if (!subscription) {
+      return { allowed: false, unlimited: false, reason: 'No subscription data' };
+    }
+    
+    // Full access for paid subscribers
+    if (subscription.fullAccess) {
+      return { allowed: true, unlimited: true, reason: 'Full subscription access' };
+    }
+    
+    // Special handling for video solutions - guests get 1 per day
+    if (feature === 'video_solutions') {
+      if (subscription.plan === 'guest') {
+        return { allowed: true, unlimited: false, reason: 'Limited daily access' };
+      }
+      return { 
+        allowed: false, 
+        unlimited: false, 
+        reason: 'Subscription required' 
+      };
+    }
+    
+    // Block other interactive features for non-subscribers
+    const blockedFeatures = [
+      'video_playbook', 'dashboard_tabs', 'question_results', 'vocabulary_test', 
+      'community_submit', 'search_functionality', 'question_interaction'
+    ];
+    
+    if (blockedFeatures.includes(feature)) {
+      return { 
+        allowed: false, 
+        unlimited: false, 
+        reason: subscription.plan === 'guest' ? 'Sign up required' : 'Subscription required' 
+      };
+    }
+    
+    return { allowed: true, unlimited: false, reason: 'Basic access' };
   };
 
   // Cancel subscription function (for recurring subscriptions only)
@@ -116,10 +216,25 @@ export const usePaywall = () => {
     }
   };
 
-  // Get user's plan info - PAYWALL REMOVED: Everyone has full access
+  // Get user's plan info
   const getPlanInfo = () => {
-    // All users now have full access - paywall removed
-    return { name: 'Full Access (Free)', isPaid: true, paywallRemoved: true };
+    if (!subscription) {
+      return { name: 'Loading...', isPaid: false, isGuest: true };
+    }
+    
+    if (subscription.plan === 'guest') {
+      return { name: 'Guest', isPaid: false, isGuest: true };
+    }
+    
+    if (subscription.plan === 'free') {
+      return { name: 'Free Account', isPaid: false, isGuest: false };
+    }
+    
+    return { 
+      name: subscription.plan === 'pro' ? 'Pro Plan' : 'Paid Plan', 
+      isPaid: true, 
+      isGuest: false 
+    };
   };
 
   return {
@@ -132,7 +247,8 @@ export const usePaywall = () => {
     cancelSubscription,
     getPlanInfo,
     isLoggedIn: !!user,
-    isPaidUser: true, // Everyone now has paid user access
+    isPaidUser: subscription?.fullAccess || false,
+    isGuest: subscription?.plan === 'guest',
     // Helper function to refresh data
     refreshSubscription: loadSubscriptionData,
   };

@@ -4,6 +4,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase';
 import { getAuth } from 'firebase/auth';
+import { usePaywall } from '../hooks/usePaywall';
 
 // Color palette matching your design system
 const COLORS = {
@@ -19,6 +20,7 @@ const COLORS = {
 };
 
 const MathsSubmitQuestionForm = () => {
+  const { checkUsage, isPaidUser, isGuest } = usePaywall();
   const [formData, setFormData] = useState({
     question: '',
     context: '',
@@ -135,6 +137,14 @@ const MathsSubmitQuestionForm = () => {
       setError('Please log in to submit a question.');
       return;
     }
+    
+    const usageCheck = await checkUsage('community_submit');
+    if (!usageCheck.allowed) {
+      setError(usageCheck.reason === 'Sign up required' 
+        ? 'Please sign up or log in to submit questions' 
+        : 'Subscription required to submit questions to the community');
+      return;
+    }
 
     setLoading(true);
     setError('');
@@ -199,7 +209,7 @@ const MathsSubmitQuestionForm = () => {
 
   // Check if form is valid and user is logged in
   const isFormValid = formData.question && formData.subject && isLoggedIn;
-  const isSubmitDisabled = loading || !isFormValid;
+  const isSubmitDisabled = loading || !isFormValid || !isPaidUser;
 
   return (
     <div style={{
@@ -871,6 +881,10 @@ const MathsSubmitQuestionForm = () => {
                 ) : !isLoggedIn ? (
                   <>
                     🔒 Login Required
+                  </>
+                ) : !isPaidUser ? (
+                  <>
+                    🔒 {isGuest ? 'Sign up required' : 'Subscription required'}
                   </>
                 ) : (
                   'Submit Maths Question'
