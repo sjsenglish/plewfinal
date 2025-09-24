@@ -27,7 +27,6 @@
 }
 
 .csat-question-card:hover {
-  transform: translateY(-4px);
   box-shadow: 0 12px 48px rgba(0, 206, 209, 0.2);
   border-color: #00CED1;
 }
