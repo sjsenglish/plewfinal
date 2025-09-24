@@ -5,6 +5,7 @@ import {
   cancelUserSubscription,
   getUserSubscription
 } from '../services/subscriptionService';
+import { isAdminEmail } from '../utils/setupAdmin';
 
 export const usePaywall = () => {
   const [subscription, setSubscription] = useState(null);
@@ -24,7 +25,8 @@ export const usePaywall = () => {
       setSubscription({ 
         status: 'none', 
         plan: 'guest',
-        fullAccess: false
+        fullAccess: false,
+        isAdmin: false
       });
       setUsage({ 
         questionsViewedToday: 0, 
@@ -36,13 +38,31 @@ export const usePaywall = () => {
     }
 
     try {
+      // Check for admin email first
+      const isAdminUser = isAdminEmail(user.email);
+      
       // Get actual subscription data for logged in users
       const subscriptionData = await getUserSubscription(user.uid);
       
-      if (subscriptionData && subscriptionData.status === 'active') {
+      if (isAdminUser) {
+        // Admin user gets full access regardless of subscription
+        setSubscription({
+          status: 'active',
+          plan: 'admin',
+          fullAccess: true,
+          isAdmin: true,
+          role: 'admin'
+        });
+        setUsage({ 
+          questionsViewedToday: 0, 
+          questionPacksCreated: 0,
+          unlimitedAccess: true 
+        });
+      } else if (subscriptionData && (subscriptionData.status === 'active' || subscriptionData.isAdmin)) {
         setSubscription({
           ...subscriptionData,
-          fullAccess: true
+          fullAccess: true,
+          isAdmin: subscriptionData.isAdmin || false
         });
         setUsage({ 
           questionsViewedToday: 0, 
@@ -54,7 +74,8 @@ export const usePaywall = () => {
         setSubscription({ 
           status: 'inactive', 
           plan: 'free',
-          fullAccess: false
+          fullAccess: false,
+          isAdmin: false
         });
         setUsage({ 
           questionsViewedToday: 0, 
@@ -67,7 +88,8 @@ export const usePaywall = () => {
       setSubscription({ 
         status: 'inactive', 
         plan: 'free',
-        fullAccess: false
+        fullAccess: false,
+        isAdmin: false
       });
       setUsage({ 
         questionsViewedToday: 0, 
@@ -249,6 +271,7 @@ export const usePaywall = () => {
     isLoggedIn: !!user,
     isPaidUser: subscription?.fullAccess || false,
     isGuest: subscription?.plan === 'guest',
+    isAdmin: subscription?.isAdmin || false,
     // Helper function to refresh data
     refreshSubscription: loadSubscriptionData,
   };

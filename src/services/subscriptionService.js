@@ -70,6 +70,50 @@ export const updateUserSubscription = async (userId, subscriptionData) => {
   }
 };
 
+// Set admin status for a user
+export const setUserAdminStatus = async (userId, isAdmin = true, role = 'admin') => {
+  try {
+    const userDocRef = doc(db, 'users', userId);
+    
+    // Get existing user data first
+    const docSnap = await getDoc(userDocRef);
+    const userData = docSnap.exists() ? docSnap.data() : {};
+    
+    // Update admin status and give full subscription access
+    const updateData = {
+      isAdmin: isAdmin,
+      role: role,
+      subscription: {
+        ...userData.subscription,
+        status: 'active',
+        plan: 'admin',
+        fullAccess: true,
+        paymentType: 'admin_grant'
+      },
+      updatedAt: new Date(),
+    };
+    
+    // If user doesn't exist, create with default data
+    if (!docSnap.exists()) {
+      updateData.createdAt = new Date();
+      updateData.usage = { 
+        questionsViewedToday: 0, 
+        questionPacksCreated: 0,
+        lastResetDate: new Date().toISOString().split('T')[0]
+      };
+      await setDoc(userDocRef, updateData);
+    } else {
+      await updateDoc(userDocRef, updateData);
+    }
+
+    console.log(`Admin status ${isAdmin ? 'granted' : 'revoked'} for user:`, userId);
+    return { success: true };
+  } catch (error) {
+    console.error('Error setting admin status:', error);
+    return { success: false, error: error.message };
+  }
+};
+
 // Cancel user subscription
 export const cancelUserSubscription = async (userId, stripeSubscriptionId) => {
   try {
