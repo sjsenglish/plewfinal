@@ -2,19 +2,28 @@ import React, { useState, useEffect } from 'react';
 import './KoreanEnglishFilters.css';
 
 const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
-  const [activeCategory, setActiveCategory] = useState('source');
-  const [selectedFilters, setSelectedFilters] = useState(currentFilters || {});
+  const [activeCategory, setActiveCategory] = useState('year');
+  const [selectedFilters, setSelectedFilters] = useState(currentFilters || { year: '2025' });
   // Start expanded on desktop (window width > 768px), collapsed on mobile
   const [isExpanded, setIsExpanded] = useState(typeof window !== 'undefined' && window.innerWidth > 768);
 
   // All filters in one unified set
   const ALL_FILTERS = {
+    year: {
+      label: '연도',
+      options: [
+        { id: '2025', label: '2025년', value: 'year:2025' },
+        { id: '2024', label: '2024년', value: 'year:2024' },
+        { id: '2023', label: '2023년', value: 'year:2023' },
+        { id: '2022', label: '2022년', value: 'year:2022' },
+        { id: '2021', label: '2021년', value: 'year:2021' },
+      ]
+    },
     source: {
       label: '문제 타입',
       options: [
         { id: 'past-paper', label: '기출', value: 'source:past-paper' },
         { id: 'similar', label: '유사', value: 'source:similar' },
-        { id: 'similar-advanced', label: 'Advanced', value: 'source:similar AND similarLevel:advanced' },
         { id: 'similar-baby', label: '베이비', value: 'source:similar AND similarLevel:baby' },
       ]
     },
@@ -136,6 +145,15 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       }
     }
   }, [activeCategory, availableCategories]);
+
+  // Apply initial 2025 filter on mount
+  useEffect(() => {
+    if (!currentFilters || Object.keys(currentFilters).length === 0) {
+      const initialFilters = { year: '2025' };
+      setSelectedFilters(initialFilters);
+      onFiltersChange({ year: 'year:2025' });
+    }
+  }, []);
 
   // No longer need to handle similarLevel separately since it's integrated into source options
 
