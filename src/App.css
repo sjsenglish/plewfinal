@@ -1943,16 +1943,18 @@ ul {
 }
 
 .typing-text {
-  font-size: 1.4rem;
-  font-weight: 500;
+  font-size: 1.2rem;
+  font-weight: 400;
   opacity: 0.95;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .modern-cursor {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 300;
   animation: modernBlink 1.5s step-end infinite;
+  font-family: 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 @keyframes modernBlink {
@@ -2333,6 +2335,8 @@ ul {
 
   .typing-text {
     font-size: 1.1rem;
+    font-family: 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
   }
 
   .modern-subtitle {
@@ -2388,6 +2392,8 @@ ul {
 
   .typing-text {
     font-size: 1rem;
+    font-family: 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
   }
 
   .modern-subtitle {
@@ -6826,10 +6832,13 @@ input[type="range"]::-moz-range-thumb {
 
   .typing-text {
     font-size: 1rem; /* Reduced from 1.1rem */
+    font-family: 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
   }
 
   .modern-cursor {
     font-size: 1rem;
+    font-family: 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   .banner-search-container {
@@ -7134,11 +7143,13 @@ input[type="range"]::-moz-range-thumb {
   font-weight: 400;
   letter-spacing: 0.5px;
   height: 100%;
+  font-family: 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .header-searchbox-input::placeholder {
   color: rgba(255, 255, 255, 0.7);
   font-style: italic;
+  font-family: 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .header-searchbox-input:focus::placeholder {
@@ -7146,30 +7157,31 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .header-searchbox-submit {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: transparent;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  margin: 5px;
+  width: 0px;
+  height: 0px;
+  margin: 0px;
   cursor: pointer;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
 }
 
 .header-searchbox-submit:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  transform: none;
+  box-shadow: none;
+  background: transparent;
 }
 
 .header-searchbox-submit svg {
-  width: 18px;
-  height: 18px;
-  color: white;
+  width: 0px;
+  height: 0px;
+  color: transparent;
+  display: none;
 }
 
 .header-searchbox-reset {

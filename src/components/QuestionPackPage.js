@@ -52,7 +52,7 @@ const getImageUrl = (url) => {
 const SUBJECTS = {
   'korean-english': {
     index: 'csat_final',
-    displayName: '수능영어 문재',
+    displayName: '수능영어 문제',
     description: '다양한 내게 맞는 문제들을 찾아 리딩 레벨을 올려 가 보세요.',
     filterCategories: {
       source: [
@@ -61,21 +61,21 @@ const SUBJECTS = {
         { id: 'baby', label: '베이비', value: 'source:baby' },
       ],
       subjectArea: [
-        { id: 'natural science', label: '자연 과학', value: 'primarySubjectArea:natural science' },
-        { id: 'social science', label: '사회 과학', value: 'primarySubjectArea:social science' },
-        { id: 'literature and arts', label: '문학/예술', value: 'primarySubjectArea:literature and arts' },
+        { id: 'natural science', label: '자연 과학', value: 'primarySubjectArea:"natural science"' },
+        { id: 'social science', label: '사회 과학', value: 'primarySubjectArea:"social science"' },
+        { id: 'literature and arts', label: '문학/예술', value: 'primarySubjectArea:"literature and arts"' },
         { id: 'humanities', label: '인문학', value: 'primarySubjectArea:humanities' },
       ],
       questionSkill: [
-        { id: '대의 파악', label: '대의 파악', value: 'questionSkill:대의 파악' },
+        { id: '대의 파악', label: '대의 파악', value: 'questionSkill:"대의 파악"' },
         { id: '도표', label: '도표', value: 'questionSkill:도표' },
-        { id: '내용 일치', label: '내용 일치', value: 'questionSkill:내용 일치' },
+        { id: '내용 일치', label: '내용 일치', value: 'questionSkill:"내용 일치"' },
         { id: '안내문', label: '안내문', value: 'questionSkill:안내문' },
         { id: '어법', label: '어법', value: 'questionSkill:어법' },
         { id: '어휘', label: '어휘', value: 'questionSkill:어휘' },
-        { id: '빈칸 추론', label: '빈칸 추론', value: 'questionSkill:빈칸 추론' },
-        { id: '간접 쓰기', label: '간접 쓰기', value: 'questionSkill:간접 쓰기' },
-        { id: '장문 독해', label: '장문 독해', value: 'questionSkill:장문 독해' },
+        { id: '빈칸 추론', label: '빈칸 추론', value: 'questionSkill:"빈칸 추론"' },
+        { id: '간접 쓰기', label: '간접 쓰기', value: 'questionSkill:"간접 쓰기"' },
+        { id: '장문 독해', label: '장문 독해', value: 'questionSkill:"장문 독해"' },
       ],
       passageType: [
         { id: 'argumentative', label: '논쟁', value: 'passageType:argumentative' },
