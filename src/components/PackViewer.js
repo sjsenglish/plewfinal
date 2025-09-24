@@ -437,7 +437,8 @@ const PackViewer = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               {questions.map((question, index) => {
                 // Get image URL from question data
-                const imageUrl = question?.image_url || question?.imageFile || question?.image_file || question?.imageUrl;
+                const rawImageUrl = question?.image_url || question?.imageFile || question?.image_file || question?.imageUrl;
+                const imageUrl = rawImageUrl && rawImageUrl !== 'default_image.jpg' ? rawImageUrl : null;
                 
                 return (
                   <div

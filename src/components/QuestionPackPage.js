@@ -107,7 +107,8 @@ const PDFPreview = ({ packData, selectedQuestions }) => {
 
   const formatQuestionForPreview = (question, index) => {
     const questionNum = index + 1;
-    const imageUrl = question?.imageUrl || question?.image_url || question?.imageFile || question?.image_file;
+    const rawImageUrl = question?.imageUrl || question?.image_url || question?.imageFile || question?.image_file;
+    const imageUrl = rawImageUrl && rawImageUrl !== 'default_image.jpg' ? rawImageUrl : null;
     
     return (
       <div 
@@ -730,7 +731,8 @@ const getQuestionPreview = (question) => {
           const processedQuestion = { ...question };
           
           // Handle various image URL formats
-          const imageUrl = question.image_url || question.imageUrl || question.image_file || question.imageFile;
+          const rawImageUrl = question.image_url || question.imageUrl || question.image_file || question.imageFile;
+          const imageUrl = rawImageUrl && rawImageUrl !== 'default_image.jpg' ? rawImageUrl : null;
           if (imageUrl) {
             try {
               // Ensure HTTPS for image URLs
