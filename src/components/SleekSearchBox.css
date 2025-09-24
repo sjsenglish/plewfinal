@@ -10,7 +10,8 @@
 
 .sleek-searchbox-form {
   width: 100%;
-  max-width: 500px;
+  max-width: 700px;
+  min-width: 600px;
 }
 
 .sleek-searchbox-container {
@@ -22,9 +23,12 @@
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   height: 50px;
+  width: 100%;
+  min-width: 600px;
+  max-width: 700px;
 }
 
 .sleek-searchbox-container:hover {
@@ -136,6 +140,19 @@
   padding: 0 !important;
 }
 
+/* Large desktop responsive */
+@media (min-width: 1200px) {
+  .sleek-searchbox-form {
+    max-width: 800px;
+    min-width: 700px;
+  }
+  
+  .sleek-searchbox-container {
+    min-width: 700px;
+    max-width: 800px;
+  }
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .sleek-searchbox-wrapper {
@@ -145,10 +162,13 @@
   
   .sleek-searchbox-form {
     max-width: 100%;
+    min-width: auto;
   }
   
   .sleek-searchbox-container {
     height: 45px;
+    min-width: auto;
+    width: 100%;
   }
   
   .sleek-searchbox-input {
@@ -165,6 +185,8 @@
   .sleek-searchbox-container {
     height: 42px;
     border-radius: 10px;
+    min-width: auto;
+    width: 100%;
   }
   
   .sleek-searchbox-input {
