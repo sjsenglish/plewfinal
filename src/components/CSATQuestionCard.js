@@ -112,9 +112,6 @@ const CSATQuestionCard = ({ hit }) => {
             className="csat-answer-button"
             onClick={toggleAnswer}
           >
-            <span className="csat-button-icon">
-              {showAnswer ? '👁️' : '👁️‍🗨️'}
-            </span>
             <span className="csat-button-text">
               {showAnswer ? 'Hide Answer' : 'Show Answer'}
             </span>
