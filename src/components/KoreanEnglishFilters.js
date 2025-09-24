@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { usePaywall } from '../hooks/usePaywall';
 import './KoreanEnglishFilters.css';
 
 const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
+  const { isPaidUser, isAdmin } = usePaywall();
   const [activeCategory, setActiveCategory] = useState('source');
   const [selectedFilters, setSelectedFilters] = useState(currentFilters || {});
   // Start expanded on desktop (window width > 768px), collapsed on mobile
   const [isExpanded, setIsExpanded] = useState(typeof window !== 'undefined' && window.innerWidth > 768);
+
+  // Check if user can use filters (paid users and admins can, free users cannot)
+  const canUseFilters = isPaidUser || isAdmin;
 
   // All filters in one unified set
   const ALL_FILTERS = {
@@ -53,6 +58,11 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
 
   // Handle filter selection
   const handleFilterSelect = (category, filterId, filterValue) => {
+    // Prevent filter selection for free users
+    if (!canUseFilters) {
+      return;
+    }
+
     const newFilters = { ...selectedFilters };
     
     // For single-select categories, replace the value
@@ -191,8 +201,9 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
           {availableCategories[activeCategory]?.options.map((option) => (
             <button
               key={option.id}
-              className={`filter-option ${selectedFilters[activeCategory] === option.id ? 'selected' : ''}`}
+              className={`filter-option ${selectedFilters[activeCategory] === option.id ? 'selected' : ''} ${!canUseFilters ? 'disabled' : ''}`}
               onClick={() => handleFilterSelect(activeCategory, option.id, option.value)}
+              disabled={!canUseFilters}
             >
               {option.label}
               {selectedFilters[activeCategory] === option.id && (
