@@ -30,6 +30,7 @@ import { ErrorBoundary } from './components/ui';
 import SubscriptionPlansPage from './components/SubscriptionPlansPage';
 import PremiumDashboard from './components/PremiumDashboard';
 import CustomSearchBox from './components/CustomSearchBox';
+import SleekSearchBox from './components/SleekSearchBox';
 import PracticeMode from './components/PracticeMode';
 import PasswordResetConfirm from './components/PasswordResetConfirm';
 import CommunitySearch from './components/CommunitySearch';
@@ -518,11 +519,9 @@ const buildAlgoliaFilters = (filters) => {
 {/* Search bar - only show in header for Algolia search */}
 {subjectConfig.searchType === 'algolia' && (
   <div className="header-search-container">
-    <CustomSearchBox
-      placeholder={`search ${subjectConfig.displayName.toLowerCase()} questions...`}
-      className="header-searchbox"
-      showSearchIcon={true}
-      showClearButton={true}
+    <SleekSearchBox
+      placeholder="search 문제은행"
+      className="sleek-header-searchbox"
       autoFocus={false}
     />
   </div>

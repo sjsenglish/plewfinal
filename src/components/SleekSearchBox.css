@@ -1,0 +1,185 @@
+/* Sleek Search Box - Clean, minimal design */
+.sleek-searchbox-wrapper {
+  margin: 2rem 0 1.5rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+.sleek-searchbox-form {
+  width: 100%;
+  max-width: 500px;
+}
+
+.sleek-searchbox-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  height: 50px;
+}
+
+.sleek-searchbox-container:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.sleek-searchbox-container.focused {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.sleek-searchbox-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0 20px;
+  font-size: 16px;
+  color: #333;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  height: 100%;
+  font-family: 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.sleek-searchbox-input::placeholder {
+  color: rgba(51, 51, 51, 0.6);
+  font-style: normal;
+  font-family: 'Futura', 'Futura PT', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.sleek-searchbox-input:focus::placeholder {
+  color: rgba(51, 51, 51, 0.4);
+}
+
+.sleek-searchbox-input.locked {
+  cursor: not-allowed;
+  color: rgba(51, 51, 51, 0.5);
+}
+
+.sleek-searchbox-clear {
+  background: none;
+  border: none;
+  color: rgba(51, 51, 51, 0.5);
+  cursor: pointer;
+  padding: 8px 15px;
+  font-size: 18px;
+  font-weight: 300;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.sleek-searchbox-clear:hover {
+  color: #333;
+  background: rgba(51, 51, 51, 0.1);
+  transform: scale(1.1);
+}
+
+/* Override any existing header search styles */
+.header-search-container .sleek-searchbox-wrapper {
+  margin: 2rem 0 1.5rem 0;
+}
+
+/* Force override all existing header searchbox styles */
+.header-search-container {
+  margin: 2rem 0 1.5rem 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Hide any existing header searchbox form elements */
+.header-search-container .header-searchbox-form,
+.header-search-container .custom-searchbox-form:not(.sleek-searchbox-form) {
+  display: none !important;
+}
+
+/* Ensure our sleek search box is always visible */
+.header-search-container .sleek-searchbox-form {
+  display: block !important;
+}
+
+/* Completely disable old header search styles */
+.header-searchbox-form,
+.header-searchbox-input,
+.header-searchbox-submit,
+.header-searchbox-reset {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .sleek-searchbox-wrapper {
+    margin: 1.5rem 0 1rem 0;
+    padding: 0 1rem;
+  }
+  
+  .sleek-searchbox-form {
+    max-width: 100%;
+  }
+  
+  .sleek-searchbox-container {
+    height: 45px;
+  }
+  
+  .sleek-searchbox-input {
+    font-size: 15px;
+    padding: 0 15px;
+  }
+  
+  .sleek-searchbox-input::placeholder {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sleek-searchbox-container {
+    height: 42px;
+    border-radius: 10px;
+  }
+  
+  .sleek-searchbox-input {
+    font-size: 14px;
+    padding: 0 12px;
+  }
+  
+  .sleek-searchbox-input::placeholder {
+    font-size: 14px;
+  }
+  
+  .sleek-searchbox-clear {
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    margin-right: 8px;
+  }
+}

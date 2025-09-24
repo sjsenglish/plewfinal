@@ -7097,8 +7097,8 @@ input[type="range"]::-moz-range-thumb {
 .maths-theme .modern-typing-container {
   color: white;
 }
-/* Header Search Bar Styles */
-.header-search-container {
+/* Header Search Bar Styles - DISABLED FOR SLEEK SEARCH BOX */
+.header-search-container.old-search {
   margin: 2rem 0 1.5rem 0;
   display: flex;
   justify-content: center;
