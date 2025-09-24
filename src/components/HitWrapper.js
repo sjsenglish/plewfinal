@@ -3,7 +3,7 @@ import React from 'react';
 import TSAHit from './TSAHit';
 import PlewHit from './PlewHit';
 import MathsHit from './MathsHit';
-import KoreanEnglishHit from './KoreanEnglishHit';
+import CSATQuestionCard from './CSATQuestionCard';
 import VocabularyHit from './VocabularyHit';
 
 const HitWrapper = ({ hit, ...props }) => {
@@ -32,9 +32,18 @@ const HitWrapper = ({ hit, ...props }) => {
     );
   };
 
-  // Function to determine if the hit is a Korean-English question
+  // Function to determine if the hit is a Korean-English question (CSAT format)
   const isKoreanEnglishQuestion = (hit) => {
     return (
+      // New CSAT structure fields
+      hit.questionText !== undefined ||
+      hit.actualQuestion !== undefined ||
+      hit.answerOptions !== undefined ||
+      hit.questionNumber !== undefined ||
+      hit.primarySubjectArea !== undefined ||
+      hit.passageType !== undefined ||
+      hit.questionSkill !== undefined ||
+      // Legacy fields
       hit.korean_text !== undefined ||
       hit.korean !== undefined ||
       hit.english_text !== undefined ||
@@ -44,8 +53,9 @@ const HitWrapper = ({ hit, ...props }) => {
       hit.korean_audio_url !== undefined ||
       hit.english_audio_url !== undefined ||
       (hit.level !== undefined && (hit.category !== undefined || hit.topic !== undefined)) ||
-      // Check if index contains korean-english
-      (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('korean-english'))
+      // Check if index contains korean-english or csat_final
+      (hit._index && typeof hit._index === 'string' && hit._index.includes && 
+       (hit._index.includes('korean-english') || hit._index.includes('csat_final')))
     );
   };
 
@@ -103,7 +113,8 @@ const HitWrapper = ({ hit, ...props }) => {
       // FIXED: Added safety checks for _index as well
       if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('vocabulary')) {
         return 'vocabulary';
-      } else if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('korean-english')) {
+      } else if (hit._index && typeof hit._index === 'string' && hit._index.includes && 
+                (hit._index.includes('korean-english') || hit._index.includes('csat_final'))) {
         return 'korean-english';
       } else if (hit._index && typeof hit._index === 'string' && hit._index.includes && hit._index.includes('maths')) {
         return 'maths';
@@ -136,7 +147,7 @@ const HitWrapper = ({ hit, ...props }) => {
     case 'maths':
       return <MathsHit hit={hit} {...props} />;
     case 'korean-english':
-      return <KoreanEnglishHit hit={hit} {...props} />;
+      return <CSATQuestionCard hit={hit} {...props} />;
     case 'tsa':
       return <TSAHit hit={hit} {...props} />;
     default:
