@@ -1602,6 +1602,47 @@ ul {
 
 .korean-english-theme .modern-main-header {
   background: linear-gradient(135deg, #d4d0ff 0%, #221468 100%);
+  min-height: 15vh !important;
+}
+
+/* Korean-English theme responsive header heights */
+@media (max-width: 768px) {
+  .korean-english-theme .modern-main-header {
+    min-height: 14vh !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .korean-english-theme .modern-main-header {
+    min-height: 12vh !important;
+  }
+}
+
+/* Korean-English theme brand title sizing */
+.korean-english-theme .modern-brand-title {
+  font-size: 2.2rem !important;
+}
+
+@media (max-width: 768px) {
+  .korean-english-theme .modern-brand-title {
+    font-size: 1.6rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .korean-english-theme .modern-brand-title {
+    font-size: 1.3rem !important;
+  }
+}
+
+/* Korean-English theme compact spacing */
+.korean-english-theme .brand-section {
+  margin-bottom: 0.25rem !important;
+}
+
+.korean-english-theme .modern-typing-container {
+  margin: 0.25rem 0 !important;
+  min-height: 1rem !important;
 }
 
 .korean-english-theme .search-card::before {
