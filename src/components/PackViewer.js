@@ -50,7 +50,7 @@ const SUBJECTS = {
     displayName: 'A-Level Maths'
   },
   'korean-english': {
-    index: 'korean-english-question-pairs',
+    index: 'csat_final',
     displayName: 'Korean-English'
   }
 };

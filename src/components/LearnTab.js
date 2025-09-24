@@ -14,7 +14,7 @@ const searchClient = algoliasearch(
 
 // Subject configurations for getting the right index
 const SUBJECTS = {
-  'korean-english': { index: 'korean-english-question-pairs' },
+  'korean-english': { index: 'csat_final' },
 };
 
 // Safe data access utility - CRITICAL for preventing React error #31

@@ -11,7 +11,7 @@ const searchClient = algoliasearch(
 // Subject configuration - Korean-English only
 const SUBJECTS = {
   'korean-english': {
-    index: 'korean-english-question-pairs',
+    index: 'csat_final',
     displayName: 'Korean-English',
     description: 'Korean-English Language Questions',
     filterCategories: {

@@ -40,6 +40,31 @@ const KoreanEnglishHit = ({ hit }) => {
   const hints = hit.hints || [];
   const examples = hit.examples || [];
   
+  // Extract source and passage type for Korean tags
+  const source = hit.source || '';
+  const passageType = hit.passageType || '';
+  
+  // Map source to Korean labels
+  const getSourceKorean = (source) => {
+    switch(source) {
+      case 'past-paper': return '기출';
+      case 'original': return '유사';
+      case 'baby': return '베이비';
+      default: return source;
+    }
+  };
+  
+  // Map passage type to Korean labels
+  const getPassageTypeKorean = (passageType) => {
+    switch(passageType) {
+      case 'argumentative': return '논쟁';
+      case 'discursive': return '담화';
+      case 'analytical': return '분석';
+      case 'comprehension': return '문해';
+      default: return passageType;
+    }
+  };
+  
   // Handle pronunciation/romanization if available
   const romanization = hit.romanization || hit.pronunciation || '';
   
@@ -130,19 +155,14 @@ const KoreanEnglishHit = ({ hit }) => {
         </div>
         
         <div className="question-metadata">
-          {category && (
-            <span className="category-badge">
-              {category}
+          {source && (
+            <span className="source-badge">
+              {getSourceKorean(source)}
             </span>
           )}
-          {type && (
-            <span className="type-badge">
-              {type}
-            </span>
-          )}
-          {topic && (
-            <span className="topic-badge">
-              {topic}
+          {passageType && (
+            <span className="passage-type-badge">
+              {getPassageTypeKorean(passageType)}
             </span>
           )}
         </div>

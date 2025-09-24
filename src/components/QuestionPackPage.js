@@ -51,31 +51,31 @@ const getImageUrl = (url) => {
 // Subject configuration - Korean-English only
 const SUBJECTS = {
   'korean-english': {
-    index: 'korean-english-question-pairs',
+    index: 'csat_final',
     displayName: '수능영어 문재',
     description: '다양한 내게 맞는 문제들을 찾아 리딩 레벨을 올려 가 보세요.',
     filterCategories: {
       source: [
         { id: 'past-paper', label: '기출', value: 'source:past-paper' },
-        { id: 'similar', label: '유사', value: 'source:similar' },
-        { id: 'similar-baby', label: '베이비', value: 'source:similar AND similarLevel:baby' },
+        { id: 'original', label: '유사', value: 'source:original' },
+        { id: 'baby', label: '베이비', value: 'source:baby' },
       ],
       subjectArea: [
-        { id: 'natural-sciences', label: '자연 과학', value: 'primarySubjectArea:natural_sciences' },
-        { id: 'social-sciences', label: '사회 과학', value: 'primarySubjectArea:social_sciences' },
-        { id: 'literature-arts', label: '문학/예술', value: 'primarySubjectArea:literature_arts' },
+        { id: 'natural science', label: '자연 과학', value: 'primarySubjectArea:natural science' },
+        { id: 'social science', label: '사회 과학', value: 'primarySubjectArea:social science' },
+        { id: 'literature and arts', label: '문학/예술', value: 'primarySubjectArea:literature and arts' },
         { id: 'humanities', label: '인문학', value: 'primarySubjectArea:humanities' },
       ],
       questionSkill: [
-        { id: 'main-idea', label: '대의 파악', value: 'questionSkill:대의 파악' },
-        { id: 'chart-graph', label: '도표', value: 'questionSkill:도표' },
-        { id: 'factual-comprehension', label: '내용 일치', value: 'questionSkill:내용 일치' },
-        { id: 'notice-guide', label: '안내문', value: 'questionSkill:안내문' },
-        { id: 'grammar', label: '어법', value: 'questionSkill:어법' },
-        { id: 'vocabulary', label: '어휘', value: 'questionSkill:어휘' },
-        { id: 'vocabulary-context', label: '빈칸 추론', value: 'questionSkill:빈칸 추론' },
-        { id: 'indirect-writing', label: '간접 쓰기', value: 'questionSkill:간접 쓰기' },
-        { id: 'long-passage', label: '장문 독해', value: 'questionSkill:장문 독해' },
+        { id: '대의 파악', label: '대의 파악', value: 'questionSkill:대의 파악' },
+        { id: '도표', label: '도표', value: 'questionSkill:도표' },
+        { id: '내용 일치', label: '내용 일치', value: 'questionSkill:내용 일치' },
+        { id: '안내문', label: '안내문', value: 'questionSkill:안내문' },
+        { id: '어법', label: '어법', value: 'questionSkill:어법' },
+        { id: '어휘', label: '어휘', value: 'questionSkill:어휘' },
+        { id: '빈칸 추론', label: '빈칸 추론', value: 'questionSkill:빈칸 추론' },
+        { id: '간접 쓰기', label: '간접 쓰기', value: 'questionSkill:간접 쓰기' },
+        { id: '장문 독해', label: '장문 독해', value: 'questionSkill:장문 독해' },
       ],
       passageType: [
         { id: 'argumentative', label: '논쟁', value: 'passageType:argumentative' },

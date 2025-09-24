@@ -35,7 +35,7 @@ const ICONS = {
 // Subject configurations for getting the right index
 const SUBJECTS = {
   tsa: { index: 'copy_tsa_questions' },
-  'korean-english': { index: 'korean-english-question-pairs' },
+  'korean-english': { index: 'csat_final' },
   maths: { index: 'edexel_mathematics_updated' },
 };
 

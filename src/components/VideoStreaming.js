@@ -160,25 +160,6 @@ const VideoStreaming = () => {
             방법을 알면 독해가 어렵지 않아요. PLEW의 체계적인 학습 방법으로 
             영어 독해 실력을 확실하게 향상시킬 수 있습니다.
           </p>
-          
-          <div className="hero-features">
-            <div className="feature-badge">
-              <div className="feature-icon"></div>
-              7개 레슨
-            </div>
-            <div className="feature-badge">
-              <div className="feature-icon"></div>
-              HD 화질
-            </div>
-            <div className="feature-badge">
-              <div className="feature-icon"></div>
-              한국어 설명
-            </div>
-            <div className="feature-badge">
-              <div className="feature-icon"></div>
-              전문 강의
-            </div>
-          </div>
 
           <div className="hero-cta">
             <button 

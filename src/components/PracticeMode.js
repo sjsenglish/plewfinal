@@ -27,7 +27,7 @@ const SUBJECTS = {
     avgTimePerQuestion: 3 // minutes
   },
   'korean-english': {
-    index: 'korean-english-question-pairs',
+    index: 'csat_final',
     displayName: 'Korean-English',
     icon: '🇰🇷',
     avgTimePerQuestion: 1 // minutes

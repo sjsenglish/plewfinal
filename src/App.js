@@ -149,7 +149,7 @@ const SUBJECTS = {
     logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de'
   },
   'korean-english': {
-    index: 'korean-english-question-pairs',
+    index: 'csat_final',
     theme: 'korean-english-theme',
     bannerText: ' 옥스포드 영어팀에서 다양한 레벨의 오리지널 문제들과 쌍둥이 문제들을 계속 업데이트 합니다',
     displayName: '문제은행',
