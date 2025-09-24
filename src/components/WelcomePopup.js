@@ -48,30 +48,45 @@ const WelcomePopup = () => {
         </div>
 
         <div className="welcome-popup-content">
-          {/* Default advertisement image */}
-          <div className="welcome-popup-image">
-            <img 
-              src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de"
-              alt="PLEW Advertisement"
-              style={{ width: '200px', height: 'auto' }}
-            />
-          </div>
-
           <div className="welcome-popup-text">
-            <h2>Welcome to PLEW! 🎉</h2>
-            <p>Your ultimate platform for Korean SAT English preparation</p>
-            <p>Access thousands of questions, personalized study tools, and comprehensive learning materials.</p>
-          </div>
-
-          <div className="welcome-popup-actions">
-            <Link 
-              to="/premium" 
-              className="welcome-popup-study-button"
-              onClick={handleClose}
-            >
-              <span>📚</span>
-              학습도우미 (Go to Study)
-            </Link>
+            <h2>Welcome to PLEW</h2>
+            <p className="welcome-intro">Here you can:</p>
+            <div className="welcome-features">
+              <div className="feature-item">
+                <span className="bullet">•</span>
+                <span>Learn like a native - the most effective way to read academic passages</span>
+              </div>
+              <div className="feature-item">
+                <span className="bullet">•</span>
+                <span>The only questionbank with 100s of original, high quality questions produced by an Oxford graduate team.</span>
+              </div>
+            </div>
+            
+            <div className="welcome-cta-section">
+              <p className="cta-header">Not sure where to start?</p>
+              <div className="cta-buttons">
+                <div className="cta-item">
+                  <span className="bullet">•</span>
+                  <Link 
+                    to="/premium" 
+                    className="cta-link"
+                    onClick={handleClose}
+                  >
+                    Click here to start our week-by-week course with video support
+                  </Link>
+                </div>
+                <div className="cta-item">
+                  <span className="bullet">•</span>
+                  <Link 
+                    to="/question-pack" 
+                    className="cta-link"
+                    onClick={handleClose}
+                  >
+                    Click here to start practicing with our tailored question packs
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

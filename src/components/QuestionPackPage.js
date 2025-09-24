@@ -55,13 +55,6 @@ const SUBJECTS = {
     displayName: '수능영어 문재',
     description: '다양한 내게 맞는 문제들을 찾아 리딩 레벨을 올려 가 보세요.',
     filterCategories: {
-      year: [
-        { id: '2025', label: '2025년', value: 'year:2025' },
-        { id: '2024', label: '2024년', value: 'year:2024' },
-        { id: '2023', label: '2023년', value: 'year:2023' },
-        { id: '2022', label: '2022년', value: 'year:2022' },
-        { id: '2021', label: '2021년', value: 'year:2021' },
-      ],
       source: [
         { id: 'past-paper', label: '기출', value: 'source:past-paper' },
         { id: 'similar', label: '유사', value: 'source:similar' },
@@ -74,19 +67,15 @@ const SUBJECTS = {
         { id: 'humanities', label: '인문학', value: 'primarySubjectArea:humanities' },
       ],
       questionSkill: [
-        { id: 'main-idea', label: '주제', value: 'questionSkill:main_idea' },
-        { id: 'vocabulary-context', label: '빈칸', value: 'questionSkill:vocabulary_context' },
-        { id: 'paragraph-ordering', label: '순서', value: 'questionSkill:paragraph_ordering' },
-        { id: 'logical-structure', label: '문장 삽입', value: 'questionSkill:logical_structure' },
-        { id: 'inference', label: '추론', value: 'questionSkill:inference' },
-        { id: 'title-selection', label: '제목', value: 'questionSkill:title_selection' },
-        { id: 'tone-attitude', label: '어조', value: 'questionSkill:tone_attitude' },
-        { id: 'factual-comprehension', label: '사실 확인', value: 'questionSkill:factual_comprehension' },
-      ],
-      difficulty: [
-        { id: 'low', label: '쉬움', value: 'difficultyLevel:low' },
-        { id: 'medium', label: '보통', value: 'difficultyLevel:medium' },
-        { id: 'high', label: '어려움 ', value: 'difficultyLevel:high' },
+        { id: 'main-idea', label: '대의 파악', value: 'questionSkill:main_idea' },
+        { id: 'chart-graph', label: '도표', value: 'questionSkill:chart_graph' },
+        { id: 'factual-comprehension', label: '내용 일치', value: 'questionSkill:factual_comprehension' },
+        { id: 'notice-guide', label: '안내문', value: 'questionSkill:notice_guide' },
+        { id: 'grammar', label: '어법', value: 'questionSkill:grammar' },
+        { id: 'vocabulary', label: '어휘', value: 'questionSkill:vocabulary' },
+        { id: 'vocabulary-context', label: '빈칸 추론', value: 'questionSkill:vocabulary_context' },
+        { id: 'indirect-writing', label: '간접 쓰기', value: 'questionSkill:indirect_writing' },
+        { id: 'long-passage', label: '장문 독해', value: 'questionSkill:long_passage' },
       ],
       passageType: [
         { id: 'argumentative', label: '논쟁', value: 'passageType:argumentative' },
@@ -94,20 +83,12 @@ const SUBJECTS = {
         { id: 'analytical', label: '분석', value: 'passageType:analytical' },
         { id: 'comprehension', label: '문해', value: 'passageType:comprehension' },
       ],
-      vocabularyLevel: [
-        { id: 'basic', label: '초급(5200개 이하)', value: 'vocabularyDemand:[* TO 5199]' },
-        { id: 'intermediate', label: '중급(5200-5500개)', value: 'vocabularyDemand:[5200 TO 5500]' },
-        { id: 'advanced', label: '고급(5500개 이상)', value: 'vocabularyDemand:[5500 TO *]' },
-      ],
     },
     categoryLabels: { 
-      year: '연도',
       source: '문제 타입',
       subjectArea: '주제 영역',
       questionSkill: '문제 유형',
-      difficulty: '난이도',
-      passageType: '지문 종류',
-      vocabularyLevel: '단어 수준'
+      passageType: '지문 종류'
     },
   },
 };
