@@ -597,14 +597,14 @@ const buildAlgoliaFilters = (filters) => {
                   <Configure 
                     key={`filters-${currentSubject}-${Date.now()}`}
                     filters={filters || ''} 
-                    hitsPerPage={7}
+                    hitsPerPage={5}
                   />
                 );
               } catch (error) {
                 console.warn('Error configuring Algolia filters:', error);
                 return <Configure 
                   key={`filters-fallback-${currentSubject}`} 
-                  hitsPerPage={7}
+                  hitsPerPage={5}
                 />;
               }
             })()}

@@ -989,38 +989,44 @@ const LearnTab = () => {
         marginBottom: '40px',
         flexWrap: 'wrap'
       }}>
-        {DIFFICULTY_LEVELS.map(level => (
-          <button
-            key={level.id}
-            onClick={() => setSelectedLevel(level.id)}
-            style={{
-              padding: '12px 24px',
-              borderRadius: '25px',
-              border: selectedLevel === level.id ? `2px solid ${level.color}` : `2px solid ${COLORS.border}`,
-              backgroundColor: selectedLevel === level.id ? level.color + '20' : COLORS.white,
-              color: selectedLevel === level.id ? level.color : COLORS.gray,
-              fontSize: '14px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              textTransform: 'capitalize'
-            }}
-            onMouseEnter={(e) => {
-              if (selectedLevel !== level.id) {
-                e.target.style.borderColor = level.color;
-                e.target.style.color = level.color;
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (selectedLevel !== level.id) {
-                e.target.style.borderColor = COLORS.border;
-                e.target.style.color = COLORS.gray;
-              }
-            }}
-          >
-            {safeRender(level.label)}
-          </button>
-        ))}
+        {DIFFICULTY_LEVELS.map(level => {
+          const isDisabled = level.id === 'intermediate' || level.id === 'advanced';
+          return (
+            <button
+              key={level.id}
+              onClick={() => !isDisabled && setSelectedLevel(level.id)}
+              disabled={isDisabled}
+              style={{
+                padding: '12px 24px',
+                borderRadius: '25px',
+                border: selectedLevel === level.id ? `2px solid ${level.color}` : `2px solid ${COLORS.border}`,
+                backgroundColor: isDisabled ? '#f5f5f5' : (selectedLevel === level.id ? level.color + '20' : COLORS.white),
+                color: isDisabled ? '#ccc' : (selectedLevel === level.id ? level.color : COLORS.gray),
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: isDisabled ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s ease',
+                textTransform: 'capitalize',
+                opacity: isDisabled ? 0.5 : 1
+              }}
+              onMouseEnter={(e) => {
+                if (!isDisabled && selectedLevel !== level.id) {
+                  e.target.style.borderColor = level.color;
+                  e.target.style.color = level.color;
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isDisabled && selectedLevel !== level.id) {
+                  e.target.style.borderColor = COLORS.border;
+                  e.target.style.color = COLORS.gray;
+                }
+              }}
+            >
+              {safeRender(level.label)}
+              {isDisabled && ' (Coming Soon)'}
+            </button>
+          );
+        })}
       </div>
 
       {/* Question Packs Section */}

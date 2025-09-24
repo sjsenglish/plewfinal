@@ -169,7 +169,7 @@ const KoreanEnglishHit = ({ hit }) => {
             className="toggle-button answer-toggle"
             onClick={toggleAnswer}
           >
-            {showAnswer ? '🔽 Hide Answer' : '🔶 Show Answer'}
+            {showAnswer ? 'Hide Answer' : 'Show Answer'}
           </button>
           
           {showAnswer && (
@@ -187,7 +187,7 @@ const KoreanEnglishHit = ({ hit }) => {
             className="toggle-button explanation-toggle"
             onClick={toggleExplanation}
           >
-            {showExplanation ? '🔽 Hide Explanation' : '💭 Show Explanation'}
+            {showExplanation ? 'Hide Explanation' : 'Show Explanation'}
           </button>
           
           {showExplanation && (

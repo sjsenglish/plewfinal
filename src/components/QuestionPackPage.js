@@ -52,13 +52,19 @@ const getImageUrl = (url) => {
 const SUBJECTS = {
   'korean-english': {
     index: 'korean-english-question-pairs',
-    displayName: '수능영어 문재들',
+    displayName: '수능영어 문재',
     description: '다양한 내게 맞는 문제들을 찾아 리딩 레벨을 올려 가 보세요.',
     filterCategories: {
+      year: [
+        { id: '2025', label: '2025년', value: 'year:2025' },
+        { id: '2024', label: '2024년', value: 'year:2024' },
+        { id: '2023', label: '2023년', value: 'year:2023' },
+        { id: '2022', label: '2022년', value: 'year:2022' },
+        { id: '2021', label: '2021년', value: 'year:2021' },
+      ],
       source: [
         { id: 'past-paper', label: '기출', value: 'source:past-paper' },
         { id: 'similar', label: '유사', value: 'source:similar' },
-        { id: 'similar-advanced', label: 'Advanced', value: 'source:similar AND similarLevel:advanced' },
         { id: 'similar-baby', label: '베이비', value: 'source:similar AND similarLevel:baby' },
       ],
       subjectArea: [
@@ -80,7 +86,7 @@ const SUBJECTS = {
       difficulty: [
         { id: 'low', label: '쉬움', value: 'difficultyLevel:low' },
         { id: 'medium', label: '보통', value: 'difficultyLevel:medium' },
-        { id: 'high', label: '어려움', value: 'difficultyLevel:high' },
+        { id: 'high', label: '어려움 ', value: 'difficultyLevel:high' },
       ],
       passageType: [
         { id: 'argumentative', label: '논쟁', value: 'passageType:argumentative' },
@@ -89,17 +95,18 @@ const SUBJECTS = {
         { id: 'comprehension', label: '문해', value: 'passageType:comprehension' },
       ],
       vocabularyLevel: [
-        { id: 'basic', label: '기초(5200개 이하)', value: 'vocabularyDemand:[* TO 5199]' },
-        { id: 'intermediate', label: '중간(5200-5500 개)', value: 'vocabularyDemand:[5200 TO 5500]' },
+        { id: 'basic', label: '초급(5200개 이하)', value: 'vocabularyDemand:[* TO 5199]' },
+        { id: 'intermediate', label: '중급(5200-5500개)', value: 'vocabularyDemand:[5200 TO 5500]' },
         { id: 'advanced', label: '고급(5500개 이상)', value: 'vocabularyDemand:[5500 TO *]' },
       ],
     },
     categoryLabels: { 
+      year: '연도',
       source: '문제 타입',
       subjectArea: '주제 영역',
-      questionSkill: '지문 출처',
+      questionSkill: '문제 유형',
       difficulty: '난이도',
-      passageType: '지문 구조',
+      passageType: '지문 종류',
       vocabularyLevel: '단어 수준'
     },
   },

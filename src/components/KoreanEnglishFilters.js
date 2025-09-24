@@ -37,7 +37,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       ]
     },
     questionSkill: {
-      label: '지문 출처',
+      label: '문제 유형',
       options: [
         { id: 'main-idea', label: '주제', value: 'questionSkill:main_idea' },
         { id: 'vocabulary-context', label: '빈칸', value: 'questionSkill:vocabulary_context' },
@@ -58,7 +58,7 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       ]
     },
     passageType: {
-      label: '지문 구조',
+      label: '지문 종류',
       options: [
         { id: 'argumentative', label: '논쟁', value: 'passageType:argumentative' },
         { id: 'discursive', label: '담화', value: 'passageType:discursive' },
@@ -69,8 +69,8 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
     vocabularyLevel: {
       label: '단어 수준',
       options: [
-        { id: 'basic', label: '기초(5200개 이하)', value: 'vocabularyDemand:[* TO 5199]' },
-        { id: 'intermediate', label: '중간(5200-5500 개)', value: 'vocabularyDemand:[5200 TO 5500]' },
+        { id: 'basic', label: '초급(5200개 이하)', value: 'vocabularyDemand:[* TO 5199]' },
+        { id: 'intermediate', label: '중급(5200-5500개)', value: 'vocabularyDemand:[5200 TO 5500]' },
         { id: 'advanced', label: '고급(5500개 이상)', value: 'vocabularyDemand:[5500 TO *]' },
       ]
     }
