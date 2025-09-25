@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import './WelcomePopup.css';
 
@@ -206,84 +206,6 @@ const WelcomePopup = () => {
             </div>
           </div>
 
-          {/* Apple-inspired minimalist styling */}
-          <style jsx>{`
-            .welcome-action-btn {
-              padding: 14px 28px;
-              border: none;
-              border-radius: 12px;
-              font-size: 16px;
-              font-weight: 500;
-              font-family: 'Futura', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-              cursor: pointer;
-              transition: all 0.2s ease;
-              text-align: center;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              position: relative;
-              text-decoration: none;
-              letter-spacing: -0.01em;
-            }
-            
-            .welcome-btn-primary {
-              background: #007AFF;
-              color: white;
-              box-shadow: 0 1px 3px rgba(0, 122, 255, 0.3);
-            }
-            
-            .welcome-btn-primary:hover {
-              background: #0056CC;
-              box-shadow: 0 2px 6px rgba(0, 122, 255, 0.4);
-              transform: translateY(-1px);
-            }
-            
-            .welcome-btn-secondary {
-              background: rgba(120, 120, 128, 0.12);
-              color: #007AFF;
-              border: 1px solid rgba(120, 120, 128, 0.16);
-            }
-            
-            .welcome-btn-secondary:hover {
-              background: rgba(120, 120, 128, 0.16);
-              color: #0056CC;
-              transform: translateY(-1px);
-            }
-            
-            .welcome-btn-accent {
-              background: rgba(0, 122, 255, 0.08);
-              color: #007AFF;
-              border: 1px solid rgba(0, 122, 255, 0.2);
-            }
-            
-            .welcome-btn-accent:hover {
-              background: rgba(0, 122, 255, 0.12);
-              color: #0056CC;
-              transform: translateY(-1px);
-            }
-            
-            @keyframes pulse-glow {
-              0% { 
-                transform: scale(1);
-                box-shadow: 0 0 5px rgba(250, 166, 26, 0.5);
-              }
-              50% { 
-                transform: scale(1.05);
-                box-shadow: 0 0 20px rgba(250, 166, 26, 0.8);
-              }
-              100% { 
-                transform: scale(1);
-                box-shadow: 0 0 5px rgba(250, 166, 26, 0.5);
-              }
-            }
-            
-            @media (max-width: 768px) {
-              .welcome-action-btn {
-                font-size: 15px;
-                padding: 12px 24px;
-              }
-            }
-          `}</style>
         </div>
 
         <div className="welcome-popup-footer" style={{

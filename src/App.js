@@ -557,6 +557,9 @@ const buildAlgoliaFilters = (filters) => {
         throw new Error('Missing required InstantSearch props');
       }
 
+      // Use fixed hits per page for now (will be overridden by App component logic)
+      const hitsPerPage = 2;
+
       return (
         <>
           <InstantSearch 
@@ -585,14 +588,14 @@ const buildAlgoliaFilters = (filters) => {
                   <Configure 
                     key={`filters-${currentSubject}-${Date.now()}`}
                     filters={filters || ''} 
-                    hitsPerPage={getHitsPerPage()}
+                    hitsPerPage={hitsPerPage}
                   />
                 );
               } catch (error) {
                 console.warn('Error configuring Algolia filters:', error);
                 return <Configure 
                   key={`filters-fallback-${currentSubject}`} 
-                  hitsPerPage={getHitsPerPage()}
+                  hitsPerPage={hitsPerPage}
                 />;
               }
             })()}
