@@ -171,166 +171,25 @@ const SubscriptionPlansModal = ({ onClose }) => {
           ✕
         </button>
 
-        <div style={{
-          textAlign: 'left',
-          maxWidth: '700px',
-          margin: '0 auto'
+        <h1 style={{
+          fontSize: '36px',
+          fontWeight: '600',
+          margin: '0 0 16px 0',
+          letterSpacing: '-1.5px',
+          lineHeight: '1.1'
         }}>
-          <p style={{
-            fontSize: '24px',
-            fontWeight: '600',
-            margin: '0 0 20px 0',
-            lineHeight: '1.3',
-            color: '#ffffff'
-          }}>
-            옥스포드 졸업생 팀에서 학생들의 자신감과 끝없는 수능 공부 시간 단축을 돕기 위해서 개발한 리딩법이에요!
-          </p>
-          
-          <p style={{
-            fontSize: '20px',
-            fontWeight: '500',
-            margin: '0 0 16px 0',
-            lineHeight: '1.4',
-            color: '#5865f2'
-          }}>
-            지금 베타 버젼 가입하시면 특별가격으로 평생 멤버십을 사용할 수 있어요
-          </p>
-          
-          <p style={{
-            fontSize: '18px',
-            margin: '0 0 16px 0',
-            lineHeight: '1.5',
-            color: 'rgba(255, 255, 255, 0.85)'
-          }}>
-            전 레벨 수준 높은 오리지널 문제들로 가득 찬 문제 은행 그리고 새 문제들과 비디오 풀이법도 계속 업데이트 되고 있어요.
-          </p>
-          
-          <p style={{
-            fontSize: '18px',
-            margin: '0 0 24px 0',
-            lineHeight: '1.5',
-            color: 'rgba(255, 255, 255, 0.85)'
-          }}>
-            그리고 네이티브들의 학술적 리딩법을 배우는 비디오 코스를 반드시, 꼭꼭 확인하고 평생 쓰는 실력을 익혀 보세요.
-          </p>
-          
-          {/* Three action buttons */}
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '12px',
-            marginTop: '32px'
-          }}>
-            <button
-              onClick={() => {
-                onClose();
-                setTimeout(() => {
-                  const firstQuestionCard = document.querySelector('.csat-question-card, .korean-english-hit, .tsa-hit, .hit-wrapper');
-                  if (firstQuestionCard) {
-                    firstQuestionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // Add pulsing effect to video solution buttons
-                    const videoButtons = document.querySelectorAll('[data-action="video-solution"]');
-                    videoButtons.forEach(btn => {
-                      btn.style.animation = 'pulse-glow 1.5s infinite';
-                      btn.style.transition = 'background-color 0.3s ease';
-                      // Only change background if it's not already styled
-                      const currentBg = window.getComputedStyle(btn).backgroundColor;
-                      if (currentBg === 'rgba(0, 0, 0, 0)' || currentBg === 'transparent') {
-                        btn.style.backgroundColor = '#faa61a';
-                      }
-                    });
-                    // Remove animation after 5 seconds
-                    setTimeout(() => {
-                      videoButtons.forEach(btn => {
-                        btn.style.animation = '';
-                      });
-                    }, 5000);
-                  }
-                }, 300);
-              }}
-              style={{
-                padding: '12px 24px',
-                backgroundColor: 'rgba(110, 163, 153, 0.1)',
-                color: '#6EA399',
-                border: '1px solid rgba(110, 163, 153, 0.3)',
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                flexShrink: 0
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = 'rgba(110, 163, 153, 0.2)';
-                e.target.style.borderColor = 'rgba(110, 163, 153, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = 'rgba(110, 163, 153, 0.1)';
-                e.target.style.borderColor = 'rgba(110, 163, 153, 0.3)';
-              }}
-            >
-              문제 은행과 풀이법은 여기서 확인
-            </button>
-
-            <button
-              onClick={() => {
-                onClose();
-                // Navigate to premium dashboard
-                window.location.href = '/premium-dashboard';
-              }}
-              style={{
-                padding: '12px 24px',
-                backgroundColor: 'rgba(88, 101, 242, 0.1)',
-                color: '#5865f2',
-                border: '1px solid rgba(88, 101, 242, 0.3)',
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                flexShrink: 0
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = 'rgba(88, 101, 242, 0.2)';
-                e.target.style.borderColor = 'rgba(88, 101, 242, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = 'rgba(88, 101, 242, 0.1)';
-                e.target.style.borderColor = 'rgba(88, 101, 242, 0.3)';
-              }}
-            >
-              맞춤형 학습으로 바로 가려면 여기
-            </button>
-
-            <button
-              onClick={() => {
-                window.open('https://www.examrizzsearch.com', '_blank');
-              }}
-              style={{
-                padding: '12px 24px',
-                backgroundColor: 'rgba(250, 166, 26, 0.1)',
-                color: '#faa61a',
-                border: '1px solid rgba(250, 166, 26, 0.3)',
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                flexShrink: 0
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = 'rgba(250, 166, 26, 0.2)';
-                e.target.style.borderColor = 'rgba(250, 166, 26, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = 'rgba(250, 166, 26, 0.1)';
-                e.target.style.borderColor = 'rgba(250, 166, 26, 0.3)';
-              }}
-            >
-              여기서 영국 프로젝트를 확인해 보세요
-            </button>
-          </div>
-        </div>
+          원하는 플랜을 골라 보세요
+        </h1>
+        
+        <p style={{
+          fontSize: '18px',
+          color: 'rgba(255, 255, 255, 0.6)',
+          margin: '0 auto',
+          maxWidth: '480px',
+          lineHeight: '1.5'
+        }}>
+          무제한 검색 기능을 사용할 수 있습니다.
+        </p>
       </div>
 
       {/* Main Content */}
@@ -677,25 +536,10 @@ const SubscriptionPlansModal = ({ onClose }) => {
       </div>
 
       {/* Custom CSS for animations */}
-      <style jsx global>{`
+      <style jsx>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
-        
-        @keyframes pulse-glow {
-          0% { 
-            transform: scale(1);
-            box-shadow: 0 0 5px rgba(250, 166, 26, 0.5);
-          }
-          50% { 
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(250, 166, 26, 0.8);
-          }
-          100% { 
-            transform: scale(1);
-            box-shadow: 0 0 5px rgba(250, 166, 26, 0.5);
-          }
         }
       `}</style>
       </div>
