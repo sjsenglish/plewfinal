@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { usePaywall } from '../hooks/usePaywall';
+import VideoPopup from './VideoPopup';
 import './CSATQuestionCard.css';
 
 const CSATQuestionCard = ({ hit }) => {
@@ -7,6 +8,7 @@ const CSATQuestionCard = ({ hit }) => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   // Early return if hit is undefined or null
   if (!hit) {
@@ -22,6 +24,7 @@ const CSATQuestionCard = ({ hit }) => {
   const correctAnswer = hit.correctAnswer || '';
   const source = hit.source || '';
   const passageType = hit.passageType || '';
+  const videoSolutionLink = hit.videosolutionlink || hit.videoSolutionLink || hit.video_solution_link || '';
 
   // Format question header
   const questionHeader = questionNumber && year ? `Question ${questionNumber} (${year})` : 'CSAT Question';
@@ -63,6 +66,15 @@ const CSATQuestionCard = ({ hit }) => {
   const isCorrectOption = (optionText) => {
     return correctAnswer.includes(optionText.substring(0, 1)) || // Check if correct answer starts with same symbol (①②③④⑤)
            correctAnswer.toLowerCase().includes(optionText.toLowerCase().substring(2, 10)); // Check text match
+  };
+
+  // Handle video solution
+  const handleVideoClick = () => {
+    setShowVideo(true);
+  };
+
+  const closeVideo = () => {
+    setShowVideo(false);
   };
 
   return (
@@ -136,14 +148,30 @@ const CSATQuestionCard = ({ hit }) => {
       {/* Answer Section */}
       {correctAnswer && (
         <div className="csat-answer-section">
-          <button 
-            className="csat-answer-button"
-            onClick={toggleAnswer}
-          >
-            <span className="csat-button-text">
-              {showAnswer ? 'Hide Answer' : '답'}
-            </span>
-          </button>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <button 
+              className="csat-answer-button"
+              onClick={toggleAnswer}
+            >
+              <span className="csat-button-text">
+                {showAnswer ? 'Hide Answer' : '답'}
+              </span>
+            </button>
+            
+            {videoSolutionLink && videoSolutionLink.trim() !== '' && (
+              <button 
+                className="csat-answer-button"
+                onClick={handleVideoClick}
+                data-action="video-solution"
+                style={{
+                  background: 'linear-gradient(135deg, #FF9500, #FF6B00)',
+                  boxShadow: '0 6px 20px rgba(255, 149, 0, 0.4)'
+                }}
+              >
+                <span className="csat-button-text">비디오 설명</span>
+              </button>
+            )}
+          </div>
           
           {showAnswer && (
             <div className="csat-answer-content">
@@ -153,6 +181,11 @@ const CSATQuestionCard = ({ hit }) => {
             </div>
           )}
         </div>
+      )}
+
+      {/* Video Popup */}
+      {showVideo && videoSolutionLink && (
+        <VideoPopup videoUrl={videoSolutionLink} onClose={closeVideo} />
       )}
     </div>
   );
