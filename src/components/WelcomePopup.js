@@ -116,18 +116,18 @@ const WelcomePopup = () => {
             </h2>
             
             <div style={{
-              background: 'rgba(0, 122, 255, 0.08)',
+              background: 'rgba(110, 163, 153, 0.08)',
               borderRadius: '12px',
               padding: '20px 24px',
               marginBottom: '24px',
-              border: '1px solid rgba(0, 122, 255, 0.1)'
+              border: '1px solid rgba(110, 163, 153, 0.1)'
             }}>
               <p style={{
                 fontSize: '18px',
                 fontWeight: '500',
                 margin: '0',
                 lineHeight: '1.4',
-                color: '#007AFF',
+                color: '#6EA399',
                 fontFamily: 'Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
               }}>
                 지금 베타 버젼 가입하시면 특별가격으로 평생 멤버십을 사용할 수 있어요
@@ -165,7 +165,7 @@ const WelcomePopup = () => {
             <button
               className="welcome-action-btn welcome-btn-primary"
               style={{
-                background: 'linear-gradient(135deg, #007AFF, #0056CC)',
+                background: 'linear-gradient(135deg, #6EA399, #17434D)',
                 color: 'white',
                 border: 'none',
                 padding: '16px 24px',
@@ -174,7 +174,8 @@ const WelcomePopup = () => {
                 fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
-                fontFamily: 'Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+                fontFamily: 'Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                boxShadow: '0 6px 20px rgba(110, 163, 153, 0.4)'
               }}
               onClick={() => {
                 handleClose();
@@ -209,9 +210,9 @@ const WelcomePopup = () => {
               style={{ 
                 textDecoration: 'none',
                 display: 'block',
-                background: 'rgba(120, 120, 128, 0.1)',
-                color: '#1d1d1f',
-                border: 'none',
+                background: 'linear-gradient(135deg, #ccccff, rgba(204, 204, 255, 0.8))',
+                color: '#17434D',
+                border: '1px solid rgba(110, 163, 153, 0.2)',
                 padding: '16px 24px',
                 borderRadius: '12px',
                 fontSize: '16px',
@@ -219,7 +220,8 @@ const WelcomePopup = () => {
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 fontFamily: 'Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-                textAlign: 'center'
+                textAlign: 'center',
+                boxShadow: '0 4px 12px rgba(110, 163, 153, 0.15)'
               }}
             >
               맞춤형 학습으로 바로 가려면 여기
@@ -228,7 +230,7 @@ const WelcomePopup = () => {
             <button
               className="welcome-action-btn welcome-btn-accent"
               style={{
-                background: 'linear-gradient(135deg, #34C759, #28A745)',
+                background: 'linear-gradient(135deg, #00CED1, #17434D)',
                 color: 'white',
                 border: 'none',
                 padding: '16px 24px',
@@ -237,7 +239,8 @@ const WelcomePopup = () => {
                 fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
-                fontFamily: 'Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+                fontFamily: 'Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                boxShadow: '0 6px 20px rgba(0, 206, 209, 0.4)'
               }}
               onClick={() => {
                 window.open('https://www.examrizzsearch.com', '_blank');
@@ -268,7 +271,7 @@ const WelcomePopup = () => {
               onChange={handleDontShowAgain}
               style={{
                 marginRight: '8px',
-                accentColor: '#007AFF'
+                accentColor: '#6EA399'
               }}
             />
             <span>Don't show again</span>
