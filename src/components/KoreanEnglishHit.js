@@ -309,6 +309,7 @@ const KoreanEnglishHit = ({ hit }) => {
           <button 
             className={`toggle-button video-solution-toggle ${!isPaidUser && isGuest ? 'limited' : (!isPaidUser ? 'locked' : '')}`}
             onClick={watchVideoSolution}
+            data-action="video-solution"
           >
             {!isPaidUser && isGuest ? '📺 Watch Video Solution (Limited)' : 
              !isPaidUser ? '🔒 Video Solution (Subscription Required)' : 

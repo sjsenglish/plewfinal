@@ -244,6 +244,7 @@ const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
               onClick={handleVideoClick}
               disabled={isVideoButtonDisabled()}
               aria-label="Watch video solution"
+              data-action="video-solution"
             >
               <span>{getVideoButtonText()}</span>
             </button>
