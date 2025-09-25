@@ -93,9 +93,9 @@
 .video-container {
   position: relative;
   width: 100%;
-  min-height: 450px;
-  height: 70vh;
-  max-height: 600px;
+  height: calc(100vh - 200px);
+  min-height: 400px;
+  max-height: 80vh;
   background: #000;
   border-radius: 8px;
   overflow: hidden;
@@ -122,7 +122,14 @@
   color: #666;
 }
 
-/* Mobile responsiveness */
+/* Responsive design for better window resizing */
+@media (max-width: 1200px) {
+  .video-container {
+    height: calc(100vh - 180px);
+    max-height: 75vh;
+  }
+}
+
 @media (max-width: 768px) {
   .video-popup-content {
     width: 95%;
@@ -131,9 +138,9 @@
   }
 
   .video-container {
+    height: calc(100vh - 160px);
     min-height: 300px;
-    height: 60vh;
-    max-height: 400px;
+    max-height: 70vh;
   }
 }
 
@@ -145,9 +152,9 @@
   }
 
   .video-container {
+    height: calc(100vh - 140px);
     min-height: 250px;
-    height: 50vh;
-    max-height: 300px;
+    max-height: 65vh;
   }
 
   .video-popup-close {
@@ -156,5 +163,13 @@
     width: 28px;
     height: 28px;
     font-size: 18px;
+  }
+}
+
+/* Handle very small windows */
+@media (max-height: 500px) {
+  .video-container {
+    height: calc(100vh - 100px);
+    min-height: 200px;
   }
 }

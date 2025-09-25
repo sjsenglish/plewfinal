@@ -106,18 +106,19 @@ const WelcomePopup = () => {
           }}>
             <div style={{
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '24px',
-              gap: '16px'
+              marginBottom: '32px',
+              gap: '24px'
             }}>
               <img 
                 src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-books-pencil.svg?alt=media&token=1ca7c953-1f5d-43df-af64-0558f17fe93a"
                 alt="Study Dinosaur"
                 style={{
-                  width: '48px',
-                  height: '48px',
-                  filter: 'drop-shadow(0 2px 8px rgba(110, 163, 153, 0.3))'
+                  width: '192px',
+                  height: '192px',
+                  filter: 'drop-shadow(0 4px 16px rgba(110, 163, 153, 0.3))'
                 }}
               />
               <h2 style={{
