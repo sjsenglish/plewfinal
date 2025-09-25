@@ -104,16 +104,33 @@ const WelcomePopup = () => {
             textAlign: 'center',
             marginBottom: '2rem'
           }}>
-            <h2 style={{
-              fontSize: '22px',
-              fontWeight: '600',
-              margin: '0 0 24px 0',
-              lineHeight: '1.3',
-              color: '#1d1d1f',
-              fontFamily: 'Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '24px',
+              gap: '16px'
             }}>
-              옥스포드 졸업생 팀에서 학생들의 자신감과 끝없는 수능 공부 시간 단축을 돕기 위해서 개발한 리딩법이에요!
-            </h2>
+              <img 
+                src="https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fdino-books-pencil.svg?alt=media&token=1ca7c953-1f5d-43df-af64-0558f17fe93a"
+                alt="Study Dinosaur"
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  filter: 'drop-shadow(0 2px 8px rgba(110, 163, 153, 0.3))'
+                }}
+              />
+              <h2 style={{
+                fontSize: '22px',
+                fontWeight: '600',
+                margin: '0',
+                lineHeight: '1.3',
+                color: '#1d1d1f',
+                fontFamily: 'Futura, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+              }}>
+                옥스포드 졸업생 팀에서 학생들의 자신감과 끝없는 수능 공부 시간 단축을 돕기 위해서 개발한 리딩법이에요!
+              </h2>
+            </div>
             
             <div style={{
               background: 'rgba(110, 163, 153, 0.08)',
