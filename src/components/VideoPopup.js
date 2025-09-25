@@ -16,8 +16,21 @@ const VideoPopup = ({ videoUrl, onClose }) => {
     return match && match[2].length === 11 ? match[2] : null;
   };
 
-  const videoId = getYoutubeId(videoUrl);
+  // Check if URL is a direct video file (like .mp4, .webm, etc.)
+  const isDirectVideoUrl = (url) => {
+    if (!url) return false;
+    return /\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv)(\?.*)?$/i.test(url);
+  };
+
+  // Check if URL is YouTube
+  const isYouTubeUrl = (url) => {
+    if (!url) return false;
+    return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/.test(url);
+  };
+
+  const videoId = isYouTubeUrl(videoUrl) ? getYoutubeId(videoUrl) : null;
   const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0` : null;
+  const isDirect = isDirectVideoUrl(videoUrl);
 
   // Disable body scroll when the popup is open
   useEffect(() => {
@@ -51,6 +64,32 @@ const VideoPopup = ({ videoUrl, onClose }) => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
+          </div>
+        ) : isDirect ? (
+          <div className="video-container">
+            <video
+              src={videoUrl}
+              title="Video Solution"
+              controls
+              autoPlay
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '8px'
+              }}
+              onError={(e) => {
+                console.error('Video loading error:', e);
+                e.target.style.display = 'none';
+                const errorDiv = e.target.parentNode.querySelector('.video-error') || document.createElement('div');
+                errorDiv.className = 'video-error';
+                errorDiv.innerHTML = '<p>Sorry, we couldn\'t load the video. Please try again later.</p>';
+                if (!e.target.parentNode.querySelector('.video-error')) {
+                  e.target.parentNode.appendChild(errorDiv);
+                }
+              }}
+            >
+              Your browser does not support the video tag.
+            </video>
           </div>
         ) : (
           <div className="video-error">

@@ -24,7 +24,7 @@ const CSATQuestionCard = ({ hit }) => {
   const correctAnswer = hit.correctAnswer || '';
   const source = hit.source || '';
   const passageType = hit.passageType || '';
-  const videoSolutionLink = hit.videosolutionlink || hit.videoSolutionLink || hit.video_solution_link || '';
+  const videoSolutionLink = hit.videoSolutionLink || hit.videosolutionlink || hit.video_solution_link || '';
 
   // Format question header
   const questionHeader = questionNumber && year ? `Question ${questionNumber} (${year})` : 'CSAT Question';
@@ -164,8 +164,8 @@ const CSATQuestionCard = ({ hit }) => {
                 onClick={handleVideoClick}
                 data-action="video-solution"
                 style={{
-                  background: 'linear-gradient(135deg, #FF9500, #FF6B00)',
-                  boxShadow: '0 6px 20px rgba(255, 149, 0, 0.4)'
+                  background: 'linear-gradient(135deg, #00CED1, #17434D)',
+                  boxShadow: '0 6px 20px rgba(0, 206, 209, 0.4)'
                 }}
               >
                 <span className="csat-button-text">비디오 설명</span>
