@@ -2051,13 +2051,47 @@ const getQuestionPreview = (question) => {
               </div>
             </div>
 
-            {/* Hide PDF preview for Korean-English questions */}
-            {packData.subject !== 'korean-english' && (
+            {/* Show preview based on step and subject */}
+            {currentStep === 2 && packData.subject === 'korean-english' ? (
+              <div style={{
+                backgroundColor: 'white',
+                borderRadius: '12px',
+                padding: '20px',
+                border: '1px solid #e5e7eb',
+                maxHeight: '400px',
+                overflowY: 'auto'
+              }}>
+                <h3 style={{
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  marginBottom: '16px',
+                  color: '#111827'
+                }}>
+                  네 문제지 미리보기
+                </h3>
+                {selectedQuestions.length > 0 ? (
+                  <div>
+                    {selectedQuestions.map((question, index) => 
+                      formatQuestionForPreview(question, index)
+                    )}
+                  </div>
+                ) : (
+                  <div style={{
+                    textAlign: 'center',
+                    color: '#9ca3af',
+                    padding: '32px',
+                    fontSize: '14px'
+                  }}>
+                    선택한 문제가 여기에 표시됩니다
+                  </div>
+                )}
+              </div>
+            ) : packData.subject !== 'korean-english' ? (
               <PDFPreview 
                 packData={packData} 
                 selectedQuestions={selectedQuestions} 
               />
-            )}
+            ) : null}
           </div>
         </div>
       </div>
