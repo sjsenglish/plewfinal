@@ -68,9 +68,8 @@ const SUBJECTS = {
       ],
       questionSkill: [
         { id: '대의 파악', label: '대의 파악', value: 'questionSkill:"대의 파악"' },
-        { id: '도표', label: '도표', value: 'questionSkill:도표' },
         { id: '내용 일치', label: '내용 일치', value: 'questionSkill:"내용 일치"' },
-        { id: '안내문', label: '안내문', value: 'questionSkill:안내문' },
+        { id: '안내문', label: '안내문', value: 'questionSkill:"안내문"' },
         { id: '어법', label: '어법', value: 'questionSkill:어법' },
         { id: '어휘', label: '어휘', value: 'questionSkill:어휘' },
         { id: '빈칸 추론', label: '빈칸 추론', value: 'questionSkill:"빈칸 추론"' },
@@ -107,180 +106,186 @@ const PDFPreview = ({ packData, selectedQuestions }) => {
 
   const formatQuestionForPreview = (question, index) => {
     const questionNum = index + 1;
-    const rawImageUrl = question?.imageUrl || question?.image_url || question?.imageFile || question?.image_file;
-    const imageUrl = rawImageUrl && rawImageUrl !== 'default_image.jpg' ? rawImageUrl : null;
     
     return (
       <div 
         key={question.objectID || index} 
         style={{ 
-          marginBottom: previewStyles.questionSpacing,
-          padding: '16px',
-          border: '1px solid #e2e8f0',
-          borderRadius: '8px',
-          backgroundColor: 'white'
+          marginBottom: '24px',
+          background: 'linear-gradient(135deg, #ccccff 0%, #ffffff 100%)',
+          border: '2px solid #6EA399',
+          borderRadius: '20px',
+          padding: '24px',
+          boxShadow: '0 8px 32px rgba(110, 163, 153, 0.15)',
+          position: 'relative'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-          <div style={{
-            width: '28px',
-            height: '28px',
-            borderRadius: '50%',
-            backgroundColor: packData.styling?.color || COLORS.teal,
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '14px',
-            fontWeight: '600',
-            flexShrink: 0
+        {/* Header Section */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          marginBottom: '20px',
+          padding: '16px',
+          background: 'linear-gradient(135deg, rgba(110, 163, 153, 0.1), rgba(0, 206, 209, 0.1))',
+          borderRadius: '16px',
+          borderBottom: '3px solid #6EA399'
+        }}>
+          <h3 style={{
+            fontSize: '18px',
+            fontWeight: '700',
+            color: '#17434D',
+            margin: '0',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
           }}>
-            {questionNum}
-          </div>
-
-          <div style={{ flex: 1 }}>
-            {/* Korean-English question display */}
-            <div style={{ marginBottom: '12px' }}>
-              {question.year && (
-                <div style={{ 
-                  fontSize: `${previewStyles.fontSize - 1}px`,
-                  color: '#6b7280',
-                  marginBottom: '4px'
-                }}>
-                  <strong>Year:</strong> {question.year}
-                </div>
-              )}
-              {question.subject_area && (
-                <div style={{ 
-                  fontSize: `${previewStyles.fontSize - 1}px`,
-                  color: '#6b7280',
-                  marginBottom: '4px'
-                }}>
-                  <strong>Subject Area:</strong> {question.subject_area}
-                </div>
-              )}
-              {question.difficulty && (
-                <div style={{ 
-                  fontSize: `${previewStyles.fontSize - 1}px`,
-                  color: '#6b7280',
-                  marginBottom: '4px'
-                }}>
-                  <strong>Difficulty:</strong> {question.difficulty}
-                </div>
-              )}
-              {question.question_type && (
-                <div style={{ 
-                  fontSize: `${previewStyles.fontSize - 1}px`,
-                  color: '#6b7280'
-                }}>
-                  <strong>Question Type:</strong> {question.question_type}
-                </div>
-              )}
-            </div>
-
-            {/* Korean text */}
-            {(question.questionText || question.korean) && (
-              <div style={{ 
-                fontSize: `${previewStyles.fontSize}px`,
-                fontWeight: '500',
-                color: '#374151',
-                marginBottom: '8px',
-                fontFamily: 'Malgun Gothic, Noto Sans KR, serif'
+            Question {questionNum}
+          </h3>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {question.source && (
+              <span style={{
+                padding: '4px 8px',
+                borderRadius: '25px',
+                fontSize: '12px',
+                fontWeight: '600',
+                color: 'white',
+                background: 'linear-gradient(135deg, #6EA399, #17434D)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
               }}>
-                <strong>Korean:</strong> {String(question.questionText || question.korean || '')}
-              </div>
+                {question.source === 'past-paper' ? '기출' : question.source === 'original' ? '유사' : '베이비'}
+              </span>
             )}
-
-            {/* English text */}
-            {(question.actualQuestion || question.english) && (
-              <div style={{ 
-                fontSize: `${previewStyles.fontSize + 1}px`,
-                fontWeight: '500',
-                color: '#111827',
-                marginBottom: '8px'
+            {question.passageType && (
+              <span style={{
+                padding: '4px 8px',
+                borderRadius: '25px',
+                fontSize: '12px',
+                fontWeight: '600',
+                color: 'white',
+                background: 'linear-gradient(135deg, #00CED1, #17434D)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
               }}>
-                <strong>English:</strong> {String(question.actualQuestion || question.english || '')}
-              </div>
-            )}
-
-            {/* Question text */}
-            {question.question && (
-              <div style={{ 
-                fontSize: `${previewStyles.fontSize + 1}px`,
-                fontWeight: '500',
-                color: '#111827',
-                marginBottom: '12px'
-              }}>
-                {question.question}
-              </div>
-            )}
-
-            {/* Options for multiple choice */}
-            {(question.answerOptions || question.options) && (question.answerOptions || question.options).length > 0 && (
-              <div style={{ marginTop: '12px' }}>
-                {(question.answerOptions || question.options).map((option, optIndex) => (
-                  <div key={optIndex} style={{ 
-                    display: 'flex', 
-                    alignItems: 'flex-start', 
-                    gap: '8px',
-                    marginBottom: '6px'
-                  }}>
-                    <span style={{
-                      backgroundColor: '#f3f4f6',
-                      color: '#374151',
-                      padding: '2px 6px',
-                      borderRadius: '4px',
-                      fontSize: `${previewStyles.fontSize - 1}px`,
-                      fontWeight: '500',
-                      minWidth: '20px',
-                      textAlign: 'center'
-                    }}>
-                      {option.id || String.fromCharCode(65 + optIndex)}
-                    </span>
-                    <span style={{ 
-                      fontSize: `${previewStyles.fontSize}px`,
-                      color: '#374151'
-                    }}>
-                      {option.text}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Answer space for fill-in-the-blank or essay questions */}
-            {(question.question_type === 'Fill in the Blank' || question.question_type === 'Essay' || question.question_type === 'Translation') && (
-              <div style={{
-                border: '1px solid #e2e8f0',
-                borderRadius: '4px',
-                padding: '20px',
-                backgroundColor: '#fafafa',
-                minHeight: '60px',
-                fontSize: `${previewStyles.fontSize - 1}px`,
-                color: '#6b7280',
-                fontStyle: 'italic',
-                marginTop: '12px'
-              }}>
-                Answer space
-              </div>
-            )}
-
-            {/* Answer section */}
-            {packData.styling?.includeAnswers && !packData.styling?.separateAnswerSheet && question.answer && (
-              <div style={{ 
-                padding: previewStyles.answerBoxPadding,
-                fontSize: `${previewStyles.fontSize - 1}px`,
-                marginTop: '12px',
-                backgroundColor: '#f0fdf4',
-                border: '1px solid #bbf7d0',
-                borderRadius: '6px',
-                color: '#16a34a'
-              }}>
-                <strong>Answer:</strong> {question.answer}
-              </div>
+                {question.passageType === 'argumentative' ? '논쟁' : 
+                 question.passageType === 'discursive' ? '담화' :
+                 question.passageType === 'analytical' ? '분석' : '문해'}
+              </span>
             )}
           </div>
         </div>
+
+        {/* Korean Section */}
+        {(question.questionText || question.korean) && (
+          <div style={{
+            background: 'linear-gradient(135deg, #ccccff, #ffffff)',
+            borderLeft: '4px solid #6EA399',
+            borderRadius: '16px',
+            padding: '16px',
+            marginBottom: '16px',
+            border: '1px solid rgba(110, 163, 153, 0.2)'
+          }}>
+            <h4 style={{
+              fontSize: '16px',
+              fontWeight: '600',
+              color: '#17434D',
+              margin: '0 0 8px 0',
+              paddingBottom: '4px',
+              borderBottom: '2px solid rgba(110, 163, 153, 0.3)'
+            }}>
+              한국어
+            </h4>
+            <p style={{
+              fontSize: '16px',
+              lineHeight: '1.6',
+              color: '#17434D',
+              margin: '0',
+              fontWeight: '500',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif'
+            }}>
+              {String(question.questionText || question.korean || '')}
+            </p>
+          </div>
+        )}
+
+        {/* English Section */}
+        {(question.actualQuestion || question.english) && (
+          <div style={{
+            background: 'linear-gradient(135deg, #ccccff, #ffffff)',
+            borderLeft: '4px solid #6EA399',
+            borderRadius: '16px',
+            padding: '16px',
+            marginBottom: '16px',
+            border: '1px solid rgba(110, 163, 153, 0.2)'
+          }}>
+            <h4 style={{
+              fontSize: '16px',
+              fontWeight: '600',
+              color: '#17434D',
+              margin: '0 0 8px 0',
+              paddingBottom: '4px',
+              borderBottom: '2px solid rgba(110, 163, 153, 0.3)'
+            }}>
+              English
+            </h4>
+            <p style={{
+              fontSize: '15px',
+              lineHeight: '1.7',
+              color: '#17434D',
+              margin: '0',
+              fontWeight: '400',
+              textAlign: 'justify'
+            }}>
+              {String(question.actualQuestion || question.english || '')}
+            </p>
+          </div>
+        )}
+
+        {/* Options Section */}
+        {(question.answerOptions || question.options) && (question.answerOptions || question.options).length > 0 && (
+          <div style={{
+            background: 'linear-gradient(135deg, #ccccff, #ffffff)',
+            borderLeft: '4px solid #6EA399',
+            borderRadius: '16px',
+            padding: '16px',
+            marginBottom: '16px',
+            border: '1px solid rgba(110, 163, 153, 0.2)'
+          }}>
+            <h4 style={{
+              fontSize: '16px',
+              fontWeight: '600',
+              color: '#17434D',
+              margin: '0 0 12px 0',
+              paddingBottom: '4px',
+              borderBottom: '2px solid rgba(110, 163, 153, 0.3)'
+            }}>
+              선택지
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {(question.answerOptions || question.options).map((option, optIndex) => (
+                <div key={optIndex} style={{
+                  background: 'white',
+                  padding: '12px 16px',
+                  borderRadius: '12px',
+                  borderLeft: '4px solid #00CED1',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span style={{
+                    fontSize: '14px',
+                    lineHeight: '1.5',
+                    color: '#17434D',
+                    fontWeight: '500',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif'
+                  }}>
+                    {option.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Note: Answer section is intentionally omitted for preview */}
       </div>
     );
   };
@@ -506,38 +511,26 @@ const colorOptions = [
     }
   };
 
-// Get question preview for Korean-English
+// Get question preview for Korean-English - simplified to show first line only
 const getQuestionPreview = (question) => {
-  let korean = question.questionText || question.korean || question.korean_text || '';
+  // Get the first line of English text (primary question text)
   let english = question.actualQuestion || question.english || question.english_text || '';
-  const questionType = question.question_type || '';
-  const subjectArea = question.subject_area || '';
   
   // Handle object values
-  if (typeof korean === 'object' && korean !== null) {
-    korean = korean.sentence || korean.text || korean.value || '';
-  }
   if (typeof english === 'object' && english !== null) {
     english = english.sentence || english.text || english.value || '';
   }
   
-  // Convert to strings
-  korean = String(korean || '');
+  // Convert to string and get first line
   english = String(english || '');
-  const questionStr = String(question.question || '');
+  const firstLine = english.split('\n')[0].trim();
   
-  // Create a meaningful preview
-  if (korean && english) {
-    return `${korean.substring(0, 30)}... → ${english.substring(0, 30)}...`;
-  } else if (korean) {
-    return `Korean: ${korean.substring(0, 40)}...`;
-  } else if (english) {
-    return `English: ${english.substring(0, 40)}...`;
-  } else if (questionStr) {
-    return questionStr.substring(0, 50) + (questionStr.length > 50 ? '...' : '');
-  } else {
-    return `${subjectArea || 'Korean-English'} ${questionType || 'Question'}`;
+  // Return first 60 characters of the first line
+  if (firstLine.length > 60) {
+    return firstLine.substring(0, 60) + '...';
   }
+  
+  return firstLine || 'Question text not available';
 };
 
   // Toggle question selection
@@ -1188,7 +1181,7 @@ const getQuestionPreview = (question) => {
                       color: COLORS.darkGray,
                       marginBottom: '12px'
                     }}>
-                      질문 필터
+                      문제 필터
                     </label>
 
                     {/* Filter Category Tabs */}
@@ -1287,7 +1280,7 @@ const getQuestionPreview = (question) => {
                     color: COLORS.darkGray,
                     marginBottom: '12px'
                   }}>
-                    질문 수
+                    문제 수
                   </label>
                   
                   <div style={{
@@ -1357,7 +1350,7 @@ const getQuestionPreview = (question) => {
                       transition: 'all 0.2s ease'
                     }}
                   >
-                    다음: 질문 선택 →
+                    다음: 문제 선택 →
                   </button>
                 </div>
               </>
@@ -1373,7 +1366,7 @@ const getQuestionPreview = (question) => {
                     color: '#111827',
                     margin: '0 0 8px 0'
                   }}>
-                    질문 선택
+                    문제 선택
                   </h2>
                   <span style={{
                     color: '#0369a1',
@@ -1477,16 +1470,17 @@ const getQuestionPreview = (question) => {
 
                             <div style={{ flex: 1 }}>
                               <div style={{
-                                fontSize: '12px',
-                                color: '#9ca3af',
-                                marginBottom: '4px'
+                                fontSize: '14px',
+                                color: '#1f2937',
+                                marginBottom: '4px',
+                                fontWeight: '600'
                               }}>
-                                Question {index + 1} • {question.objectID}
+                                Question {index + 1}{question.year ? ` (${question.year})` : ''}
                               </div>
 
                               <div style={{
-                                fontSize: '14px',
-                                color: '#374151',
+                                fontSize: '13px',
+                                color: '#4b5563',
                                 marginBottom: '8px',
                                 lineHeight: '1.4'
                               }}>
@@ -1586,7 +1580,7 @@ const getQuestionPreview = (question) => {
                       cursor: 'pointer'
                     }}
                   >
-                    ← Back
+                    ← 도라 가기
                   </button>
                   <button
                     onClick={() => {

@@ -227,9 +227,9 @@ const SubscriptionPlansModal = ({ onClose }) => {
                   borderBottom: '1px solid #faa61a',
                   cursor: 'pointer'
                 }} onClick={onClose}>
-                  sign in
+                  로그인
                 </span>
-                {' '}to subscribe to a plan
+                {' '}하세요
               </p>
             </div>
           </div>
@@ -303,7 +303,6 @@ const SubscriptionPlansModal = ({ onClose }) => {
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                인터페이스 보기 가능
               </li>
               <li style={{
                 display: 'flex',
@@ -316,7 +315,6 @@ const SubscriptionPlansModal = ({ onClose }) => {
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                필터 및 검색 UI 접근
               </li>
             </ul>
           </div>
@@ -496,7 +494,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
               ) : plan.current ? (
                 'Current plan'
               ) : !isLoggedIn ? (
-                'Sign in to subscribe'
+                '로그인 하세요'
               ) : (
                 plan.buttonText
               )}
@@ -528,10 +526,10 @@ const SubscriptionPlansModal = ({ onClose }) => {
           }}>
             문의사항이 있으시면 이메일로 연락하세요:{' '}
             <a 
-              href="mailto:team@examrizzsearch.com"
+              href="mailto:team@examrizz.com"
               style={{ color: '#5865f2', textDecoration: 'none' }}
             >
-              team@examrizzsearch.com
+              team@examrizz.com
             </a>
           </p>
         </div>

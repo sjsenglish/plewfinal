@@ -89,7 +89,7 @@ const CSATQuestionCard = ({ hit }) => {
       {/* English Passage Section */}
       {englishPassage && (
         <div className="csat-english-section">
-          <h3 className="csat-section-title">English Passage</h3>
+          <h3 className="csat-section-title">지문</h3>
           <div className="csat-passage-content">
             <p className="csat-english-text">{englishPassage}</p>
           </div>
@@ -99,7 +99,7 @@ const CSATQuestionCard = ({ hit }) => {
       {/* Korean Question Section */}
       {koreanQuestion && (
         <div className="csat-korean-section">
-          <h3 className="csat-section-title">Question</h3>
+          <h3 className="csat-section-title">문제</h3>
           <div className="csat-question-content">
             <p className="csat-korean-text">{koreanQuestion}</p>
           </div>
@@ -109,7 +109,7 @@ const CSATQuestionCard = ({ hit }) => {
       {/* Answer Options Section */}
       {answerOptions && answerOptions.length > 0 && (
         <div className="csat-options-section">
-          <h3 className="csat-section-title">Answer Options</h3>
+          <h3 className="csat-section-title">선지</h3>
           <div className="csat-options-list">
             {answerOptions.map((option, index) => (
               <div 
@@ -141,7 +141,7 @@ const CSATQuestionCard = ({ hit }) => {
             onClick={toggleAnswer}
           >
             <span className="csat-button-text">
-              {showAnswer ? 'Hide Answer' : 'Show Answer'}
+              {showAnswer ? 'Hide Answer' : '답'}
             </span>
           </button>
           

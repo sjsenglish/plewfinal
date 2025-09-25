@@ -193,9 +193,9 @@ const SubscriptionPlansPage = () => {
                   textDecoration: 'none',
                   borderBottom: '1px solid #faa61a'
                 }}>
-                  sign in
+                  로그인
                 </a>
-                {' '}to subscribe to a plan
+                {' '}하세요
               </p>
             </div>
           </div>
@@ -459,7 +459,7 @@ const SubscriptionPlansPage = () => {
                 ) : plan.current ? (
                   'Current plan'
                 ) : !isLoggedIn ? (
-                  'Sign in to subscribe'
+                  '로그인 하세요'
                 ) : (
                   plan.buttonText
                 )}

@@ -1097,7 +1097,7 @@ export const ProfilePage = () => {
                             cursor: 'pointer'
                           }}
                         >
-                          Retake Quiz
+                          테스트 재시도 
                         </button>
                       </div>
                     </div>

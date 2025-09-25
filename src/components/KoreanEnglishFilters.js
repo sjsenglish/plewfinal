@@ -35,9 +35,8 @@ const KoreanEnglishFilters = ({ onFiltersChange, currentFilters }) => {
       label: '문제 유형',
       options: [
         { id: '대의 파악', label: '대의 파악', value: 'questionSkill:"대의 파악"' },
-        { id: '도표', label: '도표', value: 'questionSkill:도표' },
         { id: '내용 일치', label: '내용 일치', value: 'questionSkill:"내용 일치"' },
-        { id: '안내문', label: '안내문', value: 'questionSkill:안내문' },
+        { id: '안내문', label: '안내문', value: 'questionSkill:"안내문"' },
         { id: '어법', label: '어법', value: 'questionSkill:어법' },
         { id: '어휘', label: '어휘', value: 'questionSkill:어휘' },
         { id: '빈칸 추론', label: '빈칸 추론', value: 'questionSkill:"빈칸 추론"' },

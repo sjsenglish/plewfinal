@@ -303,7 +303,7 @@ try {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Create a password"
+              placeholder="비밀번호를 입력하세요"
               required
               style={{
                 width: '100%',
@@ -330,7 +330,6 @@ try {
               color: COLORS.gray,
               margin: '4px 0 0 0'
             }}>
-              Password must be at least 6 characters
             </p>
           </div>
 
@@ -342,13 +341,13 @@ try {
               color: '#111827',
               marginBottom: '8px'
             }}>
-              Confirm Password
+              비밀번호 재입력
             </label>
             <input
-              type="password"
+              type="비밀번호"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm your password"
+              placeholder="비밀번호 재입력"
               required
               style={{
                 width: '100%',
@@ -380,7 +379,7 @@ try {
                 color: COLORS.error,
                 margin: '4px 0 0 0'
               }}>
-                Passwords do not match
+                비밀번호 불일치 
               </p>
             )}
           </div>

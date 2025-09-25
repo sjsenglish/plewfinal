@@ -152,7 +152,7 @@ const renderOverview = () => (
               e.target.style.boxShadow = '0 4px 16px rgba(102, 126, 234, 0.3)';
             }}
           >
-            ✨ Upgrade to Premium
+            ✨ 업그레이드
           </button>
         )}
       </div>

@@ -977,7 +977,7 @@ const LearnTab = () => {
           marginLeft: 'auto',
           marginRight: 'auto'
         }}>
-          내 레벨을 선택하면 학습 자료들을 볼 수 있어요. 
+          원하는 레벨을 선택하면 학습 자료들을 볼 수 있어요. 
         </p>
       </div>
 
@@ -1098,7 +1098,6 @@ const LearnTab = () => {
               color: COLORS.gray,
               margin: '0'
             }}>
-              No {String(selectedLevel)} level question packs found. Try a different difficulty level.
             </p>
           </div>
         )}
@@ -1170,7 +1169,6 @@ const LearnTab = () => {
               color: COLORS.gray,
               margin: '0'
             }}>
-              No {String(selectedLevel)} level videos found. Try a different difficulty level.
             </p>
           </div>
         )}

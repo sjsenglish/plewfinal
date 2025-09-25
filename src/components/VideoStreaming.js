@@ -229,7 +229,7 @@ const VideoStreaming = () => {
                       </div>
                       {!isPaidUser && (
                         <div className="subscription-notice">
-                          <span>{isGuest ? 'Sign up to watch' : 'Subscription required'}</span>
+                          <span>{isGuest ? '로그인 후 시청' : 'Subscription required'}</span>
                         </div>
                       )}
                     </div>
