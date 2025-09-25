@@ -7,6 +7,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { safeString, ensureRenderSafe } from './utils/safeRender';
 
 import { StripeProvider } from './contexts/StripeContext';
+import { usePaywall } from './hooks/usePaywall';
 // Feature flags removed - all features now enabled for all users
 
 // Import components
@@ -584,14 +585,14 @@ const buildAlgoliaFilters = (filters) => {
                   <Configure 
                     key={`filters-${currentSubject}-${Date.now()}`}
                     filters={filters || ''} 
-                    hitsPerPage={2}
+                    hitsPerPage={getHitsPerPage()}
                   />
                 );
               } catch (error) {
                 console.warn('Error configuring Algolia filters:', error);
                 return <Configure 
                   key={`filters-fallback-${currentSubject}`} 
-                  hitsPerPage={2}
+                  hitsPerPage={getHitsPerPage()}
                 />;
               }
             })()}
@@ -771,6 +772,15 @@ function App() {
   const [authLoading, setAuthLoading] = useState(true);
   const [bannerText, setBannerText] = useState('');
   const [appError, setAppError] = useState(null);
+
+  // Paywall hook for subscription status
+  const { isPaidUser, isLoggedIn } = usePaywall();
+
+  // Determine hits per page based on user status
+  const getHitsPerPage = () => {
+    // Premium/paid users get 12 results, free users (logged in or out) get 2
+    return isPaidUser ? 12 : 2;
+  };
 
   // Global error handler
   useEffect(() => {
