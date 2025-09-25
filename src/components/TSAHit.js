@@ -1,26 +1,13 @@
-// Modern TSAHit.js - Enhanced with video usage limits
-import React, { useState, useEffect, useCallback } from 'react';
+// Modern TSAHit.js - Unrestricted video access
+import React, { useState } from 'react';
 import './Hit.css';
 import VideoPopup from './VideoPopup';
-import VideoLimitModal from './VideoLimitModal';
-import { checkVideoAccess, incrementVideoUsage } from '../services/videoUsageService';
-import { getAuth } from 'firebase/auth';
-import { usePaywall } from '../hooks/usePaywall';
 import { convertFirebaseStorageUrl } from '../utils/urlUtils';
 
 const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
-  const [showVideoLimitModal, setShowVideoLimitModal] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [videoUsage, setVideoUsage] = useState(null);
-  const [checkingVideoAccess, setCheckingVideoAccess] = useState(false);
-
-  const auth = getAuth();
-  const user = auth.currentUser;
-  
-  // Get paywall info to check if user is paid
-  const { isPaidUser } = usePaywall();
 
   // Extract data from the hit
   const questionNumber = hit.question_number || hit.id || '';
@@ -45,25 +32,6 @@ const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
   // Handle video - try multiple possible field names
   const videoUrl = hit.solution_video || hit.videoSolutionLink || hit.video_solution_link || '';
 
-  // Load video usage on component mount
-  useEffect(() => {
-    if (user && videoUrl) {
-      loadVideoUsage();
-    }
-  }, [user?.uid, videoUrl, isPaidUser]); // Use user.uid instead of user object
-
-  const loadVideoUsage = useCallback(async () => {
-    if (!user) return;
-    
-    try {
-      const accessResult = await checkVideoAccess(user.uid, isPaidUser);
-      if (accessResult.success) {
-        setVideoUsage(accessResult.usage);
-      }
-    } catch (error) {
-      console.error('Error loading video usage:', error);
-    }
-  }, [user?.uid, isPaidUser]);
 
   // Convert Firebase Storage URLs to direct URLs if needed
   const getImageUrl = (url) => {
@@ -81,55 +49,14 @@ const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
     }, 150);
   };
 
-  // Handle video button click
-  const handleVideoClick = async (e) => {
+  // Handle video button click - unrestricted access
+  const handleVideoClick = (e) => {
     e.preventDefault();
-    
-    if (!user) {
-      // Redirect to login if not logged in
-      window.location.href = '/login';
-      return;
-    }
-
-    setCheckingVideoAccess(true);
-
-    try {
-      const accessResult = await checkVideoAccess(user.uid, isPaidUser);
-      
-      if (!accessResult.success) {
-        console.error('Error checking video access:', accessResult.error);
-        alert('Unable to check video access. Please try again.');
-        return;
-      }
-
-      if (accessResult.canWatch) {
-        // User can watch video - increment usage and show video
-        if (!isPaidUser) {
-          const incrementResult = await incrementVideoUsage(user.uid);
-          if (incrementResult.success) {
-            setVideoUsage(incrementResult.data);
-          }
-        }
-        setShowVideo(true);
-      } else {
-        // User has reached limit - show limit modal
-        setVideoUsage(accessResult.usage);
-        setShowVideoLimitModal(true);
-      }
-    } catch (error) {
-      console.error('Error handling video access:', error);
-      alert('Unable to check video access. Please try again.');
-    } finally {
-      setCheckingVideoAccess(false);
-    }
+    setShowVideo(true);
   };
 
   const closeVideo = () => {
     setShowVideo(false);
-  };
-
-  const closeLimitModal = () => {
-    setShowVideoLimitModal(false);
   };
 
   // Check if an option is the correct one by comparing its ID with correctAnswer
@@ -140,24 +67,6 @@ const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
   // Find the correct option object
   const getCorrectOption = () => {
     return options.find((option) => option.id === correctAnswer);
-  };
-
-  // Get video button display text
-  const getVideoButtonText = () => {
-    if (checkingVideoAccess) return 'Checking...';
-    if (!user) return 'Log in to Watch';
-    if (isPaidUser) return 'Video Solution';
-    if (videoUsage && videoUsage.remaining === 0) return 'Daily Limit Reached';
-    if (videoUsage) return `Video Solution (${videoUsage.remaining} left today)`;
-    return 'Video Solution';
-  };
-
-  // Get video button disabled state
-  const isVideoButtonDisabled = () => {
-    if (checkingVideoAccess) return true;
-    if (!user) return false; // Will redirect to login
-    if (isPaidUser) return false; // Unlimited access
-    return videoUsage && videoUsage.remaining === 0;
   };
 
   return (
@@ -240,13 +149,12 @@ const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
         <div className="tsa-hit-actions">
           {videoUrl && videoUrl !== '' && (
             <button 
-              className={`tsa-hit-button video-button ${isVideoButtonDisabled() ? 'disabled' : ''}`}
+              className="tsa-hit-button video-button"
               onClick={handleVideoClick}
-              disabled={isVideoButtonDisabled()}
               aria-label="Watch video solution"
               data-action="video-solution"
             >
-              <span>{getVideoButtonText()}</span>
+              <span>Watch Video Solution</span>
             </button>
           )}
 
@@ -275,13 +183,6 @@ const TSAHit = ({ hit, isBookmarked, toggleBookmark, isLoggedIn }) => {
 
       {/* Video popup */}
       {showVideo && <VideoPopup videoUrl={videoUrl} onClose={closeVideo} />}
-      
-      {/* Video limit modal */}
-      <VideoLimitModal 
-        isOpen={showVideoLimitModal}
-        onClose={closeLimitModal}
-        usageInfo={videoUsage}
-      />
     </div>
   );
 };

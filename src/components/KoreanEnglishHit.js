@@ -1,19 +1,9 @@
 import React, { useState } from 'react';
-import { usePaywall } from '../hooks/usePaywall';
-import { checkVideoAccess, incrementVideoUsage, incrementGuestVideoUsage } from '../services/videoUsageService';
-import VideoLimitModal from './VideoLimitModal';
-import { getAuth } from 'firebase/auth';
 import './KoreanEnglishHit.css';
 
 const KoreanEnglishHit = ({ hit }) => {
-  const { checkUsage, isPaidUser, isGuest } = usePaywall();
   const [showAnswer, setShowAnswer] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
-  const [showVideoModal, setShowVideoModal] = useState(false);
-  const [videoUsageInfo, setVideoUsageInfo] = useState(null);
-  
-  const auth = getAuth();
-  const user = auth.currentUser;
 
   // Early return if hit is undefined or null
   if (!hit) {
@@ -103,46 +93,12 @@ const KoreanEnglishHit = ({ hit }) => {
     }
   };
 
-  // Handle video solution watching
-  const watchVideoSolution = async () => {
+  // Handle video solution watching - unrestricted access for all users
+  const watchVideoSolution = () => {
     if (!videoSolutionLink) return;
     
-    try {
-      // Check if user can watch videos
-      const accessResult = await checkVideoAccess(user?.uid, isPaidUser);
-      
-      if (!accessResult.success) {
-        console.error('Error checking video access:', accessResult.error);
-        return;
-      }
-      
-      if (!accessResult.canWatch) {
-        // Show limit modal
-        setVideoUsageInfo(accessResult.usage);
-        setShowVideoModal(true);
-        return;
-      }
-      
-      // User can watch - increment usage counter
-      if (isPaidUser) {
-        // Paid users - increment Firebase counter if logged in
-        if (user?.uid) {
-          await incrementVideoUsage(user.uid);
-        }
-      } else {
-        // Free/guest users - increment localStorage counter
-        if (user?.uid) {
-          await incrementVideoUsage(user.uid);
-        } else {
-          incrementGuestVideoUsage();
-        }
-      }
-      
-      // Open video in new tab/window
-      window.open(videoSolutionLink, '_blank');
-    } catch (error) {
-      console.error('Error handling video solution:', error);
-    }
+    // Open video in new tab/window - no restrictions
+    window.open(videoSolutionLink, '_blank');
   };
 
   return (
@@ -307,13 +263,11 @@ const KoreanEnglishHit = ({ hit }) => {
       {videoSolutionLink && (
         <div className="video-solution-section">
           <button 
-            className={`toggle-button video-solution-toggle ${!isPaidUser && isGuest ? 'limited' : (!isPaidUser ? 'locked' : '')}`}
+            className="toggle-button video-solution-toggle"
             onClick={watchVideoSolution}
             data-action="video-solution"
           >
-            {!isPaidUser && isGuest ? '📺 Watch Video Solution (Limited)' : 
-             !isPaidUser ? '🔒 Video Solution (Subscription Required)' : 
-             '📺 Watch Video Solution'}
+            📺 Watch Video Solution
           </button>
         </div>
       )}
@@ -349,12 +303,6 @@ const KoreanEnglishHit = ({ hit }) => {
         </button>
       </div>
 
-      {/* Video Limit Modal */}
-      <VideoLimitModal
-        isOpen={showVideoModal}
-        onClose={() => setShowVideoModal(false)}
-        usageInfo={videoUsageInfo}
-      />
     </div>
   );
 };
