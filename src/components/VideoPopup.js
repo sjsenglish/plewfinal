@@ -72,11 +72,6 @@ const VideoPopup = ({ videoUrl, onClose }) => {
               title="Video Solution"
               controls
               autoPlay
-              style={{
-                width: '100%',
-                height: '100%',
-                borderRadius: '8px'
-              }}
               onError={(e) => {
                 console.error('Video loading error:', e);
                 e.target.style.display = 'none';
