@@ -5,6 +5,7 @@ import { InstantSearch, Stats, Hits, Configure } from 'react-instantsearch';
 import './firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { safeString, ensureRenderSafe } from './utils/safeRender';
+import { ensureAdminAccess } from './utils/ensureAdminAccess';
 
 import { StripeProvider } from './contexts/StripeContext';
 import { usePaywall } from './hooks/usePaywall';
@@ -851,9 +852,15 @@ function App() {
   useEffect(() => {
     try {
       const auth = getAuth();
-      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
         try {
           setUser(currentUser);
+          
+          // Ensure admin users have proper access in Firebase
+          if (currentUser) {
+            await ensureAdminAccess(currentUser);
+          }
+          
           setAuthLoading(false);
         } catch (error) {
           console.error('Error setting user state:', error);

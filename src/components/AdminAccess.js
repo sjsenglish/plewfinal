@@ -11,7 +11,7 @@ const AdminAccess = () => {
   const auth = getAuth();
   const user = auth.currentUser;
   const navigate = useNavigate();
-  const { isAdmin, refreshSubscription } = usePaywall();
+  const { isAdmin, loading: paywallLoading, subscription } = usePaywall();
   
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
@@ -29,21 +29,32 @@ const AdminAccess = () => {
       return;
     }
     
-    const checkAdminAccess = async () => {
-      // Wait for paywall hook to load
-      setTimeout(() => {
-        if (!isAdmin) {
-          alert('Access denied. Admin privileges required.');
-          navigate('/');
-        } else {
-          setLoading(false);
-          fetchUsersWithAccess();
-        }
-      }, 1000);
-    };
+    // Wait for paywall hook to finish loading
+    if (paywallLoading) {
+      return;
+    }
     
-    checkAdminAccess();
-  }, [user, isAdmin, navigate]);
+    // Check admin access after paywall data is loaded
+    console.log('Checking admin access for:', user.email);
+    console.log('isAdmin from paywall:', isAdmin);
+    console.log('Subscription data:', subscription);
+    
+    if (!isAdmin) {
+      // Double-check with email
+      const adminEmails = ['sjahn101@gmail.com'];
+      if (adminEmails.includes(user.email?.toLowerCase())) {
+        console.log('User email is in admin list, granting access');
+        setLoading(false);
+        fetchUsersWithAccess();
+      } else {
+        alert('Access denied. Admin privileges required.');
+        navigate('/');
+      }
+    } else {
+      setLoading(false);
+      fetchUsersWithAccess();
+    }
+  }, [user, isAdmin, navigate, paywallLoading, subscription]);
 
   // Fetch all users with full access
   const fetchUsersWithAccess = async () => {

@@ -41,11 +41,15 @@ export const usePaywall = () => {
       // Check for admin email first
       const isAdminUser = isAdminEmail(user.email);
       
+      console.log('Checking admin status for:', user.email);
+      console.log('Is admin email?:', isAdminUser);
+      
       // Get actual subscription data for logged in users
       const response = await getUserSubscription(user.uid);
       
       if (isAdminUser) {
         // Admin user gets full access regardless of subscription
+        console.log('Granting admin access to:', user.email);
         setSubscription({
           status: 'active',
           plan: 'admin',
