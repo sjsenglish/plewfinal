@@ -30,6 +30,7 @@ const SuccessPage = () => {
         const subscriptionData = {
           status: 'active',
           plan: plan,
+          fullAccess: true, // Ensure full access is granted
           activatedAt: new Date(),
           updatedAt: new Date()
         };

@@ -7,7 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 
 // Color palette matching your design system
@@ -52,22 +52,50 @@ const SignUp = () => {
       // Step 2: Set display name
       await updateProfile(userCredential.user, { displayName: name });
 
-      // Step 3: Create Firestore document with subscription schema
-      const userDocRef = doc(db, 'users', userCredential.user.uid);
-      await setDoc(userDocRef, {
-        // Existing bookmark fields
-        tsaBookmarks: [],
-        plewBookmarks: [],
-
-        // New subscription fields
-        subscription: {
-          status: 'free', // 'free', 'active', 'canceled', 'past_due'
-          plan: null, // 'study', 'pro', or null
+      // Step 3: Check if user is on the allowlist for full access
+      let subscriptionData = {
+        status: 'free', // 'free', 'active', 'canceled', 'past_due'
+        plan: null, // 'study', 'pro', or null
+        stripeCustomerId: null,
+        stripeSubscriptionId: null,
+        currentPeriodEnd: null,
+        cancelAtPeriodEnd: false,
+      };
+      
+      // Check allowlist
+      const allowlistRef = doc(db, 'allowedEmails', email.replace(/\./g, '_'));
+      const allowlistDoc = await getDoc(allowlistRef);
+      
+      if (allowlistDoc.exists() && allowlistDoc.data().accessLevel === 'full') {
+        // User is on allowlist - grant full access
+        subscriptionData = {
+          status: 'active',
+          plan: 'admin_granted',
+          fullAccess: true,
+          paymentType: 'admin_grant',
+          grantedFrom: 'allowlist',
+          activatedAt: new Date().toISOString(),
           stripeCustomerId: null,
           stripeSubscriptionId: null,
           currentPeriodEnd: null,
           cancelAtPeriodEnd: false,
-        },
+        };
+        
+        console.log('User found on allowlist - granting full access');
+      }
+
+      // Step 4: Create Firestore document with subscription schema
+      const userDocRef = doc(db, 'users', userCredential.user.uid);
+      await setDoc(userDocRef, {
+        // Store email for admin search
+        email: email,
+        
+        // Existing bookmark fields
+        tsaBookmarks: [],
+        plewBookmarks: [],
+
+        // Subscription fields (either free or full access from allowlist)
+        subscription: subscriptionData,
 
         // Usage tracking for free tier limits
         usage: {
@@ -123,24 +151,55 @@ try {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
 
+      // Check if user is on the allowlist for full access
+      let subscriptionData = {
+        status: 'free',
+        plan: null,
+        stripeCustomerId: null,
+        stripeSubscriptionId: null,
+        currentPeriodEnd: null,
+        cancelAtPeriodEnd: false,
+      };
+      
+      const userEmail = userCredential.user.email;
+      if (userEmail) {
+        // Check allowlist
+        const allowlistRef = doc(db, 'allowedEmails', userEmail.replace(/\./g, '_'));
+        const allowlistDoc = await getDoc(allowlistRef);
+        
+        if (allowlistDoc.exists() && allowlistDoc.data().accessLevel === 'full') {
+          // User is on allowlist - grant full access
+          subscriptionData = {
+            status: 'active',
+            plan: 'admin_granted',
+            fullAccess: true,
+            paymentType: 'admin_grant',
+            grantedFrom: 'allowlist',
+            activatedAt: new Date().toISOString(),
+            stripeCustomerId: null,
+            stripeSubscriptionId: null,
+            currentPeriodEnd: null,
+            cancelAtPeriodEnd: false,
+          };
+          
+          console.log('Google user found on allowlist - granting full access');
+        }
+      }
+
       // Create user document in Firestore with subscription schema
       const userDocRef = doc(db, 'users', userCredential.user.uid);
       await setDoc(
         userDocRef,
         {
+          // Store email for admin search
+          email: userEmail || '',
+          
           // Existing bookmark fields
           tsaBookmarks: [],
           plewBookmarks: [],
 
-          // New subscription fields
-          subscription: {
-            status: 'free',
-            plan: null,
-            stripeCustomerId: null,
-            stripeSubscriptionId: null,
-            currentPeriodEnd: null,
-            cancelAtPeriodEnd: false,
-          },
+          // Subscription fields (either free or full access from allowlist)
+          subscription: subscriptionData,
 
           // Usage tracking for free tier limits
           usage: {

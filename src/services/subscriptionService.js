@@ -19,9 +19,15 @@ export const getUserSubscription = async (userId) => {
         console.log('subscriptionId:', userData.subscription.subscriptionId);
       }
       
+      // Ensure fullAccess is set correctly for active subscriptions
+      const subscription = userData.subscription || { status: 'free', plan: null };
+      if (subscription.status === 'active' && !subscription.fullAccess) {
+        subscription.fullAccess = true;
+      }
+      
       return {
         success: true,
-        subscription: userData.subscription || { status: 'free', plan: null },
+        subscription: subscription,
         usage: userData.usage || { questionsViewedToday: 0, questionPacksCreated: 0 },
         isAdmin: userData.isAdmin || false,
         role: userData.role || 'user',

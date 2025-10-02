@@ -42,7 +42,7 @@ export const usePaywall = () => {
       const isAdminUser = isAdminEmail(user.email);
       
       // Get actual subscription data for logged in users
-      const subscriptionData = await getUserSubscription(user.uid);
+      const response = await getUserSubscription(user.uid);
       
       if (isAdminUser) {
         // Admin user gets full access regardless of subscription
@@ -58,17 +58,60 @@ export const usePaywall = () => {
           questionPacksCreated: 0,
           unlimitedAccess: true 
         });
-      } else if (subscriptionData && (subscriptionData.status === 'active' || subscriptionData.isAdmin)) {
-        setSubscription({
-          ...subscriptionData,
-          fullAccess: true,
-          isAdmin: subscriptionData.isAdmin || false
+      } else if (response && response.success) {
+        // Extract the actual subscription data from the response
+        const subscriptionData = response.subscription;
+        const isAdmin = response.isAdmin || false;
+        
+        console.log('Subscription data from Firebase:', {
+          status: subscriptionData?.status,
+          plan: subscriptionData?.plan,
+          fullAccess: subscriptionData?.fullAccess,
+          isAdmin: isAdmin
         });
-        setUsage({ 
-          questionsViewedToday: 0, 
-          questionPacksCreated: 0,
-          unlimitedAccess: true 
-        });
+        
+        // Check if user has an active subscription
+        if (subscriptionData && subscriptionData.status === 'active') {
+          console.log('User has active subscription - granting full access');
+          setSubscription({
+            ...subscriptionData,
+            fullAccess: true,
+            isAdmin: isAdmin
+          });
+          setUsage({ 
+            questionsViewedToday: 0, 
+            questionPacksCreated: 0,
+            unlimitedAccess: true 
+          });
+        } else if (isAdmin) {
+          // Admin user detected through database
+          setSubscription({
+            status: 'active',
+            plan: 'admin',
+            fullAccess: true,
+            isAdmin: true,
+            role: response.role || 'admin'
+          });
+          setUsage({ 
+            questionsViewedToday: 0, 
+            questionPacksCreated: 0,
+            unlimitedAccess: true 
+          });
+        } else {
+          // Logged in but no active subscription - can interact with limited features
+          setSubscription({ 
+            status: subscriptionData?.status || 'inactive', 
+            plan: subscriptionData?.plan || 'free',
+            fullAccess: false,
+            isAdmin: false,
+            ...subscriptionData // Include any other subscription fields
+          });
+          setUsage({ 
+            questionsViewedToday: response.usage?.questionsViewedToday || 0, 
+            questionPacksCreated: response.usage?.questionPacksCreated || 0,
+            unlimitedAccess: false 
+          });
+        }
       } else {
         // Logged in but no active subscription - can interact with limited features
         setSubscription({ 
@@ -103,6 +146,19 @@ export const usePaywall = () => {
 
   useEffect(() => {
     loadSubscriptionData();
+  }, [user]);
+  
+  // Add an interval to refresh subscription data periodically
+  useEffect(() => {
+    if (!user) return;
+    
+    // Refresh subscription status every 30 seconds when user is logged in
+    const interval = setInterval(() => {
+      console.log('Refreshing subscription status...');
+      loadSubscriptionData();
+    }, 30000); // 30 seconds
+    
+    return () => clearInterval(interval);
   }, [user]);
 
   // Check if user has access to a specific feature

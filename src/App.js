@@ -48,6 +48,7 @@ import DemoMode from './components/DemoMode';
 import FeatureFlagDebug from './components/FeatureFlagDebug';
 // import EnhancedPersonalStatementGrader from './components/EnhancedPersonalStatementGrader'; // HIDDEN
 import DebugTest from './components/DebugTest';
+import AdminAccess from './components/AdminAccess';
 import AdminSetup from './components/AdminSetup';
 import AdminPackCreator from './components/AdminPackCreator';
 import WelcomePopup from './components/WelcomePopup';
@@ -1076,6 +1077,7 @@ function App() {
                   <Route path="/admin/setup" element={<AdminSetup />} />
                   <Route path="/submit-question" element={<SubmitQuestionForm />} />
                   <Route path="/admin/pack-creator" element={<AdminPackCreator />} />
+                  <Route path="/admin/access" element={<ProtectedRoute><AdminAccess /></ProtectedRoute>} />
                   <Route path="/debug" element={<DebugTest />} />
                 </Routes>
               </ErrorBoundary>
