@@ -1,17 +1,7 @@
-// /api/webhooks/stripe.js - Handle Stripe webhook events and update Firebase
 import Stripe from 'stripe';
-import { buffer } from 'micro';
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
 
-// Disable body parser to access raw body for Stripe signature verification
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-// Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Initialize Firebase
@@ -26,6 +16,13 @@ const firebaseConfig = {
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 const db = getFirestore(app);
+
+// Disable body parser to access raw body for Stripe signature verification
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 // Update user subscription in Firebase
 const updateUserSubscription = async (userId, subscriptionData) => {
@@ -79,34 +76,45 @@ const getUserIdFromMetadata = (stripeObject) => {
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).end('Method Not Allowed');
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  let buf;
   let event;
   
   try {
-    // Read the raw body as buffer for Stripe signature verification
-    buf = await buffer(req);
-  } catch (err) {
-    console.log(`❌ Error reading request body:`, err.message);
-    return res.status(400).send(`Error reading request body: ${err.message}`);
-  }
+    // Read raw body for Vercel serverless functions
+    const buf = await new Promise((resolve, reject) => {
+      const chunks = [];
+      req.on('data', chunk => chunks.push(chunk));
+      req.on('end', () => resolve(Buffer.concat(chunks)));
+      req.on('error', reject);
+    });
 
-  const sig = req.headers['stripe-signature'];
-  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    const signature = req.headers['stripe-signature'];
+    
+    if (!signature) {
+      console.error('❌ No Stripe signature found in headers');
+      return res.status(400).json({ error: 'No Stripe signature found' });
+    }
 
-  try {
-    // Use raw buffer for signature verification
-    event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
+    if (!process.env.STRIPE_WEBHOOK_SECRET) {
+      console.error('❌ STRIPE_WEBHOOK_SECRET not configured');
+      return res.status(500).json({ error: 'Webhook secret not configured' });
+    }
+    
+    event = stripe.webhooks.constructEvent(
+      buf,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
   } catch (err) {
-    console.log(`❌ Webhook signature verification failed:`, err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    console.error('❌ Webhook signature verification failed:', err.message);
+    return res.status(400).json({ error: `Webhook Error: ${err.message}` });
   }
 
   console.log(`✅ Webhook received: ${event.type}`);
 
+  // Handle the event
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
@@ -117,7 +125,7 @@ export default async function handler(req, res) {
         const userId = getUserIdFromMetadata(session);
         if (!userId) {
           console.error('❌ No user ID found in session metadata');
-          return res.status(400).send('No user ID in metadata');
+          return res.status(400).json({ error: 'No user ID in metadata' });
         }
 
         console.log('👤 Processing payment for user:', userId);
@@ -147,7 +155,7 @@ export default async function handler(req, res) {
           console.log(`🎉 Subscription activated for user ${userId}`);
         } else {
           console.error(`❌ Failed to activate subscription:`, result.error);
-          return res.status(500).send('Failed to update user subscription');
+          return res.status(500).json({ error: 'Failed to update user subscription' });
         }
 
         break;
@@ -257,6 +265,6 @@ export default async function handler(req, res) {
     res.status(200).json({ received: true });
   } catch (error) {
     console.error('❌ Error processing webhook:', error);
-    res.status(500).send('Webhook processing failed');
+    res.status(500).json({ error: 'Webhook processing failed' });
   }
 }
