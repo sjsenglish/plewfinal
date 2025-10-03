@@ -32,7 +32,6 @@ const SubscriptionPlansPage = () => {
       price: 20000,
       period: '월',
       priceId: 'price_1SEEyCRslRN77kT8VpdUsQbW',
-      paymentLink: 'https://buy.stripe.com/9B600leAr0Mreueg7b8EM03',
       description: 'Everything you need for exam preparation',
       features: [
         '옥스포드 영어에서 독점 제작하는 프리미엄 독해 문제들을 무제한 검색할 수 있습니다.',
@@ -59,11 +58,20 @@ const SubscriptionPlansPage = () => {
     setSelectedPlan(plan.id);
 
     try {
-      window.open(plan.paymentLink, '_blank');
+      console.log('🚀 Starting programmatic checkout for plan:', plan.id);
+      
+      const result = await createCheckoutSession();
+      
+      if (!result.success) {
+        alert(`Error: ${result.error}`);
+        setLoading(prev => ({ ...prev, [plan.id]: false }));
+        setSelectedPlan(null);
+      }
+      // createCheckoutSession will redirect to Stripe, so no need to reset loading here
+      
     } catch (error) {
-      console.error('Error opening payment link:', error);
-      alert('Unable to open payment page. Please try again.');
-    } finally {
+      console.error('Error starting checkout:', error);
+      alert('Unable to start checkout. Please try again.');
       setLoading(prev => ({ ...prev, [plan.id]: false }));
       setSelectedPlan(null);
     }

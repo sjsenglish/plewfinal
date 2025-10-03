@@ -1,7 +1,7 @@
-// src/services/checkoutService.js - Clean checkout service for single tier
+// src/services/checkoutService.js - Programmatic checkout service
 import { getAuth } from 'firebase/auth';
 
-// Create checkout session for Premium tier
+// Create checkout session for tier1 subscription
 export const createCheckoutSession = async () => {
   try {
     const auth = getAuth();
@@ -65,14 +65,6 @@ export const handleSuccessfulPayment = async (sessionId) => {
     // The webhook should handle subscription activation
     // This is just for user feedback
     console.log('ℹ️ Webhook should have processed this payment');
-
-    // Show success message
-    alert('🎉 Payment successful! Your Premium subscription is now active.');
-
-    // Redirect to main page after a delay
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 2000);
 
     return { success: true };
   } catch (error) {

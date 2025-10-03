@@ -1,4 +1,4 @@
-// /api/webhooks/stripe.js - Clean webhook handler for single tier payment system
+// /api/webhooks/stripe.js - Handle Stripe webhook events and update Firebase
 import Stripe from 'stripe';
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';

@@ -1,4 +1,4 @@
-// /api/create-checkout-session.js - Clean implementation for single tier payment
+// /api/create-checkout-session.js - Create Stripe checkout session with Firebase UID metadata
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -26,8 +26,8 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Payment system not configured' });
     }
 
-    if (!process.env.REACT_APP_STRIPE_TIER1_PRICE_ID) {
-      console.error('❌ REACT_APP_STRIPE_TIER1_PRICE_ID not configured');
+    if (!process.env.STRIPE_TIER1_PRICE_ID) {
+      console.error('❌ STRIPE_TIER1_PRICE_ID not configured');
       return res.status(500).json({ error: 'Price ID not configured' });
     }
 
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: process.env.REACT_APP_STRIPE_TIER1_PRICE_ID,
+          price: process.env.STRIPE_TIER1_PRICE_ID,
           quantity: 1,
         },
       ],

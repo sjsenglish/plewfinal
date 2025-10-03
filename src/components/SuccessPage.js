@@ -1,16 +1,19 @@
-// src/components/SuccessPage.js - Handle post-payment verification for Stripe payment links
+// src/components/SuccessPage.js - Handle post-payment success for programmatic checkout
 import React, { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { usePaywall } from '../hooks/usePaywall';
 
 const SuccessPage = () => {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState('verifying');
   const [message, setMessage] = useState('Verifying your payment...');
+  
   const auth = getAuth();
   const user = auth.currentUser;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { refreshSubscription } = usePaywall();
 
   useEffect(() => {
     const verifyPayment = async () => {
@@ -23,203 +26,208 @@ const SuccessPage = () => {
           return;
         }
 
-        // Get pending subscription info from sessionStorage
-        const pendingSubscription = sessionStorage.getItem('pendingSubscription');
+        // Get session ID from URL parameters
+        const sessionId = searchParams.get('session_id');
         
-        if (pendingSubscription) {
-          const subscriptionInfo = JSON.parse(pendingSubscription);
-          
-          // Check if the session is recent (within 1 hour)
-          const isRecentSession = (Date.now() - subscriptionInfo.timestamp) < (60 * 60 * 1000);
-          
-          if (isRecentSession && subscriptionInfo.userEmail === user.email) {
-            console.log('Matching payment by email for user:', user.email);
-            
-            // Call our API to match the payment by email
-            const response = await fetch('/api/match-payment-by-email', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email: user.email,
-                planType: 'tier1',
-              }),
-            });
-
-            if (response.ok) {
-              const result = await response.json();
-              console.log('Payment matched successfully:', result);
-              
-              setStatus('success');
-              setMessage('🎉 Payment successful! Your premium access has been activated.');
-              
-              // Clear the pending subscription
-              sessionStorage.removeItem('pendingSubscription');
-              
-              // Redirect to dashboard after 3 seconds
-              setTimeout(() => {
-                navigate('/');
-              }, 3000);
-            } else {
-              console.error('Failed to match payment');
-              setStatus('warning');
-              setMessage('Payment received, but we need to verify your account. Please contact support if access is not granted within 5 minutes.');
-            }
-          } else {
-            setStatus('warning');
-            setMessage('Session expired or email mismatch. Please contact support for assistance.');
-          }
-        } else {
-          // No pending subscription info, show generic success
-          setStatus('success');
-          setMessage('Thank you for your payment! If you don\'t see premium access within 5 minutes, please contact support.');
+        if (!sessionId) {
+          setStatus('error');
+          setMessage('Invalid payment session. Please contact support if you completed a payment.');
+          setLoading(false);
+          return;
         }
+
+        console.log('✅ Payment completed with session ID:', sessionId);
+
+        // Wait a moment for webhook to process
+        setTimeout(async () => {
+          // Refresh subscription data to check if webhook processed the payment
+          await refreshSubscription();
+          
+          setStatus('success');
+          setMessage('Payment successful! Your premium subscription is now active.');
+          setLoading(false);
+          
+          // Redirect to main page after showing success message
+          setTimeout(() => {
+            navigate('/', { replace: true });
+          }, 3000);
+        }, 2000);
 
       } catch (error) {
         console.error('Error verifying payment:', error);
         setStatus('error');
-        setMessage('There was an error verifying your payment. Please contact support.');
-      } finally {
+        setMessage('Unable to verify payment. Please contact support if you completed a payment.');
         setLoading(false);
       }
     };
 
-    // Wait a moment for potential webhook processing
-    const timer = setTimeout(verifyPayment, 2000);
-    return () => clearTimeout(timer);
-  }, [user, navigate]);
+    verifyPayment();
+  }, [user, searchParams, navigate, refreshSubscription]);
 
-  const handleContactSupport = () => {
-    // You can implement your support contact method here
-    alert('Please email support with your payment receipt for immediate assistance.');
+  const getStatusColor = () => {
+    switch (status) {
+      case 'success':
+        return '#10b981';
+      case 'error':
+        return '#ef4444';
+      default:
+        return '#6366f1';
+    }
   };
 
-  const handleGoHome = () => {
-    navigate('/');
+  const getStatusIcon = () => {
+    switch (status) {
+      case 'success':
+        return (
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="24" r="20" fill="currentColor" fillOpacity="0.1"/>
+            <path d="M16 24l6 6 12-12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        );
+      case 'error':
+        return (
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="24" r="20" fill="currentColor" fillOpacity="0.1"/>
+            <path d="M16 16l16 16M32 16l-16 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        );
+      default:
+        return (
+          <div style={{
+            width: '48px',
+            height: '48px',
+            border: '3px solid rgba(99, 102, 241, 0.2)',
+            borderTop: '3px solid #6366f1',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite'
+          }} />
+        );
+    }
   };
-
-  if (loading) {
-    return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        padding: '2rem',
-        textAlign: 'center',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-      }}>
-        <div style={{
-          width: '50px',
-          height: '50px',
-          border: '4px solid #f3f3f3',
-          borderTop: '4px solid #6366f1',
-          borderRadius: '50%',
-          animation: 'spin 1s linear infinite',
-          marginBottom: '2rem'
-        }} />
-        <h2 style={{ color: '#1f2937', marginBottom: '1rem' }}>{message}</h2>
-        <p style={{ color: '#6b7280' }}>Please wait while we confirm your subscription...</p>
-      </div>
-    );
-  }
 
   return (
     <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#0a0a0a',
+      color: '#ffffff',
       display: 'flex',
-      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: '100vh',
-      padding: '2rem',
-      textAlign: 'center',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
     }}>
       <div style={{
-        maxWidth: '500px',
-        padding: '2rem',
-        backgroundColor: 'white',
-        borderRadius: '12px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        border: `2px solid ${status === 'success' ? '#10b981' : status === 'warning' ? '#f59e0b' : '#ef4444'}`
+        maxWidth: '480px',
+        width: '100%',
+        padding: '48px 24px',
+        textAlign: 'center'
       }}>
         <div style={{
-          fontSize: '4rem',
-          marginBottom: '1rem'
+          color: getStatusColor(),
+          marginBottom: '24px',
+          display: 'flex',
+          justifyContent: 'center'
         }}>
-          {status === 'success' ? '✅' : status === 'warning' ? '⚠️' : '❌'}
+          {getStatusIcon()}
         </div>
-        
+
         <h1 style={{
-          color: status === 'success' ? '#065f46' : status === 'warning' ? '#92400e' : '#991b1b',
-          marginBottom: '1rem',
-          fontSize: '1.5rem'
+          fontSize: '32px',
+          fontWeight: '600',
+          margin: '0 0 16px 0',
+          letterSpacing: '-0.5px'
         }}>
           {status === 'success' ? 'Payment Successful!' : 
-           status === 'warning' ? 'Payment Processing' : 
-           'Verification Error'}
+           status === 'error' ? 'Payment Issue' : 
+           'Processing Payment...'}
         </h1>
-        
+
         <p style={{
-          color: '#4b5563',
-          marginBottom: '2rem',
-          lineHeight: '1.6'
+          fontSize: '16px',
+          color: 'rgba(255, 255, 255, 0.7)',
+          margin: '0 0 32px 0',
+          lineHeight: '1.5'
         }}>
           {message}
         </p>
-        
-        <div style={{
-          display: 'flex',
-          gap: '1rem',
-          justifyContent: 'center',
-          flexWrap: 'wrap'
-        }}>
-          <button
-            onClick={handleGoHome}
-            style={{
-              padding: '0.75rem 1.5rem',
-              backgroundColor: '#6366f1',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '1rem',
-              cursor: 'pointer',
-              fontWeight: '500'
-            }}
-          >
-            Go to Home
-          </button>
-          
-          {status !== 'success' && (
-            <button
-              onClick={handleContactSupport}
+
+        {status === 'success' && (
+          <div style={{
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            border: '1px solid rgba(16, 185, 129, 0.2)',
+            borderRadius: '12px',
+            padding: '16px',
+            marginBottom: '24px'
+          }}>
+            <p style={{
+              fontSize: '14px',
+              color: '#10b981',
+              margin: 0
+            }}>
+              You now have access to all premium features. Redirecting you to the main page...
+            </p>
+          </div>
+        )}
+
+        {status === 'error' && (
+          <div style={{
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid rgba(239, 68, 68, 0.2)',
+            borderRadius: '12px',
+            padding: '16px',
+            marginBottom: '24px'
+          }}>
+            <p style={{
+              fontSize: '14px',
+              color: '#ef4444',
+              margin: '0 0 12px 0'
+            }}>
+              If you completed a payment, please contact support:
+            </p>
+            <a 
+              href="mailto:team@plew.co.kr"
               style={{
-                padding: '0.75rem 1.5rem',
-                backgroundColor: '#f3f4f6',
-                color: '#374151',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                cursor: 'pointer',
+                color: '#ef4444',
+                textDecoration: 'none',
+                fontSize: '14px',
                 fontWeight: '500'
               }}
             >
-              Contact Support
-            </button>
-          )}
-        </div>
+              team@plew.co.kr
+            </a>
+          </div>
+        )}
+
+        <button
+          onClick={() => navigate('/', { replace: true })}
+          style={{
+            padding: '12px 24px',
+            backgroundColor: '#6366f1',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = '#5046e4';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = '#6366f1';
+          }}
+        >
+          Return to Home
+        </button>
       </div>
-      
-      <style>
-        {`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}
-      </style>
+
+      {/* CSS for animations */}
+      <style jsx>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
