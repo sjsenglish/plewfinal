@@ -57,29 +57,26 @@ const SubscriptionPlansModal = ({ onClose }) => {
     setSelectedPlan(plan.id);
 
     try {
-      console.log('Creating checkout session for plan:', plan.id);
-      console.log('User ID:', user.uid);
-      console.log('User Email:', user.email);
-      console.log('Price ID:', plan.priceId);
+      console.log('Preparing payment for user:', user.uid, user.email);
       
-      // Use the checkout service to properly pass user data to Stripe
-      const result = await createCheckoutSession(
-        plan.priceId,
-        user.uid,
-        user.email,
-        false // not a trial
-      );
+      // Store user info in sessionStorage for post-payment verification
+      sessionStorage.setItem('pendingSubscription', JSON.stringify({
+        userId: user.uid,
+        userEmail: user.email,
+        planType: 'tier1',
+        timestamp: Date.now()
+      }));
       
-      if (!result.success) {
-        throw new Error(result.error || 'Failed to create checkout session');
-      }
+      // Open Stripe payment link
+      const paymentUrl = 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01';
+      console.log('Opening payment link:', paymentUrl);
       
-      // The createCheckoutSession function handles the redirect automatically
-      console.log('Checkout session created successfully');
+      // Open in same window to maintain session
+      window.location.href = paymentUrl;
       
     } catch (error) {
-      console.error('Error creating checkout session:', error);
-      alert(`결제 페이지를 열 수 없습니다: ${error.message}`);
+      console.error('Error opening payment link:', error);
+      alert('결제 페이지를 열 수 없습니다. 다시 시도해주세요.');
       setLoading(prev => ({ ...prev, [plan.id]: false }));
       setSelectedPlan(null);
     }

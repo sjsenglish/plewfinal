@@ -1,9 +1,9 @@
-// src/components/SuccessPage.js - Handle post-payment verification for Stripe payment links
+// src/components/PaymentSuccess.js - Handle post-payment verification
 import React, { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-const SuccessPage = () => {
+const PaymentSuccess = () => {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState('verifying');
   const [message, setMessage] = useState('Verifying your payment...');
@@ -224,4 +224,4 @@ const SuccessPage = () => {
   );
 };
 
-export default SuccessPage;
+export default PaymentSuccess;

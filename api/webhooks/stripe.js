@@ -1,7 +1,7 @@
-// /api/webhooks/stripe.js - Complete version with both subscription and one-time payments
+// /api/webhooks/stripe.js - Updated for payment link support with email matching
 import Stripe from 'stripe';
 import { initializeApp, getApps } from 'firebase/app';
-import { getFirestore, doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, updateDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -19,42 +19,65 @@ const firebaseConfig = {
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 const db = getFirestore(app);
 
-// Update user subscription in Firebase
-const updateUserSubscription = async (userId, subscriptionData) => {
+// Find user by email and update subscription
+const updateUserByEmail = async (email, subscriptionData) => {
   try {
-    const userDocRef = doc(db, 'users', userId);
+    console.log('🔍 Looking for user with email:', email);
     
-    // Check if user document exists
-    const userDoc = await getDoc(userDocRef);
-    
-    if (userDoc.exists()) {
-      // Update existing user
-      await updateDoc(userDocRef, {
-        subscription: subscriptionData,
-        updatedAt: new Date(),
-      });
-    } else {
-      // Create new user document
-      await setDoc(userDocRef, {
-        subscription: subscriptionData,
-        usage: { 
-          questionsViewedToday: 0, 
-          questionPacksCreated: 0,
-          lastResetDate: new Date().toISOString().split('T')[0]
-        },
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
+    // Find user by email in Firebase
+    const usersRef = collection(db, 'users');
+    const q = query(usersRef, where('email', '==', email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.log('❌ No user found with email:', email);
+      // Store payment info for future matching
+      await storeUnmatchedPayment(email, subscriptionData);
+      return { success: false, error: 'User not found' };
     }
-    
-    return { success: true };
+
+    // Get the first matching user
+    const userDoc = querySnapshot.docs[0];
+    const userId = userDoc.id;
+
+    console.log('✅ Found user:', userId, 'for email:', email);
+
+    // Update user subscription
+    const userDocRef = doc(db, 'users', userId);
+    await updateDoc(userDocRef, {
+      subscription: {
+        ...subscriptionData,
+        fullAccess: true, // Ensure full access is granted
+      },
+      updatedAt: new Date(),
+    });
+
+    console.log('✅ Subscription activated for user:', userId);
+    return { success: true, userId };
+
   } catch (error) {
-    console.error('Error updating subscription:', error);
+    console.error('❌ Error updating user by email:', error);
     return { success: false, error: error.message };
   }
 };
 
-// Get user ID from Stripe session or payment intent
+// Store payment for users who haven't signed up yet
+const storeUnmatchedPayment = async (email, subscriptionData) => {
+  try {
+    const unmatchedPaymentRef = doc(db, 'unmatchedPayments', email.replace(/\./g, '_'));
+    await setDoc(unmatchedPaymentRef, {
+      email: email,
+      subscription: subscriptionData,
+      createdAt: new Date().toISOString(),
+      matched: false,
+    });
+    console.log('📝 Stored unmatched payment for:', email);
+  } catch (error) {
+    console.error('❌ Error storing unmatched payment:', error);
+  }
+};
+
+// Get user ID from Stripe session or payment intent metadata
 const getUserIdFromMetadata = (stripeObject) => {
   if (stripeObject.metadata && stripeObject.metadata.userId) {
     return stripeObject.metadata.userId;
@@ -62,36 +85,24 @@ const getUserIdFromMetadata = (stripeObject) => {
   return null;
 };
 
-// Determine plan type from metadata or session mode
-const getPlanFromObject = (stripeObject) => {
-  // Check metadata first
-  if (stripeObject.metadata && stripeObject.metadata.planType) {
-    console.log('✅ Found plan type in metadata:', stripeObject.metadata.planType);
-    return stripeObject.metadata.planType;
+// Get customer email from Stripe objects
+const getCustomerEmail = async (stripeObject) => {
+  // Check if email is directly available
+  if (stripeObject.customer_email) {
+    return stripeObject.customer_email;
   }
   
-  // For checkout sessions, we can use mode to help determine plan type
-  // Pro plan is one-time payment, tier1/study plans are subscriptions
-  if (stripeObject.mode) {
-    if (stripeObject.mode === 'payment') {
-      // One-time payment is likely Pro plan (Full Access 2025)
-      console.log('✅ Detected one-time payment mode, assuming pro plan');
-      return 'pro';
-    } else if (stripeObject.mode === 'subscription') {
-      // Subscription could be tier1 or study plan
-      // Since tier1 is the main premium plan, default to tier1
-      console.log('✅ Detected subscription mode, defaulting to tier1 plan');
-      return 'tier1';
+  // If customer ID is available, fetch customer details
+  if (stripeObject.customer) {
+    try {
+      const customer = await stripe.customers.retrieve(stripeObject.customer);
+      return customer.email;
+    } catch (error) {
+      console.error('Error fetching customer:', error);
     }
   }
   
-  // Default fallback - log this case for debugging
-  console.log('⚠️ Using fallback plan type "tier1"');
-  console.log('Session mode:', stripeObject.mode);
-  console.log('Session metadata:', stripeObject.metadata);
-  console.log('Available keys:', Object.keys(stripeObject));
-  
-  return 'tier1';
+  return null;
 };
 
 export default async function handler(req, res) {
@@ -121,42 +132,56 @@ export default async function handler(req, res) {
         const session = event.data.object;
         console.log('💳 Checkout session completed:', session.id);
 
-        // Get user ID from metadata
+        // First try to get user ID from metadata (programmatic checkout)
         const userId = getUserIdFromMetadata(session);
-        if (!userId) {
-          console.error('❌ Could not determine user ID for session:', session.id);
-          return res.status(400).send('Could not determine user ID');
-        }
+        
+        if (userId) {
+          console.log('✅ Found userId in metadata:', userId);
+          // Handle programmatic checkout (existing logic)
+          const subscriptionData = {
+            status: 'active',
+            plan: 'tier1',
+            fullAccess: true,
+            stripeSessionId: session.id,
+            stripeCustomerId: session.customer,
+            paymentType: session.mode === 'subscription' ? 'recurring' : 'one_time',
+            activatedAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
 
-        // Get plan type from metadata
-        const planType = getPlanFromObject(session);
+          const userDocRef = doc(db, 'users', userId);
+          await updateDoc(userDocRef, {
+            subscription: subscriptionData,
+            updatedAt: new Date(),
+          });
 
-        // Create subscription data
-        const subscriptionData = {
-          status: 'active',
-          plan: planType,
-          stripeSessionId: session.id,
-          stripeCustomerId: session.customer,
-          paymentType: session.mode === 'subscription' ? 'recurring' : 'one_time',
-          activatedAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-
-        // If it's a subscription, add subscription ID
-        if (session.subscription) {
-          subscriptionData.stripeSubscriptionId = session.subscription;
-          console.log('✅ Added stripeSubscriptionId:', session.subscription);
+          console.log('✅ Subscription activated for user:', userId);
         } else {
-          console.log('ℹ️ No subscription ID found in session (likely one-time payment)');
-        }
+          console.log('🔍 No userId in metadata, trying email matching');
+          // Handle payment link checkout - match by email
+          const customerEmail = await getCustomerEmail(session);
+          
+          if (customerEmail) {
+            const subscriptionData = {
+              status: 'active',
+              plan: 'tier1',
+              fullAccess: true,
+              stripeSessionId: session.id,
+              stripeCustomerId: session.customer,
+              paymentType: 'stripe_link',
+              activatedAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              activatedByEmail: true,
+            };
 
-        const result = await updateUserSubscription(userId, subscriptionData);
-
-        if (result.success) {
-          console.log(`✅ Subscription activated for user ${userId} with plan ${planType} (${session.mode})`);
-        } else {
-          console.error(`❌ Failed to activate subscription:`, result.error);
-          return res.status(500).send('Failed to update subscription');
+            const result = await updateUserByEmail(customerEmail, subscriptionData);
+            
+            if (!result.success) {
+              console.log('⚠️ Could not match payment to existing user');
+            }
+          } else {
+            console.error('❌ No customer email found in session');
+          }
         }
 
         break;
@@ -166,35 +191,30 @@ export default async function handler(req, res) {
         const paymentIntent = event.data.object;
         console.log('💰 Payment intent succeeded:', paymentIntent.id);
 
-        // Get user ID from metadata
+        // Try metadata first
         const userId = getUserIdFromMetadata(paymentIntent);
-        if (!userId) {
-          console.log('ℹ️ No user ID in payment intent metadata, skipping');
-          break;
-        }
-
-        // Get plan type from metadata
-        const planType = getPlanFromObject(paymentIntent);
-
-        console.log('💰 One-time payment succeeded for user:', userId, 'plan:', planType);
         
-        // Update subscription for one-time payment
-        const subscriptionData = {
-          status: 'active',
-          plan: planType,
-          paymentType: 'one_time',
-          stripePaymentIntentId: paymentIntent.id,
-          activatedAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
+        if (userId) {
+          // Handle programmatic payment
+          const subscriptionData = {
+            status: 'active',
+            plan: 'tier1',
+            fullAccess: true,
+            paymentType: 'one_time',
+            stripePaymentIntentId: paymentIntent.id,
+            activatedAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
 
-        const result = await updateUserSubscription(userId, subscriptionData);
-        
-        if (result.success) {
-          console.log(`✅ One-time payment processed for user ${userId}`);
+          const userDocRef = doc(db, 'users', userId);
+          await updateDoc(userDocRef, {
+            subscription: subscriptionData,
+            updatedAt: new Date(),
+          });
+
+          console.log('✅ One-time payment processed for user:', userId);
         } else {
-          console.error(`❌ Failed to process one-time payment:`, result.error);
-          return res.status(500).send('Failed to update subscription');
+          console.log('ℹ️ No user ID in payment intent metadata');
         }
 
         break;
@@ -212,21 +232,32 @@ export default async function handler(req, res) {
           if (customer.metadata && customer.metadata.userId) {
             const userId = customer.metadata.userId;
             
-            // Update subscription renewal
             const subscriptionData = {
               status: 'active',
+              fullAccess: true,
               lastPayment: new Date().toISOString(),
               stripeInvoiceId: invoice.id,
               updatedAt: new Date().toISOString(),
             };
 
-            const result = await updateUserSubscription(userId, subscriptionData);
+            const userDocRef = doc(db, 'users', userId);
+            await updateDoc(userDocRef, {
+              subscription: subscriptionData,
+              updatedAt: new Date(),
+            });
             
-            if (result.success) {
-              console.log(`✅ Subscription renewed for user ${userId}`);
-            } else {
-              console.error(`❌ Failed to update subscription renewal:`, result.error);
-            }
+            console.log(`✅ Subscription renewed for user ${userId}`);
+          } else if (customer.email) {
+            // Try to match by email for payment link subscriptions
+            const subscriptionData = {
+              status: 'active',
+              fullAccess: true,
+              lastPayment: new Date().toISOString(),
+              stripeInvoiceId: invoice.id,
+              updatedAt: new Date().toISOString(),
+            };
+
+            await updateUserByEmail(customer.email, subscriptionData);
           }
         }
         break;
@@ -236,29 +267,25 @@ export default async function handler(req, res) {
         const invoice = event.data.object;
         console.log('❌ Invoice payment failed:', invoice.id);
 
-        // Handle failed subscription payments
         if (invoice.subscription) {
           const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
           const customer = await stripe.customers.retrieve(subscription.customer);
           
-          if (customer.metadata && customer.metadata.userId) {
-            const userId = customer.metadata.userId;
-            
-            // Update subscription status to past_due or canceled
-            const subscriptionData = {
-              status: 'past_due',
-              lastFailedPayment: new Date().toISOString(),
-              stripeInvoiceId: invoice.id,
-              updatedAt: new Date().toISOString(),
-            };
+          const subscriptionData = {
+            status: 'past_due',
+            lastFailedPayment: new Date().toISOString(),
+            stripeInvoiceId: invoice.id,
+            updatedAt: new Date().toISOString(),
+          };
 
-            const result = await updateUserSubscription(userId, subscriptionData);
-            
-            if (result.success) {
-              console.log(`✅ Subscription status updated to past_due for user ${userId}`);
-            } else {
-              console.error(`❌ Failed to update subscription status:`, result.error);
-            }
+          if (customer.metadata && customer.metadata.userId) {
+            const userDocRef = doc(db, 'users', customer.metadata.userId);
+            await updateDoc(userDocRef, {
+              subscription: subscriptionData,
+              updatedAt: new Date(),
+            });
+          } else if (customer.email) {
+            await updateUserByEmail(customer.email, subscriptionData);
           }
         }
 
@@ -269,27 +296,24 @@ export default async function handler(req, res) {
         const subscription = event.data.object;
         console.log('🗑️ Subscription canceled:', subscription.id);
 
-        // Handle subscription cancellation
         const customer = await stripe.customers.retrieve(subscription.customer);
         
-        if (customer.metadata && customer.metadata.userId) {
-          const userId = customer.metadata.userId;
-          
-          // Update subscription status to canceled
-          const subscriptionData = {
-            status: 'canceled',
-            canceledAt: new Date().toISOString(),
-            stripeSubscriptionId: subscription.id,
-            updatedAt: new Date().toISOString(),
-          };
+        const subscriptionData = {
+          status: 'canceled',
+          fullAccess: false,
+          canceledAt: new Date().toISOString(),
+          stripeSubscriptionId: subscription.id,
+          updatedAt: new Date().toISOString(),
+        };
 
-          const result = await updateUserSubscription(userId, subscriptionData);
-          
-          if (result.success) {
-            console.log(`✅ Subscription canceled for user ${userId}`);
-          } else {
-            console.error(`❌ Failed to update subscription cancellation:`, result.error);
-          }
+        if (customer.metadata && customer.metadata.userId) {
+          const userDocRef = doc(db, 'users', customer.metadata.userId);
+          await updateDoc(userDocRef, {
+            subscription: subscriptionData,
+            updatedAt: new Date(),
+          });
+        } else if (customer.email) {
+          await updateUserByEmail(customer.email, subscriptionData);
         }
 
         break;
