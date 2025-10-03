@@ -1,4 +1,4 @@
-// /api/webhooks/stripe.js - Complete version matching examrizzsearch_dev with UID-based updates
+// /api/webhooks/stripe.js - Clean webhook handler for single tier payment system
 import Stripe from 'stripe';
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
@@ -6,7 +6,7 @@ import { getFirestore, doc, updateDoc, setDoc, getDoc } from 'firebase/firestore
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Initialize Firebase (only if not already initialized)
+// Initialize Firebase
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -22,6 +22,9 @@ const db = getFirestore(app);
 // Update user subscription in Firebase
 const updateUserSubscription = async (userId, subscriptionData) => {
   try {
+    console.log('🔄 Updating user subscription for:', userId);
+    console.log('📝 Subscription data:', subscriptionData);
+    
     const userDocRef = doc(db, 'users', userId);
     
     // Check if user document exists
@@ -33,9 +36,10 @@ const updateUserSubscription = async (userId, subscriptionData) => {
         subscription: subscriptionData,
         updatedAt: new Date(),
       });
+      console.log('✅ Updated existing user subscription');
     } else {
       // Create new user document
-      await setDoc(userDocRef, {
+      const newUserData = {
         subscription: subscriptionData,
         usage: { 
           questionsViewedToday: 0, 
@@ -44,39 +48,25 @@ const updateUserSubscription = async (userId, subscriptionData) => {
         },
         createdAt: new Date(),
         updatedAt: new Date(),
-      });
+      };
+      
+      await setDoc(userDocRef, newUserData);
+      console.log('✅ Created new user with subscription');
     }
     
     return { success: true };
   } catch (error) {
-    console.error('Error updating subscription:', error);
+    console.error('❌ Error updating subscription:', error);
     return { success: false, error: error.message };
   }
 };
 
-// Get user ID from Stripe session or payment intent
+// Get user ID from Stripe metadata
 const getUserIdFromMetadata = (stripeObject) => {
   if (stripeObject.metadata && stripeObject.metadata.userId) {
     return stripeObject.metadata.userId;
   }
   return null;
-};
-
-// Determine plan type from metadata or session mode
-const getPlanFromObject = (stripeObject) => {
-  // Check metadata first
-  if (stripeObject.metadata && stripeObject.metadata.planType) {
-    console.log('✅ Found plan type in metadata:', stripeObject.metadata.planType);
-    return stripeObject.metadata.planType;
-  }
-  
-  // Default to tier1 for plew (single plan)
-  console.log('⚠️ Using fallback plan type "tier1"');
-  console.log('Session mode:', stripeObject.mode);
-  console.log('Session metadata:', stripeObject.metadata);
-  console.log('Available keys:', Object.keys(stripeObject));
-  
-  return 'tier1';
 };
 
 export default async function handler(req, res) {
@@ -99,7 +89,6 @@ export default async function handler(req, res) {
 
   console.log(`✅ Webhook received: ${event.type}`);
 
-  // Handle the event
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
@@ -109,77 +98,38 @@ export default async function handler(req, res) {
         // Get user ID from metadata
         const userId = getUserIdFromMetadata(session);
         if (!userId) {
-          console.error('❌ Could not determine user ID for session:', session.id);
-          return res.status(400).send('Could not determine user ID');
+          console.error('❌ No user ID found in session metadata');
+          return res.status(400).send('No user ID in metadata');
         }
 
-        // Get plan type from metadata
-        const planType = getPlanFromObject(session);
+        console.log('👤 Processing payment for user:', userId);
 
-        // Create subscription data
+        // Create subscription data for successful payment
         const subscriptionData = {
           status: 'active',
-          plan: planType,
+          plan: 'tier1',
+          fullAccess: true, // This is the key field your app checks
           stripeSessionId: session.id,
           stripeCustomerId: session.customer,
-          paymentType: session.mode === 'subscription' ? 'recurring' : 'one_time',
+          paymentType: 'recurring',
           activatedAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
 
-        // If it's a subscription, add subscription ID
+        // Add subscription ID if available
         if (session.subscription) {
           subscriptionData.stripeSubscriptionId = session.subscription;
-          console.log('✅ Added stripeSubscriptionId:', session.subscription);
-        } else {
-          console.log('ℹ️ No subscription ID found in session (likely one-time payment)');
+          console.log('🔗 Added subscription ID:', session.subscription);
         }
 
+        // Update user in Firebase
         const result = await updateUserSubscription(userId, subscriptionData);
 
         if (result.success) {
-          console.log(`✅ Subscription activated for user ${userId} with plan ${planType} (${session.mode})`);
+          console.log(`🎉 Subscription activated for user ${userId}`);
         } else {
           console.error(`❌ Failed to activate subscription:`, result.error);
-          return res.status(500).send('Failed to update subscription');
-        }
-
-        break;
-      }
-
-      case 'payment_intent.succeeded': {
-        const paymentIntent = event.data.object;
-        console.log('💰 Payment intent succeeded:', paymentIntent.id);
-
-        // Get user ID from metadata
-        const userId = getUserIdFromMetadata(paymentIntent);
-        if (!userId) {
-          console.log('ℹ️ No user ID in payment intent metadata, skipping');
-          break;
-        }
-
-        // Get plan type from metadata
-        const planType = getPlanFromObject(paymentIntent);
-
-        console.log('💰 One-time payment succeeded for user:', userId, 'plan:', planType);
-        
-        // Update subscription for one-time payment
-        const subscriptionData = {
-          status: 'active',
-          plan: planType,
-          paymentType: 'one_time',
-          stripePaymentIntentId: paymentIntent.id,
-          activatedAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-
-        const result = await updateUserSubscription(userId, subscriptionData);
-        
-        if (result.success) {
-          console.log(`✅ One-time payment processed for user ${userId}`);
-        } else {
-          console.error(`❌ Failed to process one-time payment:`, result.error);
-          return res.status(500).send('Failed to update subscription');
+          return res.status(500).send('Failed to update user subscription');
         }
 
         break;
@@ -196,10 +146,12 @@ export default async function handler(req, res) {
           
           if (customer.metadata && customer.metadata.userId) {
             const userId = customer.metadata.userId;
+            console.log('🔄 Renewing subscription for user:', userId);
             
-            // Update subscription renewal
+            // Update subscription with renewal info
             const subscriptionData = {
               status: 'active',
+              fullAccess: true,
               lastPayment: new Date().toISOString(),
               stripeInvoiceId: invoice.id,
               updatedAt: new Date().toISOString(),
@@ -210,7 +162,7 @@ export default async function handler(req, res) {
             if (result.success) {
               console.log(`✅ Subscription renewed for user ${userId}`);
             } else {
-              console.error(`❌ Failed to update subscription renewal:`, result.error);
+              console.error(`❌ Failed to renew subscription:`, result.error);
             }
           }
         }
@@ -221,17 +173,18 @@ export default async function handler(req, res) {
         const invoice = event.data.object;
         console.log('❌ Invoice payment failed:', invoice.id);
 
-        // Handle failed subscription payments
         if (invoice.subscription) {
           const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
           const customer = await stripe.customers.retrieve(subscription.customer);
           
           if (customer.metadata && customer.metadata.userId) {
             const userId = customer.metadata.userId;
+            console.log('⚠️ Payment failed for user:', userId);
             
-            // Update subscription status to past_due or canceled
+            // Update subscription status
             const subscriptionData = {
               status: 'past_due',
+              fullAccess: false, // Remove access when payment fails
               lastFailedPayment: new Date().toISOString(),
               stripeInvoiceId: invoice.id,
               updatedAt: new Date().toISOString(),
@@ -240,13 +193,12 @@ export default async function handler(req, res) {
             const result = await updateUserSubscription(userId, subscriptionData);
             
             if (result.success) {
-              console.log(`✅ Subscription status updated to past_due for user ${userId}`);
+              console.log(`⚠️ Subscription marked as past_due for user ${userId}`);
             } else {
-              console.error(`❌ Failed to update subscription status:`, result.error);
+              console.error(`❌ Failed to update failed payment:`, result.error);
             }
           }
         }
-
         break;
       }
 
@@ -254,15 +206,16 @@ export default async function handler(req, res) {
         const subscription = event.data.object;
         console.log('🗑️ Subscription canceled:', subscription.id);
 
-        // Handle subscription cancellation
         const customer = await stripe.customers.retrieve(subscription.customer);
         
         if (customer.metadata && customer.metadata.userId) {
           const userId = customer.metadata.userId;
+          console.log('❌ Canceling subscription for user:', userId);
           
           // Update subscription status to canceled
           const subscriptionData = {
             status: 'canceled',
+            fullAccess: false, // Remove access when canceled
             canceledAt: new Date().toISOString(),
             stripeSubscriptionId: subscription.id,
             updatedAt: new Date().toISOString(),
@@ -271,17 +224,16 @@ export default async function handler(req, res) {
           const result = await updateUserSubscription(userId, subscriptionData);
           
           if (result.success) {
-            console.log(`✅ Subscription canceled for user ${userId}`);
+            console.log(`❌ Subscription canceled for user ${userId}`);
           } else {
-            console.error(`❌ Failed to update subscription cancellation:`, result.error);
+            console.error(`❌ Failed to cancel subscription:`, result.error);
           }
         }
-
         break;
       }
 
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        console.log(`ℹ️ Unhandled event type: ${event.type}`);
     }
 
     res.status(200).json({ received: true });

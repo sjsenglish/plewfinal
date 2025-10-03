@@ -1,47 +1,27 @@
-// src/services/checkoutService.js - Complete updated version
+// src/services/checkoutService.js - Clean checkout service for single tier
 import { getAuth } from 'firebase/auth';
 
-// Create checkout using Stripe Checkout Sessions
-export const createCheckoutSession = async (priceId, userId, userEmail, isTrial = false) => {
+// Create checkout session for Premium tier
+export const createCheckoutSession = async () => {
   try {
-    console.log('Starting checkout session for:', { priceId, userId, userEmail, isTrial });
-
     const auth = getAuth();
     const currentUser = auth.currentUser;
 
     if (!currentUser) {
-      throw new Error('User must be logged in to purchase');
+      throw new Error('User must be logged in to subscribe');
     }
 
-    // Determine which plan based on price ID or trial flag
-    let planType = 'tier1'; // Default to tier1 for plew (single plan)
-    if (isTrial) {
-      planType = 'trial';
-    } else if (priceId === process.env.REACT_APP_STRIPE_TIER1_PRICE_ID) {
-      planType = 'tier1';
-    }
+    console.log('🛒 Starting checkout for user:', currentUser.uid);
 
-    console.log('🏷️ Plan detection:', { 
-      priceId, 
-      envTier1PriceId: process.env.REACT_APP_STRIPE_TIER1_PRICE_ID, 
-      detectedPlanType: planType, 
-      isTrial 
-    });
-
-    // Create checkout session via your backend API
+    // Call backend API to create checkout session
     const response = await fetch('/api/create-checkout-session', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        priceId: priceId,
         userId: currentUser.uid,
         userEmail: currentUser.email,
-        planType: planType,
-        isTrial: isTrial, // Pass trial flag to backend
-        successUrl: `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${window.location.origin}/subscription-plans`,
       }),
     });
 
@@ -51,8 +31,7 @@ export const createCheckoutSession = async (priceId, userId, userEmail, isTrial 
     }
 
     const session = await response.json();
-
-    console.log('Checkout session created:', session.id);
+    console.log('✅ Checkout session created:', session.id);
 
     // Redirect to Stripe Checkout
     window.location.href = session.url;
@@ -63,7 +42,7 @@ export const createCheckoutSession = async (priceId, userId, userEmail, isTrial 
       url: session.url,
     };
   } catch (error) {
-    console.error('Error creating checkout session:', error);
+    console.error('❌ Error creating checkout session:', error);
     return {
       success: false,
       error: error.message,
@@ -71,10 +50,10 @@ export const createCheckoutSession = async (priceId, userId, userEmail, isTrial 
   }
 };
 
-// Handle successful payment (backup method - webhook should handle this)
+// Handle successful payment (backup method - webhook handles this)
 export const handleSuccessfulPayment = async (sessionId) => {
   try {
-    console.log('Payment successful, session ID:', sessionId);
+    console.log('🎉 Payment successful, session ID:', sessionId);
 
     const auth = getAuth();
     const currentUser = auth.currentUser;
@@ -85,19 +64,19 @@ export const handleSuccessfulPayment = async (sessionId) => {
 
     // The webhook should handle subscription activation
     // This is just for user feedback
-    console.log('Webhook should have processed this payment');
+    console.log('ℹ️ Webhook should have processed this payment');
 
     // Show success message
-    alert('🎉 Payment successful! Your subscription should be activated shortly.');
+    alert('🎉 Payment successful! Your Premium subscription is now active.');
 
-    // Redirect to profile after a delay
+    // Redirect to main page after a delay
     setTimeout(() => {
-      window.location.href = '/profile';
+      window.location.href = '/';
     }, 2000);
 
     return { success: true };
   } catch (error) {
-    console.error('Error handling successful payment:', error);
+    console.error('❌ Error handling successful payment:', error);
     return { success: false, error: error.message };
   }
 };

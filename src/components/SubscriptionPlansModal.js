@@ -1,69 +1,61 @@
-// components/SubscriptionPlansModal.js - Updated without trial plan
+// SubscriptionPlansModal.js - Clean single tier Premium subscription modal
 import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { createCheckoutSession } from '../services/checkoutService';
 import { usePaywall } from '../hooks/usePaywall';
 
 const SubscriptionPlansModal = ({ onClose }) => {
-  const [loading, setLoading] = useState({ tier1: false });
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [loading, setLoading] = useState(false);
   
   const auth = getAuth();
   const user = auth.currentUser;
   
   const {
     subscription,
-    usage,
     loading: paywallLoading,
-    getPlanInfo,
     isLoggedIn,
     isPaidUser,
   } = usePaywall();
 
-  const planInfo = getPlanInfo();
+  // Premium plan configuration
+  const plan = {
+    id: 'premium',
+    name: '프리미엄 멤버십',
+    price: 20000,
+    period: '월',
+    description: '모든 기능에 무제한 액세스',
+    features: [
+      '무제한 일일 검색',
+      '무제한 비디오 솔루션',
+      '무제한 문제 팩',
+      '타이머 연습 모드',
+      '우선 커뮤니티 지원',
+      '주간 큐레이션 콘텐츠',
+      '고급 분석 대시보드',
+      '개인화된 학습 계획',
+    ],
+    buttonText: 'Start with Premium',
+    popular: true,
+    current: isPaidUser
+  };
 
-  // Premium plan configuration - matching examrizzsearch_dev style
-  const plans = [
-    {
-      id: 'tier1',
-      name: '프리미엄 멤버십',
-      price: 20000,
-      period: '월',
-      priceId: process.env.REACT_APP_STRIPE_TIER1_PRICE_ID,
-      description: 'Everything you need for exam preparation',
-      features: [
-        '옥스포드 영어에서 독점 제작하는 프리미엄 독해 문제들을 무제한 검색할 수 있습니다.',
-        '강의 시리즈와 문제 풀이 비디오들을 무제한 검색할 수 있습니다.',
-        '다양한 필터를 이용해 필요한 문제지를 무제한 제작할 수 있습니다.',
-        '단어 학습과 리딩의 연계를 통해 효율적인 단어 학습이 가능한 이노베이션 단어 은행을  제공합니다.',
-        '실전 대비 타이머 시험을 이용할 수 있습니다. ',
-        '학생들 간, 학생과  관리자 간 소통과 필요한 정보, 다양한 영어 관련 콘텐츠를 제공하는 커뮤니티를 운영하고 있습니다.',
-        '자율적 학습에 익숙하지 않은 학생들은 학습 도우미를 활용할 수 있습니다.',
-      ],
-      buttonText: 'Start with Premium',
-      popular: true,
-      current: subscription?.plan === 'tier1'
-    }
-  ];
-
-  const handleUpgrade = async (plan) => {
+  const handleUpgrade = async () => {
     if (!user) {
-      alert('플랜 업그레이드를 하려면 로그인하세요');
+      alert('구독하려면 로그인하세요');
       return;
     }
 
-    setLoading(prev => ({ ...prev, [plan.id]: true }));
-    setSelectedPlan(plan.id);
+    if (isPaidUser) {
+      alert('이미 프리미엄 구독자입니다!');
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      console.log('Starting checkout session for:', { priceId: plan.priceId, userId: user.uid, userEmail: user.email });
+      console.log('🚀 Starting Premium subscription for user:', user.uid);
       
-      const result = await createCheckoutSession(
-        plan.priceId,
-        user.uid,
-        user.email,
-        false // No trial for tier1
-      );
+      const result = await createCheckoutSession();
 
       if (!result.success) {
         alert(`오류: ${result.error}`);
@@ -74,13 +66,11 @@ const SubscriptionPlansModal = ({ onClose }) => {
       console.error('Error starting checkout:', error);
       alert('결제를 시작할 수 없습니다. 다시 시도해주세요.');
     } finally {
-      setLoading(prev => ({ ...prev, [plan.id]: false }));
-      setSelectedPlan(null);
+      setLoading(false);
     }
   };
 
   const formatPrice = (price) => {
-    if (price === 0) return 'Free';
     return `₩${price.toLocaleString()}`;
   };
 
@@ -142,7 +132,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
         border: '1px solid rgba(255, 255, 255, 0.1)',
         boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)'
       }}>
-      {/* Header - matching SubscriptionPlansPage */}
+      {/* Header */}
       <div style={{
         padding: '48px 24px 36px',
         textAlign: 'center',
@@ -189,7 +179,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
           letterSpacing: '-1.5px',
           lineHeight: '1.1'
         }}>
-          원하는 플랜을 골라 보세요
+          프리미엄으로 업그레이드
         </h1>
         
         <p style={{
@@ -199,7 +189,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
           maxWidth: '480px',
           lineHeight: '1.5'
         }}>
-          무제한 검색 기능을 사용할 수 있습니다.
+          모든 학습 기능에 무제한 액세스하세요
         </p>
       </div>
 
@@ -231,7 +221,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
                 color: 'rgba(255, 255, 255, 0.9)',
                 lineHeight: '1.5'
               }}>
-                Please{' '}
+                구독하려면{' '}
                 <span style={{
                   color: '#faa61a',
                   textDecoration: 'none',
@@ -276,7 +266,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
               color: 'rgba(255, 255, 255, 0.5)',
               margin: '0 0 1.5rem 0'
             }}>
-              기본적인 검색 기능
+              기본적인 기능
             </p>
             
             <div style={{
@@ -314,6 +304,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
+                제한된 검색
               </li>
               <li style={{
                 display: 'flex',
@@ -326,6 +317,7 @@ const SubscriptionPlansModal = ({ onClose }) => {
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M13.5 4.5L6 12L2.5 8.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
+                기본 기능
               </li>
             </ul>
           </div>
@@ -344,184 +336,181 @@ const SubscriptionPlansModal = ({ onClose }) => {
               cursor: 'not-allowed'
             }}
           >
-            Current plan
+            현재 플랜
           </button>
         </div>
 
-        {/* Premium Plans */}
-        {plans.map((plan) => (
-          <div
-            key={plan.id}
+        {/* Premium Plan */}
+        <div
+          style={{
+            backgroundColor: 'rgba(88, 101, 242, 0.05)',
+            borderRadius: '16px',
+            padding: '32px',
+            border: '2px solid rgba(88, 101, 242, 0.3)',
+            position: 'relative',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          {/* Popular badge */}
+          {plan.popular && (
+            <div style={{
+              position: 'absolute',
+              top: '-12px',
+              left: '2rem',
+              backgroundColor: '#5865f2',
+              color: 'white',
+              padding: '0.25rem 0.75rem',
+              borderRadius: '12px',
+              fontSize: '0.75rem',
+              fontWeight: '600',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>
+              추천
+            </div>
+          )}
+
+          {/* Current plan badge */}
+          {plan.current && (
+            <div style={{
+              position: 'absolute',
+              top: '1rem',
+              right: '1rem',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              color: '#10b981',
+              padding: '0.25rem 0.5rem',
+              borderRadius: '6px',
+              fontSize: '0.75rem',
+              fontWeight: '600'
+            }}>
+              Active
+            </div>
+          )}
+
+          {/* Plan header */}
+          <div style={{ marginBottom: '1.5rem' }}>
+            <h3 style={{ 
+              fontSize: '1.25rem', 
+              fontWeight: '600', 
+              color: '#ffffff',
+              marginBottom: '0.5rem'
+            }}>
+              {plan.name}
+            </h3>
+            <p style={{
+              fontSize: '0.875rem',
+              color: 'rgba(255, 255, 255, 0.5)',
+              margin: '0 0 1.5rem 0'
+            }}>
+              {plan.description}
+            </p>
+            
+            <div style={{
+              fontSize: '2.25rem',
+              fontWeight: '600',
+              marginBottom: '0.25rem',
+              color: '#ffffff'
+            }}>
+              {formatPrice(plan.price)}
+              <span style={{
+                fontSize: '1rem',
+                color: 'rgba(255, 255, 255, 0.5)',
+                fontWeight: '400',
+                marginLeft: '0.5rem'
+              }}>
+                /{plan.period}
+              </span>
+            </div>
+          </div>
+
+          {/* Features list */}
+          <div style={{ marginBottom: '2rem' }}>
+            <ul style={{ 
+              listStyle: 'none', 
+              padding: 0, 
+              margin: 0
+            }}>
+              {plan.features.map((feature, index) => (
+                <li key={index} style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.75rem',
+                  padding: '0.5rem 0',
+                  fontSize: '0.875rem',
+                  color: 'rgba(255, 255, 255, 0.9)'
+                }}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M13.5 4.5L6 12L2.5 8.5" stroke="#5865f2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Action button */}
+          <button
+            onClick={handleUpgrade}
+            disabled={loading || plan.current || !isLoggedIn}
             style={{
-              backgroundColor: 'rgba(88, 101, 242, 0.05)',
-              borderRadius: '16px',
-              padding: '32px',
-              border: '2px solid rgba(88, 101, 242, 0.3)',
-              position: 'relative',
-              transition: 'all 0.2s ease'
+              width: '100%',
+              padding: '0.75rem 1rem',
+              backgroundColor: plan.current ? 'rgba(16, 185, 129, 0.1)' : '#5865f2',
+              color: plan.current ? '#10b981' : 'white',
+              border: plan.current ? '1px solid rgba(16, 185, 129, 0.2)' : 'none',
+              borderRadius: '8px',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              cursor: (loading || plan.current || !isLoggedIn) ? 'not-allowed' : 'pointer',
+              opacity: (loading || !isLoggedIn) && !plan.current ? 0.5 : 1,
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem'
+            }}
+            onMouseEnter={(e) => {
+              if (!plan.current && !loading && isLoggedIn) {
+                e.target.style.backgroundColor = '#4752c4';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!plan.current && !loading && isLoggedIn) {
+                e.target.style.backgroundColor = '#5865f2';
+              }
             }}
           >
-            {/* Popular badge */}
-            {plan.popular && (
-              <div style={{
-                position: 'absolute',
-                top: '-12px',
-                left: '2rem',
-                backgroundColor: '#5865f2',
-                color: 'white',
-                padding: '0.25rem 0.75rem',
-                borderRadius: '12px',
-                fontSize: '0.75rem',
-                fontWeight: '600',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px'
-              }}>
-                추천
-              </div>
+            {loading ? (
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                <div style={{
+                  width: '14px',
+                  height: '14px',
+                  border: '2px solid transparent',
+                  borderTop: '2px solid currentColor',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite'
+                }} />
+                Processing...
+              </span>
+            ) : plan.current ? (
+              'Current plan'
+            ) : !isLoggedIn ? (
+              '로그인 하세요'
+            ) : (
+              plan.buttonText
             )}
+          </button>
 
-            {/* Current plan badge */}
-            {plan.current && (
-              <div style={{
-                position: 'absolute',
-                top: '1rem',
-                right: '1rem',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                color: '#10b981',
-                padding: '0.25rem 0.5rem',
-                borderRadius: '6px',
-                fontSize: '0.75rem',
-                fontWeight: '600'
-              }}>
-                Active
-              </div>
-            )}
-
-            {/* Plan header */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <h3 style={{ 
-                fontSize: '1.25rem', 
-                fontWeight: '600', 
-                color: '#ffffff',
-                marginBottom: '0.5rem'
-              }}>
-                {plan.name}
-              </h3>
-              <p style={{
-                fontSize: '0.875rem',
-                color: 'rgba(255, 255, 255, 0.5)',
-                margin: '0 0 1.5rem 0'
-              }}>
-                {plan.description}
-              </p>
-              
-              <div style={{
-                fontSize: '2.25rem',
-                fontWeight: '600',
-                marginBottom: '0.25rem',
-                color: '#ffffff'
-              }}>
-                {formatPrice(plan.price)}
-                <span style={{
-                  fontSize: '1rem',
-                  color: 'rgba(255, 255, 255, 0.5)',
-                  fontWeight: '400',
-                  marginLeft: '0.5rem'
-                }}>
-                  /{plan.period}
-                </span>
-              </div>
-            </div>
-
-            {/* Features list */}
-            <div style={{ marginBottom: '2rem' }}>
-              <ul style={{ 
-                listStyle: 'none', 
-                padding: 0, 
-                margin: 0
-              }}>
-                {plan.features.map((feature, index) => (
-                  <li key={index} style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '0.75rem',
-                    padding: '0.5rem 0',
-                    fontSize: '0.875rem',
-                    color: 'rgba(255, 255, 255, 0.9)'
-                  }}>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M13.5 4.5L6 12L2.5 8.5" stroke="#5865f2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Action button */}
-            <button
-              onClick={() => handleUpgrade(plan)}
-              disabled={loading[plan.id] || plan.current || !isLoggedIn}
-              style={{
-                width: '100%',
-                padding: '0.75rem 1rem',
-                backgroundColor: plan.current ? 'rgba(16, 185, 129, 0.1)' : '#5865f2',
-                color: plan.current ? '#10b981' : 'white',
-                border: plan.current ? '1px solid rgba(16, 185, 129, 0.2)' : 'none',
-                borderRadius: '8px',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                cursor: (loading[plan.id] || plan.current || !isLoggedIn) ? 'not-allowed' : 'pointer',
-                opacity: (loading[plan.id] || !isLoggedIn) && !plan.current ? 0.5 : 1,
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem'
-              }}
-              onMouseEnter={(e) => {
-                if (!plan.current && !loading[plan.id] && isLoggedIn) {
-                  e.target.style.backgroundColor = '#4752c4';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!plan.current && !loading[plan.id] && isLoggedIn) {
-                  e.target.style.backgroundColor = '#5865f2';
-                }
-              }}
-            >
-              {loading[plan.id] ? (
-                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                  <div style={{
-                    width: '14px',
-                    height: '14px',
-                    border: '2px solid transparent',
-                    borderTop: '2px solid currentColor',
-                    borderRadius: '50%',
-                    animation: 'spin 1s linear infinite'
-                  }} />
-                  Processing...
-                </span>
-              ) : plan.current ? (
-                'Current plan'
-              ) : !isLoggedIn ? (
-                '로그인 하세요'
-              ) : (
-                plan.buttonText
-              )}
-            </button>
-
-            <p style={{
-              fontSize: '0.6875rem',
-              color: 'rgba(255, 255, 255, 0.3)',
-              textAlign: 'center',
-              marginTop: '0.75rem',
-              margin: '0.75rem 0 0 0'
-            }}>
-              Secure payment via Stripe • Cancel anytime
-            </p>
-          </div>
-          ))}
+          <p style={{
+            fontSize: '0.6875rem',
+            color: 'rgba(255, 255, 255, 0.3)',
+            textAlign: 'center',
+            marginTop: '0.75rem',
+            margin: '0.75rem 0 0 0'
+          }}>
+            Stripe 보안 결제 • 언제든지 취소
+          </p>
+        </div>
         </div>
 
         {/* Footer */}
@@ -537,10 +526,10 @@ const SubscriptionPlansModal = ({ onClose }) => {
           }}>
             문의사항이 있으시면 이메일로 연락하세요:{' '}
             <a 
-              href="mailto:team@examrizz.com"
+              href="mailto:team@plew.co.kr"
               style={{ color: '#5865f2', textDecoration: 'none' }}
             >
-              team@examrizz.com
+              team@plew.co.kr
             </a>
           </p>
         </div>

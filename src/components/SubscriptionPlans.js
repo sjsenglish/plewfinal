@@ -1,70 +1,61 @@
-// SubscriptionPlansPage.js - Updated to use programmatic checkout like examrizzsearch_dev
+// SubscriptionPlans.js - Clean single tier Premium subscription
 import React, { useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { createCheckoutSession } from '../services/checkoutService';
 import { usePaywall } from '../hooks/usePaywall';
 
 const SubscriptionPlansPage = () => {
-  const [loading, setLoading] = useState({ tier1: false });
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [loading, setLoading] = useState(false);
   
   const auth = getAuth();
   const user = auth.currentUser;
   
   const {
     subscription,
-    usage,
     loading: paywallLoading,
-    getPlanInfo,
     isLoggedIn,
     isPaidUser,
   } = usePaywall();
 
-  const planInfo = getPlanInfo();
+  // Premium plan configuration
+  const plan = {
+    id: 'premium',
+    name: '프리미엄',
+    price: 20000,
+    period: '월',
+    description: '모든 기능에 무제한 액세스',
+    features: [
+      '무제한 일일 검색',
+      '무제한 비디오 솔루션',
+      '무제한 문제 팩',
+      '타이머 연습 모드',
+      '우선 커뮤니티 지원',
+      '주간 큐레이션 콘텐츠',
+      '고급 분석 대시보드',
+      '개인화된 학습 계획',
+    ],
+    buttonText: '프리미엄 구독',
+    popular: true,
+    current: isPaidUser
+  };
 
-  // Premium plan configuration - single tier1 plan
-  const plans = [
-    {
-      id: 'tier1',
-      name: '프리미엄',
-      price: 20000,
-      period: '월',
-      priceId: process.env.REACT_APP_STRIPE_TIER1_PRICE_ID,
-      description: '수능 준비를 위한 완전한 프리미엄 플랜',
-      features: [
-        '무제한 일일 검색',
-        '무제한 비디오 솔루션',
-        '무제한 문제 팩',
-        '타이머 연습 모드',
-        '우선 커뮤니티 지원',
-        '주간 큐레이션 콘텐츠',
-        '고급 분석 대시보드',
-        '개인화된 학습 계획',
-      ],
-      buttonText: '프리미엄 선택',
-      popular: true,
-      current: subscription?.plan === 'tier1'
-    }
-  ];
-
-  const handleUpgrade = async (plan) => {
+  const handleUpgrade = async () => {
     if (!user) {
-      alert('플랜 업그레이드를 하려면 로그인하세요');
+      alert('구독하려면 로그인하세요');
       return;
     }
 
-    setLoading(prev => ({ ...prev, [plan.id]: true }));
-    setSelectedPlan(plan.id);
+    if (isPaidUser) {
+      alert('이미 프리미엄 구독자입니다!');
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      console.log('Starting checkout session for:', { priceId: plan.priceId, userId: user.uid, userEmail: user.email });
+      console.log('🚀 Starting Premium subscription for user:', user.uid);
       
-      const result = await createCheckoutSession(
-        plan.priceId,
-        user.uid,
-        user.email,
-        false // No trial for tier1
-      );
+      const result = await createCheckoutSession();
 
       if (!result.success) {
         alert(`오류: ${result.error}`);
@@ -75,13 +66,11 @@ const SubscriptionPlansPage = () => {
       console.error('Error starting checkout:', error);
       alert('결제를 시작할 수 없습니다. 다시 시도해주세요.');
     } finally {
-      setLoading(prev => ({ ...prev, [plan.id]: false }));
-      setSelectedPlan(null);
+      setLoading(false);
     }
   };
 
   const formatPrice = (price) => {
-    if (price === 0) return 'Free';
     return `₩${price.toLocaleString()}`;
   };
 
@@ -104,7 +93,7 @@ const SubscriptionPlansPage = () => {
         <div className="header-content">
           <h1 className="header-title">프리미엄 플랜</h1>
           <p className="header-subtitle">
-            수능 준비를 위한 완전한 프리미엄 경험
+            모든 학습 기능에 무제한 액세스하세요
           </p>
         </div>
       </div>
@@ -128,87 +117,122 @@ const SubscriptionPlansPage = () => {
           </div>
         )}
 
-        {/* Plans Grid */}
+        {/* Free Plan */}
         <div className="plans-grid">
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`plan-card ${plan.popular ? 'plan-popular' : ''} ${plan.current ? 'plan-current' : ''}`}
-            >
-              {/* Badges */}
-
-              {/* Current Badge */}
-              {plan.current && (
-                <div className="badge-current">현재</div>
-              )}
-
-              <div className="plan-content">
-                {/* Plan Header */}
-                <div className="plan-header">
-                  <h3 className="plan-name">{plan.name}</h3>
-                  <p className="plan-description">{plan.description}</p>
-                  <div className="price-container">
-                    <span className={`price ${plan.popular ? 'price-popular' : ''}`}>
-                      {formatPrice(plan.price)}
-                    </span>
-                    {plan.period && (
-                      <span className="price-period">
-                        `/${plan.period}`
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Features */}
-                <div className="features-section">
-                  <h4 className="features-title">포함 내용:</h4>
-                  <ul className="features-list">
-                    {plan.features.map((feature, index) => (
-                      <li key={index} className="feature-item">
-                        <svg className="feature-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="feature-text">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Action Button */}
-                <button
-                  onClick={() => handleUpgrade(plan)}
-                  disabled={loading[plan.id] || plan.current || !isLoggedIn}
-                  className={`plan-button ${
-                    plan.current ? 'button-current' : 
-                    'button-default'
-                  } ${
-                    (loading[plan.id] || !isLoggedIn) && !plan.current ? 'button-disabled' : ''
-                  }`}
-                >
-                  {loading[plan.id] ? (
-                    <div className="button-loading">
-                      <div className="button-spinner"></div>
-                      <span>처리 중...</span>
-                    </div>
-                  ) : plan.current ? (
-                    '✓ 현재 플랜'
-                  ) : !isLoggedIn ? (
-                    '구독하려면 로그인'
-                  ) : (
-                    plan.buttonText
-                  )}
-                </button>
-
-                {/* Payment Info */}
-                <div className="payment-info">
-                  <p className="payment-text">
-                    Stripe 보안 결제<br/>
-                    언제든지 취소 • 30일 환불 보장
-                  </p>
+          <div className="plan-card">
+            <div className="plan-content">
+              <div className="plan-header">
+                <h3 className="plan-name">무료</h3>
+                <p className="plan-description">기본 기능</p>
+                <div className="price-container">
+                  <span className="price">₩0</span>
+                  <span className="price-period">/월</span>
                 </div>
               </div>
+
+              <div className="features-section">
+                <h4 className="features-title">포함 내용:</h4>
+                <ul className="features-list">
+                  <li className="feature-item">
+                    <svg className="feature-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="feature-text">제한된 검색</span>
+                  </li>
+                  <li className="feature-item">
+                    <svg className="feature-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="feature-text">기본 기능</span>
+                  </li>
+                </ul>
+              </div>
+
+              <button
+                disabled
+                className="plan-button button-current"
+              >
+                현재 플랜
+              </button>
             </div>
-          ))}
+          </div>
+
+          {/* Premium Plan */}
+          <div className={`plan-card ${plan.popular ? 'plan-popular' : ''} ${plan.current ? 'plan-current' : ''}`}>
+            {/* Popular Badge */}
+            {plan.popular && (
+              <div className="badge-popular">추천</div>
+            )}
+
+            {/* Current Badge */}
+            {plan.current && (
+              <div className="badge-current">현재</div>
+            )}
+
+            <div className="plan-content">
+              {/* Plan Header */}
+              <div className="plan-header">
+                <h3 className="plan-name">{plan.name}</h3>
+                <p className="plan-description">{plan.description}</p>
+                <div className="price-container">
+                  <span className={`price ${plan.popular ? 'price-popular' : ''}`}>
+                    {formatPrice(plan.price)}
+                  </span>
+                  <span className="price-period">
+                    /{plan.period}
+                  </span>
+                </div>
+              </div>
+
+              {/* Features */}
+              <div className="features-section">
+                <h4 className="features-title">포함 내용:</h4>
+                <ul className="features-list">
+                  {plan.features.map((feature, index) => (
+                    <li key={index} className="feature-item">
+                      <svg className="feature-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="feature-text">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Action Button */}
+              <button
+                onClick={handleUpgrade}
+                disabled={loading || plan.current || !isLoggedIn}
+                className={`plan-button ${
+                  plan.current ? 'button-current' : 
+                  'button-default'
+                } ${
+                  (loading || !isLoggedIn) && !plan.current ? 'button-disabled' : ''
+                }`}
+              >
+                {loading ? (
+                  <div className="button-loading">
+                    <div className="button-spinner"></div>
+                    <span>처리 중...</span>
+                  </div>
+                ) : plan.current ? (
+                  '✓ 현재 플랜'
+                ) : !isLoggedIn ? (
+                  '구독하려면 로그인'
+                ) : (
+                  plan.buttonText
+                )}
+              </button>
+
+              {/* Payment Info */}
+              <div className="payment-info">
+                <p className="payment-text">
+                  Stripe 보안 결제<br/>
+                  언제든지 취소 • 30일 환불 보장
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
