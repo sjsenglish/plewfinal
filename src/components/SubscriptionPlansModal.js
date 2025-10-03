@@ -57,12 +57,29 @@ const SubscriptionPlansModal = ({ onClose }) => {
     setSelectedPlan(plan.id);
 
     try {
-      // Use Stripe payment links for direct checkout
-      window.open(plan.paymentLink, '_blank');
+      console.log('Creating checkout session for plan:', plan.id);
+      console.log('User ID:', user.uid);
+      console.log('User Email:', user.email);
+      console.log('Price ID:', plan.priceId);
+      
+      // Use the checkout service to properly pass user data to Stripe
+      const result = await createCheckoutSession(
+        plan.priceId,
+        user.uid,
+        user.email,
+        false // not a trial
+      );
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to create checkout session');
+      }
+      
+      // The createCheckoutSession function handles the redirect automatically
+      console.log('Checkout session created successfully');
+      
     } catch (error) {
-      console.error('Error opening payment link:', error);
-      alert('결제 페이지를 열 수 없습니다. 다시 시도해주세요.');
-    } finally {
+      console.error('Error creating checkout session:', error);
+      alert(`결제 페이지를 열 수 없습니다: ${error.message}`);
       setLoading(prev => ({ ...prev, [plan.id]: false }));
       setSelectedPlan(null);
     }

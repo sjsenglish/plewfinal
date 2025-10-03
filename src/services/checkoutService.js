@@ -14,11 +14,16 @@ export const createCheckoutSession = async (priceId, userId, userEmail, isTrial 
     }
 
     // Determine which plan based on price ID or trial flag
-    let planType = 'study';
+    let planType = 'tier1'; // Default to tier1 for the premium plan
     if (isTrial) {
       planType = 'trial';
     } else if (priceId === process.env.REACT_APP_STRIPE_PRO_PLAN_PRICE_ID) {
       planType = 'pro';
+    } else if (priceId === 'price_1Rl7p3RslRN77kT81et1VUvh') {
+      // Hardcoded tier1 price ID from SubscriptionPlans.js
+      planType = 'tier1';
+    } else if (priceId === process.env.REACT_APP_STRIPE_STUDY_PLAN_PRICE_ID) {
+      planType = 'study';
     }
 
     console.log('🏷️ Plan detection:', { 

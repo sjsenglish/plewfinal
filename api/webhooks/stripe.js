@@ -87,26 +87,27 @@ const getPlanFromObject = (stripeObject) => {
   }
   
   // For checkout sessions, we can use mode to help determine plan type
-  // Pro plan is one-time payment, Study plan is subscription
+  // Pro plan is one-time payment, tier1/study plans are subscriptions
   if (stripeObject.mode) {
     if (stripeObject.mode === 'payment') {
       // One-time payment is likely Pro plan (Full Access 2025)
       console.log('✅ Detected one-time payment mode, assuming pro plan');
       return 'pro';
     } else if (stripeObject.mode === 'subscription') {
-      // Subscription is likely Study plan (Monthly)
-      console.log('✅ Detected subscription mode, assuming study plan');
-      return 'study';
+      // Subscription could be tier1 or study plan
+      // Since tier1 is the main premium plan, default to tier1
+      console.log('✅ Detected subscription mode, defaulting to tier1 plan');
+      return 'tier1';
     }
   }
   
   // Default fallback - log this case for debugging
-  console.log('⚠️ Using fallback plan type "study"');
+  console.log('⚠️ Using fallback plan type "tier1"');
   console.log('Session mode:', stripeObject.mode);
   console.log('Session metadata:', stripeObject.metadata);
   console.log('Available keys:', Object.keys(stripeObject));
   
-  return 'study';
+  return 'tier1';
 };
 
 export default async function handler(req, res) {
