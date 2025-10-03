@@ -1,7 +1,15 @@
 // /api/webhooks/stripe.js - Handle Stripe webhook events and update Firebase
 import Stripe from 'stripe';
+import { buffer } from 'micro';
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
+
+// Disable body parser to access raw body for Stripe signature verification
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -75,13 +83,23 @@ export default async function handler(req, res) {
     return res.status(405).end('Method Not Allowed');
   }
 
+  let buf;
+  let event;
+  
+  try {
+    // Read the raw body as buffer for Stripe signature verification
+    buf = await buffer(req);
+  } catch (err) {
+    console.log(`❌ Error reading request body:`, err.message);
+    return res.status(400).send(`Error reading request body: ${err.message}`);
+  }
+
   const sig = req.headers['stripe-signature'];
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  let event;
-
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    // Use raw buffer for signature verification
+    event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
   } catch (err) {
     console.log(`❌ Webhook signature verification failed:`, err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
