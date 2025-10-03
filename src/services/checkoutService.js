@@ -52,7 +52,26 @@ export const createCheckoutSession = async (priceId, userId, userEmail, isTrial 
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to create checkout session');
+      console.error('Checkout session creation failed:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData
+      });
+      
+      // Provide more specific error messages
+      if (response.status === 400) {
+        throw new Error(errorData.error || 'Invalid payment information. Please check your details and try again.');
+      } else if (response.status === 401) {
+        throw new Error('Authentication failed. Please log in and try again.');
+      } else if (response.status === 402) {
+        throw new Error('Payment required. Please check your payment method and try again.');
+      } else if (response.status === 429) {
+        throw new Error('Too many requests. Please wait a moment and try again.');
+      } else if (response.status === 500) {
+        throw new Error('Server error. Please try again in a few minutes.');
+      } else {
+        throw new Error(errorData.error || `Payment setup failed (${response.status}). Please try again.`);
+      }
     }
 
     const session = await response.json();

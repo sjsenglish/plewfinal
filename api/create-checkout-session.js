@@ -104,6 +104,12 @@ export default async function handler(req, res) {
       allow_promotion_codes: true,
       billing_address_collection: 'auto',
       
+      // Prevent session reuse and improve security
+      expires_at: Math.floor(Date.now() / 1000) + (30 * 60), // Expire in 30 minutes
+      
+      // Add locale for better user experience
+      locale: 'auto',
+      
       // Plan-specific configuration (metadata and subscription_data)
       ...sessionConfig,
     });
