@@ -22,15 +22,14 @@ const SubscriptionPlansModal = ({ onClose }) => {
 
   const planInfo = getPlanInfo();
 
-  // Premium plan configuration - matching SubscriptionPlansPage
+  // Premium plan configuration - matching examrizzsearch_dev style
   const plans = [
     {
       id: 'tier1',
       name: '프리미엄 멤버십',
       price: 20000,
       period: '월',
-      priceId: 'price_1SEEyCRslRN77kT8VpdUsQbW',
-      paymentLink: 'https://buy.stripe.com/9B600leAr0Mreueg7b8EM03',
+      priceId: process.env.REACT_APP_STRIPE_TIER1_PRICE_ID,
       description: 'Everything you need for exam preparation',
       features: [
         '옥스포드 영어에서 독점 제작하는 프리미엄 독해 문제들을 무제한 검색할 수 있습니다.',
@@ -57,26 +56,24 @@ const SubscriptionPlansModal = ({ onClose }) => {
     setSelectedPlan(plan.id);
 
     try {
-      console.log('Preparing payment for user:', user.uid, user.email);
+      console.log('Starting checkout session for:', { priceId: plan.priceId, userId: user.uid, userEmail: user.email });
       
-      // Store user info in sessionStorage for post-payment verification
-      sessionStorage.setItem('pendingSubscription', JSON.stringify({
-        userId: user.uid,
-        userEmail: user.email,
-        planType: 'tier1',
-        timestamp: Date.now()
-      }));
-      
-      // Open Stripe payment link
-      const paymentUrl = 'https://buy.stripe.com/9B600leAr0Mreueg7b8EM03';
-      console.log('Opening payment link:', paymentUrl);
-      
-      // Open in same window to maintain session
-      window.location.href = paymentUrl;
+      const result = await createCheckoutSession(
+        plan.priceId,
+        user.uid,
+        user.email,
+        false // No trial for tier1
+      );
+
+      if (!result.success) {
+        alert(`오류: ${result.error}`);
+      }
+      // createCheckoutSession will redirect to Stripe, so no need for further action
       
     } catch (error) {
-      console.error('Error opening payment link:', error);
-      alert('결제 페이지를 열 수 없습니다. 다시 시도해주세요.');
+      console.error('Error starting checkout:', error);
+      alert('결제를 시작할 수 없습니다. 다시 시도해주세요.');
+    } finally {
       setLoading(prev => ({ ...prev, [plan.id]: false }));
       setSelectedPlan(null);
     }

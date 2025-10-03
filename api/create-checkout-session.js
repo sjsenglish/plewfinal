@@ -64,7 +64,7 @@ export default async function handler(req, res) {
         },
       };
     } else {
-      // Study Plan or tier1 is subscription (recurring)
+      // tier1 plan is subscription (recurring) - default for plew
       mode = 'subscription';
       sessionConfig = {
         metadata: {
@@ -97,8 +97,8 @@ export default async function handler(req, res) {
       customer_email: userEmail,
       
       // URLs
-      success_url: successUrl || `${req.headers.origin || 'https://examrizzsearch.com'}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${req.headers.origin || 'https://examrizzsearch.com'}/subscription-plans`,
+      success_url: successUrl || `${req.headers.origin || 'https://www.plew.co.kr'}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${req.headers.origin || 'https://www.plew.co.kr'}/subscription-plans`,
       
       // Additional options
       allow_promotion_codes: true,
