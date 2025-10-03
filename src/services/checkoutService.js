@@ -19,7 +19,7 @@ export const createCheckoutSession = async (priceId, userId, userEmail, isTrial 
       planType = 'trial';
     } else if (priceId === process.env.REACT_APP_STRIPE_PRO_PLAN_PRICE_ID) {
       planType = 'pro';
-    } else if (priceId === 'price_1Rl7p3RslRN77kT81et1VUvh') {
+    } else if (priceId === 'price_1SEEyCRslRN77kT8VpdUsQbW') {
       // Hardcoded tier1 price ID from SubscriptionPlans.js
       planType = 'tier1';
     } else if (priceId === process.env.REACT_APP_STRIPE_STUDY_PLAN_PRICE_ID) {

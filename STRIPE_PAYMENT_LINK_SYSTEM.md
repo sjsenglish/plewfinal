@@ -2,7 +2,7 @@
 
 ## Overview
 
-This system enables **automatic Firebase user updates** when customers pay through the Stripe payment link: `https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01`
+This system enables **automatic Firebase user updates** when customers pay through the Stripe payment link: `https://buy.stripe.com/9B600leAr0Mreueg7b8EM03`
 
 ## How It Works
 
@@ -66,7 +66,7 @@ subscription: {
 ```
 1. User logged in → clicks "Subscribe"
 2. sessionStorage stores: { userId, userEmail, planType, timestamp }
-3. Redirect to: https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01
+3. Redirect to: https://buy.stripe.com/9B600leAr0Mreueg7b8EM03
 4. Customer completes payment with their email
 5. Stripe webhook → match by email → update Firebase user
 6. User returns to success page → verification → access granted

@@ -31,8 +31,8 @@ const SubscriptionPlansPage = () => {
       name: '프리미엄 멤버십',
       price: 20000,
       period: '월',
-      priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',
-      paymentLink: 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01',
+      priceId: 'price_1SEEyCRslRN77kT8VpdUsQbW',
+      paymentLink: 'https://buy.stripe.com/9B600leAr0Mreueg7b8EM03',
       description: 'Everything you need for exam preparation',
       features: [
         '옥스포드 영어에서 독점 제작하는 프리미엄 독해 문제들을 무제한 검색할 수 있습니다.',

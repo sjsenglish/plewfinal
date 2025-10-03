@@ -29,8 +29,8 @@ const SubscriptionPlansPage = () => {
       name: '프리미엄',
       price: 29000,
       period: '월',
-      priceId: 'price_1Rl7p3RslRN77kT81et1VUvh',
-      paymentLink: 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01',
+      priceId: 'price_1SEEyCRslRN77kT8VpdUsQbW',
+      paymentLink: 'https://buy.stripe.com/9B600leAr0Mreueg7b8EM03',
       description: '수능 준비를 위한 완전한 프리미엄 플랜',
       features: [
         '무제한 일일 검색',
@@ -69,7 +69,7 @@ const SubscriptionPlansPage = () => {
       }));
       
       // Open Stripe payment link
-      const paymentUrl = 'https://buy.stripe.com/8x23cxcsjfHl2Lw08d8EM01';
+      const paymentUrl = 'https://buy.stripe.com/9B600leAr0Mreueg7b8EM03';
       console.log('Opening payment link:', paymentUrl);
       
       // Open in same window to maintain session
