@@ -1,21 +1,20 @@
 import Stripe from 'stripe';
-import { initializeApp, getApps } from 'firebase/app';
-import { getFirestore, doc, updateDoc, setDoc, getDoc } from 'firebase/firestore';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-};
-
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-const db = getFirestore(app);
+// Initialize Firebase Admin SDK
+if (!getApps().length) {
+  initializeApp({
+    credential: cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    }),
+  });
+}
+const db = getFirestore();
 
 // Disable body parser to access raw body for Stripe signature verification
 export const config = {
@@ -30,14 +29,14 @@ const updateUserSubscription = async (userId, subscriptionData) => {
     console.log('🔄 Updating user subscription for:', userId);
     console.log('📝 Subscription data:', subscriptionData);
     
-    const userDocRef = doc(db, 'users', userId);
+    const userDocRef = db.collection('users').doc(userId);
     
     // Check if user document exists
-    const userDoc = await getDoc(userDocRef);
+    const userDoc = await userDocRef.get();
     
-    if (userDoc.exists()) {
+    if (userDoc.exists) {
       // Update existing user
-      await updateDoc(userDocRef, {
+      await userDocRef.update({
         subscription: subscriptionData,
         updatedAt: new Date(),
       });
@@ -55,7 +54,7 @@ const updateUserSubscription = async (userId, subscriptionData) => {
         updatedAt: new Date(),
       };
       
-      await setDoc(userDocRef, newUserData);
+      await userDocRef.set(newUserData);
       console.log('✅ Created new user with subscription');
     }
     
