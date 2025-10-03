@@ -64,7 +64,7 @@ export default async function handler(req, res) {
         },
       };
     } else {
-      // Study Plan is subscription (recurring)
+      // Study Plan or tier1 is subscription (recurring)
       mode = 'subscription';
       sessionConfig = {
         metadata: {
@@ -103,12 +103,6 @@ export default async function handler(req, res) {
       // Additional options
       allow_promotion_codes: true,
       billing_address_collection: 'auto',
-      
-      // Prevent session reuse and improve security
-      expires_at: Math.floor(Date.now() / 1000) + (30 * 60), // Expire in 30 minutes
-      
-      // Add locale for better user experience
-      locale: 'auto',
       
       // Plan-specific configuration (metadata and subscription_data)
       ...sessionConfig,

@@ -14,7 +14,7 @@ export const createCheckoutSession = async (priceId, userId, userEmail, isTrial 
     }
 
     // Determine which plan based on price ID or trial flag
-    let planType = 'tier1'; // Default to tier1 for the premium plan
+    let planType = 'tier1'; // Default to tier1 for premium plan
     if (isTrial) {
       planType = 'trial';
     } else if (priceId === process.env.REACT_APP_STRIPE_PRO_PLAN_PRICE_ID) {
@@ -52,26 +52,7 @@ export const createCheckoutSession = async (priceId, userId, userEmail, isTrial 
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('Checkout session creation failed:', {
-        status: response.status,
-        statusText: response.statusText,
-        error: errorData
-      });
-      
-      // Provide more specific error messages
-      if (response.status === 400) {
-        throw new Error(errorData.error || 'Invalid payment information. Please check your details and try again.');
-      } else if (response.status === 401) {
-        throw new Error('Authentication failed. Please log in and try again.');
-      } else if (response.status === 402) {
-        throw new Error('Payment required. Please check your payment method and try again.');
-      } else if (response.status === 429) {
-        throw new Error('Too many requests. Please wait a moment and try again.');
-      } else if (response.status === 500) {
-        throw new Error('Server error. Please try again in a few minutes.');
-      } else {
-        throw new Error(errorData.error || `Payment setup failed (${response.status}). Please try again.`);
-      }
+      throw new Error(errorData.error || 'Failed to create checkout session');
     }
 
     const session = await response.json();

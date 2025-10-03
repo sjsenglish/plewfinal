@@ -28,31 +28,15 @@ const updateUserSubscription = async (userId, subscriptionData) => {
     const userDoc = await getDoc(userDocRef);
     
     if (userDoc.exists()) {
-      // Get existing data to merge
-      const existingData = userDoc.data();
-      const existingSubscription = existingData.subscription || {};
-      
-      // Merge subscription data, preserving important fields
-      const mergedSubscription = {
-        ...existingSubscription,
-        ...subscriptionData,
-        // Ensure fullAccess is set for active subscriptions
-        fullAccess: subscriptionData.status === 'active' ? true : (subscriptionData.fullAccess || false)
-      };
-      
       // Update existing user
       await updateDoc(userDocRef, {
-        subscription: mergedSubscription,
+        subscription: subscriptionData,
         updatedAt: new Date(),
       });
     } else {
       // Create new user document
       await setDoc(userDocRef, {
-        subscription: {
-          ...subscriptionData,
-          // Ensure fullAccess is set for active subscriptions
-          fullAccess: subscriptionData.status === 'active' ? true : (subscriptionData.fullAccess || false)
-        },
+        subscription: subscriptionData,
         usage: { 
           questionsViewedToday: 0, 
           questionPacksCreated: 0,
@@ -151,7 +135,6 @@ export default async function handler(req, res) {
         const subscriptionData = {
           status: 'active',
           plan: planType,
-          fullAccess: true, // Ensure this flag is set for paid users
           stripeSessionId: session.id,
           stripeCustomerId: session.customer,
           paymentType: session.mode === 'subscription' ? 'recurring' : 'one_time',
@@ -199,7 +182,6 @@ export default async function handler(req, res) {
         const subscriptionData = {
           status: 'active',
           plan: planType,
-          fullAccess: true, // Ensure this flag is set for paid users
           paymentType: 'one_time',
           stripePaymentIntentId: paymentIntent.id,
           activatedAt: new Date().toISOString(),
@@ -233,7 +215,6 @@ export default async function handler(req, res) {
             // Update subscription renewal
             const subscriptionData = {
               status: 'active',
-              fullAccess: true, // Ensure this flag is set for paid users
               lastPayment: new Date().toISOString(),
               stripeInvoiceId: invoice.id,
               updatedAt: new Date().toISOString(),
