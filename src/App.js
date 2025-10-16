@@ -18,7 +18,7 @@ import HitWrapper from './components/HitWrapper';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
-import { CommunityPage } from './components/CommunityPage';
+// import { CommunityPage } from './components/CommunityPage'; // Hidden from consumer view
 import { QuestionPackPage } from './components/QuestionPackPage';
 import { ProfilePage } from './components/ProfilePage';
 import PackViewer from './components/PackViewer';
@@ -42,8 +42,8 @@ import LearnContentAdmin from './components/LearnContentAdmin';
 // import MathsSubmitQuestionForm from './components/MathsSubmitQuestionForm'; // HIDDEN
 // import MathsFilters from './components/MathsFilters'; // HIDDEN
 import KoreanEnglishFilters from './components/KoreanEnglishFilters';
-import VocabularyPinterest from './components/EnhancedVocabularyPinterest';
-import VideoStreaming from './components/VideoStreaming';
+// import VocabularyPinterest from './components/EnhancedVocabularyPinterest'; // Hidden from consumer view
+// import VideoStreaming from './components/VideoStreaming'; // Hidden from consumer view
 import DemoMode from './components/DemoMode';
 // import StudyBuddyApp from './components/StudyBuddyApp'; // HIDDEN - Ask Bo and Application Builder
 import FeatureFlagDebug from './components/FeatureFlagDebug';
@@ -95,7 +95,7 @@ const createMockSearchClient = () => ({
         nbHits: 0,
         page: 0,
         nbPages: 0,
-        hitsPerPage: 20,
+        hitsPerPage: 10,
         processingTimeMS: 0,
         exhaustiveNbHits: true,
         query: typeof query?.query === 'string' ? query.query : '',
@@ -143,8 +143,9 @@ if (!process.env.REACT_APP_OPENAI_API_KEY) {
   console.warn('⚠️ Missing OpenAI API key. Vocabulary features will have limited functionality.');
 }
 
-// Updated SUBJECTS - Vocabulary, Korean-English (middle), and Community
+// Updated SUBJECTS - Vocabulary and Community hidden from consumer view
 const SUBJECTS = {
+  /* Vocabulary - Hidden from consumer view
   vocabulary: {
     theme: 'vocabulary-theme',
     bannerText: '단어의 의미와 사용법과 빈도를 기출 문제에서 확인하는 리딩 연계 단어 은행입니다',
@@ -152,6 +153,7 @@ const SUBJECTS = {
     searchType: 'firebase',
     logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logo.svg?alt=media&token=b01d0e4e-1458-4979-84dc-c2cc581db3de'
   },
+  */
   'korean-english': {
     index: 'csat_final',
     theme: 'korean-english-theme',
@@ -160,6 +162,7 @@ const SUBJECTS = {
     searchType: 'algolia',
     logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logos-toggle2.svg?alt=media&token=f0fc8a2c-2bd5-47e4-bf77-698cf19e6f69'
   },
+  /* Community - Hidden from consumer view
   community: {
     index: 'plewcommunity',
     theme: 'community-theme',
@@ -168,6 +171,7 @@ const SUBJECTS = {
     searchType: 'pinecone',
     logoUrl: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fplew-site-logos-toogle2.svg?alt=media&token=a97ec472-1fa3-4b09-b8c4-aff39193b5fa'
   }
+  */
 };
 
 const LoadingScreen = () => (
@@ -459,11 +463,13 @@ const buildAlgoliaFilters = (filters) => {
             <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
           </svg>
         </a>
+        {/* Instagram - Hidden from consumer view
         <a href="https://www.instagram.com/plew_csat?igsh=b3dtcnBneWdnc2Nk&utm_source=qr" target="_blank" rel="noopener noreferrer" className="modern-social-link instagram-link" aria-label="Instagram Profile">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
           </svg>
         </a>
+        */}
         <a href="https://discord.gg/VP3sSpSGk5" target="_blank" rel="noopener noreferrer" className="modern-social-link discord-link" aria-label="Discord Server">
           <svg width="24" height="24" viewBox="0 0 127.14 96.36" fill="currentColor">
             <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54.1,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.34,46,96.13,53,91.08,65.69,84.69,65.69Z"/>
@@ -560,7 +566,7 @@ const buildAlgoliaFilters = (filters) => {
       }
 
       // Use fixed hits per page for now (will be overridden by App component logic)
-      const hitsPerPage = 2;
+      const hitsPerPage = 10;
 
       return (
         <>
@@ -655,23 +661,24 @@ const buildAlgoliaFilters = (filters) => {
     }
   }
 
-  // For Firebase search (Vocabulary), render component directly
+  // For Firebase search (Vocabulary), render component directly - Hidden from consumer view
+  /* Vocabulary section hidden
   if (subjectConfig && subjectConfig.searchType === 'firebase') {
     try {
       return (
         <>
           {headerContent}
 
-          {/* Vocabulary Pinterest Interface */}
+          {/* Vocabulary Pinterest Interface * /}
           <div className="modern-search-wrapper">
             <div className="container">
               <VocabularyPinterest key={`vocab-${currentSubject}`} />
             </div>
           </div>
 
-          {/* Video Popup */}
+          {/* Video Popup * /}
           <VideoPopup isOpen={showVideoPopup} onClose={handleCloseVideo} />
-          {/* Demo Mode */}
+          {/* Demo Mode * /}
           {showDemoMode && (
             <DemoMode onClose={() => setShowDemoMode(false)} />
           )}
@@ -693,6 +700,7 @@ const buildAlgoliaFilters = (filters) => {
       );
     }
   }
+  */
 
   // For Pinecone search (Community) or fallback, no InstantSearch wrapper needed
   try {
@@ -1063,9 +1071,11 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/success" element={<SuccessPage />} />
-                  <Route path="/community" element={<CommunityPage />} />
-                  <Route path="/vocabulary" element={<VocabularyPinterest />} />
-                  <Route path="/videos" element={<VideoStreaming />} />
+                  {/* Community and Vocabulary - Hidden from consumer view */}
+                  {/* <Route path="/community" element={<CommunityPage />} /> */}
+                  {/* <Route path="/vocabulary" element={<VocabularyPinterest />} /> */}
+                  {/* Video Streaming - Hidden from consumer view */}
+                  {/* <Route path="/videos" element={<VideoStreaming />} /> */}
                   <Route path="/admin/quiz-creator" element={<QuizCreator />} />
                   <Route path="/test" element={<TestPage />} />
                   <Route path="/subscription-plans" element={<SubscriptionPlansPage />} />

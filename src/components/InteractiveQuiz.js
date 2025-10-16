@@ -389,6 +389,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                         </div>
                       </div>
                       
+                      {/* Video Solution Button - Hidden from consumer view
                       {videoUrl && (
                         <button
                           onClick={() => handleVideoClick(result.questionId, videoUrl)}
@@ -412,9 +413,11 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                           <span>{getVideoButtonText()}</span>
                         </button>
                       )}
+                      */}
                     </div>
 
-                    {/* Video Player (if active) */}
+                    {/* Video Player (if active) - Hidden from consumer view */}
+                    {/* 
                     {questionVideoState.showVideo && (
                       <div style={{
                         backgroundColor: '#f8fafc',
@@ -474,6 +477,7 @@ const QuizReview = ({ results, questions, onClose, packData }) => {
                         </div>
                       </div>
                     )}
+                    */}
 
                     {/* Question Content */}
                     <div>

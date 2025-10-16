@@ -158,6 +158,7 @@ const CSATQuestionCard = ({ hit }) => {
               </span>
             </button>
             
+            {/* Video Solution Button - Hidden from consumer view
             {videoSolutionLink && videoSolutionLink.trim() !== '' && (
               <button 
                 className="csat-answer-button"
@@ -171,6 +172,7 @@ const CSATQuestionCard = ({ hit }) => {
                 <span className="csat-button-text">비디오 설명</span>
               </button>
             )}
+            */}
           </div>
           
           {showAnswer && (

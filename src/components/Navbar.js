@@ -162,7 +162,8 @@ const Navbar = ({ onSubjectChange }) => {
             </Link>
             */}
 
-            {/* Video Streaming */}
+            {/* Video Streaming - Hidden from consumer view */}
+            {/* 
             <Link 
               to="/videos" 
               className="navbar-glass-button"
@@ -170,6 +171,7 @@ const Navbar = ({ onSubjectChange }) => {
               <span></span>
               원스톱 PLEW 강의
             </Link>
+            */}
 
             {/* Premium Dashboard - Always visible, authentication handled by routes */}
             <Link 

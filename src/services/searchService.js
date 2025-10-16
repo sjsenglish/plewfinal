@@ -1,6 +1,6 @@
 import { getAuth } from 'firebase/auth';
 
-export const performSearch = async (indexName, query = '', filters = '', hitsPerPage = 20) => {
+export const performSearch = async (indexName, query = '', filters = '', hitsPerPage = 10) => {
   try {
     const auth = getAuth();
     const user = auth.currentUser;

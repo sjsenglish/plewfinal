@@ -62,7 +62,7 @@ const PremiumDashboard = () => {
 
   const sections = [
     { id: 'overview', name: '홈', icon: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftoaster.svg?alt=media&token=744ba4bf-336d-4dd2-b2dc-25bd4df85af6', premium: false },
-    { id: 'learn', name: ' 학습 도우미', icon: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftv.svg?alt=media&token=c65f115a-2543-483b-99ff-0a30d47a2dd6', premium: true },
+    // { id: 'learn', name: ' 학습 도우미', icon: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Ftv.svg?alt=media&token=c65f115a-2543-483b-99ff-0a30d47a2dd6', premium: true }, // Hidden from consumer view
     { id: 'profile', name: '내 서고', icon: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbagback.svg?alt=media&token=65739e08-36db-4810-951c-91641f5d0084', premium: true },
     { id: 'question-packs', name: '마이 문제은행 ', icon: 'https://firebasestorage.googleapis.com/v0/b/plewcsat1.firebasestorage.app/o/icons%2Fbulb.svg?alt=media&token=1f21ae0e-764d-4b03-ba1d-f1423329c325', premium: true },
   ];
@@ -77,15 +77,15 @@ const PremiumDashboard = () => {
   };
 
   const renderSectionContent = () => {
-    if (!isPaidUser && ['learn', 'profile', 'question-packs'].includes(activeSection)) {
+    if (!isPaidUser && ['profile', 'question-packs'].includes(activeSection)) { // 'learn' removed
       return renderUpgradePrompt();
     }
 
     switch (activeSection) {
       case 'overview':
         return renderOverview();
-      case 'learn':
-        return <LearnTab />;
+      // case 'learn':
+      //   return <LearnTab />; // Hidden from consumer view
       case 'profile':
         return <ProfilePage />;
       case 'question-packs':

@@ -44,7 +44,7 @@ export default async function handler(req, res) {
       return res.status(429).json({ error: 'Daily limit reached' });
     }
 
-    const { indexName, query, filters, hitsPerPage = 20 } = req.body;
+    const { indexName, query, filters, hitsPerPage = 10 } = req.body;
     
     // Validate index name
     const allowedIndexes = ['tsa_questions', 'korean-english-question-pairs', 'maths_alevel'];

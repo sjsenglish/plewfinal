@@ -259,7 +259,8 @@ const KoreanEnglishHit = ({ hit }) => {
         </div>
       )}
 
-      {/* Video Solution Section */}
+      {/* Video Solution Section - Hidden from consumer view */}
+      {/* 
       {videoSolutionLink && (
         <div className="video-solution-section">
           <button 
@@ -271,6 +272,7 @@ const KoreanEnglishHit = ({ hit }) => {
           </button>
         </div>
       )}
+      */}
 
       {/* Tags Section */}
       {tags.length > 0 && (
